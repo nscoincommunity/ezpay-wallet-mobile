@@ -44,7 +44,7 @@ After node module has been install success then shim:
   
   start server react:
   ```
-  npm star
+  npm start
   # or
   react-native start
   ```
