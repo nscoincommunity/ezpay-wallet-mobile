@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, SegmentedControlIOS } from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, SegmentedControlIOS, Alert } from 'react-native';
 import { Form, Item, Input, Label } from 'native-base'
 import SegmentControl from 'react-native-segment-controller';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
+import { restoreByBackup, restoreByPk } from './restore.service'
 
 class ScreenRestore extends Component {
     constructor() {
@@ -34,8 +35,8 @@ class ScreenRestore extends Component {
                     borderRadius={9}
                 />
 
-                {this.state.index === 0 && <FormBackupcode />}
-                {this.state.index === 1 && <FormPrivateKey />}
+                {this.state.index === 0 && <FormBackupcode navigator={this.props.navigator} />}
+                {this.state.index === 1 && <FormPrivateKey navigator={this.props.navigator} />}
 
             </View>
 
@@ -45,6 +46,97 @@ class ScreenRestore extends Component {
 }
 
 class FormBackupcode extends Component {
+    InitState = {
+        backupCode: '',
+        password: '',
+        confirmPwd: '',
+        txtErrBUcode: '',
+        txtErrPwd: '',
+        txtCfPwd: '',
+        errBUcode: false,
+        errPwd: false,
+        errCfPwd: false,
+        typeButton: true
+    }
+    constructor(props) {
+
+        super(props)
+
+        this.state = this.InitState
+    };
+
+    async validateBuCode(value) {
+        this.setState({ txtErrBUcode: '' })
+        if (value.length < 1) {
+            await this.setState({ errBUcode: true, txtErrBUcode: 'Please enter a valid backup code.', typeButton: true });
+        } else {
+            await this.setState({ backupCode: value, errBUcode: false, txtErrBUcode: '', typeButton: false })
+        }
+
+        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errBUcode == true) {
+            await this.setState({ typeButton: true })
+        } else {
+            await this.setState({ typeButton: false })
+        }
+    }
+
+    async validatePwd(value) {
+        this.setState({ password: value })
+        if (value.length > 5) {
+            await this.setState({ txtErrPwd: '', errPwd: false, typeButton: false });
+        } else {
+            await this.setState({ txtErrPwd: 'Wallet local passcode needs at least 6 characters', errPwd: true, typeButton: true })
+        }
+
+        if (this.state.confirmPwd == '' || this.state.confirmPwd == value) {
+            await this.setState({ txtCfPwd: '', errCfPwd: false });
+        } else {
+            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true })
+        }
+        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errBUcode == true) {
+            await this.setState({ typeButton: true })
+        } else {
+            await this.setState({ typeButton: false })
+        }
+
+    }
+
+    async validateCfPwd(value) {
+        this.setState({ confirmPwd: value })
+        if (this.state.password && this.state.password == value) {
+            await this.setState({ txtCfPwd: '', errCfPwd: false, typeButton: false });
+        } else {
+            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true, typeButton: true })
+        }
+
+        if (this.state.errPwd == true || this.state.errBUcode == true || this.state.errCfPwd == true) {
+            await this.setState({ typeButton: true })
+        } else {
+            await this.setState({ typeButton: false })
+        }
+    }
+    restoreByBackupCode() {
+        restoreByBackup(this.state.backupCode, this.state.password)
+            .then(rCode => {
+                if (rCode == 0) {
+                    const { navigate } = this.props.navigator;
+                    navigate('TabNavigator');
+                } else {
+                    Alert.alert(
+                        'Error',
+                        'Invalid restore code, please try again!',
+                        [{ text: 'OK', onPress: () => this.setState(this.InitState) }]
+                    )
+                }
+            }).catch(err => {
+                Alert.alert(
+                    'Error',
+                    'Invalid restore code, please try again!',
+                    [{ text: 'OK', onPress: () => { this.setState(this.InitState) } }]
+                )
+            })
+    }
+
     render() {
         return (
             <View>
@@ -54,9 +146,9 @@ class FormBackupcode extends Component {
                         flexWrap: 'wrap',
                         width: GLOBALS.WIDTH,
                     }}>
-                        <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.3 }}>
+                        <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.3 }} error={this.state.errBUcode}>
                             <Label>Backup code/Choose file</Label>
-                            <Input />
+                            <Input onChangeText={(val) => this.validateBuCode(val)} />
                         </Item>
 
                         <TouchableOpacity style={style.buttonFolder}>
@@ -64,20 +156,29 @@ class FormBackupcode extends Component {
                             </Icon>
                         </TouchableOpacity>
                     </View>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrBUcode}</Text>
+                    </Item>
 
-
-                    <Item floatingLabel>
+                    <Item floatingLabel error={this.state.errPwd}>
                         <Label>Local passcode</Label>
-                        <Input secureTextEntry={true} />
+                        <Input secureTextEntry={true} onChangeText={(val) => this.validatePwd(val)} />
+                    </Item>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
                     </Item>
 
-                    <Item floatingLabel>
+                    <Item floatingLabel error={this.state.errCfPwd}>
                         <Label>Comfirm local passcode</Label>
-                        <Input secureTextEntry={true} />
+                        <Input secureTextEntry={true} onChangeText={(val) => this.validateCfPwd(val)} />
                     </Item>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
+                    </Item>
+
                 </Form>
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.primary).button} onPress={() => { }}>
+                    <TouchableOpacity style={styleButton(GLOBALS.Color.primary, this.state.typeButton).button} onPress={() => this.restoreByBackupCode()} disabled={this.state.typeButton}>
                         <Text style={style.TextButton}>Continue</Text>
                     </TouchableOpacity>
                 </View>
@@ -86,27 +187,127 @@ class FormBackupcode extends Component {
     }
 }
 class FormPrivateKey extends Component {
+    constructor(props) {
+
+        super(props)
+
+        this.state = {
+            privateKey: '',
+            password: '',
+            confirmPwd: '',
+            txtErrPKcode: '',
+            txtErrPwd: '',
+            txtCfPwd: '',
+            errPKcode: false,
+            errPwd: false,
+            errCfPwd: false,
+            typeButton: true
+        };
+    };
+
+    async validatePKCode(value) {
+        this.setState({ txtErrPKcode: '' })
+        if (value.length != 64) {
+            await this.setState({ errPKcode: true, txtErrPKcode: 'Please enter a valid private key.', typeButton: true });
+        } else {
+            await this.setState({ privateKey: value, errPKcode: false, txtErrPKcode: '', typeButton: false })
+        }
+
+        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errPKcode == true) {
+            await this.setState({ typeButton: true })
+        } else {
+            await this.setState({ typeButton: false })
+        }
+    }
+
+    async validatePwd(value) {
+        this.setState({ password: value })
+        if (value.length > 5) {
+            await this.setState({ txtErrPwd: '', errPwd: false, typeButton: false });
+        } else {
+            await this.setState({ txtErrPwd: 'Wallet local passcode needs at least 6 character', errPwd: true, typeButton: true })
+        }
+
+        if (this.state.confirmPwd == '' || this.state.confirmPwd == value) {
+            await this.setState({ txtCfPwd: '', errCfPwd: false });
+        } else {
+            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true })
+        }
+        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errPKcode == true) {
+            await this.setState({ typeButton: true })
+        } else {
+            await this.setState({ typeButton: false })
+        }
+
+    }
+
+    async validateCfPwd(value) {
+        this.setState({ confirmPwd: value })
+        if (this.state.password && this.state.password == value) {
+            await this.setState({ txtCfPwd: '', errCfPwd: false, typeButton: false });
+        } else {
+            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true, typeButton: true })
+        }
+        if (this.state.errPwd == true || this.state.errPKcode == true || this.state.errCfPwd) {
+            await this.setState({ typeButton: true })
+        } else {
+            await this.setState({ typeButton: false })
+        }
+    }
+
+    restoreByPK() {
+        restoreByPk(this.state.privateKey, this.state.password)
+            .then(rCode => {
+                if (rCode == 0) {
+                    const { navigate } = this.props.navigator;
+                    navigate('TabNavigator');
+                } else {
+                    Alert.alert(
+                        'Error',
+                        'Invalid private key, please try again!',
+                        [{ text: 'OK', onPress: () => this.setState(this.InitState) }]
+                    )
+                }
+            }).catch(err => {
+                console.log('cache', err)
+                Alert.alert(
+                    'Error',
+                    'Invalid private key, please try again!',
+                    [{ text: 'OK', onPress: () => { this.setState(this.InitState) } }]
+                )
+            })
+    }
+
     render() {
         return (
             <View>
                 <Form style={style.FormLogin}>
-                    <Item floatingLabel>
+                    <Item floatingLabel error={this.state.errPKcode}>
                         <Label>Private key</Label>
-                        <Input />
+                        <Input onChangeText={(val) => this.validatePKCode(val)} />
+                    </Item>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPKcode}</Text>
                     </Item>
 
-                    <Item floatingLabel>
+                    <Item floatingLabel error={this.state.errPwd}>
                         <Label>Local passcode</Label>
-                        <Input secureTextEntry={true} />
+                        <Input secureTextEntry={true} onChangeText={(val) => this.validatePwd(val)} />
+                    </Item>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
                     </Item>
 
-                    <Item floatingLabel>
+                    <Item floatingLabel error={this.state.errCfPwd}>
                         <Label>Comfirm local passcode</Label>
-                        <Input secureTextEntry={true} />
+                        <Input secureTextEntry={true} onChangeText={(val) => this.validateCfPwd(val)} />
+                    </Item>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
                     </Item>
                 </Form>
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.primary).button} onPress={() => { }}>
+                    <TouchableOpacity style={styleButton(GLOBALS.Color.primary, this.state.typeButton).button} disabled={this.state.typeButton} onPress={() => this.restoreByPK()}>
                         <Text style={style.TextButton}>Continue</Text>
                     </TouchableOpacity>
                 </View>
@@ -120,7 +321,7 @@ export default class restore extends Component {
         return (
             <ScrollView >
                 <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
-                    <ScreenRestore></ScreenRestore>
+                    <ScreenRestore navigator={this.props.navigation}></ScreenRestore>
                 </KeyboardAvoidingView>
             </ScrollView>
         )
@@ -128,13 +329,17 @@ export default class restore extends Component {
 }
 
 /* style button */
-var styleButton = (color) => StyleSheet.create({
+var styleButton = (color, type) => StyleSheet.create({
     button: {
-        backgroundColor: color,
+        backgroundColor: type == true ? '#cccccc' : color,
         marginBottom: GLOBALS.HEIGHT / 40,
         height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6
+        width: GLOBALS.WIDTH / 1.6,
+        shadowOffset: { width: 3, height: 3, },
+        shadowColor: 'black',
+        shadowOpacity: 0.2,
+        borderRadius: 2
     }
 })
 

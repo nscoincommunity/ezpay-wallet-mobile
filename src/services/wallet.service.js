@@ -136,4 +136,13 @@ export async function estimateGas(transaction: Tx): number {
     console.log(gas)
     return gas;
 }
-
+export async function getAddressFromPK(privateKey) {
+    try {
+        var account = WEB3.eth.accounts.privateKeyToAccount('0x' + privateKey);
+    } catch (error) {
+        console.log(error)
+    }
+    return new Promise((resolve) => {
+        resolve(account.address)
+    })
+}

@@ -93,6 +93,9 @@ class ScreenRegister extends Component {
         } else {
             this.setState({ TexterrorCPw: 'Wallet local passcode not match', errorCPw: true, typeButton: true })
         }
+        if (this.state.errorPw == true) {
+            this.setState({ typeButton: true })
+        }
     }
     render() {
         return (

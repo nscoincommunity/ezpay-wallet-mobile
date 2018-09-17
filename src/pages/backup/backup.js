@@ -8,6 +8,7 @@ import { showToastBottom, showToastTop } from '../../services/loading.service'
 import moment from 'moment';
 import { Address } from '../../services/auth.service'
 import RNFS from 'react-native-fs';
+import { setData } from '../../services/data.service'
 
 
 var datetime = new Date();
@@ -19,7 +20,8 @@ export default class backup extends Component {
             dialogVisible: false,
             backupcode: '',
             passcode: '',
-            getsuccess: false
+            getsuccess: false,
+            isCopy: false
         };
     };
 
@@ -114,6 +116,9 @@ export default class backup extends Component {
     Copy() {
         Clipboard.setString(this.state.backupcode);
         showToastBottom('Copied to clipboard');
+        setData('isBackup', '1');
+        this.setState({ isCopy: true })
+
     }
 
     handleCancel() {
@@ -139,8 +144,14 @@ export default class backup extends Component {
                                 <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>Backup code</Text>
                                 <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.backupcode}</Text>
                                 <View style={style.FormRouter}>
-                                    <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)}>
-                                        <Text style={style.TextButton}>Copy backup code</Text>
+                                    <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)} disabled={this.state.isCopy}>
+                                        {
+                                            !this.state.isCopy ?
+                                                <Text style={style.TextButton}>Copy backup code</Text>
+                                                :
+                                                <Text style={style.TextButton}>Copied </Text>
+                                        }
+
                                     </TouchableOpacity>
                                 </View>
                             </View> : null

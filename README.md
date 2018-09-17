@@ -43,14 +43,14 @@ After node module has been install success then shim:
   ## Deploy
   
   start server react:
-  ```
+  ```sh
   npm start
   # or
   react-native start
   ```
   run app in device or simulator
-  ```
-  - react-native run-ios ### for ios
-  - react-native run-android ### for android
+  ```sh
+  - react-native run-ios # for ios
+  - react-native run-android # for android
   ```
   

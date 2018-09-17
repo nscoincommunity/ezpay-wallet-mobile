@@ -20,6 +20,7 @@ export async function Register(password: string) {
     // await createKeystore(key, password, address)
     Address = await address;
     await restore(address, privateKey, password)
+    setData('isBackup', '0');
 }
 
 export async function encryptPassword(password: string): string {
