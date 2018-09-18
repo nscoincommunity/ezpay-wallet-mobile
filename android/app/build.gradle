@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-document-picker')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-udp')
     implementation project(':react-native-tcp')

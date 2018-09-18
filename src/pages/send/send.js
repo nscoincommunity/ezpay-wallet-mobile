@@ -217,7 +217,7 @@ class FormSend extends Component {
                     <Dialog.Description>
                         Enter your local passcode to process
                         </Dialog.Description>
-                    <Dialog.Input placeholder="Wallet Local passcode" onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true}></Dialog.Input>
+                    <Dialog.Input placeholder="Wallet Local passcode" onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
                     <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
                     <Dialog.Button label="Send" onPress={this.doSend.bind(this)} />
                 </Dialog.Container>
@@ -277,7 +277,6 @@ export default class send extends Component {
         headerTintColor: 'white',
     };
     render() {
-        console.log(this.props.navigation)
         return (
             <ScrollView >
                 <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>

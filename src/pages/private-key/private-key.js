@@ -73,7 +73,7 @@ export default class privateKey extends Component {
     }
 
     handleCancel() {
-        this.setState({ dialogVisible: false })
+        this.setState({ dialogVisible: false, passcode: '' })
     }
     Copy() {
         Clipboard.setString(this.state.privatekey);
@@ -132,7 +132,7 @@ export default class privateKey extends Component {
                             <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
                                 Enter you local passcode to process
                         </Dialog.Description>
-                            <Dialog.Input placeholder="Local passcode" onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode}></Dialog.Input>
+                            <Dialog.Input placeholder="Local passcode" onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
                             <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
                             <Dialog.Button label="Get" onPress={this.handleGet.bind(this)} />
                         </Dialog.Container>

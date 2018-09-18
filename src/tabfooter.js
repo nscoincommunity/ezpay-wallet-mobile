@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Text, View, TouchableOpacity } from 'react-native';
-import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator, createTabNavigator } from 'react-navigation';
 import dashboard from './pages/dashboard/dashboard';
 import request from './pages/request/request';
 import send from './pages/send/send';
@@ -102,6 +102,7 @@ export default createBottomTabNavigator(
     },
     {
         initialRouteName: 'DASHBOARD',
+        tabBarPosition: 'bottom',
         /* Other configuration remains unchanged */
         tabBarOptions: {
             showLabel: true,
@@ -117,6 +118,8 @@ export default createBottomTabNavigator(
                 backgroundColor: GLOBALS.Color.primary,
             },
             tabStyle: {},
-        }
+        },
+        swipeEnabled: true,
+        animationEnabled: true,
     }
 );

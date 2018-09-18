@@ -15,7 +15,7 @@ import bigInt from "big-integer";
 
 // export var Web3: web3 = new web3(new web3.providers.HttpProvider(GLOBALS.WEB3_API));
 const WEB3 = new Web3();
-WEB3.setProvider(new WEB3.providers.HttpProvider('http://13.228.68.50:8545'));
+WEB3.setProvider(new WEB3.providers.HttpProvider(CONSTANTS.WEB3_API));
 export var balance: number = 0
 
 export async function updateBalance() {

@@ -7,6 +7,5 @@ export async function getExchangeRate() {
     return await axios.get(CONSTANTS.GETUSD)
         .then(data => {
             exchangeRate = data.data.data['quotes'].USD.price;
-            console.log(exchangeRate)
         })
 }

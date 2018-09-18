@@ -71,7 +71,7 @@ class ScreenRegister extends Component {
         if (value.length > 5) {
             await this.setState({ TexterrorPw: '', errorPw: false, typeButton: false });
         } else {
-            await this.setState({ TexterrorPw: 'Wallet local passcode needs at least 6 character', errorPw: true, typeButton: true })
+            await this.setState({ TexterrorPw: 'Wallet local passcode needs at least 6 characters', errorPw: true, typeButton: true })
         }
 
         if (this.state.confirmpassword == '' || this.state.confirmpassword == value) {

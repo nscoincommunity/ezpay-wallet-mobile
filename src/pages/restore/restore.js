@@ -4,7 +4,10 @@ import { Form, Item, Input, Label } from 'native-base'
 import SegmentControl from 'react-native-segment-controller';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
-import { restoreByBackup, restoreByPk } from './restore.service'
+import { restoreByBackup, restoreByPk } from './restore.service';
+import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
+
 
 class ScreenRestore extends Component {
     constructor() {
@@ -136,6 +139,38 @@ class FormBackupcode extends Component {
                 )
             })
     }
+    SelectFile() {
+        // iPhone/Android
+        DocumentPicker.show({
+            filetype: [DocumentPickerUtil.allFiles()],
+        }, (error, res) => {
+            if (res != null) {
+                // Android
+                console.log(
+                    res.uri,
+                    '\n- ' + res.type, // mime type
+                    '\n- ' + res.fileName,
+                    '\n- ' + res.fileSize
+                );
+                if ((res.fileName).substring((res.fileName).lastIndexOf('.') + 1, (res.fileName).length) == 'txt' && (res.fileName).indexOf('nexty') > -1) {
+                    RNFS.readFile(res.uri).then(data => {
+                        console.log(data)
+                        this.setState({ backupCode: data })
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                } else {
+                    Alert.alert(
+                        'Warning',
+                        'Please select a valid backup file',
+                        [{ text: 'OK', onPress: () => { }, style: 'cancel' }]
+                    )
+                }
+
+            }
+        });
+
+    }
 
     render() {
         return (
@@ -148,10 +183,10 @@ class FormBackupcode extends Component {
                     }}>
                         <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.3 }} error={this.state.errBUcode}>
                             <Label>Backup code/Choose file</Label>
-                            <Input onChangeText={(val) => this.validateBuCode(val)} />
+                            <Input onChangeText={(val) => this.validateBuCode(val)} value={this.state.backupCode} />
                         </Item>
 
-                        <TouchableOpacity style={style.buttonFolder}>
+                        <TouchableOpacity style={style.buttonFolder} onPress={() => this.SelectFile()}>
                             <Icon name="folder-open" backgroundColor="#3b5998" color="rgb(170, 170, 27)" size={35}>
                             </Icon>
                         </TouchableOpacity>

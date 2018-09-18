@@ -17,7 +17,6 @@ export default class unlogin extends Component {
 
 
     componentDidMount() {
-        console.log('mount')
         initAuth()
             .then(async data => {
                 if (isAuth) {
@@ -34,16 +33,8 @@ export default class unlogin extends Component {
 
             )
     }
-    // componentWillReceiveProps() {
-    //     console.log('will update')
-    //     this.setState({ isAuth: false })
-
-    // }
-
-
 
     async goLogin() {
-        // getBalance().then()
         const { navigate } = this.props.navigation;
         navigate('login');
     }
@@ -56,14 +47,6 @@ export default class unlogin extends Component {
         navigate('restore');
     }
     render() {
-        // if (this.state.isAuth) {
-        //     return (
-        //         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        //             <Spinner color={GLOBALS.Color.primary} />
-        //             <Text>Auto login ...</Text>
-        //         </View>
-        //     )
-        // } else {
         return (
             < View style={style.container} >
                 <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
@@ -108,9 +91,6 @@ var styleButton = (color) => StyleSheet.create({
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        // marginTop: Platform.OS === 'ios' ? 25 : 0,
-        // paddingLeft: GLOBALS.WIDTH / 5,
-        // paddingRight: GLOBALS.WIDTH / 5
         justifyContent: 'center',
         alignItems: 'center',
     },

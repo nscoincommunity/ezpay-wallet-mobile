@@ -34,7 +34,8 @@ export default class Redeem extends Component {
         amount: '',
         QRcode: '',
         dataReturn: null,
-        QRNotFound: false
+        QRNotFound: false,
+        loadding: true,
     }
 
     constructor(props) {
@@ -92,7 +93,8 @@ export default class Redeem extends Component {
         const { navigate } = this.props.navigation;
         navigate('QRscan', { onSelect: this.onSelect });
     }
-    componentWillMount() {
+
+    componentDidMount() {
         this.props.navigation.setParams({
             onBackPress: this._handleBackPress
         });
@@ -103,8 +105,13 @@ export default class Redeem extends Component {
             })
         }
         setTimeout(() => {
-            this.navigateToOFO()
+            this.navigateToOFO();
+            this.setState({ loadding: false })
         }, 1000);
+    }
+
+    componentWillMount() {
+
     }
 
     _handleBackPress = () => {
@@ -117,24 +124,6 @@ export default class Redeem extends Component {
         }
     }
 
-    // componentDidCatch() {
-    //     console.log('componentDidCatch');
-    // }
-    // componentDidMount() {
-    //     console.log('componentDidMount')
-    // }
-    // componentDidUpdate() {
-    //     console.log('componentDidUpdate')
-    // }
-    // componentWillReceiveProps() {
-    //     console.log('componentWillReceiveProps')
-    // }
-    // componentWillUnmount() {
-    //     console.log('componentWillUnmount')
-    // }
-    // componentWillUpdate() {
-    //     console.log('componentWillUpdate')
-    // }
     redeem() {
         try {
             let body = JSON.stringify({ couponCode: this.state.QRcode, nextyWallet: Address })
@@ -172,6 +161,17 @@ export default class Redeem extends Component {
                 </Header>
 
                 <Content padder contentContainerStyle={styles.container}>
+                    {
+                        this.state.loadding &&
+                        <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
+                            <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 7 }}>
+                                <Spinner color={GLOBALS.Color.primary} />
+                                <Text>Open camera...</Text>
+                            </View>
+                        </View>
+                    }
+
+
                     {this.state.dataReturn != null && this.state.getValue &&
                         < View style={styles.form}>
                             <Text style={styles.Titlebox}>Info QR code</Text>

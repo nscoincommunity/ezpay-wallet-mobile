@@ -34,7 +34,7 @@ export default class backup extends Component {
         getBackupCode(this.state.passcode)
             .then(bc => {
                 this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false }, () => {
-                    var NameFile = 'backup--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.json'
+                    var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.txt'
                     var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
                     RNFS.writeFile(path, bc)
                         .then(success => {
@@ -122,7 +122,7 @@ export default class backup extends Component {
     }
 
     handleCancel() {
-        this.setState({ dialogVisible: false })
+        this.setState({ dialogVisible: false, passcode: '' })
     }
     render() {
         return (
@@ -162,7 +162,7 @@ export default class backup extends Component {
                         <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
                             Enter you local passcode to process
                         </Dialog.Description>
-                        <Dialog.Input placeholder="Local passcode" style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode}></Dialog.Input>
+                        <Dialog.Input placeholder="Local passcode" style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label="Backup" onPress={this.handleGet.bind(this)} />
                     </Dialog.Container>

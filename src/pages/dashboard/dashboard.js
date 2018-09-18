@@ -23,7 +23,6 @@ export default class dashboard extends Component {
 
     componentDidMount() {
         getData('isBackup').then(data => {
-            console.log(data)
             if (data == 1) {
                 this.setState({ isBackup: true });
             } else {
