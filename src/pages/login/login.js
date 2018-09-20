@@ -74,6 +74,10 @@ class ScreenLogin extends Component {
         }
     }
 
+    focusTheField = (id) => {
+        this.inputs[id]._root.focus();
+    }
+    inputs = {};
 
     render() {
         return (
@@ -82,7 +86,13 @@ class ScreenLogin extends Component {
                 <Form style={style.FormLogin}>
                     <Item floatingLabel error={this.state.ErrorAddress}>
                         <Label>Address wallet</Label>
-                        <Input onChangeText={(val) => this.checkAddress(val)} value={this.state.Address} />
+                        <Input
+                            onChangeText={(val) => this.checkAddress(val)}
+                            value={this.state.Address}
+                            returnKeyType={"next"}
+                            blurOnSubmit={false}
+                            onSubmitEditing={() => { this.focusTheField('field2'); }}
+                        />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }}>
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
@@ -93,7 +103,12 @@ class ScreenLogin extends Component {
                             onChangeText={(val) => this.checkPassword(val)}
                             secureTextEntry={true}
                             returnKeyType="done"
-                        // onKeyPress={(event) => this.handleKeyDown(event)}
+                            getRef={input => { this.inputs['field2'] = input }}
+                            onSubmitEditing={() => {
+                                if (this.state.typeButton == false) {
+                                    this.Login()
+                                }
+                            }}
                         />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }}>

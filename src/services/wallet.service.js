@@ -5,18 +5,42 @@ import '../../global';
 import moment from 'moment';
 const Web3 = require('web3');
 // import Web3 from 'web3'
-import { forkJoin, of, interval, throwError, fromEvent, Observable } from 'rxjs';
+import { forkJoin, of, interval, throwError, fromEvent, Observable, merge } from 'rxjs';
 import GLOBALS from "../helper/constants";
 import { Address, initAuth, validatePassword, getPrivateKey } from '../services/auth.service';
 import CONSTANTS from '../helper/constants';
 import { sign } from '@warren-bank/ethereumjs-tx-sign';
 import bigInt from "big-integer";
-
+import { getData, setData } from './data.service'
 
 // export var Web3: web3 = new web3(new web3.providers.HttpProvider(GLOBALS.WEB3_API));
 const WEB3 = new Web3();
 WEB3.setProvider(new WEB3.providers.HttpProvider(CONSTANTS.WEB3_API));
 export var balance: number = 0
+
+export async function updateBalanceTK(params) {
+    return new Promise(resolve => {
+        var ListToken: Array = [];
+        getData('ListToken').then(async data => {
+            if (data != null) {
+                ListToken = JSON.parse(data);
+                for (let i = 0; i < ListToken.length; i++) {
+                    var contract = await new WEB3.eth.Contract(ListToken[i].ABI, ListToken[i].tokenAddress)
+                    await contract.methods.balanceOf(Address).call().then(bal => {
+                        ListToken[i].balance = bal;
+                    })
+
+                    if (i == (ListToken.length - 1)) {
+                        setData('ListToken', JSON.stringify(ListToken)).then(() => { })
+                        resolve('1')
+                        break;
+                    }
+                }
+            }
+        })
+    })
+
+}
 
 export async function updateBalance() {
     if (Address == undefined) {
@@ -35,7 +59,6 @@ export async function updateBalance() {
             balance = 0
         }
 }
-
 
 export async function getBalance(address) {
     return of(
@@ -58,7 +81,7 @@ interface Tx {
 }
 
 export async function SendService(address: string, nty: number, password: string, exData?: string) {
-    if (!validatePassword(password)) {
+    if (! await validatePassword(password)) {
         throw ("Invalid local passcode")
     }
     // check address
@@ -121,12 +144,79 @@ export async function SendService(address: string, nty: number, password: string
                 })
             }).catch(err => {
                 console.log('err', err)
+                reject('Check your banlance')
+            })
+
+    })
+
+}
+
+export async function SendToken(toAddress: string, tokenAddress, ABI, token: number, password: string, exData?: string) {
+    if (!await validatePassword(password)) {
+        throw ("Invalid local passcode")
+    }
+    // check address
+    if (! await WEB3.utils.isAddress(address)) {
+        throw ("Invalid address");
+    }
+    var Contract = new WEB3.eth.Contract(ABI, tokenAddress, { from: Address });
+
+
+
+    let txData: Tx;
+    txData = {
+        from: Address,
+        to: tokenAddress,
+        value: '0x0',
+        data: Contract.methods.transfer(toAddress, token).encodeABI(),
+        chainId: 66666
+    }
+
+    return new Promise((resolve, reject) => {
+        WEB3.eth.getTransactionCount(Address)
+            .then(async (nonce) => {
+                console.log('getTransactionCount')
+                txData.nonce = nonce;
+
+                await estimateGas(txData).then(async (gas) => {
+                    console.log("gas first: " + gas)
+                    console.log('estimateGas')
+                    txData.gas = gas;
+                    let rawTx;
+                    try {
+                        rawTx = '0x' + await signTransaction(txData, await getPrivateKey(password))
+                    } catch (ex) {
+                        console.log(ex);
+                        reject('cannot sign transaction')
+                        return;
+                    }
+
+                    console.log('gas: ' + txData.gas)
+
+                    WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
+                        console.log('sendSignedTransactionCount')
+                        if (error) {
+                            reject(error.message);
+                            console.log('error' + error.message)
+                        } else {
+                            // update balance
+                            console.log('send success')
+                            updateBalance().then(() => {
+                                console.log('update balance')
+                                resolve(hash)
+                            });
+                        }
+                    })
+                })
+            }).catch(err => {
+                console.log('err', err)
                 reject('server error')
             })
 
     })
 
 }
+
 export async function signTransaction(txData: Tx, privateKey: string) {
     let { rawTx } = sign(txData, privateKey);
     return rawTx
@@ -144,5 +234,47 @@ export async function getAddressFromPK(privateKey) {
     }
     return new Promise((resolve) => {
         resolve(account.address)
+    })
+}
+
+var ABI = [{ "constant": true, "inputs": [{ "name": "", "type": "uint256" }], "name": "owners", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_to", "type": "address" }, { "name": "_amount", "type": "uint256" }], "name": "sendTokens", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "name", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "approve", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_from", "type": "address" }, { "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "INITIAL_SUPPLY", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "manager", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_subtractedValue", "type": "uint256" }], "name": "decreaseApproval", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "_owner", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "balance", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "symbol", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getOwners", "outputs": [{ "name": "", "type": "address[]" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transfer", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "tokenWallet", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "endDate", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_addedValue", "type": "uint256" }], "name": "increaseApproval", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "_owner", "type": "address" }, { "name": "_spender", "type": "address" }], "name": "allowance", "outputs": [{ "name": "remaining", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "ownerByAddress", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_owners", "type": "address[]" }], "name": "setOwners", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "name": "tokenOwner", "type": "address" }, { "name": "_endDate", "type": "uint256" }], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "owners", "type": "address[]" }], "name": "SetOwners", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "owner", "type": "address" }, { "indexed": true, "name": "spender", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }];
+export function GetInfoToken(TokenAddress) {
+
+    return new Promise((resolve, reject) => {
+        try {
+            var ContractABI = new WEB3.eth.Contract(ABI, TokenAddress);
+            console.log(ContractABI.methods);
+            try {
+            } catch (error) {
+                console.log(error)
+            }
+        } catch (error) {
+            reject(error);
+            console.log(error)
+        }
+
+        forkJoin([
+            ContractABI.methods.balanceOf(Address).call().catch(err => {
+                return null;
+            }),
+            ContractABI.methods.symbol().call().catch(err => {
+                return null;
+            }),
+            ContractABI.methods.decimals().call().catch(err => {
+                return null;
+            }),
+            of(ABI)
+        ]).subscribe(data => {
+            console.log(data);
+            var infoTK = {
+                "balance": data[0],
+                "symbol": data[1],
+                "decimals": data[2],
+                "ABI": data[3]
+            }
+            resolve(infoTK)
+        }), err => {
+            reject('get info fail')
+        }
     })
 }

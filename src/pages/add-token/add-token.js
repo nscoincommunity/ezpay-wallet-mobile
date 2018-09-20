@@ -1,21 +1,23 @@
 import React, { Component } from 'react'
-import { View } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native';
 import GLOBALS from '../../helper/variables';
-// import Icon from "react-native-vector-icons/FontAwesome";
+import { GetInfoToken } from '../../services/wallet.service';
+import { setData, getData, rmData } from '../../services/data.service'
+
+
 import {
     Container,
     Header,
     Title,
     Content,
-    Text,
     Button,
-    Footer,
-    FooterTab,
     Left,
     Right,
     Body,
-    Tabs,
-    Tab,
+    Form,
+    Item,
+    Input,
+    Label
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -35,15 +37,200 @@ export default class Addtoken extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: '#fff' }}>Addtoken</Title>
+                        <Title style={{ color: '#fff' }}>Add token</Title>
                     </Body>
                     <Right />
                 </Header>
 
-                <Content padder>
-                    <Text>Priva</Text>
-                </Content>
+                <Body padder>
+                    <ScrollView>
+                        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} enabled>
+                            <FormAddToken />
+                        </KeyboardAvoidingView>
+                    </ScrollView>
+                </Body>
             </Container>
         )
     }
 }
+
+class FormAddToken extends Component {
+    ListToken = [];
+    initState = {
+        addressTK: '',
+        txtErr: '',
+        symbol: '',
+        decimals: '',
+        typeButton: true,
+        ValidToken: false,
+        ExistToken: false,
+        ABI: [],
+        balance: ''
+    }
+    constructor(props) {
+        super(props)
+
+        this.state = this.initState
+    };
+
+    async setValue(val: string) {
+        this.setState({ addressTK: val });
+        if (val.length > 0) {
+            GetInfoToken(val).then(async data => {
+                if (data.symbol != null) {
+                    await this.setState({ symbol: data.symbol, decimals: data.decimals, ABI: data.ABI, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
+                        this.disableButton()
+                    })
+                }
+                else {
+                    await this.setState({ ValidToken: true, txtErr: 'Token address is invalid' }, () => {
+                        this.disableButton()
+                    })
+                }
+            }).catch(async err => {
+                console.log(err);
+                await this.setState({ ValidToken: true, txtErr: 'Token address is invalid' }, () => {
+                    this.disableButton()
+                })
+            })
+        }
+    }
+
+    async disableButton() {
+        if (this.state.ValidToken == true || this.state.ExistToken == true || this.state.symbol == '' || this.state.addressTK == '') {
+            await this.setState({ typeButton: true })
+        } else {
+            await this.setState({ typeButton: false })
+        }
+    }
+
+    addToken() {
+        getData('ListToken').then(async data => {
+            if (data != null) {
+                this.ListToken = JSON.parse(data);
+                if (this.ListToken.findIndex(x => x['tokenAddress'] == this.state.addressTK) > -1) {
+                    this.setState({ ExistToken: true });
+                    Alert.alert(
+                        'Error',
+                        'Token address has already existed',
+                        [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                    )
+                } else {
+                    try {
+                        await this.ListToken.push({
+                            "tokenAddress": this.state.addressTK,
+                            "balance": this.state.balance,
+                            "symbol": this.state.symbol,
+                            "decimals": this.state.decimals,
+                            "ABI": this.state.ABI
+                        })
+                        setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
+                            Alert.alert(
+                                'Successfuly',
+                                'Add token successfuly',
+                                [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                            )
+                        })
+                    } catch (error) {
+                        Alert.alert(
+                            'Error',
+                            error,
+                            [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                        )
+                    }
+                }
+            } else {
+                try {
+                    await this.ListToken.push({
+                        'tokenAddress': this.state.addressTK,
+                        'balance': this.state.balance,
+                        'symbol': this.state.symbol,
+                        'decimals': this.state.decimals,
+                        'ABI': this.state.ABI
+                    })
+                    setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
+                        Alert.alert(
+                            'Successfuly',
+                            'Add token successfuly',
+                            [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                        )
+                    })
+                } catch (error) {
+                    Alert.alert(
+                        'Error',
+                        error,
+                        [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                    )
+                }
+            }
+        })
+    }
+
+    render() {
+        return (
+            <View>
+                <View style={styles.FormLogin}>
+                    <Item floatingLabel error={this.state.ValidToken}>
+                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>Enter token contract address</Label>
+                        <Input onChangeText={(value) => { this.setValue(value) }} value={this.state.addressTK} />
+                    </Item>
+                    <Item style={{ borderBottomWidth: 0 }} >
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErr}</Text>
+                    </Item>
+                    <Item floatingLabel disabled={true}>
+                        <Label style={{ fontFamily: GLOBALS.font.Poppins }} >Token symbol</Label>
+                        <Input disabled={true} value={this.state.symbol} />
+                    </Item>
+                </View>
+                <View style={styles.AreaButton}>
+                    <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.addToken.bind(this)} disabled={this.state.typeButton}>
+                        <Text style={styles.TextButton}>Add token</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* <View>
+                    <TouchableOpacity onPress={() => { rmData('ListToken') }}>
+                        <Text>Remove token</Text>
+                    </TouchableOpacity>
+                </View> */}
+            </View>
+        )
+    }
+}
+
+
+var typeButton = (color, type) => StyleSheet.create({
+    button: {
+        backgroundColor: type == true ? '#cccccc' : color,
+        marginBottom: GLOBALS.HEIGHT / 40,
+        height: GLOBALS.HEIGHT / 17,
+        justifyContent: 'center',
+        width: GLOBALS.WIDTH / 1.6,
+        shadowOffset: { width: 3, height: 3, },
+        shadowColor: 'black',
+        shadowOpacity: 0.2,
+    }
+})
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    TextButton: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 15,
+        fontFamily: GLOBALS.font.Poppins
+    },
+    AreaButton: {
+        alignItems: 'center',
+    },
+    FormLogin: {
+        width: GLOBALS.WIDTH,
+        marginBottom: GLOBALS.HEIGHT / 50,
+        paddingLeft: GLOBALS.WIDTH / 20,
+        paddingRight: GLOBALS.WIDTH / 20,
+        marginTop: GLOBALS.HEIGHT / 25,
+    }
+})
+

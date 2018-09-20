@@ -3,7 +3,7 @@ import Rx, { Observable, forkJoin, fromEvent } from 'rxjs';
 export async function setData(key, value) {
     try {
         return AsyncStorage.setItem(key, value)
-            .then(() => { console.log('address ' + value) })
+            .then(() => { })
     } catch (error) {
         console.log(error)
     }
@@ -46,4 +46,7 @@ export async function checkAuth() {
     return await AsyncStorage.getItem('auth').then(value => {
         return (value == "1");
     })
+}
+export async function rmData(key) {
+    return await AsyncStorage.removeItem(key)
 }

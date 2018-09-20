@@ -19,7 +19,7 @@ export var historyData: Array<HistoryModel> = []
 export function getDataHis(start: number = 0, length: number = 15) {
     console.log('index = ' + start)
     let body = {
-        addr: '0xCf9D1938F80861D0B512a8E322F190a293eEC87e',
+        addr: Address,
         start: start,
         length: length
     }

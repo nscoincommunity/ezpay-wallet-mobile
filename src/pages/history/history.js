@@ -42,7 +42,7 @@ export default class History extends Component {
             index: 0,
             isLoading: true,
             isRefreshing: false,
-            loadbottom: true
+            loadbottom: false
         };
     };
 
@@ -56,9 +56,6 @@ export default class History extends Component {
                 isLoading: false,
                 isRefreshing: false
             });
-            if (this.state.index < length) {
-                this.setState({ loadbottom: false })
-            }
             console.log('index: ' + this.state.index)
         }).catch((e) => [
             this.setState({
@@ -75,10 +72,10 @@ export default class History extends Component {
 
     getFullTransaction(): Transaction[] {
         let transactions = [];
-        var AddressTest = '0xCf9D1938F80861D0B512a8E322F190a293eEC87e';
+        // var AddressTest = '0xCf9D1938F80861D0B512a8E322F190a293eEC87e';
         for (let entry of historyData) {
             let type = 'arrow-up';
-            if (entry.to.toLowerCase() == AddressTest.toLowerCase()) {
+            if (entry.to.toLowerCase() == Address.toLowerCase()) {
                 type = 'arrow-down'
             }
             let transaction = new Transaction();
@@ -101,7 +98,7 @@ export default class History extends Component {
                         await this.getFullTransaction().forEach(element => {
                             transactions.push(element)
                         });
-                        await this.setState({ index: transactions.length })
+                        await this.setState({ index: transactions.length, loadbottom: false })
                         console.log(this.state.index)
                     }).catch((err) => {
                         console.log('err', err)
@@ -201,7 +198,7 @@ export default class History extends Component {
                                 }}
                                 onEndReached={() => this.onEndReached()}
                                 onEndReachedThreshold={0.001}
-                                ListFooterComponent={<BottomList show={this.state.loadbottom} />}
+                                // ListFooterComponent={<BottomList show={this.state.loadbottom} />}
                                 keyExtractor={(item, index) => index.toString()}
                                 refreshControl={
                                     <RefreshControl  //Component cho chức năng Pull to Refresh

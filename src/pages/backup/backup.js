@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, TouchableOpacity, Alert, Clipboard, Platform, Share } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, Clipboard, Platform, Share, Image } from 'react-native';
 import { Text, Root } from "native-base";
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
@@ -21,7 +21,8 @@ export default class backup extends Component {
             backupcode: '',
             passcode: '',
             getsuccess: false,
-            isCopy: false
+            isCopy: false,
+            loading: false,
         };
     };
 
@@ -31,9 +32,10 @@ export default class backup extends Component {
     }
 
     async handleGet() {
+        this.setState({ loading: true })
         getBackupCode(this.state.passcode)
             .then(bc => {
-                this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false }, () => {
+                this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false, loading: false }, () => {
                     var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.txt'
                     var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
                     RNFS.writeFile(path, bc)
@@ -101,6 +103,7 @@ export default class backup extends Component {
                 //     console.log(err)
                 // })
             }).catch(err => {
+                this.setState({ loading: false })
                 Alert.alert(
                     'Get backup code failed',
                     err,
@@ -166,7 +169,15 @@ export default class backup extends Component {
                         <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label="Backup" onPress={this.handleGet.bind(this)} />
                     </Dialog.Container>
-
+                    {
+                        this.state.loading ?
+                            <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
+                                {/* <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}> */}
+                                <Image source={require('../../images/loading.gif')} resizeMode="contain" style={{ height: 80, width: 80 }} />
+                                {/* </View> */}
+                            </View>
+                            : null
+                    }
                 </View >
             </Root>
         )

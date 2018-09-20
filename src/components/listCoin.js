@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import GLOBALS from '../helper/variables'
 import { Item } from 'native-base'
-import { updateBalance, balance } from '../services/wallet.service';
+import { updateBalance, balance, updateBalanceTK } from '../services/wallet.service';
 import { Utils } from '../helper/utils';
-import CONSTANTS from '../helper/constants'
+import CONSTANTS from '../helper/constants';
+import { getData } from '../services/data.service'
 
 
 class HorizontalItem extends Component {
@@ -18,12 +19,27 @@ class HorizontalItem extends Component {
     }
 }
 
+class ListTokenShow extends Component {
+    render() {
+        return (
+            <View style={styles.ItemHozi}>
+                <Text style={styles.contenCoin}>{this.props.item.symbol}</Text>
+                <Text style={styles.contenCoin}>{this.props.item.balance}</Text>
+            </View>
+        )
+    }
+}
+
 var interval;
 export default class listCoin extends Component {
+
+
+
     constructor(props) {
         super(props)
         this.state = {
-            balanceNTY: ''
+            balanceNTY: '',
+            ListToken: []
         };
         updateBalance().then(res => {
             this.setState({ balanceNTY: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })
@@ -31,8 +47,15 @@ export default class listCoin extends Component {
             console.log('catch', err)
             this.setState({ balanceNTY: '0' })
         })
+        this.loadListToken()
 
     };
+
+    loadListToken() {
+        getData('ListToken').then(data => {
+            this.state.ListToken = JSON.parse(data)
+        })
+    }
 
     componentDidMount() {
         interval = setInterval(() => {
@@ -42,6 +65,19 @@ export default class listCoin extends Component {
                 this.setState({ balanceNTY: '0' })
             })
         }, 2000)
+        this.updateBalTK()
+    }
+
+    async updateBalTK() {
+
+        updateBalanceTK().then(async data => {
+            if (data == 1) {
+                await this.loadListToken();
+                setTimeout(() => {
+                    this.updateBalTK();
+                }, 2000);
+            }
+        })
     }
 
     componentWillUnmount() {
@@ -74,6 +110,18 @@ export default class listCoin extends Component {
                         }}
                         keyExtractor={(item, index) => item.nameToken}
                     />
+                    {
+                        this.state.ListToken &&
+                        <FlatList
+                            data={this.state.ListToken}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <ListTokenShow item={item} index={index} parentLatList={this} />
+                                )
+                            }}
+                            keyExtractor={(item, index) => item.symbol}
+                        />
+                    }
                 </View>
             </View>
         )

@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, Keyboard } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { Form, Item, Input, Label } from 'native-base'
 import Icon from "react-native-vector-icons/Ionicons";
 import { exchangeRate } from '../../services/rate.service';
 import { Utils } from '../../helper/utils'
 import Dialog from "react-native-dialog";
-import { SendService } from "../../services/wallet.service";
-import { ScaleDialog } from "../../services/loading.service"
+import { SendService, SendToken } from "../../services/wallet.service";
+import { ScaleDialog } from "../../services/loading.service";
+import { getData } from '../../services/data.service';
+import { Dropdown } from 'react-native-material-dropdown';
+
 
 import PopupDialog, {
     ScaleAnimation, DialogTitle, DialogButton
@@ -15,7 +18,21 @@ import PopupDialog, {
 
 const scaleAnimation = new ScaleAnimation();
 
-class FormSend extends Component {
+export default class FormSend extends Component {
+    static navigationOptions = {
+        title: 'Send',
+        headerStyle: {
+            backgroundColor: GLOBALS.Color.primary,
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerBackTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    };
+
     InitState = {
         addresswallet: '',
         TextErrorAddress: '',
@@ -28,7 +45,10 @@ class FormSend extends Component {
         dialogSend: false,
         Password: '',
         titleDialog: '',
-        contentDialog: ''
+        contentDialog: '',
+        ListToken: [],
+        viewSymbol: 'NTY',
+        tokenSelected: {}
     }
 
     resetState = {
@@ -118,110 +138,202 @@ class FormSend extends Component {
     }
 
     async  doSend() {
-        SendService(this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password)
-            .then(async data => {
-                await this.setState(this.resetState)
-                console.log('send success: ' + data)
-                await this.setState({ titleDialog: 'Send successfully', contentDialog: data })
-                await this.showScaleAnimationDialog();
-                // Alert.alert(
-                //     'Send successfully',
-                //     data,
-                //     [
-                //         { text: 'OK', onPress: () => { }, style: 'cancel' }
-                //     ]
-                // )
-            }).catch(async error => {
-                await this.setState(this.resetState)
-                console.log('send error: ' + error)
-                await this.setState({ titleDialog: 'Error', contentDialog: error })
-                await this.showScaleAnimationDialog();
-                console.log(error)
+        if (this.state.viewSymbol == 'NTY') {
+            SendService(this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password)
+                .then(async data => {
+                    await this.setState(this.resetState)
+                    console.log('send success: ' + data)
+                    await this.setState({ titleDialog: 'Send successfully', contentDialog: data })
+                    await this.showScaleAnimationDialog();
+                    // Alert.alert(
+                    //     'Send successfully',
+                    //     data,
+                    //     [
+                    //         { text: 'OK', onPress: () => { }, style: 'cancel' }
+                    //     ]
+                    // )
+                }).catch(async error => {
+                    await this.setState(this.resetState)
+                    console.log('send error: ' + error)
+                    await this.setState({ titleDialog: 'Error', contentDialog: error })
+                    await this.showScaleAnimationDialog();
+                    console.log(error)
 
-                // Alert.alert(
-                //     'Error',
-                //     error,
-                //     [
-                //         { text: 'OK', onPress: () => { }, style: 'cancel' }
-                //     ]
-                // )
-            })
+                    // Alert.alert(
+                    //     'Error',
+                    //     error,
+                    //     [
+                    //         { text: 'OK', onPress: () => { }, style: 'cancel' }
+                    //     ]
+                    // )
+                })
+        } else {
+            SendToken(this.state.addresswallet, this.state.tokenSelected.tokenAddress, this.state.tokenSelected.ABI, parseFloat(this.state.NTY), this.state.Password)
+                .then(async data => {
+                    await this.setState(this.resetState)
+                    console.log('send success: ' + data)
+                    await this.setState({ titleDialog: 'Send successfully', contentDialog: data })
+                    await this.showScaleAnimationDialog();
+                    // Alert.alert(
+                    //     'Send successfully',
+                    //     data,
+                    //     [
+                    //         { text: 'OK', onPress: () => { }, style: 'cancel' }
+                    //     ]
+                    // )
+                }).catch(async error => {
+                    await this.setState(this.resetState)
+                    console.log('send error: ' + error)
+                    await this.setState({ titleDialog: 'Error', contentDialog: error })
+                    await this.showScaleAnimationDialog();
+                    console.log(error)
 
+                    // Alert.alert(
+                    //     'Error',
+                    //     error,
+                    //     [
+                    //         { text: 'OK', onPress: () => { }, style: 'cancel' }
+                    //     ]
+                    // )
+                })
+        }
     }
 
     handleCancel() {
         this.setState({ dialogSend: false })
     }
 
-    // componentDidMount() {
-    //     setTimeout(() => {
-    //         this.showScaleAnimationDialog()
-    //     }, 1000);
-    // }
+    componentDidMount() {
+        this.state.ListToken.push({ value: 'NTY', label: 'NTY' })
+        getData('ListToken')
+            .then(data => {
+                if (data != null) {
+                    JSON.parse(data).forEach(element => {
+                        this.state.ListToken.push({
+                            value: JSON.stringify(element),
+                            label: element.symbol
+                        })
+                    });
+                }
+            })
+        // setTimeout(() => {
+        //     this.setState({ dialogSend: true });
+        //     setTimeout(() => {
+        //         Keyboard.dismiss()
+        //         this.setState({ dialogSend: false })
+        // setTimeout(() => {
+        //     this.showScaleAnimationDialog()
+        // }, 1000);
+        //     }, 3000)
+        // }, 1000);
+    }
 
     showScaleAnimationDialog = () => {
         this.scaleAnimationDialog.show();
     }
 
+    focusTheField = (id) => {
+        this.inputs[id]._root.focus();
+    }
+    inputs = {};
+
+    selectToken(token) {
+        if (token == 'NTY') {
+            this.setState({ viewSymbol: token })
+        } else {
+            this.state.tokenSelected = JSON.parse(token)
+            this.setState({ viewSymbol: this.state.tokenSelected.symbol })
+        }
+    }
+
     render() {
+
         return (
             <View style={style.container}>
-                <Form style={style.FormSend}>
-                    <View style={{
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        width: GLOBALS.WIDTH,
-                    }}>
-                        <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.4 }} error={this.state.errorAddress}>
-                            <Label>To</Label>
-                            <Input value={this.state.addresswallet} onChangeText={(val) => this.CheckAddress(val)} />
-                        </Item>
-                        <Item style={{ borderBottomWidth: 0 }}>
-                            <TouchableOpacity style={style.buttonScan} onPress={this.navigateToScan.bind(this)}>
-                                <Icon name="md-qr-scanner" size={30} color="#fff">
-                                </Icon>
+                <ScrollView style={{ flex: 1 }}>
+                    <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
+
+                        <View style={{ width: GLOBALS.WIDTH, paddingLeft: GLOBALS.WIDTH / 25, paddingRight: GLOBALS.WIDTH / 25 }}>
+
+                            {
+                                this.state.ListToken &&
+                                <Dropdown
+                                    onChangeText={(item) => this.selectToken(item)}
+                                    label='Select Token'
+                                    data={this.state.ListToken}
+                                    value={'NTY'}
+                                />
+                            }
+                        </View>
+                        <Form style={style.FormSend}>
+
+                            <View style={{
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                width: GLOBALS.WIDTH,
+                            }}>
+                                <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.4 }} error={this.state.errorAddress}>
+                                    <Label>To</Label>
+                                    <Input
+                                        value={this.state.addresswallet}
+                                        onChangeText={(val) => this.CheckAddress(val)}
+                                        returnKeyType={"next"}
+                                        blurOnSubmit={false}
+                                        onSubmitEditing={() => { this.focusTheField('field2'); }}
+                                    />
+
+                                </Item>
+                                <Item style={{ borderBottomWidth: 0 }}>
+                                    <TouchableOpacity style={style.buttonScan} onPress={this.navigateToScan.bind(this)}>
+                                        <Icon name="md-qr-scanner" size={30} color="#fff">
+                                        </Icon>
+                                    </TouchableOpacity>
+                                </Item>
+                                <Item style={{ borderBottomWidth: 0 }}>
+                                    <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
+                                </Item>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                width: GLOBALS.WIDTH,
+                            }}>
+                                <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
+                                    <Label>{this.state.viewSymbol}</Label>
+                                    <Input
+                                        keyboardType="numeric"
+                                        onChangeText={(val) => this.CheckNTY(val)}
+                                        value={this.state.NTY}
+                                        getRef={input => { this.inputs['field2'] = input }}
+                                    />
+                                </Item>
+                                <Icon name="md-swap" size={20} style={{ marginTop: 40 }}></Icon>
+                                <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
+                                    <Label>USD</Label>
+                                    <Input
+                                        keyboardType="numeric"
+                                        onChangeText={(val) => this.CheckUSD(val)}
+                                        value={this.state.USD} />
+                                </Item>
+                                <Item style={{ borderBottomWidth: 0 }}>
+                                    <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorNTY}</Text>
+                                </Item>
+                            </View>
+                            <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.VisibaleButton).button} disabled={this.state.VisibaleButton} onPress={() => this.setState({ dialogSend: true })}>
+                                <Text style={style.TextButton}>SEND</Text>
                             </TouchableOpacity>
-                        </Item>
-                        <Item style={{ borderBottomWidth: 0 }}>
-                            <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
-                        </Item>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        width: GLOBALS.WIDTH,
-                    }}>
-                        <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
-                            <Label>NTY</Label>
-                            <Input keyboardType="numeric" onChangeText={(val) => this.CheckNTY(val)} value={this.state.NTY} />
-                        </Item>
-                        <Icon name="md-swap" size={20} style={{ marginTop: 40 }}></Icon>
-                        <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
-                            <Label>USD</Label>
-                            <Input keyboardType="numeric" onChangeText={(val) => this.CheckUSD(val)} value={this.state.USD} />
-                        </Item>
-                        <Item style={{ borderBottomWidth: 0 }}>
-                            <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorNTY}</Text>
-                        </Item>
-                    </View>
-
-                </Form>
-                <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.VisibaleButton).button} disabled={this.state.VisibaleButton} onPress={() => this.setState({ dialogSend: true })}>
-                        <Text style={style.TextButton}>SEND</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <Dialog.Container visible={this.state.dialogSend}>
-                    <Dialog.Title>Confirm send</Dialog.Title>
-                    <Dialog.Description>
-                        Enter your local passcode to process
+                        </Form>
+                        <Dialog.Container visible={this.state.dialogSend}>
+                            <Dialog.Title>Confirm send</Dialog.Title>
+                            <Dialog.Description>
+                                Enter your local passcode to process
                         </Dialog.Description>
-                    <Dialog.Input placeholder="Wallet Local passcode" onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
-                    <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
-                    <Dialog.Button label="Send" onPress={this.doSend.bind(this)} />
-                </Dialog.Container>
-
+                            <Dialog.Input placeholder="Wallet Local passcode" onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
+                            <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
+                            <Dialog.Button label="Send" onPress={this.doSend.bind(this)} />
+                        </Dialog.Container>
+                    </KeyboardAvoidingView>
+                </ScrollView>
                 <PopupDialog
                     // dialogStyle={{ width: 300, height: 200 }}
                     dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: GLOBALS.HEIGHT / 4 }}
@@ -241,10 +353,10 @@ class FormSend extends Component {
                     ]}
                 >
                     <View style={style.dialogContentView}>
-                        <Text>{this.state.contentDialog}</Text>
+                        <Text style={{ textAlign: 'center', marginTop: 10 }}>{this.state.contentDialog}</Text>
                     </View>
                 </PopupDialog>
-            </View>
+            </View >
         )
     }
 }
@@ -256,37 +368,21 @@ var styleButton = (color, type) => StyleSheet.create({
         marginBottom: GLOBALS.HEIGHT / 40,
         height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6
+        width: GLOBALS.WIDTH / 1.6,
+        marginTop: GLOBALS.HEIGHT / 30,
     }
 })
 
 
 
-export default class send extends Component {
-    static navigationOptions = {
-        title: 'Send',
-        headerStyle: {
-            backgroundColor: GLOBALS.Color.primary,
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerBackTitleStyle: {
-            color: 'white',
-        },
-        headerTintColor: 'white',
-    };
-    render() {
-        return (
-            <ScrollView >
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
-                    <FormSend navigation={this.props.navigation} ></FormSend>
-                </KeyboardAvoidingView>
+// export default class send extends Component {
 
-            </ScrollView>
-        )
-    }
-}
+//     render() {
+//         return (
+//             <FormSend navigation={this.props.navigation} ></FormSend>
+//         )
+//     }
+// }
 
 
 const style = StyleSheet.create({
@@ -296,7 +392,7 @@ const style = StyleSheet.create({
     },
     FormSend: {
         width: GLOBALS.WIDTH,
-        marginBottom: GLOBALS.HEIGHT / 20,
+        alignItems: 'center',
     },
     buttonScan: {
         flexDirection: 'column',

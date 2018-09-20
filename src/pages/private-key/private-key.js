@@ -42,7 +42,6 @@ export default class privateKey extends Component {
     }
 
     async handleGet() {
-        console.log('aa')
         if (this.state.passcode == '') {
             Alert.alert(
                 'Get private key failed',
@@ -58,6 +57,15 @@ export default class privateKey extends Component {
             .then(pk => {
                 if (pk.length > 0) {
                     this.setState({ privatekey: pk, dialogVisible: false, getsuccess: true })
+                } else {
+                    Alert.alert(
+                        'Get private key failed',
+                        'Invalid local passcode',
+                        [
+                            { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '' }) }, style: 'cancel' },
+                            { text: 'Try again', onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
+                        ]
+                    )
                 }
             }).catch(err => {
                 Alert.alert(

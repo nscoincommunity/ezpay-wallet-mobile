@@ -171,6 +171,10 @@ class FormBackupcode extends Component {
         });
 
     }
+    focusTheField = (id) => {
+        this.inputs[id]._root.focus();
+    }
+    inputs = {};
 
     render() {
         return (
@@ -183,7 +187,13 @@ class FormBackupcode extends Component {
                     }}>
                         <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.3 }} error={this.state.errBUcode}>
                             <Label>Backup code/Choose file</Label>
-                            <Input onChangeText={(val) => this.validateBuCode(val)} value={this.state.backupCode} />
+                            <Input
+                                onChangeText={(val) => this.validateBuCode(val)}
+                                value={this.state.backupCode}
+                                returnKeyType={"next"}
+                                blurOnSubmit={false}
+                                onSubmitEditing={() => { this.focusTheField('field2'); }}
+                            />
                         </Item>
 
                         <TouchableOpacity style={style.buttonFolder} onPress={() => this.SelectFile()}>
@@ -197,7 +207,14 @@ class FormBackupcode extends Component {
 
                     <Item floatingLabel error={this.state.errPwd}>
                         <Label>Local passcode</Label>
-                        <Input secureTextEntry={true} onChangeText={(val) => this.validatePwd(val)} />
+                        <Input
+                            secureTextEntry={true}
+                            onChangeText={(val) => this.validatePwd(val)}
+                            getRef={input => { this.inputs['field2'] = input }}
+                            returnKeyType={'next'}
+                            blurOnSubmit={false}
+                            onSubmitEditing={() => { this.focusTheField('field3'); }}
+                        />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }}>
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
@@ -205,7 +222,17 @@ class FormBackupcode extends Component {
 
                     <Item floatingLabel error={this.state.errCfPwd}>
                         <Label>Comfirm local passcode</Label>
-                        <Input secureTextEntry={true} onChangeText={(val) => this.validateCfPwd(val)} />
+                        <Input
+                            secureTextEntry={true}
+                            onChangeText={(val) => this.validateCfPwd(val)}
+                            getRef={input => { this.inputs['field3'] = input }}
+                            returnKeyType={'done'}
+                            onSubmitEditing={() => {
+                                if (this.state.typeButton == false) {
+                                    this.restoreByBackupCode()
+                                }
+                            }}
+                        />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }}>
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
@@ -313,13 +340,24 @@ class FormPrivateKey extends Component {
             })
     }
 
+    focusTheField = (id) => {
+        this.inputs[id]._root.focus();
+    }
+    inputs = {};
+
     render() {
         return (
             <View>
                 <Form style={style.FormLogin}>
                     <Item floatingLabel error={this.state.errPKcode}>
                         <Label>Private key</Label>
-                        <Input onChangeText={(val) => this.validatePKCode(val)} />
+                        <Input
+                            value={this.state.privateKey}
+                            onChangeText={(val) => this.validatePKCode(val)}
+                            returnKeyType={"next"}
+                            blurOnSubmit={false}
+                            onSubmitEditing={() => { this.focusTheField('field2'); }}
+                        />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }}>
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPKcode}</Text>
@@ -327,7 +365,14 @@ class FormPrivateKey extends Component {
 
                     <Item floatingLabel error={this.state.errPwd}>
                         <Label>Local passcode</Label>
-                        <Input secureTextEntry={true} onChangeText={(val) => this.validatePwd(val)} />
+                        <Input
+                            secureTextEntry={true}
+                            onChangeText={(val) => this.validatePwd(val)}
+                            getRef={input => { this.inputs['field2'] = input }}
+                            returnKeyType={'next'}
+                            blurOnSubmit={false}
+                            onSubmitEditing={() => { this.focusTheField('field3'); }}
+                        />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }}>
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
@@ -335,7 +380,17 @@ class FormPrivateKey extends Component {
 
                     <Item floatingLabel error={this.state.errCfPwd}>
                         <Label>Comfirm local passcode</Label>
-                        <Input secureTextEntry={true} onChangeText={(val) => this.validateCfPwd(val)} />
+                        <Input
+                            secureTextEntry={true}
+                            onChangeText={(val) => this.validateCfPwd(val)}
+                            getRef={input => { this.inputs['field3'] = input }}
+                            returnKeyType={'done'}
+                            onSubmitEditing={() => {
+                                if (this.state.typeButton == false) {
+                                    this.restoreByPK()
+                                }
+                            }}
+                        />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }}>
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>

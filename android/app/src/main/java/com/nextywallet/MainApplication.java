@@ -3,6 +3,13 @@ package com.nextywallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.tradle.react.UdpSocketsModule;
+import com.peel.react.TcpSocketsModule;
+import com.bitgo.randombytes.RandomBytesPackage;
+import com.peel.react.rnos.RNOSModule;
+import com.rnfs.RNFSPackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.tradle.react.UdpSocketsModule;
@@ -31,6 +38,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new UdpSocketsModule(),
+            new TcpSocketsModule(),
+            new RandomBytesPackage(),
+            new RNOSModule(),
+            new RNFSPackage(),
+            new RNCameraPackage(),
             new ReactNativeDocumentPicker(),
             new VectorIconsPackage(),
             new UdpSocketsModule(),
