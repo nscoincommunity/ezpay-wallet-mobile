@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Platform } from "react-native";
+import { Image, StyleSheet, Platform, Keyboard } from "react-native";
 import GLOBALS from './helper/variables';
 import { logout } from './services/auth.service'
 
@@ -60,6 +60,7 @@ export default class sidebar extends Component {
 
 
     constructor(props) {
+        Keyboard.dismiss();
         super(props);
         this.state = {
             shadowOffsetWidth: 1,

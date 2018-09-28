@@ -62,7 +62,7 @@ export default class request extends Component {
                             fgColor="white"
                         />
                     </TouchableOpacity>
-                    <Text style={{ marginBottom: GLOBALS.HEIGHT / 40, marginTop: GLOBALS.HEIGHT / 40, fontFamily: GLOBALS.font.Poppins }} >{this.state.address}</Text>
+                    <Text style={{ marginBottom: GLOBALS.HEIGHT / 40, marginTop: GLOBALS.HEIGHT / 40, fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }} >{this.state.address}</Text>
 
                     <View style={style.FormRouter}>
                         <TouchableOpacity style={style.button} onPress={this.shareAddress.bind(this)}>

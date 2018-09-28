@@ -71,7 +71,7 @@ class FormBackupcode extends Component {
     async validateBuCode(value) {
         this.setState({ txtErrBUcode: '' })
         if (value.length < 1) {
-            await this.setState({ errBUcode: true, txtErrBUcode: 'Please enter a valid backup code.', typeButton: true });
+            await this.setState({ backupCode: '', errBUcode: true, txtErrBUcode: 'Please enter a valid backup code.', typeButton: true });
         } else {
             await this.setState({ backupCode: value, errBUcode: false, txtErrBUcode: '', typeButton: false })
         }
@@ -208,6 +208,7 @@ class FormBackupcode extends Component {
                     <Item floatingLabel error={this.state.errPwd}>
                         <Label>Local passcode</Label>
                         <Input
+                            value={this.state.password}
                             secureTextEntry={true}
                             onChangeText={(val) => this.validatePwd(val)}
                             getRef={input => { this.inputs['field2'] = input }}
@@ -223,6 +224,7 @@ class FormBackupcode extends Component {
                     <Item floatingLabel error={this.state.errCfPwd}>
                         <Label>Comfirm local passcode</Label>
                         <Input
+                            value={this.state.confirmPwd}
                             secureTextEntry={true}
                             onChangeText={(val) => this.validateCfPwd(val)}
                             getRef={input => { this.inputs['field3'] = input }}
@@ -249,28 +251,33 @@ class FormBackupcode extends Component {
     }
 }
 class FormPrivateKey extends Component {
+    InitState = {
+        privateKey: '',
+        password: '',
+        confirmPwd: '',
+        txtErrPKcode: '',
+        txtErrPwd: '',
+        txtCfPwd: '',
+        errPKcode: false,
+        errPwd: false,
+        errCfPwd: false,
+        typeButton: true
+    }
     constructor(props) {
 
         super(props)
 
-        this.state = {
-            privateKey: '',
-            password: '',
-            confirmPwd: '',
-            txtErrPKcode: '',
-            txtErrPwd: '',
-            txtCfPwd: '',
-            errPKcode: false,
-            errPwd: false,
-            errCfPwd: false,
-            typeButton: true
-        };
+        this.state = this.InitState
     };
 
     async validatePKCode(value) {
         this.setState({ txtErrPKcode: '' })
+        if (value.length == 0) {
+            await this.setState({ privateKey: '', errPKcode: true, txtErrPKcode: 'Please enter a valid private key.', typeButton: true });
+            return;
+        }
         if (value.length != 64) {
-            await this.setState({ errPKcode: true, txtErrPKcode: 'Please enter a valid private key.', typeButton: true });
+            await this.setState({ privateKey: value, errPKcode: true, txtErrPKcode: 'Please enter a valid private key.', typeButton: true });
         } else {
             await this.setState({ privateKey: value, errPKcode: false, txtErrPKcode: '', typeButton: false })
         }
@@ -366,6 +373,7 @@ class FormPrivateKey extends Component {
                     <Item floatingLabel error={this.state.errPwd}>
                         <Label>Local passcode</Label>
                         <Input
+                            value={this.state.password}
                             secureTextEntry={true}
                             onChangeText={(val) => this.validatePwd(val)}
                             getRef={input => { this.inputs['field2'] = input }}
@@ -381,6 +389,7 @@ class FormPrivateKey extends Component {
                     <Item floatingLabel error={this.state.errCfPwd}>
                         <Label>Comfirm local passcode</Label>
                         <Input
+                            value={this.state.confirmPwd}
                             secureTextEntry={true}
                             onChangeText={(val) => this.validateCfPwd(val)}
                             getRef={input => { this.inputs['field3'] = input }}

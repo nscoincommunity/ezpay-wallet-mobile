@@ -49,6 +49,10 @@ export default class unlogin extends Component {
     render() {
         return (
             < View style={style.container} >
+                <StatusBar
+                    backgroundColor={GLOBALS.Color.primary}
+                    barStyle="light-content"
+                />
                 <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.primary).button} onPress={this.goLogin.bind(this)} >

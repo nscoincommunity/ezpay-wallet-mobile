@@ -84,7 +84,7 @@ export default class FormSend extends Component {
     async CheckAddress(value) {
         await this.setState({ TextErrorAddress: '' });
         if (value.length < 1) {
-            await this.setState({ errorAddress: true, TextErrorAddress: 'Invalid address', VisibaleButton: true })
+            await this.setState({ addresswallet: value, errorAddress: true, TextErrorAddress: 'Invalid address', VisibaleButton: true })
         } else {
             await this.setState({ addresswallet: value, errorAddress: false })
         }
@@ -98,12 +98,12 @@ export default class FormSend extends Component {
         var val = await parseFloat(value)
         await this.setState({ TextErrorNTY: '' });
         if (isNaN(val)) {
-            await this.setState({ errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '' })
+            await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '' })
             return
         }
 
         if (val < 1 || value.length < 1) {
-            await this.setState({ errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '' })
+            await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '' })
         } else {
             var usd = await Utils.round(val * exchangeRate, 5);
             await this.setState({ errorNTY: false, USD: usd.toString(), NTY: value });
@@ -117,14 +117,14 @@ export default class FormSend extends Component {
         var val = await parseFloat(value)
         await this.setState({ TextErrorNTY: '' });
         if (isNaN(val)) {
-            await this.setState({ errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '' })
+            await this.setState({ errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '', NTY: '' })
             return
         }
         if (val < 1 || value.length < 1) {
-            await this.setState({ errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, NTY: '' })
+            await this.setState({ USD: '', errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, NTY: '' })
         } else {
             var nty = await Utils.round(val / exchangeRate);
-            await this.setState({ errorNTY: false, NTY: nty.toString() })
+            await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
         }
         if (this.state.errorNTY == true || this.state.errorAddress == true || this.state.addresswallet == '' || this.state.NTY == '') {
         } else {
@@ -155,7 +155,11 @@ export default class FormSend extends Component {
                 }).catch(async error => {
                     await this.setState(this.resetState)
                     console.log('send error: ' + error)
-                    await this.setState({ titleDialog: 'Error', contentDialog: error })
+                    if (error == 'Returned error: insufficient funds for gas * price + value') {
+                        await this.setState({ titleDialog: 'Error', contentDialog: "You do not have enough NTY for this transaction" })
+                    } else {
+                        await this.setState({ titleDialog: 'Error', contentDialog: error })
+                    }
                     await this.showScaleAnimationDialog();
                     console.log(error)
 
@@ -250,6 +254,7 @@ export default class FormSend extends Component {
 
         return (
             <View style={style.container}>
+
                 <ScrollView style={{ flex: 1 }}>
                     <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
 
@@ -281,8 +286,8 @@ export default class FormSend extends Component {
                                         blurOnSubmit={false}
                                         onSubmitEditing={() => { this.focusTheField('field2'); }}
                                     />
-
                                 </Item>
+
                                 <Item style={{ borderBottomWidth: 0 }}>
                                     <TouchableOpacity style={style.buttonScan} onPress={this.navigateToScan.bind(this)}>
                                         <Icon name="md-qr-scanner" size={30} color="#fff">

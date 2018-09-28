@@ -61,7 +61,7 @@ class ScreenLogin extends Component {
     async checkAddress(val) {
         await this.setState({ TextError: '' });
         if (val.length < 1) {
-            await this.setState({ ErrorAddress: true, TextErrorAddress: 'Please enter a valid address.', typeButton: true });
+            await this.setState({ Address: '', ErrorAddress: true, TextErrorAddress: 'Please enter a valid address.', typeButton: true });
         } else {
             await this.setState({ Address: val, ErrorAddress: false, TextErrorAddress: '', typeButton: false })
         }

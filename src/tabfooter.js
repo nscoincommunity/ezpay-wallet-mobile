@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View, TouchableOpacity } from 'react-native';
+import { Button, Text, View, TouchableOpacity, Keyboard } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator, createTabNavigator } from 'react-navigation';
 import dashboard from './pages/dashboard/dashboard';
 import request from './pages/request/request';
@@ -8,7 +8,7 @@ import GLOBALS from './helper/variables'
 import Icon from "react-native-vector-icons/FontAwesome";
 import { exchangeRate } from '../src/services/rate.service';
 
-
+Keyboard.dismiss()
 const DashboardScreen = createStackNavigator(
     {
         dashboard: dashboard
@@ -47,7 +47,7 @@ const SendSceen = createStackNavigator(
     {
         navigationOptions: ({ navigation }) => ({
             headerLeft: (
-                <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => navigation.openDrawer()}>
+                <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => { navigation.openDrawer(); Keyboard.dismiss() }}>
                     <Icon name="bars" color='#fff' size={25}></Icon>
                 </TouchableOpacity>
             ),

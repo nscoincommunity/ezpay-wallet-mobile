@@ -62,7 +62,7 @@ export default class privateKey extends Component {
                         'Get private key failed',
                         'Invalid local passcode',
                         [
-                            { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '' }) }, style: 'cancel' },
+                            { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '', passcode: '' }) }, style: 'cancel' },
                             { text: 'Try again', onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
                         ]
                     )
@@ -72,7 +72,7 @@ export default class privateKey extends Component {
                     'Get private key failed',
                     'Invalid local passcode',
                     [
-                        { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '' }) }, style: 'cancel' },
+                        { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '', passcode: '' }) }, style: 'cancel' },
                         { text: 'Try again', onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
                     ]
                 )

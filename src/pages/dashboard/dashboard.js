@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Chart from '../../components/chart';
@@ -50,7 +50,8 @@ export default class dashboard extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
+                {/* <View style={styles.container}> */}
                 {
                     !this.state.isBackup ?
                         <View style={{ flexDirection: 'row', backgroundColor: '#D50000', justifyContent: 'center', alignItems: 'center' }}>
@@ -65,14 +66,16 @@ export default class dashboard extends Component {
                         : null
                 }
                 <Chart />
-                <Ranges />
+                {/* <Ranges /> */}
                 <List />
-            </View>
+                {/* </View> */}
+            </ScrollView>
         )
     }
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: GLOBALS.Color.primary
     }
 })

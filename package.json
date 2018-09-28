@@ -39,14 +39,15 @@
     "react-native-dialog": "^5.1.0",
     "react-native-document-picker": "^2.1.0",
     "react-native-fs": "^2.11.15",
-    "react-native-http": "tradle/react-native-http#834492d",
     "react-native-level-fs": "^3.0.0",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-os": "^1.0.1",
+    "react-native-pathjs-charts": "0.0.34",
     "react-native-popup-dialog": "^0.15.0",
     "react-native-qrcode": "^0.2.7",
     "react-native-randombytes": "^3.5.0",
     "react-native-segment-controller": "^1.0.0",
+    "react-native-splash-screen": "^3.1.1",
     "react-native-tcp": "^3.2.1",
     "react-native-udp": "^2.1.0",
     "react-native-vector-icons": "^5.0.0",
@@ -57,7 +58,9 @@
     "string_decoder": "~0.10.25",
     "timers-browserify": "^1.0.1",
     "url": "~0.10.1",
-    "web3": "^1.0.0-beta.33"
+    "victory-native": "^30.4.0",
+    "web3": "^1.0.0-beta.33",
+    "react-native-http": "tradle/react-native-http#834492d"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
