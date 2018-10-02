@@ -45,9 +45,9 @@ function setHeader(title) {
 }
 const Drawer = createDrawerNavigator(
     {
-        Dashboard: { screen: dashboard },
+        // Dashboard: { screen: dashboard },
         Redeem: { screen: redeem },
-        Request: { screen: request },
+        // Request: { screen: request },
         Sendpage: { screen: send },
         TabNavigator: { screen: TabNavigator },
         Privatekey: { screen: Prk },
@@ -69,7 +69,8 @@ const Screen = createStackNavigator(
             }
         },
         Drawer: {
-            screen: Drawer, navigationOptions: {
+            screen: Drawer,
+            navigationOptions: {
                 header: () => null,
             }
         },
@@ -101,7 +102,6 @@ const Screen = createStackNavigator(
     },
     {
         initialRouteName: "Unlogin",
-
     },
 )
 export default class Router extends Component {

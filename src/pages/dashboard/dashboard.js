@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackAndroid } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Chart from '../../components/chart';
 import Ranges from '../../components/ranges';
 import List from '../../components/listCoin';
-import { getData } from '../../services/data.service'
+import { getData, rmData } from '../../services/data.service'
 
-
+var interval
 export default class dashboard extends Component {
 
     constructor(props) {
@@ -15,11 +15,18 @@ export default class dashboard extends Component {
 
         this.state = {
             balanceNTY: '',
-            isBackup: false
+            isBackup: true
         };
 
 
     };
+    componentWillReceiveProps() {
+        console.log('componentWillReceiveProps')
+    }
+    componentWillMount() {
+
+        console.log('componentWillMount');
+    }
 
     componentDidMount() {
         getData('isBackup').then(data => {
@@ -30,6 +37,7 @@ export default class dashboard extends Component {
             }
         })
     }
+
 
     static navigationOptions = {
         headerStyle: {
@@ -44,14 +52,33 @@ export default class dashboard extends Component {
         headerTintColor: 'white',
     };
 
+    checkBackup() {
+        getData('isBackup').then(data => {
+            console.log('check backup');
+            if (data == 1) {
+                this.setState({ isBackup: true });
+            } else {
+                this.setState({ isBackup: false });
+            }
+        })
+    }
+
     gotoBackup() {
-        this.props.navigation.navigate('Backup')
+        this.props.navigator.navigate('Backup', { callDasboard: this.checkBackup.bind(this) })
+    }
+    resetTypeBackup() {
+        rmData('isBackup')
     }
 
     render() {
         return (
             <ScrollView style={styles.container}>
                 {/* <View style={styles.container}> */}
+                {/* <TouchableOpacity
+                    style={{ backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}
+                    onPress={() => this.resetTypeBackup()}>
+                    <Text style={{ color: '#fff' }}>Reset type backup</Text>
+                </TouchableOpacity> */}
                 {
                     !this.state.isBackup ?
                         <View style={{ flexDirection: 'row', backgroundColor: '#D50000', justifyContent: 'center', alignItems: 'center' }}>

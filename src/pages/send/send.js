@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, Keyboard, TextInput } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { Form, Item, Input, Label } from 'native-base'
 import Icon from "react-native-vector-icons/Ionicons";
@@ -288,6 +288,7 @@ export default class FormSend extends Component {
                                     />
                                 </Item>
 
+
                                 <Item style={{ borderBottomWidth: 0 }}>
                                     <TouchableOpacity style={style.buttonScan} onPress={this.navigateToScan.bind(this)}>
                                         <Icon name="md-qr-scanner" size={30} color="#fff">
@@ -366,6 +367,41 @@ export default class FormSend extends Component {
     }
 }
 
+class FloatingLabelInput extends Component {
+    state = {
+        isFocused: false,
+    };
+
+    handleFocus = () => this.setState({ isFocused: true });
+    handleBlur = () => this.setState({ isFocused: false });
+
+    render() {
+        const { label, ...props } = this.props;
+        const { isFocused } = this.state;
+        const labelStyle = {
+            position: 'absolute',
+            left: 0,
+            top: !isFocused ? 18 : 0,
+            fontSize: !isFocused ? 20 : 14,
+            color: !isFocused ? '#aaa' : '#000',
+        };
+        return (
+            <View style={{ paddingTop: 18 }}>
+                <Text style={labelStyle}>
+                    {label}
+                </Text>
+                <TextInput
+                    {...props}
+                    style={{ height: 26, fontSize: 20, color: '#000', borderBottomWidth: 1, borderBottomColor: '#555', width: GLOBALS.WIDTH / 1.4 }}
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}
+                    blurOnSubmit
+                />
+            </View>
+        );
+    }
+}
+
 /* style button */
 var styleButton = (color, type) => StyleSheet.create({
     button: {
@@ -384,7 +420,22 @@ var styleButton = (color, type) => StyleSheet.create({
 
 //     render() {
 //         return (
-//             <FormSend navigation={this.props.navigation} ></FormSend>
+//             <View style={{ flex: 1 }}>
+//                 {/* <KeyboardAvoidingView> */}
+//                 <TextInput placeholder="nhap gi vao day" style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5 }} />
+//                 <Input placeholder="nhap gi vao day" style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5 }} />
+//                 <Item floatingLabel>
+//                     <Label>nhap gi vao day</Label>
+//                     <Input style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5 }} />
+
+//                 </Item>
+//                 <Item floatingLabel>
+//                     <Label>nhap gi vao day</Label>
+//                     <TextInput style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5, zIndex: 9999 }} />
+//                 </Item>
+//                 {/* </KeyboardAvoidingView> */}
+//             </View>
+//             // <FormSend navigation={this.props.navigation} ></FormSend>
 //         )
 //     }
 // }

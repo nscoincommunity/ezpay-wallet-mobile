@@ -5,44 +5,27 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Button } from 'native-base'
 
 export default class CameraScreen extends React.Component<any, any> {
-    // static navigationOptions = {
-    //     headerLeft: ({ goBack }) =>
-    //         < Text onPress={() => {
-    //             console.log(goBack)
-    //         }}> aaa</Text>
-    //     // header: ({ state, setParams }) => ({
-    //     //     left: (
-    //     //         <Button
-    //     //             onPress={() => {
-    //     //                 if (state.params && state.params.onBackPress) {
-    //     //                     state.params.onBackPress();
-    //     //                 }
-    //     //             }}
-    //     //             title={'Back'}
-    //     //         />
-    //     //     )
-    //     // })
-    // }
-    static navigationOptions = ({ navigation }) => {
-        const { params = {} } = navigation.state;
-        return {
-            headerLeft:
-                <Button
-                    style={{ paddingLeft: 10, paddingRight: 10 }}
-                    transparent
-                    onPress={() => {
-                        navigation.goBack();
-                        navigation.state.params.onSelect({ result: 'cancelScan' });
-                    }} >
-                    <Icon name="angle-left" color='#fff' size={30} style={{ marginTop: Platform.OS == 'android' ? Dimensions.get('window').height / 50 : 0 }}></Icon>
-                    <Text
-                        style={{ color: '#fff', fontSize: 15, marginTop: Platform.OS == 'android' ? Dimensions.get('window').height / 50 : 0, marginRight: Platform.OS == 'android' ? Dimensions.get('window').width / 10 : 0 }}
-                    >
-                        Cancel
-                        </Text>
-                </Button>
-        };
-    };
+
+    // static navigationOptions = ({ navigation }) => {
+    //     const { params = {} } = navigation.state;
+    //     return {
+    //         headerLeft:
+    //             <Button
+    //                 style={{ paddingLeft: 10, paddingRight: 10 }}
+    //                 transparent
+    //                 onPress={() => {
+    //                     navigation.goBack();
+    //                     navigation.state.params.onSelect({ result: 'cancelScan' });
+    //                 }} >
+    //                 <Icon name="angle-left" color='#fff' size={30} style={{ marginTop: Platform.OS == 'android' ? Dimensions.get('window').height / 50 : 0 }}></Icon>
+    //                 <Text
+    //                     style={{ color: '#fff', fontSize: 15, marginTop: Platform.OS == 'android' ? Dimensions.get('window').height / 50 : 0, marginRight: Platform.OS == 'android' ? Dimensions.get('window').width / 10 : 0 }}
+    //                 >
+    //                     Cancel
+    //                     </Text>
+    //             </Button>
+    //     };
+    // };
 
     constructor(props) {
         super(props);
@@ -65,6 +48,10 @@ export default class CameraScreen extends React.Component<any, any> {
             this.props.navigation.state.params.onSelect({ result: scanResult.data });
         }
         return;
+    }
+
+    componentWillUnmount() {
+        this.props.navigation.state.params.onSelect({ result: 'cancelScan' })
     }
 
     defaultStyles() {

@@ -26,6 +26,10 @@ export default class backup extends Component {
         };
     };
 
+    componentWillUnmount() {
+        const { params } = this.props.navigation.state;
+        params.callDasboard()
+    }
 
     showDialog() {
         this.setState({ dialogVisible: true });

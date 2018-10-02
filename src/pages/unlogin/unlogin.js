@@ -17,13 +17,14 @@ export default class unlogin extends Component {
 
 
     componentDidMount() {
+        console.log(this.props)
         initAuth()
             .then(async data => {
                 if (isAuth) {
                     await this.setState({ isAuth });
                     await getExchangeRate()
                     const { navigate } = await this.props.navigation;
-                    navigate('TabNavigator');
+                    navigate('Drawer');
                     setTimeout(() => {
                         this.setState({ isAuth: false })
 

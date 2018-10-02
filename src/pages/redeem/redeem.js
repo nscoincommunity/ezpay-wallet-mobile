@@ -52,6 +52,7 @@ export default class Redeem extends Component {
         if (data['result'] == 'cancelScan') {
             console.log('aaaa' + data['result'])
             this.setState({ error: true, QRNotFound: true, dataReturn: 'null' })
+            return;
         }
 
         try {

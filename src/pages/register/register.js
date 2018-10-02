@@ -70,8 +70,7 @@ class ScreenRegister extends Component {
             <View style={style.container}>
                 {/* <ModalLoading visibleModal={this.state.visibaleMd} /> */}
                 <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
-                <View style={style.FormLogin}
-                >
+                <View style={style.FormLogin}>
                     <Item floatingLabel error={this.state.errorPw}>
                         <Label style={{ fontFamily: GLOBALS.font.Poppins }}>Wallet local passcode</Label>
                         <Input
