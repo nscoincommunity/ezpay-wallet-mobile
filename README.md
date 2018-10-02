@@ -11,9 +11,9 @@ Learn once, write anywhere: Build mobile apps with React.
 See the official [React Native website](https://facebook.github.io/react-native/) for an introduction to React Native.
 
 - [Requirements](#requirements)
-- [Getting Started](#getting-started)
-- [Documentation](#documentation)
-- [Upgrading](#upgrading)
+- [Getting Started](https://github.com/facebook/react-native#building-your-first-react-native-app)
+- [Documentation](https://github.com/facebook/react-native#full-documentation)
+- [Upgrading](https://facebook.github.io/react-native/docs/upgrading)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -53,4 +53,7 @@ After node module has been install success then shim:
   - react-native run-ios # for ios
   - react-native run-android # for android
   ```
+  ## Contributing
+  * Facebook: https://www.facebook.com/huu.tho.92754
+  ## License
   
