@@ -50,8 +50,8 @@ After node module has been install success then shim:
   ```
   run app in device or simulator
   ```sh
-  - react-native run-ios # for ios
-  - react-native run-android # for android
+  * react-native run-ios # for ios
+  * react-native run-android # for android
   ```
   ## Contributing
   * Facebook: https://www.facebook.com/huu.tho.92754
