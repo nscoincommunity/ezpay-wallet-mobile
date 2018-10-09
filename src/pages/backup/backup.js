@@ -27,8 +27,10 @@ export default class backup extends Component {
     };
 
     componentWillUnmount() {
-        const { params } = this.props.navigation.state;
-        params.callDasboard()
+        if (this.props.navigation.state.params) {
+            const { params } = this.props.navigation.state;
+            params.callDasboard()
+        }
     }
 
     showDialog() {
@@ -39,66 +41,68 @@ export default class backup extends Component {
         this.setState({ loading: true })
         getBackupCode(this.state.passcode)
             .then(bc => {
-                this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false, loading: false }, () => {
-                    var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.txt'
-                    var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
-                    RNFS.writeFile(path, bc)
-                        .then(success => {
-                            if (Platform.OS == 'ios') {
-                                console.log('this is iporn')
-                                setTimeout(() => {
-                                    Share.share({
-                                        url: path,
-                                        title: 'save backup code file'
-                                    }).then(share => {
-                                        if (share['action'] == "dismissedAction") {
-                                            showToastTop('Save file was cancel')
-                                        } else {
-                                            showToastTop('Save file backup success!')
-                                        }
-                                    }).catch(errShare => {
-                                        console.log('err', errShare)
-                                    })
-                                }, 1000)
-                            }
-                            if (Platform.OS == 'android') {
-                                showToastTop('Save file backup success!')
-                                var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
-                                console.log(newPath)
-                                if (RNFS.exists(newPath)) {
-                                    console.log('exist dir')
-                                } else {
-                                    try {
-                                        const granted = PermissionsAndroid.request(
-                                            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-                                                title: "Grant SD card access",
-                                                message: "We need access",
-                                            },
-                                        );
-                                        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                                            console.log("Permission OK");
-                                        } else {
-                                            console.log("Permission failed");
-                                        }
-                                        RNFS.mkdir(newPath).then(ssFolder => {
-                                            RNFS.copyFile(path, newPath).then(cp => {
-                                                console.log(cp)
-                                            }).catch(errCopy => {
-                                                console.log(errCopy)
-                                            })
-                                        }).catch(errFolder => {
-                                            console.log(errFolder)
-
+                this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false, loading: false },
+                    () => {
+                        var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.txt'
+                        var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
+                        RNFS.writeFile(path, bc)
+                            .then(success => {
+                                if (Platform.OS == 'ios') {
+                                    console.log('this is iporn')
+                                    setTimeout(() => {
+                                        Share.share({
+                                            url: path,
+                                            title: 'save backup code file'
+                                        }).then(share => {
+                                            if (share['action'] == "dismissedAction") {
+                                                showToastTop('Save file was cancel')
+                                            } else {
+                                                showToastTop('Save file backup success!')
+                                            }
+                                        }).catch(errShare => {
+                                            console.log('err', errShare)
                                         })
-                                    } catch (error) {
-                                        console.log(error)
+                                    }, 1000)
+                                }
+                                if (Platform.OS == 'android') {
+                                    showToastTop('Save file backup success!')
+                                    var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
+                                    console.log(newPath)
+                                    if (RNFS.exists(newPath)) {
+                                        console.log('exist dir')
+                                    } else {
+                                        try {
+                                            const granted = PermissionsAndroid.request(
+                                                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+                                                    title: "Grant SD card access",
+                                                    message: "We need access",
+                                                },
+                                            );
+                                            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                                                console.log("Permission OK");
+                                            } else {
+                                                console.log("Permission failed");
+                                            }
+                                            RNFS.mkdir(newPath).then(ssFolder => {
+                                                RNFS.copyFile(path, newPath).then(cp => {
+                                                    console.log(cp)
+                                                }).catch(errCopy => {
+                                                    console.log(errCopy)
+                                                })
+                                            }).catch(errFolder => {
+                                                console.log(errFolder)
+
+                                            })
+                                        } catch (error) {
+                                            console.log(error)
+                                        }
                                     }
                                 }
-                            }
-                        }).catch(error => {
-                            console.log(error)
-                        })
-                })
+                            }).catch(error => {
+                                console.log(error)
+                            })
+                    }
+                )
                 // var NameFile = 'backup--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.json'
                 // console.log(NameFile)
                 // saveFile(NameFile, bc).then(ss => {

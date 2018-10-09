@@ -56,7 +56,6 @@ export default class History extends Component {
                 isLoading: false,
                 isRefreshing: false
             });
-            console.log('index: ' + this.state.index)
         }).catch((e) => [
             this.setState({
                 isLoading: false,
@@ -66,7 +65,6 @@ export default class History extends Component {
     }
 
     componentDidMount() {
-
         this.getData();
     }
 
@@ -81,7 +79,7 @@ export default class History extends Component {
             let transaction = new Transaction();
             transaction.tx = entry.tx;
             transaction.type = type;
-            transaction.quantity = entry.value.toFixed(0) + " NTY";
+            transaction.quantity = entry.value.toFixed(2) + " NTY";
             transaction.datetime = entry.time.format("YYYY-MM-DD HH:mm:ss");
             transaction.data = entry;
             transactions.push(transaction)

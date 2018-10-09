@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackAndroid } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Chart from '../../components/chart';
-import Ranges from '../../components/ranges';
 import List from '../../components/listCoin';
 import { getData, rmData } from '../../services/data.service'
 
@@ -20,15 +19,19 @@ export default class dashboard extends Component {
 
 
     };
-    componentWillReceiveProps() {
-        console.log('componentWillReceiveProps')
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backButtonClick);
     }
-    componentWillMount() {
 
-        console.log('componentWillMount');
+
+    backButtonClick() {
+        BackHandler.exitApp()
+        return false;
     }
 
     componentDidMount() {
+        BackHandler.addEventListener("hardwareBackPress", this.backButtonClick);
+
         getData('isBackup').then(data => {
             if (data == 1) {
                 this.setState({ isBackup: true });
@@ -37,7 +40,6 @@ export default class dashboard extends Component {
             }
         })
     }
-
 
     static navigationOptions = {
         headerStyle: {
@@ -64,7 +66,7 @@ export default class dashboard extends Component {
     }
 
     gotoBackup() {
-        this.props.navigator.navigate('Backup', { callDasboard: this.checkBackup.bind(this) })
+        this.props.navigation.navigate('Backup', { callDasboard: this.checkBackup.bind(this) })
     }
     resetTypeBackup() {
         rmData('isBackup')
@@ -93,9 +95,7 @@ export default class dashboard extends Component {
                         : null
                 }
                 <Chart />
-                {/* <Ranges /> */}
                 <List />
-                {/* </View> */}
             </ScrollView>
         )
     }

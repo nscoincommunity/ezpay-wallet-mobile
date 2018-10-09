@@ -115,10 +115,7 @@ export default class CameraScreen extends React.Component<any, any> {
     }
 
     render() {
-        console.log(this.props.navigation)
-
         const styles = this.defaultStyles();
-
         const { height, width } = Dimensions.get('window');
         const maskRowHeight = Math.round((height - 300) / 20);
         const maskColWidth = (width - 300) / 2;

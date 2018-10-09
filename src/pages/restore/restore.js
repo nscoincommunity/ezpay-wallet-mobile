@@ -7,6 +7,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { restoreByBackup, restoreByPk } from './restore.service';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
+import { setData } from '../../services/data.service'
 
 
 class ScreenRestore extends Component {
@@ -122,6 +123,7 @@ class FormBackupcode extends Component {
         restoreByBackup(this.state.backupCode, this.state.password)
             .then(rCode => {
                 if (rCode == 0) {
+                    setData('isBackup', '0');
                     const { navigate } = this.props.navigator;
                     navigate('TabNavigator');
                 } else {
@@ -328,6 +330,7 @@ class FormPrivateKey extends Component {
         restoreByPk(this.state.privateKey, this.state.password)
             .then(rCode => {
                 if (rCode == 0) {
+                    setData('isBackup', '0');
                     const { navigate } = this.props.navigator;
                     navigate('TabNavigator');
                 } else {

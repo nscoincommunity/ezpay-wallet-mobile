@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Platform, Keyboard } from "react-native";
+import { Image, StyleSheet, Platform, Keyboard, Alert } from "react-native";
 import GLOBALS from './helper/variables';
 import { logout } from './services/auth.service'
 
@@ -17,7 +17,6 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const datas = [
-
     {
         name: 'Redeem',
         route: 'Redeem',
@@ -70,9 +69,21 @@ export default class sidebar extends Component {
 
     navigationPage(route) {
         if (route == 'Unlogin') {
-            logout().then(() => {
-                this.props.navigation.navigate(route);
-            })
+            Alert.alert(
+                'Do you want to logout?',
+                '',
+                [
+                    { text: 'DISAGREE', style: 'Cancel' },
+                    {
+                        text: 'AGREE', onPress: () => {
+                            logout().then(() => {
+                                this.props.navigation.navigate(route);
+                            })
+                        }
+                    }
+                ]
+            )
+
         } else {
             this.props.navigation.navigate(route);
         }

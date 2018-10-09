@@ -15,10 +15,11 @@ import {
     List,
     ListItem,
     Toast,
-    Root
+    Root,
+    ActionSheet,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import CustomToast from '../../components/toast'
 
 const datas = [
     {
@@ -39,58 +40,69 @@ const datas = [
 ];
 
 export default class Setting extends Component {
+    Default_Toast_Bottom = () => {
 
-    pustToPage(Status: boolean, Router) {
+        this.refs.defaultToastBottom.ShowToastFunction('This feature is coming soon');
+
+    }
+
+    pushToPage(Status: boolean, Router) {
         if (Status == true) {
             this.props.navigation.navigate(Router)
         }
         else {
-            Toast.show({
-                text: "This feature is coming soon",
-                position: "bottom"
-            })
+            this.Default_Toast_Bottom()
+            // try {
+            //     Toast.show({
+            //         text: "This feature is coming soon",
+            //         position: "bottom"
+            //     })
+            // } catch (error) {
+            //     console.log(error)
+            // }
+
         }
     }
     render() {
         return (
-            <Root>
-                <Container style={{ backgroundColor: "#fff" }}>
-                    <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
-                        <Left>
-                            <Button
-                                transparent
-                                onPress={() => this.props.navigation.openDrawer()}
-                            >
-                                <Icon name="bars" color='#fff' size={25}></Icon>
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Title style={{ color: '#fff' }}>Settings</Title>
-                        </Body>
-                        <Right />
-                    </Header>
+            <Container style={{ backgroundColor: "#fff" }}>
+                <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
+                    <Left>
+                        <Button
+                            transparent
+                            onPress={() => this.props.navigation.openDrawer()}
+                        >
+                            <Icon name="bars" color='#fff' size={25}></Icon>
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title style={{ color: '#fff' }}>Settings</Title>
+                    </Body>
+                    <Right />
+                </Header>
 
-                    <Content padder>
-                        <List
-                            dataArray={datas}
-                            renderRow={data =>
-                                <ListItem
-                                    button
-                                    onPress={() => this.pustToPage(data.status, data.route)}
-                                >
-                                    <Left>
-                                        <Text>
-                                            {data.text}
-                                        </Text>
-                                    </Left>
-                                    <Right>
-                                        <Icon name="angle-right" />
-                                    </Right>
-                                </ListItem>}
-                        />
-                    </Content>
-                </Container>
-            </Root>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <List
+                        style={{ width: GLOBALS.WIDTH }}
+                        dataArray={datas}
+                        renderRow={data =>
+                            <ListItem
+                                button
+                                onPress={() => this.pushToPage(data.status, data.route)}
+                            >
+                                <Left>
+                                    <Text>
+                                        {data.text}
+                                    </Text>
+                                </Left>
+                                <Right>
+                                    <Icon name="angle-right" />
+                                </Right>
+                            </ListItem>}
+                    />
+                </View>
+                <CustomToast ref="defaultToastBottom" position="bottom" />
+            </Container>
         )
     }
 }

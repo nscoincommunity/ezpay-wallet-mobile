@@ -27,7 +27,7 @@ import request from './pages/request/request';
 import send from './pages/send/send';
 import dashboard from './pages/dashboard/dashboard';
 
-
+/* customize header */
 function setHeader(title) {
     return {
         headerStyle: {
@@ -43,11 +43,12 @@ function setHeader(title) {
         title: title
     }
 }
+
 const Drawer = createDrawerNavigator(
     {
-        // Dashboard: { screen: dashboard },
+        Dashboard: { screen: dashboard },
         Redeem: { screen: redeem },
-        // Request: { screen: request },
+        Request: { screen: request },
         Sendpage: { screen: send },
         TabNavigator: { screen: TabNavigator },
         Privatekey: { screen: Prk },
@@ -57,6 +58,7 @@ const Drawer = createDrawerNavigator(
         About: { screen: About }
     }, {
         initialRouteName: "TabNavigator",
+        /** customize drawer*/
         contentComponent: props => <Sidebar {...props} />
     }
 )

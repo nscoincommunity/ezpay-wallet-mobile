@@ -124,7 +124,7 @@
 // );
 
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Keyboard, Platform, BackHandler, BackAndroid, Alert } from 'react-native';
 import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
 import Dashboard from './pages/dashboard/dashboard';
 import Request from './pages/request/request';
@@ -133,6 +133,7 @@ import GLOBALS from './helper/variables'
 import Iccon from "react-native-vector-icons/FontAwesome";
 import { Container, Header, Left, Body, Title, Right, Button, Icon, Input, Item } from 'native-base'
 import { exchangeRate } from '../src/services/rate.service';
+
 
 class SendSceen extends React.Component {
 
@@ -166,13 +167,26 @@ class SendSceen extends React.Component {
                     </Body>
                     <Right />
                 </Header>
-                <Send />
+                <Send navigation={this.props.navigation} />
             </Container>
         );
     }
 }
 
 class DashboardScreen extends React.Component {
+    // componentDidMount() {
+    //     console.log(this.props.navigation.state.routeName)
+    //     BackHandler.addEventListener('hardwareBackPress', () => {
+    //         if (this.props.navigation.state.routeName == "Dashboard") {
+    //             alert(this.props.navigation.state.routeName)
+    //             return true;
+    //         } else {
+    //             return false
+    //         }
+    //     });
+
+    // }
+
     static navigationOptions = {
         tabBarLabel: 'Dashboard',
         tabBarIcon: ({ tintColor }) => (
@@ -202,13 +216,14 @@ class DashboardScreen extends React.Component {
                     </Body>
                     <Right />
                 </Header>
-                <Dashboard navigator={this.props.navigation} />
+                <Dashboard navigation={this.props.navigation} />
             </Container>
         );
     }
 }
 
 class RequestSceen extends React.Component {
+
     static navigationOptions = {
         tabBarLabel: 'Request',
         tabBarIcon: ({ tintColor }) => (
@@ -238,7 +253,7 @@ class RequestSceen extends React.Component {
                     </Body>
                     <Right />
                 </Header>
-                <Request />
+                <Request navigation={this.props.navigation} />
             </Container>
         );
     }

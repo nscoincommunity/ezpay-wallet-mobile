@@ -3,6 +3,7 @@ import { StyleSheet, Platform, Text, View, Image, TouchableOpacity, KeyboardAvoi
 import { Form, Item, Input, Label } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { checkIOS, Register } from '../../services/auth.service';
+import { setData } from '../../services/data.service'
 
 
 class ScreenRegister extends Component {
@@ -26,6 +27,7 @@ class ScreenRegister extends Component {
     async  register() {
         // this.setState({ visibaleMd: true })
         Register(this.state.password)
+        setData('isBackup', '0');
         const { navigate } = this.props.data.navigation;
         navigate('TabNavigator');
     }

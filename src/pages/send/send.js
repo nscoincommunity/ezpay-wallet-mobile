@@ -153,7 +153,7 @@ export default class FormSend extends Component {
                     //     ]
                     // )
                 }).catch(async error => {
-                    await this.setState(this.resetState)
+                    await this.setState({ VisibaleButton: true, dialogSend: false, VisibaleButton: false })
                     console.log('send error: ' + error)
                     if (error == 'Returned error: insufficient funds for gas * price + value') {
                         await this.setState({ titleDialog: 'Error', contentDialog: "You do not have enough NTY for this transaction" })
@@ -251,7 +251,6 @@ export default class FormSend extends Component {
     }
 
     render() {
-
         return (
             <View style={style.container}>
 
@@ -270,8 +269,8 @@ export default class FormSend extends Component {
                                 />
                             }
                         </View>
-                        <Form style={style.FormSend}>
 
+                        <Form style={style.FormSend}>
                             <View style={{
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
@@ -329,7 +328,8 @@ export default class FormSend extends Component {
                                 <Text style={style.TextButton}>SEND</Text>
                             </TouchableOpacity>
                         </Form>
-                        <Dialog.Container visible={this.state.dialogSend}>
+
+                        <Dialog.Container visible={this.state.dialogSend} >
                             <Dialog.Title>Confirm send</Dialog.Title>
                             <Dialog.Description>
                                 Enter your local passcode to process
@@ -340,8 +340,8 @@ export default class FormSend extends Component {
                         </Dialog.Container>
                     </KeyboardAvoidingView>
                 </ScrollView>
+
                 <PopupDialog
-                    // dialogStyle={{ width: 300, height: 200 }}
                     dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: GLOBALS.HEIGHT / 4 }}
                     ref={(popupDialog) => {
                         this.scaleAnimationDialog = popupDialog;
@@ -367,41 +367,6 @@ export default class FormSend extends Component {
     }
 }
 
-class FloatingLabelInput extends Component {
-    state = {
-        isFocused: false,
-    };
-
-    handleFocus = () => this.setState({ isFocused: true });
-    handleBlur = () => this.setState({ isFocused: false });
-
-    render() {
-        const { label, ...props } = this.props;
-        const { isFocused } = this.state;
-        const labelStyle = {
-            position: 'absolute',
-            left: 0,
-            top: !isFocused ? 18 : 0,
-            fontSize: !isFocused ? 20 : 14,
-            color: !isFocused ? '#aaa' : '#000',
-        };
-        return (
-            <View style={{ paddingTop: 18 }}>
-                <Text style={labelStyle}>
-                    {label}
-                </Text>
-                <TextInput
-                    {...props}
-                    style={{ height: 26, fontSize: 20, color: '#000', borderBottomWidth: 1, borderBottomColor: '#555', width: GLOBALS.WIDTH / 1.4 }}
-                    onFocus={this.handleFocus}
-                    onBlur={this.handleBlur}
-                    blurOnSubmit
-                />
-            </View>
-        );
-    }
-}
-
 /* style button */
 var styleButton = (color, type) => StyleSheet.create({
     button: {
@@ -413,33 +378,6 @@ var styleButton = (color, type) => StyleSheet.create({
         marginTop: GLOBALS.HEIGHT / 30,
     }
 })
-
-
-
-// export default class send extends Component {
-
-//     render() {
-//         return (
-//             <View style={{ flex: 1 }}>
-//                 {/* <KeyboardAvoidingView> */}
-//                 <TextInput placeholder="nhap gi vao day" style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5 }} />
-//                 <Input placeholder="nhap gi vao day" style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5 }} />
-//                 <Item floatingLabel>
-//                     <Label>nhap gi vao day</Label>
-//                     <Input style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5 }} />
-
-//                 </Item>
-//                 <Item floatingLabel>
-//                     <Label>nhap gi vao day</Label>
-//                     <TextInput style={{ height: 50, width: GLOBALS.WIDTH, borderWidth: 1, borderRadius: 5, zIndex: 9999 }} />
-//                 </Item>
-//                 {/* </KeyboardAvoidingView> */}
-//             </View>
-//             // <FormSend navigation={this.props.navigation} ></FormSend>
-//         )
-//     }
-// }
-
 
 const style = StyleSheet.create({
     container: {

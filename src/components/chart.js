@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import Line from './line';
-// import { SmoothLine } from 'react-native-pathjs-charts'
 import GLOBALS from '../helper/variables';
 import { Spinner } from "native-base";
 import Constants from '../helper/constants'
-// import PureChart from 'react-native-pure-chart';
 import { VictoryArea, VictoryStack } from "victory-native";
 
 
@@ -92,56 +89,9 @@ export default class Chart extends Component {
 
 
     render() {
-
-        // let options = {
-        //     width: GLOBALS.WIDTH,
-        //     height: GLOBALS.HEIGHT / 3,
-        //     color: "#286bb7",
-        //     margin: {
-        //         top: 20,
-        //         left: 0,
-        //         bottom: 0,
-        //         right: 20
-        //     },
-        //     animate: {
-        //         type: 'delayed',
-        //         duration: 200
-        //     },
-        //     axisX: {
-        //         showAxis: false,
-        //         showLines: false,
-        //         showLabels: false,
-        //         showTicks: false,
-        //         zeroAxis: true,
-        //         orient: 'bottom',
-        //         label: {
-        //             fontFamily: 'Arial',
-        //             fontSize: 14,
-        //             fontWeight: true,
-        //             fill: '#34495E'
-        //         }
-        //     },
-        //     axisY: {
-        //         showAxis: false,
-        //         showLines: false,
-        //         showLabels: false,
-        //         showTicks: false,
-        //         zeroAxis: false,
-        //         orient: 'left',
-        //         label: {
-        //             fontFamily: 'Arial',
-        //             fontSize: 14,
-        //             fontWeight: true,
-        //             fill: '#34495E'
-        //         }
-        //     }
-        // }
         return (
             <View style={styles.container}>
                 {this.state.DataChart.length > 0 ?
-                    // <View />
-                    // <SmoothLine data={[this.state.DataChart]} options={options} xKey='x' yKey='y' />
-
                     <VictoryArea
                         style={{
                             data: {

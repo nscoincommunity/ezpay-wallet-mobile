@@ -2,20 +2,20 @@ import bigInt from "big-integer";
 export default {
 
     /* static */
-    SERVICE_API: '',
+    SERVICE_API: 'https://app.nexty.io',
 
     /* Test net*/
-    WEB3_API_TEST: '',
+    WEB3_API_TEST: 'http://125.212.250.61:11111',
 
     /* Test net 2*/
-    WEB3_API_TEST2: '',
+    WEB3_API_TEST2: 'http://198.13.47.125',
 
     /* Main net */
-    WEB3_API: '',
+    WEB3_API: 'http://13.228.68.50:8545',
 
 
-    EXPLORER_API: '',
-    WALLET_API: '',
+    EXPLORER_API: 'https://explorer.nexty.io',
+    WALLET_API: 'https://dev-wallet.nexty.io',
     BASE_PNTY: Math.pow(10, 22),
     BASE_NTY: Math.pow(10, 18),
     PNTY_NTY: 10000,
