@@ -6,6 +6,7 @@ import CONSTANTS from '../../helper/constants';
 import { POSTAPI } from '../../helper/utils'
 import { Address } from '../../services/auth.service'
 import { getDataHis, HistoryModel, historyData } from './history.service'
+import Language from '../../i18n/i18n'
 
 import {
     Container,
@@ -134,13 +135,13 @@ export default class History extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>History</Title>
+                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('History.Title')}</Title>
                         </Body>
                         <Right />
                     </Header>
                     <Content padder contentContainerStyle={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', height: GLOBALS.HEIGHT - 20 }}>
                         <Spinner color={GLOBALS.Color.primary} />
-                        <Text>Please waitting ...</Text>
+                        <Text>{Language.t('History.Loading')}</Text>
                     </Content>
                 </Container>
             )
@@ -157,7 +158,7 @@ export default class History extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>History</Title>
+                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('History.Title')}</Title>
                         </Body>
                         <Right />
                     </Header>

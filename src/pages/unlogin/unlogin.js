@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, StatusBar } from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
 import { initAuth, isAuth, Address, cachePwd } from '../../services/auth.service'
 import { getExchangeRate } from '../../services/rate.service'
 import { Spinner } from 'native-base';
+import Lang from '../../i18n/i18n'
 
 export default class unlogin extends Component {
     constructor(props) {
@@ -49,20 +50,16 @@ export default class unlogin extends Component {
     render() {
         return (
             < View style={style.container} >
-                <StatusBar
-                    backgroundColor={GLOBALS.Color.primary}
-                    barStyle="light-content"
-                />
                 <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.primary).button} onPress={this.goLogin.bind(this)} >
-                        <Text style={style.TextButton}>Login</Text>
+                        <Text style={style.TextButton}>{Lang.t('Unlogin.Login')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.secondary).button} onPress={this.goRegister.bind(this)}>
-                        <Text style={style.TextButton}>Create Wallet</Text>
+                        <Text style={style.TextButton}>{Lang.t('Unlogin.CreateWallet')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.tertiary).button} onPress={this.goRestore.bind(this)}>
-                        <Text style={style.TextButton}>Restore Wallet</Text>
+                        <Text style={style.TextButton}>{Lang.t('Unlogin.Restore')}</Text>
                     </TouchableOpacity>
                 </View>
                 {
@@ -70,7 +67,7 @@ export default class unlogin extends Component {
                         <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
                             <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}>
                                 <Spinner color={GLOBALS.Color.primary} />
-                                <Text>Auto login ...</Text>
+                                <Text>{Lang.t('Unlogin.AutoLogin')}</Text>
                             </View>
                         </View>
                         : null

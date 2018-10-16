@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { GetInfoToken } from '../../services/wallet.service';
 import { setData, getData, rmData } from '../../services/data.service'
-
-
+import Language from '../../i18n/i18n'
 import {
     Container,
     Header,
@@ -31,13 +30,13 @@ export default class Addtoken extends Component {
                     <Left>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.openDrawer()}
+                            onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
                         >
                             <Icon name="bars" color='#fff' size={25}></Icon>
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: '#fff' }}>Add token</Title>
+                        <Title style={{ color: '#fff' }}>{Language.t("AddToken.Title")}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -83,13 +82,13 @@ class FormAddToken extends Component {
                     })
                 }
                 else {
-                    await this.setState({ ValidToken: true, txtErr: 'Token address is invalid' }, () => {
+                    await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken') }, () => {
                         this.disableButton()
                     })
                 }
             }).catch(async err => {
                 console.log(err);
-                await this.setState({ ValidToken: true, txtErr: 'Token address is invalid' }, () => {
+                await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken') }, () => {
                     this.disableButton()
                 })
             })
@@ -111,9 +110,9 @@ class FormAddToken extends Component {
                 if (this.ListToken.findIndex(x => x['tokenAddress'] == this.state.addressTK) > -1) {
                     this.setState({ ExistToken: true });
                     Alert.alert(
-                        'Error',
-                        'Token address has already existed',
-                        [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                        Language.t('AddToken.AlerError.Title'),
+                        Language.t('AddToken.AlerError.Content'),
+                        [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
                     )
                 } else {
                     try {
@@ -126,16 +125,16 @@ class FormAddToken extends Component {
                         })
                         setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
                             Alert.alert(
-                                'Successfuly',
-                                'Add token successfuly',
-                                [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                                Language.t('AddToken.AlerSuccess.Title'),
+                                Language.t('AddToken.AlerSuccess.Content'),
+                                [{ text: Language.t('AddToken.AlerSuccess.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
                             )
                         })
                     } catch (error) {
                         Alert.alert(
-                            'Error',
+                            Language.t('AddToken.AlerError.Title'),
                             error,
-                            [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                            [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
                         )
                     }
                 }
@@ -150,16 +149,16 @@ class FormAddToken extends Component {
                     })
                     setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
                         Alert.alert(
-                            'Successfuly',
-                            'Add token successfuly',
-                            [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                            Language.t('AddToken.AlerSuccess.Title'),
+                            Language.t('AddToken.AlerSuccess.Content'),
+                            [{ text: Language.t('AddToken.AlerSuccess.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
                         )
                     })
                 } catch (error) {
                     Alert.alert(
-                        'Error',
+                        Language.t('AddToken.AlerError.Title'),
                         error,
-                        [{ text: 'OK', onPress: () => this.setState(this.initState), style: 'cancel' }]
+                        [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
                     )
                 }
             }
@@ -171,20 +170,20 @@ class FormAddToken extends Component {
             <View>
                 <View style={styles.FormLogin}>
                     <Item floatingLabel error={this.state.ValidToken}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>Enter token contract address</Label>
+                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t("AddToken.FormAdd.PlaceholderToken")}</Label>
                         <Input onChangeText={(value) => { this.setValue(value) }} value={this.state.addressTK} />
                     </Item>
                     <Item style={{ borderBottomWidth: 0 }} >
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErr}</Text>
                     </Item>
                     <Item floatingLabel disabled={true}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }} >Token symbol</Label>
+                        <Label style={{ fontFamily: GLOBALS.font.Poppins }} >{Language.t("AddToken.FormAdd.PlaceholderSymbol")}</Label>
                         <Input disabled={true} value={this.state.symbol} />
                     </Item>
                 </View>
                 <View style={styles.AreaButton}>
                     <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.addToken.bind(this)} disabled={this.state.typeButton}>
-                        <Text style={styles.TextButton}>Add token</Text>
+                        <Text style={styles.TextButton}>{Language.t("AddToken.FormAdd.TitleButton")}</Text>
                     </TouchableOpacity>
                 </View>
                 {/* <View>

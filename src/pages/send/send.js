@@ -10,8 +10,7 @@ import { SendService, SendToken } from "../../services/wallet.service";
 import { ScaleDialog } from "../../services/loading.service";
 import { getData } from '../../services/data.service';
 import { Dropdown } from 'react-native-material-dropdown';
-
-
+import Language from '../../i18n/i18n';
 import PopupDialog, {
     ScaleAnimation, DialogTitle, DialogButton
 } from "react-native-popup-dialog"
@@ -84,7 +83,7 @@ export default class FormSend extends Component {
     async CheckAddress(value) {
         await this.setState({ TextErrorAddress: '' });
         if (value.length < 1) {
-            await this.setState({ addresswallet: value, errorAddress: true, TextErrorAddress: 'Invalid address', VisibaleButton: true })
+            await this.setState({ addresswallet: value, errorAddress: true, TextErrorAddress: Language.t('Send.ValidAddress'), VisibaleButton: true })
         } else {
             await this.setState({ addresswallet: value, errorAddress: false })
         }
@@ -98,12 +97,12 @@ export default class FormSend extends Component {
         var val = await parseFloat(value)
         await this.setState({ TextErrorNTY: '' });
         if (isNaN(val)) {
-            await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '' })
+            await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '' })
             return
         }
 
         if (val < 1 || value.length < 1) {
-            await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '' })
+            await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '' })
         } else {
             var usd = await Utils.round(val * exchangeRate, 5);
             await this.setState({ errorNTY: false, USD: usd.toString(), NTY: value });
@@ -117,11 +116,11 @@ export default class FormSend extends Component {
         var val = await parseFloat(value)
         await this.setState({ TextErrorNTY: '' });
         if (isNaN(val)) {
-            await this.setState({ errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, USD: '', NTY: '' })
+            await this.setState({ errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '', NTY: '' })
             return
         }
         if (val < 1 || value.length < 1) {
-            await this.setState({ USD: '', errorNTY: true, TextErrorNTY: 'Please enter a valid amount', VisibaleButton: true, NTY: '' })
+            await this.setState({ USD: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, NTY: '' })
         } else {
             var nty = await Utils.round(val / exchangeRate);
             await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
@@ -143,7 +142,7 @@ export default class FormSend extends Component {
                 .then(async data => {
                     await this.setState(this.resetState)
                     console.log('send success: ' + data)
-                    await this.setState({ titleDialog: 'Send successfully', contentDialog: data })
+                    await this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
                     await this.showScaleAnimationDialog();
                     // Alert.alert(
                     //     'Send successfully',
@@ -156,9 +155,9 @@ export default class FormSend extends Component {
                     await this.setState({ VisibaleButton: true, dialogSend: false, VisibaleButton: false })
                     console.log('send error: ' + error)
                     if (error == 'Returned error: insufficient funds for gas * price + value') {
-                        await this.setState({ titleDialog: 'Error', contentDialog: "You do not have enough NTY for this transaction" })
+                        await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
                     } else {
-                        await this.setState({ titleDialog: 'Error', contentDialog: error })
+                        await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
                     }
                     await this.showScaleAnimationDialog();
                     console.log(error)
@@ -176,7 +175,7 @@ export default class FormSend extends Component {
                 .then(async data => {
                     await this.setState(this.resetState)
                     console.log('send success: ' + data)
-                    await this.setState({ titleDialog: 'Send successfully', contentDialog: data })
+                    await this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
                     await this.showScaleAnimationDialog();
                     // Alert.alert(
                     //     'Send successfully',
@@ -188,7 +187,7 @@ export default class FormSend extends Component {
                 }).catch(async error => {
                     await this.setState(this.resetState)
                     console.log('send error: ' + error)
-                    await this.setState({ titleDialog: 'Error', contentDialog: error })
+                    await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
                     await this.showScaleAnimationDialog();
                     console.log(error)
 
@@ -263,7 +262,7 @@ export default class FormSend extends Component {
                                 this.state.ListToken &&
                                 <Dropdown
                                     onChangeText={(item) => this.selectToken(item)}
-                                    label='Select Token'
+                                    label={Language.t('Send.SendForm.SelectToken')}
                                     data={this.state.ListToken}
                                     value={'NTY'}
                                 />
@@ -277,7 +276,7 @@ export default class FormSend extends Component {
                                 width: GLOBALS.WIDTH,
                             }}>
                                 <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.4 }} error={this.state.errorAddress}>
-                                    <Label>To</Label>
+                                    <Label>{Language.t('Send.SendForm.To')}</Label>
                                     <Input
                                         value={this.state.addresswallet}
                                         onChangeText={(val) => this.CheckAddress(val)}
@@ -325,18 +324,18 @@ export default class FormSend extends Component {
                                 </Item>
                             </View>
                             <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.VisibaleButton).button} disabled={this.state.VisibaleButton} onPress={() => this.setState({ dialogSend: true })}>
-                                <Text style={style.TextButton}>SEND</Text>
+                                <Text style={style.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
                             </TouchableOpacity>
                         </Form>
 
                         <Dialog.Container visible={this.state.dialogSend} >
-                            <Dialog.Title>Confirm send</Dialog.Title>
+                            <Dialog.Title>{Language.t('Send.ConfirmSend.Title')}</Dialog.Title>
                             <Dialog.Description>
-                                Enter your local passcode to process
-                        </Dialog.Description>
-                            <Dialog.Input placeholder="Wallet Local passcode" onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
-                            <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
-                            <Dialog.Button label="Send" onPress={this.doSend.bind(this)} />
+                                {Language.t('Send.ConfirmSend.Content')}
+                            </Dialog.Description>
+                            <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
+                            <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
+                            <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.doSend.bind(this)} />
                         </Dialog.Container>
                     </KeyboardAvoidingView>
                 </ScrollView>
@@ -350,7 +349,7 @@ export default class FormSend extends Component {
                     dialogTitle={<DialogTitle title={this.state.titleDialog} />}
                     actions={[
                         <DialogButton
-                            text="OK"
+                            text={Language.t('Send.Ok')}
                             onPress={() => {
                                 this.scaleAnimationDialog.dismiss();
                             }}

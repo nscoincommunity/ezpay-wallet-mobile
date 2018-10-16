@@ -133,12 +133,12 @@ import GLOBALS from './helper/variables'
 import Iccon from "react-native-vector-icons/FontAwesome";
 import { Container, Header, Left, Body, Title, Right, Button, Icon, Input, Item } from 'native-base'
 import { exchangeRate } from '../src/services/rate.service';
-
+import Language from './i18n/i18n'
 
 class SendSceen extends React.Component {
 
     static navigationOptions = {
-        tabBarLabel: 'Send',
+        // tabBarLabel: Language.t("Send.Title"),
         // Note: By default the icon is only shown on iOS. Search the showIcon option below.
         tabBarIcon: ({ tintColor }) => (
             <Iccon
@@ -163,7 +163,7 @@ class SendSceen extends React.Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>Send</Title>
+                        <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t("Send.Title")}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -174,21 +174,9 @@ class SendSceen extends React.Component {
 }
 
 class DashboardScreen extends React.Component {
-    // componentDidMount() {
-    //     console.log(this.props.navigation.state.routeName)
-    //     BackHandler.addEventListener('hardwareBackPress', () => {
-    //         if (this.props.navigation.state.routeName == "Dashboard") {
-    //             alert(this.props.navigation.state.routeName)
-    //             return true;
-    //         } else {
-    //             return false
-    //         }
-    //     });
-
-    // }
 
     static navigationOptions = {
-        tabBarLabel: 'Dashboard',
+        tabBarLabel: Language.t("Dashboard.Title"),
         tabBarIcon: ({ tintColor }) => (
             <Iccon
                 type="FontAwesome"
@@ -225,7 +213,7 @@ class DashboardScreen extends React.Component {
 class RequestSceen extends React.Component {
 
     static navigationOptions = {
-        tabBarLabel: 'Request',
+        tabBarLabel: Language.t("Request.Title"),
         tabBarIcon: ({ tintColor }) => (
             <Iccon
                 type="FontAwesome"
@@ -249,7 +237,7 @@ class RequestSceen extends React.Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>Request</Title>
+                        <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t("Request.Title")}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -266,38 +254,82 @@ const styles = StyleSheet.create({
     },
 });
 
-const MyApp = TabNavigator(
-    {
-        Send: {
-            screen: SendSceen,
-        },
-        Dashboard: {
-            screen: DashboardScreen,
-        },
-        Request: {
-            screen: RequestSceen,
-        }
-    },
-    {
-        tabBarComponent: TabBarBottom,
-        initialRouteName: 'Dashboard',
-        tabBarPosition: 'bottom',
-        animationEnabled: true,
-        tabBarOptions: {
-            showIcon: true,
-            showLabel: true,
-            activeTintColor: '#F8F8F8',
-            inactiveTintColor: '#586589',
-            upperCaseLabel: true,
-            labelStyle: {
-                fontSize: 15,
-                fontFamily: GLOBALS.font.Poppins
-            },
-            style: {
-                backgroundColor: GLOBALS.Color.primary,
-            },
-            tabStyle: {},
-        }
-    });
 
-export default MyApp;
+// export default MyApp
+
+export default class TabFooder extends React.Component {
+
+    render() {
+        const MyApp = TabNavigator(
+            {
+                Send: {
+                    screen: props => <SendSceen {...this.props} />,
+                    navigationOptions: {
+                        tabBarLabel: Language.t("Send.Title"),
+                        tabBarIcon: ({ tintColor }) => (
+                            <Iccon
+                                color={tintColor}
+                                type="FontAwesome"
+                                name="arrow-up"
+                                size={25}
+                            />
+                        )
+                    }
+                },
+                Dashboard: {
+                    screen: props => <DashboardScreen {...this.props} />,
+                    navigationOptions: {
+                        tabBarLabel: Language.t("Dashboard.Title"),
+                        tabBarIcon: ({ tintColor }) => (
+                            <Iccon
+                                type="FontAwesome"
+                                name="home"
+                                color={tintColor}
+                                size={25}
+                            />
+                        )
+                    }
+                },
+                Request: {
+                    screen: props => <RequestSceen {...this.props} />,
+                    navigationOptions: {
+                        tabBarLabel: Language.t("Request.Title"),
+                        tabBarIcon: ({ tintColor }) => (
+                            <Iccon
+                                type="FontAwesome"
+                                name="arrow-down"
+                                color={tintColor}
+                                size={25}
+                            />
+                        )
+                    }
+                }
+            },
+            {
+                tabBarComponent: TabBarBottom,
+                initialRouteName: 'Dashboard',
+                tabBarPosition: 'bottom',
+                animationEnabled: true,
+                tabBarOptions: {
+                    showIcon: true,
+                    showLabel: true,
+                    activeTintColor: '#F8F8F8',
+                    inactiveTintColor: '#586589',
+                    upperCaseLabel: true,
+                    labelStyle: {
+                        fontSize: 12,
+                        fontFamily: GLOBALS.font.Poppins
+                    },
+                    style: {
+                        backgroundColor: GLOBALS.Color.primary,
+                        // paddingTop: Platform.OS == 'android' ? 5 : 'auto'
+
+                    },
+                    tabStyle: {},
+                }
+            });
+        return (
+            <MyApp />
+        )
+    }
+};

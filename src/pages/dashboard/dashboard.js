@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Chart from '../../components/chart';
 import List from '../../components/listCoin';
 import { getData, rmData } from '../../services/data.service'
+import Language from '../../i18n/i18n'
 
 var interval
 export default class dashboard extends Component {
@@ -84,12 +85,12 @@ export default class dashboard extends Component {
                 {
                     !this.state.isBackup ?
                         <View style={{ flexDirection: 'row', backgroundColor: '#D50000', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ width: GLOBALS.WIDTH * 4 / 5.5, color: '#fff' }}>Wallet has not yet backed up</Text>
+                            <Text style={{ width: GLOBALS.WIDTH * 4 / 5.5, color: '#fff' }}>{Language.t('Dashboard.CheckBackup')}</Text>
                             <TouchableOpacity
                                 style={{ backgroundColor: GLOBALS.Color.primary, borderRadius: 3, justifyContent: 'center', padding: 5, margin: 4 }}
                                 onPress={() => this.gotoBackup()}
                             >
-                                <Text style={{ color: '#fff', textAlign: 'center' }}>BACK UP</Text>
+                                <Text style={{ color: '#fff', textAlign: 'center' }}>{Language.t('Dashboard.ButtonBackup')}</Text>
                             </TouchableOpacity>
                         </View>
                         : null

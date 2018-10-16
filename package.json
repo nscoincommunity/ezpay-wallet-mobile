@@ -39,6 +39,8 @@
     "react-native-dialog": "^5.1.0",
     "react-native-document-picker": "^2.1.0",
     "react-native-fs": "^2.11.15",
+    "react-native-http": "tradle/react-native-http#834492d",
+    "react-native-i18n": "^2.0.15",
     "react-native-level-fs": "^3.0.0",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-os": "^1.0.1",
@@ -59,8 +61,7 @@
     "timers-browserify": "^1.0.1",
     "url": "~0.10.1",
     "victory-native": "^30.4.0",
-    "web3": "^1.0.0-beta.33",
-    "react-native-http": "tradle/react-native-http#834492d"
+    "web3": "^1.0.0-beta.33"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

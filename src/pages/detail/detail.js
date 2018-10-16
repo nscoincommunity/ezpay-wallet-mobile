@@ -15,8 +15,22 @@ import {
     List
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Language from '../../i18n/i18n';
 
 export default class DetailHis extends Component {
+    static navigationOptions = () => ({
+        title: Language.t('DetailHistory.Title'),
+        headerStyle: {
+            backgroundColor: GLOBALS.Color.primary,
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerBackTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    });
 
     render() {
         var data = this.props.navigation.getParam('data');
@@ -24,11 +38,11 @@ export default class DetailHis extends Component {
 
         return (
             <Container style={{ backgroundColor: "#fff" }}>
-                <Content padder>
+                <View >
 
                     <ListItem icon>
                         <Body>
-                            <Text style={styleText}>Txhash</Text>
+                            <Text style={styleText}>{Language.t('DetailHistory.Txhash')}</Text>
                             <Text style={styleText} note numberOfLines={1}>{data.tx}</Text>
                         </Body>
                     </ListItem>
@@ -37,7 +51,7 @@ export default class DetailHis extends Component {
                         data.type == 'arrow-up' &&
                         <ListItem icon>
                             <Body>
-                                <Text style={styleText}>To</Text>
+                                <Text style={styleText}>{Language.t('DetailHistory.To')}</Text>
                                 <Text style={styleText} note numberOfLines={1}>{data.data.to}</Text>
                             </Body>
                         </ListItem>
@@ -47,7 +61,7 @@ export default class DetailHis extends Component {
                         data.type == 'arrow-down' &&
                         <ListItem icon>
                             <Body>
-                                <Text style={styleText}>From</Text>
+                                <Text style={styleText}>{Language.t('DetailHistory.From')}</Text>
                                 <Text style={styleText} note numberOfLines={1}>{data.data.from}</Text>
                             </Body>
                         </ListItem>
@@ -55,21 +69,21 @@ export default class DetailHis extends Component {
 
                     <ListItem icon>
                         <Body>
-                            <Text style={styleText}>Amount</Text>
+                            <Text style={styleText}>{Language.t('DetailHistory.Amount')}</Text>
                             <Text style={styleText} note numberOfLines={1}>{data.quantity}</Text>
                         </Body>
                     </ListItem>
 
                     <ListItem icon>
                         <Body>
-                            <Text style={styleText}>Date</Text>
+                            <Text style={styleText}>{Language.t('DetailHistory.Date')}</Text>
                             <Text note numberOfLines={1} style={styleText}>{data.datetime}</Text>
                         </Body>
                     </ListItem>
 
                     <ListItem icon >
                         <Body>
-                            <Text style={styleText}>Status</Text>
+                            <Text style={styleText}>{Language.t('DetailHistory.Status')}</Text>
                             <Text style={{ color: "green", fontFamily: GLOBALS.font.Poppins }} note numberOfLines={1} >COMPLETE</Text>
                         </Body>
                     </ListItem>
@@ -84,10 +98,10 @@ export default class DetailHis extends Component {
                                 justifyContent: 'center',
                                 width: GLOBALS.WIDTH / 1.6
                             }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins }}>EXPLORER</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins }}>{Language.t('DetailHistory.TitleButton')}</Text>
                         </TouchableOpacity>
                     </View>
-                </Content>
+                </View>
             </Container>
         )
     }

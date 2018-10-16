@@ -15,44 +15,8 @@ import {
     Footer,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Language from './i18n/i18n';
 
-const datas = [
-    {
-        name: 'Redeem',
-        route: 'Redeem',
-        icon: 'gift',
-    },
-    {
-        name: 'Private key',
-        route: 'Privatekey',
-        icon: 'key',
-    },
-    {
-        name: 'Add token',
-        route: 'Addtoken',
-        icon: 'plus-circle',
-    },
-    {
-        name: 'History',
-        route: 'History',
-        icon: 'history',
-    },
-    {
-        name: 'Settings',
-        route: 'Setting',
-        icon: 'cog',
-    },
-    {
-        name: 'About',
-        route: 'About',
-        icon: 'info-circle',
-    },
-    {
-        name: 'Logout',
-        route: 'Unlogin',
-        icon: 'sign-out',
-    },
-]
 
 
 export default class sidebar extends Component {
@@ -70,12 +34,12 @@ export default class sidebar extends Component {
     navigationPage(route) {
         if (route == 'Unlogin') {
             Alert.alert(
-                'Do you want to logout?',
+                Language.t("ConfirmLogout.Content"),
                 '',
                 [
-                    { text: 'DISAGREE', style: 'Cancel' },
+                    { text: Language.t("ConfirmLogout.ButtonCancel"), style: 'Cancel' },
                     {
-                        text: 'AGREE', onPress: () => {
+                        text: Language.t("ConfirmLogout.ButtonAgree"), onPress: () => {
                             logout().then(() => {
                                 this.props.navigation.navigate(route);
                             })
@@ -90,6 +54,44 @@ export default class sidebar extends Component {
     }
 
     render() {
+        const datas = [
+            {
+                name: Language.t('Drawer.Redeem'),
+                route: 'Redeem',
+                icon: 'gift',
+            },
+            {
+                name: Language.t('Drawer.Privatekey'),
+                route: 'Privatekey',
+                icon: 'key',
+            },
+            {
+                name: Language.t('Drawer.Addtoken'),
+                route: 'Addtoken',
+                icon: 'plus-circle',
+            },
+            {
+                name: Language.t('Drawer.History'),
+                route: 'History',
+                icon: 'history',
+            },
+            {
+                name: Language.t('Drawer.Settings'),
+                route: 'Setting',
+                icon: 'cog',
+            },
+            {
+                name: Language.t('Drawer.About'),
+                route: 'About',
+                icon: 'info-circle',
+            },
+            {
+                name: Language.t('Drawer.Logout'),
+                route: 'Unlogin',
+                icon: 'sign-out',
+            },
+        ]
+
         return (
             <Container >
                 <Content
@@ -162,7 +164,7 @@ export default class sidebar extends Component {
                             </ListItem>}
                     />
                 </Content>
-                <Text style={{ color: '#fff', backgroundColor: '#093a84' }}>Version 0.0.1</Text>
+                <Text style={{ color: '#fff', backgroundColor: '#093a84' }}>{Language.t('Drawer.Version')} 0.0.1</Text>
             </Container>
         )
     }

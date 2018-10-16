@@ -3,6 +3,17 @@ package com.nextywallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.tradle.react.UdpSocketsModule;
+import com.peel.react.TcpSocketsModule;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.bitgo.randombytes.RandomBytesPackage;
+import com.peel.react.rnos.RNOSModule;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.rnfs.RNFSPackage;
+import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
+import org.reactnative.camera.RNCameraPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -32,18 +43,18 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new SplashScreenReactPackage(),
-            new SvgPackage(),
-            new VectorIconsPackage(),
-            new UdpSocketsModule(),
-            new TcpSocketsModule(),
-            new RandomBytesPackage(),
-            new RNOSModule(),
-            new RNFSPackage(),
-            new ReactNativeDocumentPicker(),
-            new RNCameraPackage()
-      );
+              new MainReactPackage(),
+              new RNI18nPackage(),
+              new SplashScreenReactPackage(),
+              new SvgPackage(),
+              new VectorIconsPackage(),
+              new UdpSocketsModule(),
+              new TcpSocketsModule(),
+              new RandomBytesPackage(),
+              new RNOSModule(),
+              new RNFSPackage(),
+              new ReactNativeDocumentPicker(),
+              new RNCameraPackage());
     }
 
     @Override

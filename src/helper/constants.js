@@ -11,11 +11,11 @@ export default {
     WEB3_API_TEST2: 'http://198.13.47.125',
 
     /* Main net */
-    WEB3_API: 'http://13.228.68.50:8545',
+    WEB3_API: '',
 
 
-    EXPLORER_API: 'https://explorer.nexty.io',
-    WALLET_API: 'https://dev-wallet.nexty.io',
+    EXPLORER_API: '',
+    WALLET_API: '',
     BASE_PNTY: Math.pow(10, 22),
     BASE_NTY: Math.pow(10, 18),
     PNTY_NTY: 10000,

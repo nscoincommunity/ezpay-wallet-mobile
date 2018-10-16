@@ -1,12 +1,21 @@
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, AsyncStorage } from 'react-native';
-import { Form, Item, Input, Label } from 'native-base'
+import { Form, Item, Input, Label, Title } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
 import { initAuth, Address, isAuth, Login } from '../../services/auth.service'
 import { getData, checkAuth } from '../../services/data.service'
+import Lang from '../../i18n/i18n'
+// import I18n from 'react-native-i18n';
+
+// I18n.fallbacks = true;
+// I18n.translations = {
+//     'en': require('../../i18n/en'),
+//     'vi': require('../../i18n/vi')
+// };
 
 class ScreenLogin extends Component {
+
 
     constructor(props) {
         super(props)
@@ -23,15 +32,18 @@ class ScreenLogin extends Component {
             ErrorPwd: false,
             typeButton: true
         };
-
-
-    };
-
-    componentDidMount() {
         initAuth().then(data => {
             this.setState({ Address: Address })
         })
-    }
+
+    };
+
+    // componentDidMount() {
+    //     console.log(Lang)
+    //     initAuth().then(data => {
+    //         this.setState({ Address: Address })
+    //     })
+    // }
 
 
     static navigationOptions = {
@@ -39,20 +51,21 @@ class ScreenLogin extends Component {
     };
 
 
-    Login() {
-        Login(this.state.Address, this.state.Password).then(data => {
-            const { navigate } = this.props.data.navigation;
-            navigate('TabNavigator');
-        }).catch(err => {
-            console.log(err)
-            this.setState({ TextError: 'Invalid credentials.' })
-        })
+    LoginNTY() {
+        Login(this.state.Address, this.state.Password)
+            .then(data => {
+                const { navigate } = this.props.navigation;
+                navigate('TabNavigator');
+            }).catch(err => {
+                console.log(err)
+                this.setState({ TextError: Lang.t('Login.InvalidCredentials') })
+            })
     }
 
     async checkPassword(val) {
         await this.setState({ TextError: '' });
         if (val.length < 6) {
-            await this.setState({ ErrorPwd: true, TextErrorPwd: 'Please enter a valid local passcode', typeButton: true })
+            await this.setState({ ErrorPwd: true, TextErrorPwd: Lang.t('Login.InvalidLocalPasscode'), typeButton: true })
         } else {
             await this.setState({ Password: val, ErrorPwd: false, TextErrorPwd: '', typeButton: false })
         }
@@ -61,15 +74,20 @@ class ScreenLogin extends Component {
     async checkAddress(val) {
         await this.setState({ TextError: '' });
         if (val.length < 1) {
-            await this.setState({ Address: '', ErrorAddress: true, TextErrorAddress: 'Please enter a valid address.', typeButton: true });
+            await this.setState({ Address: '', ErrorAddress: true, TextErrorAddress: Lang.t('Login.InvalidAddress'), typeButton: true });
         } else {
             await this.setState({ Address: val, ErrorAddress: false, TextErrorAddress: '', typeButton: false })
         }
+        if (this.state.Password == '' || this.state.ErrorPwd == true) {
+            await this.setState({ typeButton: true });
+        } else {
+            await this.setState({ typeButton: true });
+        }
+
     }
     handleKeyDown(e) {
         console.log(e.nativeEvent)
         if (e.nativeEvent.key == "Enter") {
-            alert('hahaha')
             dismissKeyboard();
         }
     }
@@ -85,7 +103,8 @@ class ScreenLogin extends Component {
                 <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
                 <Form style={style.FormLogin}>
                     <Item floatingLabel error={this.state.ErrorAddress}>
-                        <Label>Address wallet</Label>
+                        <Label>{Lang.t('Login.PHAddress')}</Label>
+                        {/* <Label>Address wallet</Label> */}
                         <Input
                             onChangeText={(val) => this.checkAddress(val)}
                             value={this.state.Address}
@@ -98,7 +117,7 @@ class ScreenLogin extends Component {
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
                     </Item>
                     <Item floatingLabel error={this.state.ErrorPwd}>
-                        <Label>Wallet local passcode</Label>
+                        <Label>{Lang.t('Login.PHLocalPasscode')}</Label>
                         <Input
                             onChangeText={(val) => this.checkPassword(val)}
                             secureTextEntry={true}
@@ -106,7 +125,7 @@ class ScreenLogin extends Component {
                             getRef={input => { this.inputs['field2'] = input }}
                             onSubmitEditing={() => {
                                 if (this.state.typeButton == false) {
-                                    this.Login()
+                                    this.LoginNTY()
                                 }
                             }}
                         />
@@ -119,8 +138,8 @@ class ScreenLogin extends Component {
                     </Item>
                 </Form>
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.Login.bind(this)} disabled={this.state.typeButton}>
-                        <Text style={style.TextButton}>Continue</Text>
+                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={() => this.LoginNTY()} disabled={this.state.typeButton}>
+                        <Text style={style.TextButton}>{Lang.t('Login.TitleButton')}</Text>
                     </TouchableOpacity>
                 </View>
             </View >
@@ -130,12 +149,25 @@ class ScreenLogin extends Component {
 
 }
 export default class login extends Component {
+    static navigationOptions = () => ({
+        title: Lang.t('Login.Title'),
+        headerStyle: {
+            backgroundColor: GLOBALS.Color.primary,
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerBackTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    });
 
     render() {
         return (
             <ScrollView >
                 <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
-                    <ScreenLogin data={this.props}></ScreenLogin>
+                    <ScreenLogin {...this.props} />
                 </KeyboardAvoidingView>
             </ScrollView>
         )

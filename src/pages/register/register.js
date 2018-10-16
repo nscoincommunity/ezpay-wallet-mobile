@@ -4,6 +4,7 @@ import { Form, Item, Input, Label } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { checkIOS, Register } from '../../services/auth.service';
 import { setData } from '../../services/data.service'
+import Lang from '../../i18n/i18n'
 
 
 class ScreenRegister extends Component {
@@ -36,13 +37,13 @@ class ScreenRegister extends Component {
         if (value.length > 5) {
             await this.setState({ TexterrorPw: '', errorPw: false, typeButton: false });
         } else {
-            await this.setState({ TexterrorPw: 'Wallet local passcode needs at least 6 characters', errorPw: true, typeButton: true })
+            await this.setState({ TexterrorPw: Lang.t("Register.ErrorLocalPasscode"), errorPw: true, typeButton: true })
         }
 
         if (this.state.confirmpassword == '' || this.state.confirmpassword == value) {
             await this.setState({ TexterrorCPw: '', errorCPw: false });
         } else {
-            await this.setState({ TexterrorCPw: 'Wallet local passcode not match', errorCPw: true })
+            await this.setState({ TexterrorCPw: Lang.t("Register.ErrorNotMatch"), errorCPw: true })
         }
         if (this.state.password == '' || this.state.confirmpassword == '' || this.state.errorCPw == true || this.state.errorPw == true) {
             await this.setState({ typeButton: true })
@@ -56,7 +57,7 @@ class ScreenRegister extends Component {
         if (this.state.password && this.state.password == value) {
             this.setState({ TexterrorCPw: '', errorCPw: false, typeButton: false });
         } else {
-            this.setState({ TexterrorCPw: 'Wallet local passcode not match', errorCPw: true, typeButton: true })
+            this.setState({ TexterrorCPw: Lang.t("Register.ErrorNotMatch"), errorCPw: true, typeButton: true })
         }
         if (this.state.errorPw == true) {
             this.setState({ typeButton: true })
@@ -72,9 +73,9 @@ class ScreenRegister extends Component {
             <View style={style.container}>
                 {/* <ModalLoading visibleModal={this.state.visibaleMd} /> */}
                 <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
-                <View style={style.FormLogin}>
+                <Form style={style.FormLogin}>
                     <Item floatingLabel error={this.state.errorPw}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>Wallet local passcode</Label>
+                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Register.PHWalletLocalPasscode")}</Label>
                         <Input
                             secureTextEntry={true}
                             onChangeText={(value) => { this.validatePass(value) }}
@@ -87,7 +88,7 @@ class ScreenRegister extends Component {
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorPw}</Text>
                     </Item>
                     <Item floatingLabel error={this.state.errorCPw}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>Comfirm wallet local passcode</Label>
+                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Register.PHConfirmLocalPasscode")}</Label>
                         <Input
                             secureTextEntry={true}
                             onChangeText={(value) => { this.validateConfirmPass(value) }}
@@ -103,13 +104,13 @@ class ScreenRegister extends Component {
                     <Item style={{ borderBottomWidth: 0 }}>
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorCPw}</Text>
                     </Item>
-                </View>
-                <Text style={{ fontFamily: GLOBALS.font.Poppins }}>By creating a new wallet you agree to the </Text>
+                </Form>
+                <Text style={{ fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }}>{Lang.t("Register.policy")}</Text>
                 <Text style={{ color: GLOBALS.Color.primary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy.html') }}> Term of Service</Text>
 
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.register.bind(this)} disabled={this.state.typeButton}>
-                        <Text style={style.TextButton}>Create wallet</Text>
+                        <Text style={style.TextButton}>{Lang.t("Register.TitleButton")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -119,11 +120,24 @@ class ScreenRegister extends Component {
 
 }
 export default class register extends Component {
+    static navigationOptions = () => ({
+        title: Lang.t('Register.Title'),
+        headerStyle: {
+            backgroundColor: GLOBALS.Color.primary,
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerBackTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    });
 
     render() {
         return (
             <ScrollView >
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
+                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={55} enabled>
                     <ScreenRegister data={this.props}></ScreenRegister>
                 </KeyboardAvoidingView>
             </ScrollView>

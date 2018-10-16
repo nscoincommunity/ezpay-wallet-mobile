@@ -6,7 +6,7 @@ import { updateBalance, balance, updateBalanceTK } from '../services/wallet.serv
 import { Utils } from '../helper/utils';
 import CONSTANTS from '../helper/constants';
 import { getData } from '../services/data.service'
-
+import Language from '../i18n/i18n'
 
 class HorizontalItem extends Component {
     render() {
@@ -95,7 +95,7 @@ export default class listCoin extends Component {
         ]
         return (
             <View style={styles.container}>
-                <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingBottom: 10, fontFamily: GLOBALS.font.Poppins }}> Your balance</Text>
+                <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingBottom: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Dashboard.YourBalance')}</Text>
                 {/* <View style={styles.ItemHozi}>
                     <Text style={styles.contenCoin}>NTY</Text>
                     <Text style={styles.contenCoin}>204847</Text>

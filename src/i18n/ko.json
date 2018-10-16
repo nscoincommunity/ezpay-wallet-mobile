@@ -1,0 +1,227 @@
+{
+    "Login": {
+        "Title": "로그인",
+        "PHAddress": "지갑주소",
+        "PHLocalPasscode": "월렛 로컬 패스 코드",
+        "TitleButton": "다음",
+        "InvalidCredentials": "잘못된 자격 증명",
+        "InvalidLocalPasscode": "올바른 패스 코드를 입력하십시오",
+        "InvalidAddress": "올바른 주소를 입력하십시오"
+    },
+    "Register": {
+        "Title": "월렛 생성",
+        "TitleButton": "월렛 생성",
+        "PHWalletLocalPasscode": "월렛 로컬 패스 코드",
+        "PHConfirmLocalPasscode": "월렛 로컬 패스 코드 확인",
+        "policy": "새 월렛을 만들면 이용약관에 동의하게됩니다.",
+        "ErrorLocalPasscode": "월렛 로컬 비밀번호는 6 자 이상이어야합니다.",
+        "ErrorNotMatch": "월렛 로컬 비밀번호가 일치하지 않습니다."
+    },
+    "Restore": {
+        "Title": "지갑 복원",
+        "BackUpCode": "백업 코드",
+        "Privatekey": "Private key",
+        "ChooserFile": "파일을 선택",
+        "LocalPasscode": "월렛 로컬 패스 코드",
+        "ComfirmLocalPasscode": "월렛 로컬 패스 코드 확인",
+        "ErrorLocalPasscode": "월렛 로컬 비밀번호는 6 자 이상이어야합니다.",
+        "ErrorNotMatch": "월렛 로컬 비밀번호가 일치하지 않습니다.",
+        "TitleButton": "다음",
+        "Error": "오류",
+        "InvalidRestoreCode": "잘못된 복원 코드입니다. 다시 시도하십시오.",
+        "Ok": "OK",
+        "InvalidPK": "유효한 private key 를 입력하십시오.",
+        "Warning": "경고",
+        "ContentWarning": "올바른 백업 파일을 선택하십시오.",
+        "AlertInvalidPK": "I잘못된 private key, 다시 시도하십시오!"
+    },
+    "Dashboard": {
+        "Title": "게시판",
+        "Day": "일",
+        "Week": "주",
+        "Month": "월",
+        "All": "모두",
+        "YourBalance": "잔액",
+        "CheckBackup": "지갑이 아직 백업되지 않았습니다.",
+        "ButtonBackup": "백업"
+    },
+    "Send": {
+        "Title": "보내다",
+        "SendForm": {
+            "SelectToken": "토큰 선택",
+            "To": "에",
+            "TitleButton": "보내다"
+        },
+        "ConfirmSend": {
+            "Title": "보내기 확인",
+            "Content": "진행을 하려면 로컬 패스 코드를 입력하십시오.",
+            "Placeholder": "월렛 로컬 패스 코드",
+            "TitleButtonCancel": "취소"
+        },
+        "AlerError": {
+            "Error": "오류",
+            "Content": "로컬 패스 코드가 잘못되었습니다.",
+            "NotEnoughNTY": "이 거래에 충분한 NTY가 없습니다."
+        },
+        "SendSuccess": {
+            "Title": "성공적으로 보내기"
+        },
+        "Ok": "Ok",
+        "ValidAmount": "유효한 금액을 입력하십시오.",
+        "ValidAddress": "잘못된 주소"
+    },
+    "Request": {
+        "Title": "요청",
+        "TitleCopy": "아래 이미지를 탭하여이 지갑 주소를 복사하거나 이메일 또는 텍스트를 통해 다른 사람과 공유하십시오.",
+        "Share": "공유",
+        "Toast": "클립 보드에 복사 됨"
+    },
+    "Unlogin": {
+        "Login": "로그인",
+        "CreateWallet": "월렛 생성",
+        "Restore": "지갑 복원",
+        "AutoLogin": "자동 로그인 ..."
+    },
+    "Drawer": {
+        "Redeem": "도로 사다",
+        "Privatekey": "Private key",
+        "Addtoken": "토큰 추가",
+        "History": "기록",
+        "Settings": "설정",
+        "About": "Nexty에 대하여",
+        "Logout": "로그 아웃",
+        "Version": "번역"
+    },
+    "Redeem": {
+        "Title": "도로 사다",
+        "OpenCam": "오픈 카메라...",
+        "InfoQR": {
+            "Title": "정보 QR 코드",
+            "Content": "QR 코드",
+            "TitleButton": "도로 사다"
+        },
+        "Congratulation": {
+            "Title": "축하",
+            "Content": "당신은 받았습니다",
+            "TitleButton": "Ok"
+        },
+        "Error": {
+            "Title": "오류",
+            "Content": {
+                "Used": "죄송합니다.이 QR 코드가 사용되었습니다.",
+                "expired": "죄송합니다. QR 코드가 만료되었습니다.",
+                "NotFound": "QR 코드를 찾을 수 없음"
+            },
+            "TitleButton": "재검색"
+        }
+    },
+    "PrivateKey": {
+        "Title": "Private key",
+        "InitForm": {
+            "Content": "PRIVATE 키를 받으려면 아래 버튼을 클릭하십시오.",
+            "TitleButton": "다음"
+        },
+        "GetSuccess": {
+            "TitleButton": "PRIVATE 키 복사",
+            "TitleCopied": "복사 됨복사 됨"
+        },
+        "DialogConfirm": {
+            "Title": "PRIVATE 키 검색",
+            "Content": "진행을 하려면 로컬 패스 코드를 입력하십시오.",
+            "Placeholder": "월렛 로컬 패스 코드",
+            "TitleButtonGet": "받기",
+            "TitleButtonCancel": "취소"
+        },
+        "Aler": {
+            "Title": "PRIVATE 키 가져 오기 실패",
+            "Content": "로컬 패스 코드가 잘못되었습니다.",
+            "TitleButtonCancel": "취소",
+            "TitleButtonTry": "다시 시도하십시오."
+        },
+        "Toast": "클립 보드에 복사 됨"
+    },
+    "AddToken": {
+        "Title": "토큰 추가",
+        "FormAdd": {
+            "PlaceholderToken": "토큰 계약 주소 입력",
+            "PlaceholderSymbol": "토큰 심볼",
+            "TitleButton": "토큰 추가"
+        },
+        "AlerError": {
+            "Title": "오류",
+            "Content": "토큰 주소가 이미 존재 함",
+            "TitleButton": "Ok"
+        },
+        "AlerSuccess": {
+            "Title": "성공적으로",
+            "Content": "토큰이 성공적으로 추가되었습니다",
+            "TitleButton": "Ok"
+        },
+        "ValidToken": "토큰 주소가 잘못되었습니다."
+    },
+    "History": {
+        "Title": "기록",
+        "Loading": "기다려주십시오. ..."
+    },
+    "DetailHistory": {
+        "Title": "상세 거래 내역",
+        "Txhash": "Txhash",
+        "From": "에서",
+        "To": "에",
+        "Amount": "수량",
+        "Date": "날짜",
+        "Status": "상태",
+        "TitleButton": "탐색"
+    },
+    "Settings": {
+        "Title": "설정",
+        "Backup": "백업",
+        "Languages": "언어",
+        "ChangePIN": "PIN 변경",
+        "TouchID": "터치 ID를 PIN으로 사용",
+        "Toast": "이 기능은 곧 제공 될 예정입니다."
+    },
+    "Backup": {
+        "Title": "백업",
+        "InitForm": {
+            "Content": "지갑을 백업하려면 아래 버튼을 클릭하십시오.",
+            "TitleButton": "백업"
+        },
+        "GetSuccess": {
+            "Title": "백업 코드",
+            "TitleButton": "백업 코드 복사",
+            "TitleCopied": "복사 됨복사 됨"
+        },
+        "DialogConfirm": {
+            "Title": "백업 확인",
+            "Content": "진행을 하려면 로컬 패스 코드를 입력하십시오.",
+            "Placeholder": "월렛 로컬 패스 코드",
+            "TitleButtonGet": "백업",
+            "TitleButtonCancel": "취소"
+        },
+        "Alert": {
+            "Title": "백업 코드 가져오기 실패",
+            "TitleButtonCancel": "취소",
+            "TitleButtonTry": "다시 시도하십시오."
+        },
+        "ToastSaveFile": "파일 백업 저장이 완료되었습니다.",
+        "IOScancel": "저장 파일이 취소되었습니다.",
+        "Toast": "클립 보드에 복사 됨"
+    },
+    "Languages": {
+        "Title": "언어"
+    },
+    "About": {
+        "Title": "Nexty에 대하여",
+        "Content": "Nexty는 공동체의 모금을 통해 전자상거래 및 기술 스타트업에 도움을 주는 핀테크 에코시스템입니다."
+    },
+    "QRScan": {
+        "Title": "QR 스캔"
+    },
+    "ConfirmLogout": {
+        "Content": "로그 아웃 하시겠습니까?",
+        "ButtonAgree": "동의하다",
+        "ButtonCancel": "동의하지 않는다"
+    },
+    "LOGIN_TITLE": "로그인"
+}

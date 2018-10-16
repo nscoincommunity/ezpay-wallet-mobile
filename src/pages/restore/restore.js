@@ -8,8 +8,7 @@ import { restoreByBackup, restoreByPk } from './restore.service';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
 import { setData } from '../../services/data.service'
-
-
+import Lang from '../../i18n/i18n'
 class ScreenRestore extends Component {
     constructor() {
         super();
@@ -30,7 +29,7 @@ class ScreenRestore extends Component {
                 <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
 
                 <SegmentControl
-                    values={['BACKUP CODE', 'PRIVATE KEY']}
+                    values={[Lang.t('Restore.BackUpCode'), Lang.t('Restore.Privatekey')]}
                     selectedIndex={this.state.index}
                     height={30}
                     onTabPress={this.handlePress}
@@ -72,7 +71,7 @@ class FormBackupcode extends Component {
     async validateBuCode(value) {
         this.setState({ txtErrBUcode: '' })
         if (value.length < 1) {
-            await this.setState({ backupCode: '', errBUcode: true, txtErrBUcode: 'Please enter a valid backup code.', typeButton: true });
+            await this.setState({ backupCode: '', errBUcode: true, txtErrBUcode: Lang.t('Restore.InvalidRestoreCode'), typeButton: true });
         } else {
             await this.setState({ backupCode: value, errBUcode: false, txtErrBUcode: '', typeButton: false })
         }
@@ -89,13 +88,13 @@ class FormBackupcode extends Component {
         if (value.length > 5) {
             await this.setState({ txtErrPwd: '', errPwd: false, typeButton: false });
         } else {
-            await this.setState({ txtErrPwd: 'Wallet local passcode needs at least 6 characters', errPwd: true, typeButton: true })
+            await this.setState({ txtErrPwd: Lang.t("Restore.ErrorLocalPasscode"), errPwd: true, typeButton: true })
         }
 
         if (this.state.confirmPwd == '' || this.state.confirmPwd == value) {
             await this.setState({ txtCfPwd: '', errCfPwd: false });
         } else {
-            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true })
+            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true })
         }
         if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errBUcode == true) {
             await this.setState({ typeButton: true })
@@ -110,7 +109,7 @@ class FormBackupcode extends Component {
         if (this.state.password && this.state.password == value) {
             await this.setState({ txtCfPwd: '', errCfPwd: false, typeButton: false });
         } else {
-            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true, typeButton: true })
+            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true, typeButton: true })
         }
 
         if (this.state.errPwd == true || this.state.errBUcode == true || this.state.errCfPwd == true) {
@@ -128,16 +127,16 @@ class FormBackupcode extends Component {
                     navigate('TabNavigator');
                 } else {
                     Alert.alert(
-                        'Error',
-                        'Invalid restore code, please try again!',
-                        [{ text: 'OK', onPress: () => this.setState(this.InitState) }]
+                        Lang.t("Restore.Error"),
+                        Lang.t("Restore.InvalidRestoreCode"),
+                        [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
                     )
                 }
             }).catch(err => {
                 Alert.alert(
-                    'Error',
-                    'Invalid restore code, please try again!',
-                    [{ text: 'OK', onPress: () => { this.setState(this.InitState) } }]
+                    Lang.t("Restore.Error"),
+                    Lang.t("Restore.InvalidRestoreCode"),
+                    [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
                 )
             })
     }
@@ -163,9 +162,9 @@ class FormBackupcode extends Component {
                     })
                 } else {
                     Alert.alert(
-                        'Warning',
-                        'Please select a valid backup file',
-                        [{ text: 'OK', onPress: () => { }, style: 'cancel' }]
+                        Lang.t("Restore.Warning"),
+                        Lang.t("Restore.ContentWarning"),
+                        [{ text: Lang.t("Restore.Ok"), onPress: () => { }, style: 'cancel' }]
                     )
                 }
 
@@ -188,7 +187,7 @@ class FormBackupcode extends Component {
                         width: GLOBALS.WIDTH,
                     }}>
                         <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.3 }} error={this.state.errBUcode}>
-                            <Label>Backup code/Choose file</Label>
+                            <Label>{Lang.t('Restore.BackUpCode')}/ {Lang.t('Restore.ChooserFile')}</Label>
                             <Input
                                 onChangeText={(val) => this.validateBuCode(val)}
                                 value={this.state.backupCode}
@@ -208,7 +207,7 @@ class FormBackupcode extends Component {
                     </Item>
 
                     <Item floatingLabel error={this.state.errPwd}>
-                        <Label>Local passcode</Label>
+                        <Label>{Lang.t('Restore.LocalPasscode')}</Label>
                         <Input
                             value={this.state.password}
                             secureTextEntry={true}
@@ -224,7 +223,7 @@ class FormBackupcode extends Component {
                     </Item>
 
                     <Item floatingLabel error={this.state.errCfPwd}>
-                        <Label>Comfirm local passcode</Label>
+                        <Label>{Lang.t('Restore.ComfirmLocalPasscode')}</Label>
                         <Input
                             value={this.state.confirmPwd}
                             secureTextEntry={true}
@@ -245,7 +244,7 @@ class FormBackupcode extends Component {
                 </Form>
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.primary, this.state.typeButton).button} onPress={() => this.restoreByBackupCode()} disabled={this.state.typeButton}>
-                        <Text style={style.TextButton}>Continue</Text>
+                        <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -275,11 +274,11 @@ class FormPrivateKey extends Component {
     async validatePKCode(value) {
         this.setState({ txtErrPKcode: '' })
         if (value.length == 0) {
-            await this.setState({ privateKey: '', errPKcode: true, txtErrPKcode: 'Please enter a valid private key.', typeButton: true });
+            await this.setState({ privateKey: '', errPKcode: true, txtErrPKcode: Lang.t("Restore.InvalidPK"), typeButton: true });
             return;
         }
         if (value.length != 64) {
-            await this.setState({ privateKey: value, errPKcode: true, txtErrPKcode: 'Please enter a valid private key.', typeButton: true });
+            await this.setState({ privateKey: value, errPKcode: true, txtErrPKcode: Lang.t("Restore.InvalidPK"), typeButton: true });
         } else {
             await this.setState({ privateKey: value, errPKcode: false, txtErrPKcode: '', typeButton: false })
         }
@@ -296,13 +295,13 @@ class FormPrivateKey extends Component {
         if (value.length > 5) {
             await this.setState({ txtErrPwd: '', errPwd: false, typeButton: false });
         } else {
-            await this.setState({ txtErrPwd: 'Wallet local passcode needs at least 6 character', errPwd: true, typeButton: true })
+            await this.setState({ txtErrPwd: Lang.t("Restore.ErrorLocalPasscode"), errPwd: true, typeButton: true })
         }
 
         if (this.state.confirmPwd == '' || this.state.confirmPwd == value) {
             await this.setState({ txtCfPwd: '', errCfPwd: false });
         } else {
-            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true })
+            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true })
         }
         if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errPKcode == true) {
             await this.setState({ typeButton: true })
@@ -317,7 +316,7 @@ class FormPrivateKey extends Component {
         if (this.state.password && this.state.password == value) {
             await this.setState({ txtCfPwd: '', errCfPwd: false, typeButton: false });
         } else {
-            await this.setState({ txtCfPwd: 'Wallet local passcode not match', errCfPwd: true, typeButton: true })
+            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true, typeButton: true })
         }
         if (this.state.errPwd == true || this.state.errPKcode == true || this.state.errCfPwd) {
             await this.setState({ typeButton: true })
@@ -335,17 +334,17 @@ class FormPrivateKey extends Component {
                     navigate('TabNavigator');
                 } else {
                     Alert.alert(
-                        'Error',
-                        'Invalid private key, please try again!',
-                        [{ text: 'OK', onPress: () => this.setState(this.InitState) }]
+                        Lang.t("Restore.Error"),
+                        Lang.t("Restore.AlertInvalidPK"),
+                        [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
                     )
                 }
             }).catch(err => {
                 console.log('cache', err)
                 Alert.alert(
-                    'Error',
-                    'Invalid private key, please try again!',
-                    [{ text: 'OK', onPress: () => { this.setState(this.InitState) } }]
+                    Lang.t("Restore.Error"),
+                    Lang.t("Restore.AlertInvalidPK"),
+                    [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
                 )
             })
     }
@@ -360,7 +359,7 @@ class FormPrivateKey extends Component {
             <View>
                 <Form style={style.FormLogin}>
                     <Item floatingLabel error={this.state.errPKcode}>
-                        <Label>Private key</Label>
+                        <Label>{Lang.t("Restore.Privatekey")}</Label>
                         <Input
                             value={this.state.privateKey}
                             onChangeText={(val) => this.validatePKCode(val)}
@@ -374,7 +373,7 @@ class FormPrivateKey extends Component {
                     </Item>
 
                     <Item floatingLabel error={this.state.errPwd}>
-                        <Label>Local passcode</Label>
+                        <Label>{Lang.t("Restore.LocalPasscode")}</Label>
                         <Input
                             value={this.state.password}
                             secureTextEntry={true}
@@ -390,7 +389,7 @@ class FormPrivateKey extends Component {
                     </Item>
 
                     <Item floatingLabel error={this.state.errCfPwd}>
-                        <Label>Comfirm local passcode</Label>
+                        <Label>{Lang.t("Restore.ComfirmLocalPasscode")}</Label>
                         <Input
                             value={this.state.confirmPwd}
                             secureTextEntry={true}
@@ -410,7 +409,7 @@ class FormPrivateKey extends Component {
                 </Form>
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.primary, this.state.typeButton).button} disabled={this.state.typeButton} onPress={() => this.restoreByPK()}>
-                        <Text style={style.TextButton}>Continue</Text>
+                        <Text style={style.TextButton}>{Lang.t("Restore.TitleButton")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -419,6 +418,20 @@ class FormPrivateKey extends Component {
 }
 
 export default class restore extends Component {
+    static navigationOptions = () => ({
+        title: Lang.t('Restore.Title'),
+        headerStyle: {
+            backgroundColor: GLOBALS.Color.primary,
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerBackTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    });
+
     render() {
         return (
             <ScrollView >

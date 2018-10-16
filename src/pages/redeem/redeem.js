@@ -20,6 +20,7 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Address } from '../../services/auth.service';
+import Language from '../../i18n/i18n'
 
 export default class Redeem extends Component {
 
@@ -50,7 +51,6 @@ export default class Redeem extends Component {
 
     onSelect = data => {
         if (data['result'] == 'cancelScan') {
-            console.log('aaaa' + data['result'])
             this.setState({ error: true, QRNotFound: true, dataReturn: 'null' })
             return;
         }
@@ -116,7 +116,6 @@ export default class Redeem extends Component {
     }
 
     _handleBackPress = () => {
-        alert('hahaha')
     }
 
     componentWillUnmount() {
@@ -156,7 +155,7 @@ export default class Redeem extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>Redeem</Title>
+                        <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('Redeem.Title')}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -167,7 +166,7 @@ export default class Redeem extends Component {
                         <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
                             <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 7 }}>
                                 <Spinner color={GLOBALS.Color.primary} />
-                                <Text>Open camera...</Text>
+                                <Text>{Language.t('Redeem.OpenCam')}</Text>
                             </View>
                         </View>
                     }
@@ -175,38 +174,38 @@ export default class Redeem extends Component {
 
                     {this.state.dataReturn != null && this.state.getValue &&
                         < View style={styles.form}>
-                            <Text style={styles.Titlebox}>Info QR code</Text>
-                            <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>QR code:</Text><Text>{this.state.QRcode}</Text>
+                            <Text style={styles.Titlebox}>{Language.t('Redeem.InfoQR.Title')}</Text>
+                            <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Redeem.InfoQR.Content')}</Text><Text>{this.state.QRcode}</Text>
                             <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>NTY:</Text><Text>{this.state.amount}</Text>
                             <TouchableOpacity onPress={this.redeem.bind(this)} style={styleButton(GLOBALS.Color.primary).button}>
-                                <Text style={styles.TextButton}>Redeem</Text>
+                                <Text style={styles.TextButton}>{Language.t('Redeem.InfoQR.TitleButton')}</Text>
                             </TouchableOpacity>
                         </View>
                     }
                     {this.state.dataReturn != null && this.state.statusQR &&
                         <View style={styles.form}>
-                            <Text style={styles.Titlebox}>Congratulation!</Text>
-                            <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>You have received {this.state.amount} NTY</Text>
+                            <Text style={styles.Titlebox}>{Language.t('Redeem.Congratulation.Title')}</Text>
+                            <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Redeem.Congratulation.Content')} {this.state.amount} NTY</Text>
                             <TouchableOpacity style={styleButton(GLOBALS.Color.primary).button} onPress={() => this.props.navigation.navigate('TabNavigator')}>
-                                <Text style={styles.TextButton}>OK</Text>
+                                <Text style={styles.TextButton}>{Language.t('Redeem.Congratulation.TitleButton')}</Text>
                             </TouchableOpacity>
                         </View>
 
                     }
                     {this.state.dataReturn != null && this.state.error &&
                         <View style={styles.form}>
-                            <Text style={styles.Titlebox}>Error!</Text>
+                            <Text style={styles.Titlebox}>{Language.t('Redeem.Error.Title')}</Text>
                             {this.state.used &&
-                                <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>Sorry, this QR code has been used</Text>
+                                <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Redeem.Error.Content.Used')}</Text>
                             }
                             {this.state.expired &&
-                                <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>Sorry, then QR code has been expired</Text>
+                                <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Redeem.Error.Content.expired')}</Text>
                             }
                             {this.state.QRNotFound &&
-                                <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>QR code not found </Text>
+                                <Text style={{ marginBottom: 10, marginTop: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Redeem.Error.Content.NotFound')}</Text>
                             }
                             <TouchableOpacity onPress={this.navigateToOFO.bind(this)} style={styleButton(GLOBALS.Color.secondary).button}>
-                                <Text style={styles.TextButton}>Rescan</Text>
+                                <Text style={styles.TextButton}>{Language.t('Redeem.Error.TitleButton')}</Text>
                             </TouchableOpacity>
                         </View>
                     }

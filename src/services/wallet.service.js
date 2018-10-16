@@ -12,6 +12,8 @@ import CONSTANTS from '../helper/constants';
 import { sign } from '@warren-bank/ethereumjs-tx-sign';
 import bigInt from "big-integer";
 import { getData, setData } from './data.service'
+import Language from '../i18n/i18n'
+
 
 // export var Web3: web3 = new web3(new web3.providers.HttpProvider(GLOBALS.WEB3_API));
 const WEB3 = new Web3();
@@ -49,6 +51,7 @@ export async function updateBalance() {
 
     of(await WEB3.eth.getBalance(Address))
         .subscribe(value => {
+            // console.log('Address', Address);
             if (value > 0) {
                 balance = parseFloat(value / CONSTANTS.BASE_NTY).toFixed(3)
             } else {
@@ -82,11 +85,11 @@ interface Tx {
 
 export async function SendService(address: string, nty: number, password: string, exData?: string) {
     if (! await validatePassword(password)) {
-        throw ("Invalid local passcode")
+        throw (Language.t('Send.AlerError.Content'))
     }
     // check address
     if (! await WEB3.utils.isAddress(address)) {
-        throw ("Invalid address");
+        throw (Language.t('Send.ValidAddress'));
     }
 
     let sendValue = CONSTANTS.BASE_NTY2.valueOf() * nty;
@@ -152,16 +155,15 @@ export async function SendService(address: string, nty: number, password: string
 }
 
 export async function SendToken(toAddress: string, tokenAddress, ABI, token: number, password: string, exData?: string) {
-    if (!await validatePassword(password)) {
-        throw ("Invalid local passcode")
+    if (! await validatePassword(password)) {
+        throw (Language.t('Send.AlerError.Content'))
     }
     // check address
     if (! await WEB3.utils.isAddress(address)) {
-        throw ("Invalid address");
+        throw (Language.t('Send.ValidAddress'));
     }
+
     var Contract = new WEB3.eth.Contract(ABI, tokenAddress, { from: Address });
-
-
 
     let txData: Tx;
     txData = {

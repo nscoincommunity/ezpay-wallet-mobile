@@ -22,7 +22,7 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { from } from 'rxjs';
-
+import Language from '../../i18n/i18n'
 
 export default class privateKey extends Component {
     constructor(props) {
@@ -33,6 +33,7 @@ export default class privateKey extends Component {
             privatekey: '',
             passcode: '',
             getsuccess: false,
+            isCopy: false
         };
     };
 
@@ -44,11 +45,11 @@ export default class privateKey extends Component {
     async handleGet() {
         if (this.state.passcode == '') {
             Alert.alert(
-                'Get private key failed',
-                'Invalid local passcode',
+                Language.t('PrivateKey.Aler.Title'),
+                Language.t('PrivateKey.Aler.Content'),
                 [
-                    { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '' }) }, style: 'cancel' },
-                    { text: 'Try again', onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
+                    { text: Language.t('PrivateKey.Aler.TitleButtonCancel'), onPress: () => { this.setState({ dialogVisible: false, privatekey: '' }) }, style: 'cancel' },
+                    { text: Language.t('PrivateKey.Aler.TitleButtonTry'), onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
                 ]
             )
             return
@@ -59,21 +60,21 @@ export default class privateKey extends Component {
                     this.setState({ privatekey: pk, dialogVisible: false, getsuccess: true })
                 } else {
                     Alert.alert(
-                        'Get private key failed',
-                        'Invalid local passcode',
+                        Language.t('PrivateKey.Aler.Title'),
+                        Language.t('PrivateKey.Aler.Content'),
                         [
-                            { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '', passcode: '' }) }, style: 'cancel' },
-                            { text: 'Try again', onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
+                            { text: Language.t('PrivateKey.Aler.TitleButtonCancel'), onPress: () => { this.setState({ dialogVisible: false, privatekey: '', passcode: '' }) }, style: 'cancel' },
+                            { text: Language.t('PrivateKey.Aler.TitleButtonTry'), onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
                         ]
                     )
                 }
             }).catch(err => {
                 Alert.alert(
-                    'Get private key failed',
-                    'Invalid local passcode',
+                    Language.t('PrivateKey.Aler.Title'),
+                    Language.t('PrivateKey.Aler.Content'),
                     [
-                        { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, privatekey: '', passcode: '' }) }, style: 'cancel' },
-                        { text: 'Try again', onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
+                        { text: Language.t('PrivateKey.Aler.TitleButtonCancel'), onPress: () => { this.setState({ dialogVisible: false, privatekey: '', passcode: '' }) }, style: 'cancel' },
+                        { text: Language.t('PrivateKey.Aler.TitleButtonTry'), onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
                     ]
                 )
                 console.log(err)
@@ -85,7 +86,8 @@ export default class privateKey extends Component {
     }
     Copy() {
         Clipboard.setString(this.state.privatekey);
-        showToastBottom('Copied to clipboard');
+        showToastBottom(Language.t('PrivateKey.Toast'));
+        this.setState({ isCopy: true })
     }
 
     render() {
@@ -102,47 +104,48 @@ export default class privateKey extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>Private key</Title>
+                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.Title')}</Title>
                         </Body>
                         <Right />
                     </Header>
 
                     <Content >
                         {
-                            !this.state.getsuccess ?
-                                <View>
-                                    <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>Click below button to get private key</Text>
-                                    <View style={style.FormRouter}>
-                                        <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
-                                            <Text style={style.TextButton}>Continue</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                                : null
-                        }
-                        {
                             this.state.getsuccess ?
                                 <View>
-                                    <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>Private key</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('PrivateKey.Title')}</Text>
                                     <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.privatekey}</Text>
                                     <View style={style.FormRouter}>
                                         <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)}>
-                                            <Text style={style.TextButton}>Copy private key</Text>
+                                            {
+                                                !this.state.isCopy ?
+                                                    <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleButton')}</Text>
+                                                    :
+                                                    <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleCopied')}</Text>
+                                            }
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                                : null
+                                :
+                                <View>
+                                    <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.InitForm.Content')}</Text>
+                                    <View style={style.FormRouter}>
+                                        <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
+                                            <Text style={style.TextButton}>{Language.t('PrivateKey.InitForm.TitleButton')}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                         }
 
 
                         <Dialog.Container visible={this.state.dialogVisible}>
-                            <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>Retrieve your private key</Dialog.Title>
+                            <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.DialogConfirm.Title')}</Dialog.Title>
                             <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
-                                Enter you local passcode to process
-                        </Dialog.Description>
-                            <Dialog.Input placeholder="Local passcode" onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
-                            <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
-                            <Dialog.Button label="Get" onPress={this.handleGet.bind(this)} />
+                                {Language.t('PrivateKey.DialogConfirm.Content')}
+                            </Dialog.Description>
+                            <Dialog.Input placeholder={Language.t('PrivateKey.DialogConfirm.Placeholder')} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
+                            <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
+                            <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
                         </Dialog.Container>
 
                     </Content>

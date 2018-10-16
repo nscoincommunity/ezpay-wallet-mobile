@@ -3,12 +3,13 @@ import CONSTANTS from '../../helper/constants';
 import { Utils } from '../../helper/utils'
 import { validatePassword, getPrivateKey, Address } from '../../services/auth.service';
 import CryptoJS from 'crypto-js';
+import Language from '../../i18n/i18n'
 
 export let code: string;
 
 export async function getBackupCode(password: string) {
     if (! await validatePassword(password)) {
-        throw ("Invalid local passcode")
+        throw (Language.t('Send.AlerError.Content'))
     }
 
     code = Utils.generateRandom(32)

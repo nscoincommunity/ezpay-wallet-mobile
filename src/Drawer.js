@@ -1,5 +1,6 @@
 import React from "react";
 import { navigationOptions, createDrawerNavigator } from "react-navigation";
+import Language from './i18n/i18n';
 
 class MyHomeScreen extends React.Component {
     static navigationOptions = {

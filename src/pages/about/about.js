@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Image, StyleSheet } from 'react-native';
 import GLOBALS from '../../helper/variables';
+import Language from '../../i18n/i18n'
 // import Icon from "react-native-vector-icons/FontAwesome";
 import {
     Container,
@@ -35,7 +36,7 @@ export default class About extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: '#fff' }}>About</Title>
+                        <Title style={{ color: '#fff' }}>{Language.t('About.Title')}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -43,7 +44,7 @@ export default class About extends Component {
                 <Content padder>
                     <View style={style.container}>
                         <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
-                        <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 40, fontFamily: GLOBALS.font.Poppins }}>Nexty is a Fintech ecosystem which helps e-commerce and technology startups to raise funds from community</Text>
+                        <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 40, fontFamily: GLOBALS.font.Poppins }}>{Language.t("About.Content")}</Text>
                     </View>
                 </Content>
             </Container>

@@ -4,26 +4,9 @@ import GLOBALS from '../helper/variables';
 import { Spinner } from "native-base";
 import Constants from '../helper/constants'
 import { VictoryArea, VictoryStack } from "victory-native";
+import Language from '../i18n/i18n'
 
 
-var HorizontalData = [
-    {
-        type: 'D',
-        show: 'Day'
-    },
-    {
-        type: 'W',
-        show: 'Week'
-    },
-    {
-        type: 'M',
-        show: 'Month'
-    },
-    {
-        type: 'ALL',
-        show: 'All'
-    },
-]
 
 export default class Chart extends Component {
     constructor(props) {
@@ -89,6 +72,24 @@ export default class Chart extends Component {
 
 
     render() {
+        var HorizontalData = [
+            {
+                type: 'D',
+                show: Language.t('Dashboard.Day')
+            },
+            {
+                type: 'W',
+                show: Language.t('Dashboard.Week')
+            },
+            {
+                type: 'M',
+                show: Language.t('Dashboard.Month')
+            },
+            {
+                type: 'ALL',
+                show: Language.t('Dashboard.All')
+            },
+        ]
         return (
             <View style={styles.container}>
                 {this.state.DataChart.length > 0 ?

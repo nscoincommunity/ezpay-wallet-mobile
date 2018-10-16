@@ -3,8 +3,23 @@ import { StyleSheet, Dimensions, View, Text, Platform } from 'react-native';
 import Camera from 'react-native-camera'
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button } from 'native-base'
+import Language from '../i18n/i18n';
+import GLOBALS from '../helper/variables'
 
 export default class CameraScreen extends React.Component<any, any> {
+    static navigationOptions = () => ({
+        title: Language.t('QRScan.Title'),
+        headerStyle: {
+            backgroundColor: GLOBALS.Color.primary,
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerBackTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    });
 
     // static navigationOptions = ({ navigation }) => {
     //     const { params = {} } = navigation.state;

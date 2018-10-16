@@ -5,7 +5,9 @@ import GLOBALS from '../../helper/variables';
 import QRCode from 'react-native-qrcode';
 import { getData } from '../../services/data.service';
 import { showToastBottom } from '../../services/loading.service';
-import { Toast, Root } from 'native-base'
+import { Toast, Root } from 'native-base';
+import Language from '../../i18n/i18n';
+
 export default class request extends Component {
     constructor(props) {
         super(props)
@@ -44,7 +46,7 @@ export default class request extends Component {
     CopyAddress() {
         console.log('copied')
 
-        showToastBottom('Copied to clipboard');
+        showToastBottom(Language.t('Request.Toast'));
 
         Clipboard.setString(this.state.address)
     }
@@ -53,7 +55,7 @@ export default class request extends Component {
         return (
             <Root>
                 <View style={style.container}>
-                    <Text style={{ marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 40, textAlign: 'center', fontFamily: GLOBALS.font.Poppins }}>Tap the below image to copy this wallet address or share it other via email or text</Text>
+                    <Text style={{ marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 40, textAlign: 'center', fontFamily: GLOBALS.font.Poppins }}>{Language.t('Request.TitleCopy')}</Text>
                     <TouchableOpacity onPress={this.CopyAddress.bind(this)}>
                         <QRCode
                             value={this.state.address}
@@ -66,7 +68,7 @@ export default class request extends Component {
 
                     <View style={style.FormRouter}>
                         <TouchableOpacity style={style.button} onPress={this.shareAddress.bind(this)}>
-                            <Text style={style.TextButton}>SHARE</Text>
+                            <Text style={style.TextButton}>{Language.t('Request.Share')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

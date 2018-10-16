@@ -38,6 +38,7 @@ export async function restore(address: string, privateKey: string, password: str
     cacheAddress = await address;
     cachePrivatekey = await privateKey;
     cachePwd = await password;
+    Address = await address
 }
 
 export async function createKeystore(keyObject, password: string, address) {

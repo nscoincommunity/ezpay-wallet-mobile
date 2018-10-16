@@ -36,7 +36,6 @@ export function ShowLoading() {
 }
 
 export async function saveFile(name, content) {
-    console.log('aaa')
     var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + name : RNFS.ExternalDirectoryPath + '/' + name)
     return new Promise((resolve, reject) => {
         RNFS.writeFile(path, content)
@@ -48,7 +47,6 @@ export async function saveFile(name, content) {
                             title: 'save backup code file'
                         }).then(share => {
                             if (share['action'] == "dismissedAction") {
-                                console.log('aaa')
                                 reject(1)
                             } else {
                                 console.log('bbb')

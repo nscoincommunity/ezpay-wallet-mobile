@@ -9,10 +9,25 @@ import moment from 'moment';
 import { Address } from '../../services/auth.service'
 import RNFS from 'react-native-fs';
 import { setData } from '../../services/data.service'
+import Language from '../../i18n/i18n'
 
 
 var datetime = new Date();
 export default class backup extends Component {
+    static navigationOptions = () => ({
+        title: Language.t('Backup.Title'),
+        headerStyle: {
+            backgroundColor: GLOBALS.Color.primary,
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerBackTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    });
+
     constructor(props) {
         super(props)
 
@@ -55,9 +70,9 @@ export default class backup extends Component {
                                             title: 'save backup code file'
                                         }).then(share => {
                                             if (share['action'] == "dismissedAction") {
-                                                showToastTop('Save file was cancel')
+                                                showToastTop(Language.t('Backup.IOScancel'))
                                             } else {
-                                                showToastTop('Save file backup success!')
+                                                showToastTop(Language.t('Backup.ToastSaveFile'))
                                             }
                                         }).catch(errShare => {
                                             console.log('err', errShare)
@@ -65,7 +80,7 @@ export default class backup extends Component {
                                     }, 1000)
                                 }
                                 if (Platform.OS == 'android') {
-                                    showToastTop('Save file backup success!')
+                                    showToastTop(Language.t('Backup.ToastSaveFile'))
                                     var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
                                     console.log(newPath)
                                     if (RNFS.exists(newPath)) {
@@ -113,11 +128,11 @@ export default class backup extends Component {
             }).catch(err => {
                 this.setState({ loading: false })
                 Alert.alert(
-                    'Get backup code failed',
+                    Language.t('Backup.Alert.Title'),
                     err,
                     [
-                        { text: 'Cancel', onPress: () => { this.setState({ dialogVisible: false, passcode: '' }) }, style: 'cancel' },
-                        { text: 'Try again', onPress: () => { this.setState({ dialogVisible: true, passcode: '' }) } }
+                        { text: Language.t('Backup.Alert.TitleButtonCancel'), onPress: () => { this.setState({ dialogVisible: false, passcode: '' }) }, style: 'cancel' },
+                        { text: Language.t('Backup.Alert.TitleButtonTry'), onPress: () => { this.setState({ dialogVisible: true, passcode: '' }) } }
                     ]
                 )
             })
@@ -126,7 +141,7 @@ export default class backup extends Component {
 
     Copy() {
         Clipboard.setString(this.state.backupcode);
-        showToastBottom('Copied to clipboard');
+        showToastBottom(Language.t('Backup.Toast'));
         setData('isBackup', '1');
         this.setState({ isCopy: true })
 
@@ -139,43 +154,42 @@ export default class backup extends Component {
         return (
             <Root>
                 <View>
-                    {!this.state.getsuccess ?
-                        < View >
-                            <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>Click below button to backup wallet</Text>
-                            <View style={style.FormRouter}>
-                                <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
-                                    <Text style={style.TextButton}>BACKUP</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View> : null
-                    }
                     {
                         this.state.getsuccess ?
                             <View>
-                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>Backup code</Text>
+                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('Backup.GetSuccess.Title')}</Text>
                                 <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.backupcode}</Text>
                                 <View style={style.FormRouter}>
                                     <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)} disabled={this.state.isCopy}>
                                         {
                                             !this.state.isCopy ?
-                                                <Text style={style.TextButton}>Copy backup code</Text>
+                                                <Text style={style.TextButton}>{Language.t('Backup.GetSuccess.TitleButton')}</Text>
                                                 :
-                                                <Text style={style.TextButton}>Copied </Text>
+                                                <Text style={style.TextButton}>{Language.t('Backup.GetSuccess.TitleCopied')} </Text>
                                         }
 
                                     </TouchableOpacity>
                                 </View>
-                            </View> : null
+                            </View>
+                            :
+                            < View >
+                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Backup.InitForm.Content')}</Text>
+                                <View style={style.FormRouter}>
+                                    <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
+                                        <Text style={style.TextButton}>{Language.t('Backup.InitForm.TitleButton')}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                     }
 
                     <Dialog.Container visible={this.state.dialogVisible}>
-                        <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>Confirm backup</Dialog.Title>
+                        <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t('Backup.DialogConfirm.Title')}</Dialog.Title>
                         <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
-                            Enter you local passcode to process
+                            {Language.t('Backup.DialogConfirm.Content')}
                         </Dialog.Description>
-                        <Dialog.Input placeholder="Local passcode" style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
-                        <Dialog.Button label="Cancel" onPress={this.handleCancel.bind(this)} />
-                        <Dialog.Button label="Backup" onPress={this.handleGet.bind(this)} />
+                        <Dialog.Input placeholder={Language.t('Backup.DialogConfirm.Placeholder')} style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
+                        <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
+                        <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
                     </Dialog.Container>
                     {
                         this.state.loading ?

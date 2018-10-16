@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation'
-import { StyleSheet } from 'react-native';
+import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation'
+import { StyleSheet, View, Text } from 'react-native';
 import '../global';
 import '../shim.js';
-import crypto from 'crypto'
+import crypto from 'crypto';
+import Lang, { DeviceLanguage, selectLang } from './i18n/i18n';
+import { getData } from './services/data.service'
+
 /* screen stack */
 import Sidebar from "./sidebar";
 import GLOBALS from './helper/variables';
@@ -14,6 +17,7 @@ import restore from './pages/restore/restore';
 import Backup from './pages/backup/backup';
 import DetailHis from './pages/detail/detail';
 import QRscan from "./components/qrscan";
+import Language from "./pages/languages/language"
 
 /* screen drawer*/
 import Setting from './pages/setting/setting';
@@ -27,6 +31,7 @@ import request from './pages/request/request';
 import send from './pages/send/send';
 import dashboard from './pages/dashboard/dashboard';
 
+// Lang.locale = 'vi'
 /* customize header */
 function setHeader(title) {
     return {
@@ -78,27 +83,31 @@ const Screen = createStackNavigator(
         },
         login: {
             screen: login,
-            navigationOptions: setHeader('Login'),
+            // navigationOptions: setHeader(Lang.t('LOGIN_TITLE')),
         },
         register: {
             screen: register,
-            navigationOptions: setHeader('Create wallet')
+            // navigationOptions: setHeader(Lang.t('Register.Title'))
         },
         restore: {
             screen: restore,
-            navigationOptions: setHeader('Restore wallet')
+            // navigationOptions: setHeader(Lang.t('Restore.Title'))
         },
         Backup: {
             screen: Backup,
-            navigationOptions: setHeader('Backup')
+            // navigationOptions: setHeader(Lang.t('Backup.Title'))
         },
         DetailsHis: {
             screen: DetailHis,
-            navigationOptions: setHeader('Transaction Details')
+            // navigationOptions: setHeader(Lang.t('DetailHistory.Title'))
         },
         QRscan: {
             screen: QRscan,
-            navigationOptions: setHeader('QR scan')
+            // navigationOptions: setHeader(Lang.t('QRScan.Title'))
+        },
+        Language: {
+            screen: Language,
+            // navigationOptions: setHeader(Lang.t('Languages.Title'))
         }
 
     },
@@ -106,10 +115,104 @@ const Screen = createStackNavigator(
         initialRouteName: "Unlogin",
     },
 )
-export default class Router extends Component {
-    render() {
-        return <Screen />;
-    }
-}
+
+
+
+export default Screen;
+
+// export default class Router extends Component {
+//     state = { InitLanguage: false }
+
+//     componentWillMount() {
+//         try {
+//             getData('languages').then(lang => {
+//                 console.log('languages router', lang)
+//                 if (lang == null) {
+//                     DeviceLanguage()
+//                     this.setState({ InitLanguage: true })
+//                 } else {
+//                     getData('languages').then(data => {
+//                         Lang.locale = data;
+//                         this.setState({ InitLanguage: true })
+//                     }).catch(err => {
+//                         this.setState({ InitLanguage: true })
+//                         console.log(err)
+//                     })
+//                 }
+//             })
+//         } catch (error) {
+//             console.log('err', error)
+//             DeviceLanguage()
+//             this.setState({ InitLanguage: true })
+//         }
+//     }
+
+//     render() {
+//         const Screen = createStackNavigator(
+//             {
+//                 Unlogin: {
+//                     screen: unlogin,
+//                     navigationOptions: {
+//                         header: () => null,
+//                     }
+//                 },
+//                 Drawer: {
+//                     screen: Drawer,
+//                     navigationOptions: {
+//                         header: () => null,
+//                     }
+//                 },
+//                 login: {
+//                     screen: login,
+//                     // navigationOptions: setHeader(Lang.t('LOGIN_TITLE')),
+//                 },
+//                 register: {
+//                     screen: register,
+//                     // navigationOptions: setHeader(Lang.t('Register.Title'))
+//                 },
+//                 restore: {
+//                     screen: restore,
+//                     // navigationOptions: setHeader(Lang.t('Restore.Title'))
+//                 },
+//                 Backup: {
+//                     screen: Backup,
+//                     // navigationOptions: setHeader(Lang.t('Backup.Title'))
+//                 },
+//                 DetailsHis: {
+//                     screen: DetailHis,
+//                     // navigationOptions: setHeader(Lang.t('DetailHistory.Title'))
+//                 },
+//                 QRscan: {
+//                     screen: QRscan,
+//                     // navigationOptions: setHeader(Lang.t('QRScan.Title'))
+//                 },
+//                 Language: {
+//                     screen: Language,
+//                     // navigationOptions: setHeader(Lang.t('Languages.Title'))
+//                 }
+
+//             },
+//             {
+//                 initialRouteName: "Drawer",
+//             },
+//         )
+
+//         // const AppNavigator = createSwitchNavigator({
+//         //     Stack: Screen
+//         // })
+
+//         if (this.state.InitLanguage) {
+//             return (
+//                 <Screen />
+//             )
+//         } else {
+//             return (
+//                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//                     <Text>Initial languages ....</Text>
+//                 </View>
+//             )
+//         }
+//     }
+// }
 
 
