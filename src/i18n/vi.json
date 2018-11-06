@@ -61,7 +61,9 @@
         "AlerError": {
             "Error": "Lỗi",
             "Content": "Mật khẩu sai",
-            "NotEnoughNTY": "Bạn không đủ NTY cho giao dịch này"
+            "NotEnoughNTY": "Bạn không đủ NTY cho giao dịch này",
+            "NotEnoughToken": "Bạn không đủ token cho giao dịch này",
+            "TransactionFail": "Giao dịch thất bại"
         },
         "SendSuccess": {
             "Title": "Giao dịch thành công"
@@ -133,7 +135,7 @@
             "TitleButtonCancel": "Hủy"
         },
         "Aler": {
-            "Title": "Lấy private thất bại",
+            "Title": "Lấy private key thất bại",
             "Content": "Sai mật khẩu ví",
             "TitleButtonCancel": "Hủy",
             "TitleButtonTry": "Thử lại"

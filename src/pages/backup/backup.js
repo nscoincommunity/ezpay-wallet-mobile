@@ -1,19 +1,25 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, TouchableOpacity, Alert, Clipboard, Platform, Share, Image } from 'react-native';
-import { Text, Root } from "native-base";
+import { View, StyleSheet, TouchableOpacity, Alert, Clipboard, Platform, Share, Image, Text } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
 import { getBackupCode } from './backup.service'
-import { showToastBottom, showToastTop } from '../../services/loading.service'
 import moment from 'moment';
 import { Address } from '../../services/auth.service'
 import RNFS from 'react-native-fs';
 import { setData } from '../../services/data.service'
 import Language from '../../i18n/i18n'
+import CustomToast from '../../components/toast';
 
 
 var datetime = new Date();
 export default class backup extends Component {
+
+    Default_Toast_Bottom = (message) => {
+
+        this.refs.defaultToastBottom.ShowToastFunction(message);
+
+    }
+
     static navigationOptions = () => ({
         title: Language.t('Backup.Title'),
         headerStyle: {
@@ -70,9 +76,9 @@ export default class backup extends Component {
                                             title: 'save backup code file'
                                         }).then(share => {
                                             if (share['action'] == "dismissedAction") {
-                                                showToastTop(Language.t('Backup.IOScancel'))
+                                                this.Default_Toast_Bottom(Language.t('Backup.IOScancel'))
                                             } else {
-                                                showToastTop(Language.t('Backup.ToastSaveFile'))
+                                                this.Default_Toast_Bottom(Language.t('Backup.ToastSaveFile'))
                                             }
                                         }).catch(errShare => {
                                             console.log('err', errShare)
@@ -80,7 +86,7 @@ export default class backup extends Component {
                                     }, 1000)
                                 }
                                 if (Platform.OS == 'android') {
-                                    showToastTop(Language.t('Backup.ToastSaveFile'))
+                                    this.Default_Toast_Bottom(Language.t('Backup.ToastSaveFile'))
                                     var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
                                     console.log(newPath)
                                     if (RNFS.exists(newPath)) {
@@ -141,7 +147,7 @@ export default class backup extends Component {
 
     Copy() {
         Clipboard.setString(this.state.backupcode);
-        showToastBottom(Language.t('Backup.Toast'));
+        this.Default_Toast_Bottom(Language.t('Backup.Toast'));
         setData('isBackup', '1');
         this.setState({ isCopy: true })
 
@@ -152,56 +158,48 @@ export default class backup extends Component {
     }
     render() {
         return (
-            <Root>
-                <View>
-                    {
-                        this.state.getsuccess ?
-                            <View>
-                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('Backup.GetSuccess.Title')}</Text>
-                                <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.backupcode}</Text>
-                                <View style={style.FormRouter}>
-                                    <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)} disabled={this.state.isCopy}>
-                                        {
-                                            !this.state.isCopy ?
-                                                <Text style={style.TextButton}>{Language.t('Backup.GetSuccess.TitleButton')}</Text>
-                                                :
-                                                <Text style={style.TextButton}>{Language.t('Backup.GetSuccess.TitleCopied')} </Text>
-                                        }
+            <View style={{ flex: 1, alignItems: 'center' }}>
+                {
+                    this.state.getsuccess ?
+                        <View>
+                            <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('Backup.GetSuccess.Title')}</Text>
+                            <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.backupcode}</Text>
+                            <View style={style.FormRouter}>
+                                <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)} disabled={this.state.isCopy}>
+                                    {
+                                        !this.state.isCopy ?
+                                            <Text style={style.TextButton}>{Language.t('Backup.GetSuccess.TitleButton')}</Text>
+                                            :
+                                            <Text style={style.TextButton}>{Language.t('Backup.GetSuccess.TitleCopied')} </Text>
+                                    }
 
-                                    </TouchableOpacity>
-                                </View>
+                                </TouchableOpacity>
                             </View>
-                            :
-                            < View >
-                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Backup.InitForm.Content')}</Text>
-                                <View style={style.FormRouter}>
-                                    <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
-                                        <Text style={style.TextButton}>{Language.t('Backup.InitForm.TitleButton')}</Text>
-                                    </TouchableOpacity>
-                                </View>
+                        </View>
+                        :
+                        < View >
+                            <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Backup.InitForm.Content')}</Text>
+                            <View style={style.FormRouter}>
+                                <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
+                                    <Text style={style.TextButton}>{Language.t('Backup.InitForm.TitleButton')}</Text>
+                                </TouchableOpacity>
                             </View>
-                    }
+                        </View>
+                }
 
-                    <Dialog.Container visible={this.state.dialogVisible}>
-                        <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t('Backup.DialogConfirm.Title')}</Dialog.Title>
-                        <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
-                            {Language.t('Backup.DialogConfirm.Content')}
-                        </Dialog.Description>
-                        <Dialog.Input placeholder={Language.t('Backup.DialogConfirm.Placeholder')} style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
-                        <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
-                        <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
-                    </Dialog.Container>
-                    {
-                        this.state.loading ?
-                            <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
-                                {/* <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}> */}
-                                <Image source={require('../../images/loading.gif')} resizeMode="contain" style={{ height: 80, width: 80 }} />
-                                {/* </View> */}
-                            </View>
-                            : null
-                    }
-                </View >
-            </Root>
+                <Dialog.Container visible={this.state.dialogVisible}>
+                    <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t('Backup.DialogConfirm.Title')}</Dialog.Title>
+                    <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
+                        {Language.t('Backup.DialogConfirm.Content')}
+                    </Dialog.Description>
+                    <Dialog.Input placeholder={Language.t('Backup.DialogConfirm.Placeholder')} style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
+                    <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
+                    <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
+                </Dialog.Container>
+
+                <CustomToast ref="defaultToastBottom" position="bottom" />
+
+            </View >
         )
     }
 }

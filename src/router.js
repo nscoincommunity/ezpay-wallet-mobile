@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation'
-import { StyleSheet, View, Text } from 'react-native';
+import { createStackNavigator, createDrawerNavigator, createSwitchNavigator, DrawerActions } from 'react-navigation'
+import { StyleSheet, View, Text, TouchableOpacity, Linking } from 'react-native';
+import { Icon } from 'native-base';
 import '../global';
 import '../shim.js';
 import crypto from 'crypto';
@@ -18,6 +19,7 @@ import Backup from './pages/backup/backup';
 import DetailHis from './pages/detail/detail';
 import QRscan from "./components/qrscan";
 import Language from "./pages/languages/language"
+import TempPage from './Drawer';
 
 /* screen drawer*/
 import Setting from './pages/setting/setting';
@@ -51,168 +53,88 @@ function setHeader(title) {
 
 const Drawer = createDrawerNavigator(
     {
-        Dashboard: { screen: dashboard },
-        Redeem: { screen: redeem },
-        Request: { screen: request },
-        Sendpage: { screen: send },
         TabNavigator: { screen: TabNavigator },
         Privatekey: { screen: Prk },
         Addtoken: { screen: Addtoken },
         Setting: { screen: Setting },
         History: { screen: history },
-        About: { screen: About }
+        About: { screen: About },
+        Redeem: { screen: redeem },
+
     }, {
         initialRouteName: "TabNavigator",
         /** customize drawer*/
         contentComponent: props => <Sidebar {...props} />
     }
 )
-const Screen = createStackNavigator(
-    {
-        Unlogin: {
-            screen: unlogin,
-            navigationOptions: {
-                header: () => null,
-            }
-        },
-        Drawer: {
-            screen: Drawer,
-            navigationOptions: {
-                header: () => null,
-            }
-        },
-        login: {
-            screen: login,
-            // navigationOptions: setHeader(Lang.t('LOGIN_TITLE')),
-        },
-        register: {
-            screen: register,
-            // navigationOptions: setHeader(Lang.t('Register.Title'))
-        },
-        restore: {
-            screen: restore,
-            // navigationOptions: setHeader(Lang.t('Restore.Title'))
-        },
-        Backup: {
-            screen: Backup,
-            // navigationOptions: setHeader(Lang.t('Backup.Title'))
-        },
-        DetailsHis: {
-            screen: DetailHis,
-            // navigationOptions: setHeader(Lang.t('DetailHistory.Title'))
-        },
-        QRscan: {
-            screen: QRscan,
-            // navigationOptions: setHeader(Lang.t('QRScan.Title'))
-        },
-        Language: {
-            screen: Language,
-            // navigationOptions: setHeader(Lang.t('Languages.Title'))
+
+
+export default class Router extends Component {
+    state = { InitLanguage: false }
+
+    componentWillMount() {
+        try {
+            getData('languages').then(lang => {
+                console.log('languages router', lang)
+                if (lang == null) {
+                    DeviceLanguage()
+                    this.setState({ InitLanguage: true })
+                } else {
+                    getData('languages').then(data => {
+                        Lang.locale = data;
+                        this.setState({ InitLanguage: true })
+                    }).catch(err => {
+                        this.setState({ InitLanguage: true })
+                        console.log(err)
+                    })
+                }
+            })
+        } catch (error) {
+            console.log('err', error)
+            DeviceLanguage()
+            this.setState({ InitLanguage: true })
         }
+    }
 
-    },
-    {
-        initialRouteName: "Unlogin",
-    },
-)
-
-
-
-export default Screen;
-
-// export default class Router extends Component {
-//     state = { InitLanguage: false }
-
-//     componentWillMount() {
-//         try {
-//             getData('languages').then(lang => {
-//                 console.log('languages router', lang)
-//                 if (lang == null) {
-//                     DeviceLanguage()
-//                     this.setState({ InitLanguage: true })
-//                 } else {
-//                     getData('languages').then(data => {
-//                         Lang.locale = data;
-//                         this.setState({ InitLanguage: true })
-//                     }).catch(err => {
-//                         this.setState({ InitLanguage: true })
-//                         console.log(err)
-//                     })
-//                 }
-//             })
-//         } catch (error) {
-//             console.log('err', error)
-//             DeviceLanguage()
-//             this.setState({ InitLanguage: true })
-//         }
-//     }
-
-//     render() {
-//         const Screen = createStackNavigator(
-//             {
-//                 Unlogin: {
-//                     screen: unlogin,
-//                     navigationOptions: {
-//                         header: () => null,
-//                     }
-//                 },
-//                 Drawer: {
-//                     screen: Drawer,
-//                     navigationOptions: {
-//                         header: () => null,
-//                     }
-//                 },
-//                 login: {
-//                     screen: login,
-//                     // navigationOptions: setHeader(Lang.t('LOGIN_TITLE')),
-//                 },
-//                 register: {
-//                     screen: register,
-//                     // navigationOptions: setHeader(Lang.t('Register.Title'))
-//                 },
-//                 restore: {
-//                     screen: restore,
-//                     // navigationOptions: setHeader(Lang.t('Restore.Title'))
-//                 },
-//                 Backup: {
-//                     screen: Backup,
-//                     // navigationOptions: setHeader(Lang.t('Backup.Title'))
-//                 },
-//                 DetailsHis: {
-//                     screen: DetailHis,
-//                     // navigationOptions: setHeader(Lang.t('DetailHistory.Title'))
-//                 },
-//                 QRscan: {
-//                     screen: QRscan,
-//                     // navigationOptions: setHeader(Lang.t('QRScan.Title'))
-//                 },
-//                 Language: {
-//                     screen: Language,
-//                     // navigationOptions: setHeader(Lang.t('Languages.Title'))
-//                 }
-
-//             },
-//             {
-//                 initialRouteName: "Drawer",
-//             },
-//         )
-
-//         // const AppNavigator = createSwitchNavigator({
-//         //     Stack: Screen
-//         // })
-
-//         if (this.state.InitLanguage) {
-//             return (
-//                 <Screen />
-//             )
-//         } else {
-//             return (
-//                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//                     <Text>Initial languages ....</Text>
-//                 </View>
-//             )
-//         }
-//     }
-// }
+    render() {
+        const Screen = createStackNavigator(
+            {
+                Unlogin: {
+                    screen: unlogin,
+                    navigationOptions: {
+                        header: () => null,
+                    }
+                },
+                Drawer: {
+                    screen: Drawer,
+                    navigationOptions: {
+                        header: () => null,
+                    }
+                },
+                login: { screen: login },
+                register: { screen: register },
+                restore: { screen: restore },
+                Backup: { screen: Backup },
+                DetailsHis: { screen: DetailHis },
+                QRscan: { screen: QRscan },
+                Language: { screen: Language }
+            },
+            {
+                initialRouteName: "Unlogin",
+            },
+        )
+        if (this.state.InitLanguage) {
+            return (
+                <Screen />
+            )
+        } else {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Initial languages ....</Text>
+                </View>
+            )
+        }
+    }
+}
 
 

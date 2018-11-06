@@ -21,6 +21,7 @@ export async function Register(password: string) {
     Address = await address;
     await restore(address, privateKey, password)
     setData('isBackup', '0');
+    setAuth(true)
 }
 
 export async function encryptPassword(password: string): string {
@@ -38,7 +39,9 @@ export async function restore(address: string, privateKey: string, password: str
     cacheAddress = await address;
     cachePrivatekey = await privateKey;
     cachePwd = await password;
-    Address = await address
+    Address = await address;
+    await setAuth(true)
+    initAuth()
 }
 
 export async function createKeystore(keyObject, password: string, address) {

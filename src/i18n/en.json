@@ -9,13 +9,13 @@
         "InvalidAddress": "Please enter a valid address"
     },
     "Register": {
-        "Title": "Create wallet",
-        "TitleButton": "Create wallet",
+        "Title": "Create a wallet",
+        "TitleButton": "Create a wallet",
         "PHWalletLocalPasscode": "Wallet local passcode",
         "PHConfirmLocalPasscode": "Confirm wallet local passcode",
         "policy": "By creating a new wallet you agree to the Term of Service",
         "ErrorLocalPasscode": "Wallet local passcode needs at least 6 characters",
-        "ErrorNotMatch": "Wallet local passcode not match"
+        "ErrorNotMatch": "Wallet local passcodes do not match"
     },
     "Restore": {
         "Title": "Restore wallet",
@@ -25,10 +25,10 @@
         "LocalPasscode": "Local passcode",
         "ComfirmLocalPasscode": "Confirm local passcode",
         "ErrorLocalPasscode": "Wallet local passcode needs at least 6 characters",
-        "ErrorNotMatch": "Wallet local passcode not match",
+        "ErrorNotMatch": "Wallet local passcodes do not match",
         "TitleButton": "Continue",
         "Error": "Error",
-        "InvalidRestoreCode": "Invalid restore code, please try again.",
+        "InvalidRestoreCode": "Invalid backup code, please try again.",
         "Ok": "OK",
         "InvalidPK": "Please enter a valid private key",
         "Warning": "Warning",
@@ -42,7 +42,7 @@
         "Month": "Month",
         "All": "All",
         "YourBalance": "Your balance",
-        "CheckBackup": "Wallet has not yet backed up",
+        "CheckBackup": "Wallet hasn't been backed up yet",
         "ButtonBackup": "Backup"
     },
     "Send": {
@@ -55,13 +55,15 @@
         "ConfirmSend": {
             "Title": "Confirm Send",
             "Content": "Enter your local passcode to process",
-            "Placeholder": "Wallet Local passcode",
+            "Placeholder": "Wallet local passcode",
             "TitleButtonCancel": "Cancel"
         },
         "AlerError": {
             "Error": "Error",
             "Content": "Invalid local passcode",
-            "NotEnoughNTY": "You do not have enough NTY for this transaction"
+            "NotEnoughNTY": "You do not have enough NTY for this transaction",
+            "NotEnoughToken": "You do not have enough token for this transaction",
+            "TransactionFail": "Transaction failed"
         },
         "SendSuccess": {
             "Title": "Send successfully"
@@ -72,7 +74,7 @@
     },
     "Request": {
         "Title": "Request",
-        "TitleCopy": "Tap the below image to copy this wallet address or share it other via email or text",
+        "TitleCopy": "Tap the image below to copy this wallet address or share it other via email or text",
         "Share": "Share",
         "Toast": "Copied to clipboard"
     },
@@ -118,7 +120,7 @@
     "PrivateKey": {
         "Title": "Private key",
         "InitForm": {
-            "Content": "Click below button to get private key",
+            "Content": "Click the button below to get private key",
             "TitleButton": "Continue"
         },
         "GetSuccess": {
@@ -127,13 +129,13 @@
         },
         "DialogConfirm": {
             "Title": "Retrieve your private key",
-            "Content": "Enter your local passcode to process",
-            "Placeholder": "Wallet Local passcode",
+            "Content": "Enter you local passcode to process",
+            "Placeholder": "Wallet local passcode",
             "TitleButtonGet": "Get",
             "TitleButtonCancel": "Cancel"
         },
         "Aler": {
-            "Title": "Get private key failed",
+            "Title": "Failed to get the private key",
             "Content": "Invalid local passcode",
             "TitleButtonCancel": "Cancel",
             "TitleButtonTry": "Try again"
@@ -153,15 +155,15 @@
             "TitleButton": "Ok"
         },
         "AlerSuccess": {
-            "Title": "Successfuly",
-            "Content": "Add token successfuly",
+            "Title": "Successfully",
+            "Content": "Add token successfully",
             "TitleButton": "Ok"
         },
         "ValidToken": "Token address is invalid"
     },
     "History": {
         "Title": "History",
-        "Loading": "Please waitting ..."
+        "Loading": "Please wait..."
     },
     "DetailHistory": {
         "Title": "Transaction details",
@@ -184,7 +186,7 @@
     "Backup": {
         "Title": "Backup",
         "InitForm": {
-            "Content": "Click below button to backup wallet",
+            "Content": "Click the button below to backup wallet",
             "TitleButton": "Backup"
         },
         "GetSuccess": {
@@ -195,17 +197,17 @@
         "DialogConfirm": {
             "Title": "Confirm backup",
             "Content": "Enter you local passcode to process",
-            "Placeholder": "Wallet Local passcode",
+            "Placeholder": "Wallet local passcode",
             "TitleButtonGet": "Backup",
             "TitleButtonCancel": "Cancel"
         },
         "Alert": {
-            "Title": "Get backup code failed",
+            "Title": "Failed to get backup code",
             "TitleButtonCancel": "Cancel",
             "TitleButtonTry": "Try again"
         },
-        "ToastSaveFile": "Save file backup success!",
-        "IOScancel": "Save file was cancel",
+        "ToastSaveFile": "Successfully saved backup file!",
+        "IOScancel": "File save was canceled",
         "Toast": "Copied to clipboard"
     },
     "Languages": {

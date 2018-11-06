@@ -17,22 +17,32 @@ export default class dashboard extends Component {
             balanceNTY: '',
             isBackup: true
         };
-
-
+        // this.backButtonClick = this.backButtonClick.bind(this)
     };
-    componentWillUnmount() {
-        BackHandler.removeEventListener("hardwareBackPress", this.backButtonClick);
-    }
+
+    // componentWillUnmount() {
+    //     console.log('aaa')
+    //     BackHandler.removeEventListener("hardwareBackPress");
+    // }
 
 
-    backButtonClick() {
-        BackHandler.exitApp()
-        return false;
-    }
+    // backButtonClick() {
+    //     console.log('props', this.props.navigation)
+    //     const { dispatch, nav } = this.props.navigation;
+    //     const { state } = this.props.navigation.dangerouslyGetParent()
+    //     console.log("Back pressed", state);
+    //     const activeRoute = state.routes[state.index];
+    //     if (activeRoute.index === 0) {
+    //         return false;
+    //     }
+    //     dispatch(this.props.navigation.goBack());
+    //     return true;
+    //     // BackHandler.exitApp()
+    //     // return false;
+    // }
 
     componentDidMount() {
-        BackHandler.addEventListener("hardwareBackPress", this.backButtonClick);
-
+        // BackHandler.addEventListener("hardwareBackPress", this.backButtonClick);
         getData('isBackup').then(data => {
             if (data == 1) {
                 this.setState({ isBackup: true });
@@ -84,8 +94,8 @@ export default class dashboard extends Component {
                 </TouchableOpacity> */}
                 {
                     !this.state.isBackup ?
-                        <View style={{ flexDirection: 'row', backgroundColor: '#D50000', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ width: GLOBALS.WIDTH * 4 / 5.5, color: '#fff' }}>{Language.t('Dashboard.CheckBackup')}</Text>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#D50000', justifyContent: 'space-between', alignItems: 'center', padding: 5 }}>
+                            <Text style={{ flex: 8, color: '#fff' }}>{Language.t('Dashboard.CheckBackup')}</Text>
                             <TouchableOpacity
                                 style={{ backgroundColor: GLOBALS.Color.primary, borderRadius: 3, justifyContent: 'center', padding: 5, margin: 4 }}
                                 onPress={() => this.gotoBackup()}

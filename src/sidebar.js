@@ -164,7 +164,7 @@ export default class sidebar extends Component {
                             </ListItem>}
                     />
                 </Content>
-                <Text style={{ color: '#fff', backgroundColor: '#093a84' }}>{Language.t('Drawer.Version')} 0.0.1</Text>
+                <Text style={{ color: '#fff', backgroundColor: '#093a84' }}>{Language.t('Drawer.Version')}1.1.1</Text>
             </Container>
         )
     }

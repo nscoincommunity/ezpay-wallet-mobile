@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, AsyncStorage } from 'react-native';
-import { Form, Item, Input, Label, Title } from 'native-base'
+import { Form, Item, Input, Label, Title, Spinner } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
 import { initAuth, Address, isAuth, Login } from '../../services/auth.service'
@@ -23,7 +23,7 @@ class ScreenLogin extends Component {
         this.state = {
             Address: '',
             Password: '',
-
+            loading: false,
             TextError: '',
             Error: false,
             TextErrorAddress: '',
@@ -52,13 +52,15 @@ class ScreenLogin extends Component {
 
 
     LoginNTY() {
+        this.setState({ loading: true })
         Login(this.state.Address, this.state.Password)
             .then(data => {
+                this.setState({ loading: false })
                 const { navigate } = this.props.navigation;
-                navigate('TabNavigator');
+                navigate('Drawer');
             }).catch(err => {
                 console.log(err)
-                this.setState({ TextError: Lang.t('Login.InvalidCredentials') })
+                this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
             })
     }
 
@@ -106,6 +108,7 @@ class ScreenLogin extends Component {
                         <Label>{Lang.t('Login.PHAddress')}</Label>
                         {/* <Label>Address wallet</Label> */}
                         <Input
+                            autoFocus={true}
                             onChangeText={(val) => this.checkAddress(val)}
                             value={this.state.Address}
                             returnKeyType={"next"}
@@ -142,6 +145,17 @@ class ScreenLogin extends Component {
                         <Text style={style.TextButton}>{Lang.t('Login.TitleButton')}</Text>
                     </TouchableOpacity>
                 </View>
+
+                {
+                    this.state.loading ?
+                        <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Platform.OS == 'ios' ? 'rgba(155, 155, 155, 0.63)' : 'tranparent', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
+                            <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}>
+                                <Spinner color={GLOBALS.Color.primary} />
+                                <Text>{Lang.t('Login.TitleButton')}</Text>
+                            </View>
+                        </View>
+                        : null
+                }
             </View >
 
         )

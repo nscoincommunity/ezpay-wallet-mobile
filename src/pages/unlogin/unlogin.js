@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import GLOBALS from '../../helper/variables';
-import { StackNavigator } from 'react-navigation';
 import { initAuth, isAuth, Address, cachePwd } from '../../services/auth.service'
 import { getExchangeRate } from '../../services/rate.service'
 import { Spinner } from 'native-base';
-import Lang from '../../i18n/i18n'
+import Lang from '../../i18n/i18n';
+
 
 export default class unlogin extends Component {
     constructor(props) {
@@ -18,6 +18,8 @@ export default class unlogin extends Component {
 
 
     componentDidMount() {
+        // const { navigate } = this.props.navigation;
+        // navigate('Drawer');
         initAuth()
             .then(async data => {
                 if (isAuth) {

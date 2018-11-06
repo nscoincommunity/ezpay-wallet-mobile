@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, SegmentedControlIOS, Alert } from 'react-native';
-import { Form, Item, Input, Label } from 'native-base'
+import { Form, Item, Input, Label, Spinner } from 'native-base'
 import SegmentControl from 'react-native-segment-controller';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -15,7 +15,8 @@ class ScreenRestore extends Component {
 
         this.state = {
             index: 0,
-            content: ''
+            content: '',
+            loading: false,
         }
         this.handlePress = this.handlePress.bind(this);
     }
@@ -23,6 +24,11 @@ class ScreenRestore extends Component {
     handlePress(index) {
         this.setState({ content: `Segment ${index + 1} selected !!!`, index });
     }
+
+    showLoading(type: boolean) {
+        this.setState({ loading: type })
+    }
+
     render() {
         return (
             <View style={style.container}>
@@ -38,9 +44,19 @@ class ScreenRestore extends Component {
                     borderRadius={9}
                 />
 
-                {this.state.index === 0 && <FormBackupcode navigator={this.props.navigator} />}
-                {this.state.index === 1 && <FormPrivateKey navigator={this.props.navigator} />}
+                {this.state.index === 0 && <FormBackupcode navigator={this.props.navigator} showLoading={this.showLoading.bind(this)} />}
+                {this.state.index === 1 && <FormPrivateKey navigator={this.props.navigator} showLoading={this.showLoading.bind(this)} />}
 
+                {
+                    this.state.loading ?
+                        <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
+                            <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}>
+                                <Spinner color={GLOBALS.Color.primary} />
+                                <Text>{Lang.t('Restore.Title')}</Text>
+                            </View>
+                        </View>
+                        : null
+                }
             </View>
 
         )
@@ -119,8 +135,10 @@ class FormBackupcode extends Component {
         }
     }
     restoreByBackupCode() {
+        this.props.showLoading(true);
         restoreByBackup(this.state.backupCode, this.state.password)
             .then(rCode => {
+                this.props.showLoading(false);
                 if (rCode == 0) {
                     setData('isBackup', '0');
                     const { navigate } = this.props.navigator;
@@ -133,6 +151,7 @@ class FormBackupcode extends Component {
                     )
                 }
             }).catch(err => {
+                this.props.showLoading(false);
                 Alert.alert(
                     Lang.t("Restore.Error"),
                     Lang.t("Restore.InvalidRestoreCode"),
@@ -326,8 +345,10 @@ class FormPrivateKey extends Component {
     }
 
     restoreByPK() {
+        this.props.showLoading(true);
         restoreByPk(this.state.privateKey, this.state.password)
             .then(rCode => {
+                this.props.showLoading(false);
                 if (rCode == 0) {
                     setData('isBackup', '0');
                     const { navigate } = this.props.navigator;
@@ -340,6 +361,7 @@ class FormPrivateKey extends Component {
                     )
                 }
             }).catch(err => {
+                this.props.showLoading(false);
                 console.log('cache', err)
                 Alert.alert(
                     Lang.t("Restore.Error"),

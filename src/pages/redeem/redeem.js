@@ -46,7 +46,16 @@ export default class Redeem extends Component {
 
 
     setFalse() {
-
+        this.setState({
+            show: false,
+            expired: false,
+            getValue: false,
+            notExist: false,
+            statusQR: false,
+            error: false,
+            used: false,
+            QRNotFound: false
+        })
     }
 
     onSelect = data => {
@@ -64,6 +73,7 @@ export default class Redeem extends Component {
             try {
                 fetch('https://coupon.nexty.io/api/Coupon/info?couponcode=' + this.state.dataReturn)
                     .then(QR => {
+                        console.log('return QR: ', QR)
                         if (QR == null || QR == '') {
                             this.setState({ notExist: true, error: true })
                         } else {
@@ -105,18 +115,19 @@ export default class Redeem extends Component {
                 this.setState({ error: true, QRNotFound: true, dataReturn: 'null' })
             })
         }
+
+        // setTimeout(async () => {
+        //     await this.navigateToOFO();
+        //     await this.setState({ loadding: false })
+        // }, 1000);
+    }
+    componentWillMount() {
         setTimeout(() => {
             this.navigateToOFO();
             this.setState({ loadding: false })
-        }, 1000);
+        }, Platform.OS == 'android' ? 2000 : 1000);
     }
 
-    componentWillMount() {
-
-    }
-
-    _handleBackPress = () => {
-    }
 
     componentWillUnmount() {
         if (Platform.OS == "android") {
@@ -143,6 +154,11 @@ export default class Redeem extends Component {
     }
 
     render() {
+        console.log(
+            'notfound: ' + this.state.QRNotFound,
+            '\nexpired: ' + this.state.expired,
+            '\nused: ' + this.state.used
+        )
         return (
             <Container style={{ backgroundColor: "#fff" }}>
                 <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
@@ -155,12 +171,12 @@ export default class Redeem extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('Redeem.Title')}</Title>
+                        <Title style={{ color: '#fff' }}>{Language.t('Redeem.Title')}</Title>
                     </Body>
                     <Right />
                 </Header>
 
-                <Content padder contentContainerStyle={styles.container}>
+                <View style={styles.container}>
                     {
                         this.state.loadding &&
                         <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
@@ -209,7 +225,7 @@ export default class Redeem extends Component {
                             </TouchableOpacity>
                         </View>
                     }
-                </Content>
+                </View>
             </Container >
         )
     }

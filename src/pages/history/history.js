@@ -135,7 +135,7 @@ export default class History extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('History.Title')}</Title>
+                            <Title style={{ color: '#fff' }}>{Language.t('History.Title')}</Title>
                         </Body>
                         <Right />
                     </Header>
@@ -158,7 +158,7 @@ export default class History extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('History.Title')}</Title>
+                            <Title style={{ color: '#fff' }}>{Language.t('History.Title')}</Title>
                         </Body>
                         <Right />
                     </Header>

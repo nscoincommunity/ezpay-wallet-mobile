@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard, Platform } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { GetInfoToken } from '../../services/wallet.service';
 import { setData, getData, rmData } from '../../services/data.service'
@@ -35,19 +35,17 @@ export default class Addtoken extends Component {
                             <Icon name="bars" color='#fff' size={25}></Icon>
                         </Button>
                     </Left>
-                    <Body>
+                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: '#fff' }}>{Language.t("AddToken.Title")}</Title>
                     </Body>
                     <Right />
                 </Header>
 
-                <Body padder>
-                    <ScrollView>
-                        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} enabled>
-                            <FormAddToken />
-                        </KeyboardAvoidingView>
-                    </ScrollView>
-                </Body>
+                <ScrollView style={{ flex: 1 }}>
+                    <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} enabled style={{ flex: 1 }}>
+                        <FormAddToken />
+                    </KeyboardAvoidingView>
+                </ScrollView>
             </Container>
         )
     }
@@ -82,13 +80,13 @@ class FormAddToken extends Component {
                     })
                 }
                 else {
-                    await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken') }, () => {
+                    await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken'), symbol: '' }, () => {
                         this.disableButton()
                     })
                 }
             }).catch(async err => {
                 console.log(err);
-                await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken') }, () => {
+                await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken'), symbol: '' }, () => {
                     this.disableButton()
                 })
             })
@@ -167,25 +165,24 @@ class FormAddToken extends Component {
 
     render() {
         return (
-            <View>
-                <View style={styles.FormLogin}>
+            <View style={styles.container}>
+                <Form style={styles.FormAddToken} >
                     <Item floatingLabel error={this.state.ValidToken}>
                         <Label style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t("AddToken.FormAdd.PlaceholderToken")}</Label>
                         <Input onChangeText={(value) => { this.setValue(value) }} value={this.state.addressTK} />
                     </Item>
-                    <Item style={{ borderBottomWidth: 0 }} >
+                    <Item style={{ borderBottomWidth: 0, marginBottom: 10, marginTop: 10 }} >
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErr}</Text>
                     </Item>
                     <Item floatingLabel disabled={true}>
                         <Label style={{ fontFamily: GLOBALS.font.Poppins }} >{Language.t("AddToken.FormAdd.PlaceholderSymbol")}</Label>
                         <Input disabled={true} value={this.state.symbol} />
                     </Item>
-                </View>
-                <View style={styles.AreaButton}>
-                    <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.addToken.bind(this)} disabled={this.state.typeButton}>
-                        <Text style={styles.TextButton}>{Language.t("AddToken.FormAdd.TitleButton")}</Text>
-                    </TouchableOpacity>
-                </View>
+                </Form>
+
+                <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.addToken.bind(this)} disabled={this.state.typeButton}>
+                    <Text style={styles.TextButton}>{Language.t("AddToken.FormAdd.TitleButton")}</Text>
+                </TouchableOpacity>
                 {/* <View>
                     <TouchableOpacity onPress={() => { rmData('ListToken') }}>
                         <Text>Remove token</Text>
@@ -200,7 +197,7 @@ class FormAddToken extends Component {
 var typeButton = (color, type) => StyleSheet.create({
     button: {
         backgroundColor: type == true ? '#cccccc' : color,
-        marginBottom: GLOBALS.HEIGHT / 40,
+        marginTop: GLOBALS.HEIGHT / 40,
         height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
         width: GLOBALS.WIDTH / 1.6,
@@ -214,6 +211,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        marginTop: 20,
     },
     TextButton: {
         color: 'white',
@@ -224,12 +222,10 @@ const styles = StyleSheet.create({
     AreaButton: {
         alignItems: 'center',
     },
-    FormLogin: {
+    FormAddToken: {
         width: GLOBALS.WIDTH,
-        marginBottom: GLOBALS.HEIGHT / 50,
-        paddingLeft: GLOBALS.WIDTH / 20,
-        paddingRight: GLOBALS.WIDTH / 20,
-        marginTop: GLOBALS.HEIGHT / 25,
+        // padding: 10,
+        // paddingTop: 20,
     }
 })
 

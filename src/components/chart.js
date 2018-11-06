@@ -23,8 +23,8 @@ export default class Chart extends Component {
 
     }
 
-    async changeChart(type) {
-        await this.setState({ DataChart: [], selected: type })
+    changeChart(type) {
+        this.setState({ DataChart: [], selected: type })
         var time = new Date;
         var url = '';
         switch (type) {
@@ -52,14 +52,14 @@ export default class Chart extends Component {
                 .then(response => {
                     var tempData = [];
                     var i = 0;
-                    response['price_usd'].forEach(async element => {
+                    response['price_usd'].forEach(element => {
                         i++;
                         tempData.push({
                             x: element[0],
                             y: element[1]
                         })
                         if (i == response['price_usd'].length - 1) {
-                            await this.setState({ DataChart: tempData })
+                            this.setState({ DataChart: tempData })
                         }
                     });
                 })

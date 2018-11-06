@@ -1,227 +1,229 @@
 {
     "Login": {
         "Title": "Login",
-        "PHAddress": "Address wallet",
-        "PHLocalPasscode": "Wallet local passcode",
-        "TitleButton": "Continue",
-        "InvalidCredentials": "Invalid credentials",
-        "InvalidLocalPasscode": "Please enter a valid local passcode",
-        "InvalidAddress": "Please enter a valid address"
+        "PHAddress": "Endereço da Wallet",
+        "PHLocalPasscode": "Senha da Wallet",
+        "TitleButton": "Prosseguir",
+        "InvalidCredentials": "Credenciais inválidas",
+        "InvalidLocalPasscode": "Por favor, insira uma senha válida",
+        "InvalidAddress": "Por favor, insira um endereço válido"
     },
     "Register": {
-        "Title": "Create wallet",
-        "TitleButton": "Create wallet",
-        "PHWalletLocalPasscode": "Wallet local passcode",
-        "PHConfirmLocalPasscode": "Confirm wallet local passcode",
-        "policy": "By creating a new wallet you agree to the Term of Service",
-        "ErrorLocalPasscode": "Wallet local passcode needs at least 6 characters",
-        "ErrorNotMatch": "Wallet local passcode not match"
+        "Title": "Criar wallet",
+        "TitleButton": "Criar Wallet",
+        "PHWalletLocalPasscode": "Senha da wallet",
+        "PHConfirmLocalPasscode": "Confirme senha da wallet",
+        "policy": "Ao criar uma nova Wallet, você concorda com o Termo de Serviço",
+        "ErrorLocalPasscode": "A senha da wallet precisa de pelo menos 6 caracteres",
+        "ErrorNotMatch": "Senha da wallet não corresponde"
     },
     "Restore": {
-        "Title": "Restore wallet",
-        "BackUpCode": "Backup code",
+        "Title": "Restaurar wallet",
+        "BackUpCode": "Código de backup",
         "Privatekey": "Private key",
-        "ChooserFile": "Choose file",
-        "LocalPasscode": "Local passcode",
-        "ComfirmLocalPasscode": "Confirm local passcode",
-        "ErrorLocalPasscode": "Wallet local passcode needs at least 6 characters",
-        "ErrorNotMatch": "Wallet local passcode not match",
-        "TitleButton": "Continue",
-        "Error": "Error",
-        "InvalidRestoreCode": "Invalid restore code, please try again.",
+        "ChooserFile": "Escolher arquivo",
+        "LocalPasscode": "Senha",
+        "ComfirmLocalPasscode": "Confirmar senha",
+        "ErrorLocalPasscode": "A senha da wallet precisa de pelo menos 6 caracteres",
+        "ErrorNotMatch": "Senha da wallet não corresponde",
+        "TitleButton": "Prosseguir",
+        "Error": "Erro",
+        "InvalidRestoreCode": "Código de backup inválido, por favor, tente novamente.",
         "Ok": "OK",
-        "InvalidPK": "Please enter a valid private key",
-        "Warning": "Warning",
-        "ContentWarning": "Please select a valid backup file",
-        "AlertInvalidPK": "Invalid private key, please try again!"
+        "InvalidPK": "Por favor, insira uma chave privada válida",
+        "Warning": "Aviso",
+        "ContentWarning": "Por favor, selecione um arquivo de backup válido",
+        "AlertInvalidPK": "Chave privada inválida, por favor tente novamente!"
     },
     "Dashboard": {
-        "Title": "Dashboard",
-        "Day": "Day",
-        "Week": "Week",
-        "Month": "Month",
-        "All": "All",
-        "YourBalance": "Your balance",
-        "CheckBackup": "Wallet has not yet backed up",
+        "Title": "Painel de controle ",
+        "Day": "Dia",
+        "Week": "Semana",
+        "Month": "Mês",
+        "All": "Tudo",
+        "YourBalance": "Seu saldo",
+        "CheckBackup": "A Wallet ainda não fez o backup ",
         "ButtonBackup": "Backup"
     },
     "Send": {
-        "Title": "Send",
+        "Title": "Enviar",
         "SendForm": {
-            "SelectToken": "Select Token",
-            "To": "To",
-            "TitleButton": "Send"
+            "SelectToken": "Selecionar Token ",
+            "To": "Para",
+            "TitleButton": "Enviar"
         },
         "ConfirmSend": {
-            "Title": "Confirm Send",
-            "Content": "Enter your local passcode to process",
-            "Placeholder": "Wallet Local passcode",
-            "TitleButtonCancel": "Cancel"
+            "Title": "Confirmar Envio ",
+            "Content": "Digite sua senha para processar ",
+            "Placeholder": "Senha da Wallet ",
+            "TitleButtonCancel": "Cancelar"
         },
         "AlerError": {
-            "Error": "Error",
-            "Content": "Invalid local passcode",
-            "NotEnoughNTY": "You do not have enough NTY for this transaction"
+            "Error": "Erro",
+            "Content": "Senha invalida ",
+            "NotEnoughNTY": "Você não tem NTY suficiente para esta transação ",
+            "NotEnoughToken": "Você não tem token suficiente para essa transação ",
+            "TransactionFail": "Falha na transação"
         },
         "SendSuccess": {
-            "Title": "Send successfully"
+            "Title": "Enviado com sucesso "
         },
         "Ok": "Ok",
-        "ValidAmount": "Please  enter a valid amount",
-        "ValidAddress": "Invalid address"
+        "ValidAmount": "Por favor, insira um valor válido ",
+        "ValidAddress": "Endereço inválido"
     },
     "Request": {
-        "Title": "Request",
-        "TitleCopy": "Tap the below image to copy this wallet address or share it other via email or text",
-        "Share": "Share",
-        "Toast": "Copied to clipboard"
+        "Title": "Pedido ",
+        "TitleCopy": "Toque na imagem abaixo para copiar este endereço da carteira ou compartilhá-lo por email ou texto ",
+        "Share": "Compartilhar",
+        "Toast": "Copiado para a área de transferência "
     },
     "Unlogin": {
         "Login": "Login",
-        "CreateWallet": "Create Wallet",
-        "Restore": "Restore Wallet",
-        "AutoLogin": "Auto login ..."
+        "CreateWallet": "Criar Wallet",
+        "Restore": "Restaurar Wallet",
+        "AutoLogin": "Login automático..."
     },
     "Drawer": {
-        "Redeem": "Redeem",
-        "Privatekey": "Private key",
-        "Addtoken": "Add token",
-        "History": "History",
-        "Settings": "Settings",
-        "About": "About",
-        "Logout": "Logout",
-        "Version": "Version"
+        "Redeem": "Resgatar",
+        "Privatekey": "Chave Privada",
+        "Addtoken": "Adicionar token",
+        "History": "Histórico",
+        "Settings": "Configurações",
+        "About": "Sobre",
+        "Logout": "Sair",
+        "Version": "Versão"
     },
     "Redeem": {
-        "Title": "Redeem",
-        "OpenCam": "Open camera...",
+        "Title": "Resgatar",
+        "OpenCam": "Abrir a camera...",
         "InfoQR": {
             "Title": "Info QR code",
             "Content": "QR code",
             "TitleButton": "Redeem"
         },
         "Congratulation": {
-            "Title": "Congratulation",
-            "Content": "You have received ",
+            "Title": "Parabéns",
+            "Content": "Você recebeu ",
             "TitleButton": "Ok"
         },
         "Error": {
-            "Title": "Error",
+            "Title": "Erro",
             "Content": {
-                "Used": "Sorry, this QR code has been used",
-                "expired": "Sorry, then QR code has been expired",
-                "NotFound": "QR code not found"
+                "Used": "Desculpe, este QR Code foi usado",
+                "expired": "Desculpe, o QR Code expirou",
+                "NotFound": "QR Code não entcontrado"
             },
-            "TitleButton": "Rescan"
+            "TitleButton": "Realizar nova leitura"
         }
     },
     "PrivateKey": {
-        "Title": "Private key",
+        "Title": "Chave privada",
         "InitForm": {
-            "Content": "Click below button to get private key",
-            "TitleButton": "Continue"
+            "Content": "Clique no botão abaixo para obter a chave privada",
+            "TitleButton": "Continuar"
         },
         "GetSuccess": {
-            "TitleButton": "Copy private key",
-            "TitleCopied": "Copied"
+            "TitleButton": "Copiar chave privada",
+            "TitleCopied": "Copiado"
         },
         "DialogConfirm": {
-            "Title": "Retrieve your private key",
-            "Content": "Enter you local passcode to process",
-            "Placeholder": "Wallet Local passcode",
-            "TitleButtonGet": "Get",
-            "TitleButtonCancel": "Cancel"
+            "Title": "Recuperar sua chave privada",
+            "Content": "Digite sua senha para processar",
+            "Placeholder": "Senha da Wallet",
+            "TitleButtonGet": "Obter",
+            "TitleButtonCancel": "Cancelar"
         },
         "Aler": {
-            "Title": "Get private key failed",
-            "Content": "Invalid local passcode",
-            "TitleButtonCancel": "Cancel",
-            "TitleButtonTry": "Try again"
+            "Title": "Falha na chave privada",
+            "Content": "Senha inválida",
+            "TitleButtonCancel": "Cancelar",
+            "TitleButtonTry": "Tente novamente"
         },
-        "Toast": "Copied to clipboard"
+        "Toast": "Copiado para a área de transferência"
     },
     "AddToken": {
-        "Title": "Add token",
+        "Title": "Adicionar token",
         "FormAdd": {
-            "PlaceholderToken": "Enter token contract address",
-            "PlaceholderSymbol": "Token symbol",
-            "TitleButton": "Add token"
+            "PlaceholderToken": "Digite o endereço do contrato do token",
+            "PlaceholderSymbol": " Símbolo do token ",
+            "TitleButton": "Adicionar token"
         },
         "AlerError": {
-            "Title": "Error",
-            "Content": "Token address has already existed",
+            "Title": "Erro",
+            "Content": "O endereço do token já existe",
             "TitleButton": "Ok"
         },
         "AlerSuccess": {
-            "Title": "Successfuly",
-            "Content": "Add token successfuly",
+            "Title": "Com sucesso",
+            "Content": "Token adicionado com sucesso",
             "TitleButton": "Ok"
         },
-        "ValidToken": "Token address is invalid"
+        "ValidToken": "O endereço do token é inválido"
     },
     "History": {
-        "Title": "History",
-        "Loading": "Please waitting ..."
+        "Title": "Histórico",
+        "Loading": "Por favor, aguarde ..."
     },
     "DetailHistory": {
-        "Title": "Transaction details",
-        "Txhash": "Txhash",
-        "From": "From",
-        "To": "To",
-        "Amount": "Amount",
-        "Date": "Date",
+        "Title": "Detalhes da transação",
+        "Txhash": "Hash de Transação",
+        "From": "De",
+        "To": "Para",
+        "Amount": "Valor",
+        "Date": "Data",
         "Status": "Status",
         "TitleButton": "EXPLORER"
     },
     "Settings": {
-        "Title": "Setting",
+        "Title": "Configuração",
         "Backup": "Backup",
-        "Languages": "Languages",
-        "ChangePIN": "Change PIN",
-        "TouchID": "Use Touch ID as PIN",
-        "Toast": "This feature is coming soon"
+        "Languages": "Idiomas",
+        "ChangePIN": "Alterar  PIN",
+        "TouchID": "Usar ID de toque como PIN",
+        "Toast": "Este recurso estará disponível em breve"
     },
     "Backup": {
         "Title": "Backup",
         "InitForm": {
-            "Content": "Click below button to backup wallet",
+            "Content": "Clique no botão abaixo para realizar o backup da wallet",
             "TitleButton": "Backup"
         },
         "GetSuccess": {
-            "Title": "Backup code",
-            "TitleButton": "Copy backup code",
-            "TitleCopied": "Copied"
+            "Title": "Código Backup",
+            "TitleButton": "Copiar código de backup",
+            "TitleCopied": "Copiado"
         },
         "DialogConfirm": {
-            "Title": "Confirm backup",
-            "Content": "Enter you local passcode to process",
-            "Placeholder": "Wallet Local passcode",
+            "Title": "Confirmar backup",
+            "Content": "Digite sua senha para processar",
+            "Placeholder": "Senha da Wallet",
             "TitleButtonGet": "Backup",
-            "TitleButtonCancel": "Cancel"
+            "TitleButtonCancel": "Cancelar"
         },
-        "Aler": {
-            "Title": "Get backup code failed",
-            "TitleButtonCancel": "Cancel",
-            "TitleButtonTry": "Try again"
+        "Alert": {
+            "Title": "Falha ao obter código de backup",
+            "TitleButtonCancel": "Cancelar",
+            "TitleButtonTry": "Tente novamente"
         },
-        "ToastSaveFile": "Save file backup success!",
-        "IOScancel": "Save file was cancel",
-        "Toast": "Copied to clipboard"
+        "ToastSaveFile": "Arquivo de backup salvo com sucesso!",
+        "IOScancel": "Arquivo salvo foi cancelado",
+        "Toast": "Copiado para a área de transferência"
     },
     "Languages": {
-        "Title": "Languages"
+        "Title": "Idiomas"
     },
     "About": {
-        "Title": "About",
-        "Content": "Nexty is a Fintech ecosystem which helps e-commerce and technology startups to raise funds from community"
+        "Title": "Sobre",
+        "Content": "Nexty é um ecossistema da Fintech que ajuda o comércio eletrônico e startups de tecnologia a levantarem fundos através da comunidade"
     },
     "QRScan": {
         "Title": "QR scan"
     },
     "ConfirmLogout": {
-        "Content": "Do you want to logout?",
-        "ButtonAgree": "AGREE",
-        "ButtonCancel": "DISAGREE"
+        "Content": "Você quer sair?",
+        "ButtonAgree": "CONCORDO",
+        "ButtonCancel": "NÃO CONCORDO"
     },
     "LOGIN_TITLE": "Login"
 }

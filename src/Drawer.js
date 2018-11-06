@@ -1,62 +1,69 @@
-import React from "react";
-import { navigationOptions, createDrawerNavigator } from "react-navigation";
-import Language from './i18n/i18n';
+import React, { Component } from 'react';
+import { NavigationActions } from 'react-navigation';
+import PropTypes from 'prop-types';
+import { ScrollView, Text, View, StyleSheet, Platform } from 'react-native';
+import { DrawerActions } from 'react-navigation';
 
-class MyHomeScreen extends React.Component {
-    static navigationOptions = {
-        drawerLabel: 'Home',
-        drawerIcon: ({ tintColor }) => (
-            <Image
-                source={require('./chats-icon.png')}
-                style={[styles.icon, { tintColor: tintColor }]}
-            />
-        ),
-    };
+class DrawerScreen extends Component {
+    navigateToScreen = (route) => () => {
+        const navigateAction = NavigationActions.navigate({
+            routeName: route
+        });
+        this.props.navigation.dispatch(navigateAction);
+        this.props.navigation.dispatch(DrawerActions.closeDrawer())
+    }
 
     render() {
         return (
-            <Button
-                onPress={() => this.props.navigation.navigate('Notifications')}
-                title="Go to notifications"
-            />
+            <View>
+                <ScrollView>
+                    <View>
+                        <View style={styles.menuItem}>
+                            <Text onPress={this.navigateToScreen('Home')}>
+                                Home
+              </Text>
+                        </View>
+                        <View style={styles.menuItem}>
+                            <Text onPress={this.navigateToScreen('About')}>
+                                About
+              </Text>
+                        </View>
+                        <View style={styles.menuItem}>
+                            <Text onPress={this.navigateToScreen('Contact')}>
+                                Contact
+              </Text>
+                        </View>
+                        <View style={styles.menuItem}>
+                            <Text onPress={this.navigateToScreen('Login')}>
+                                Login
+              </Text>
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
         );
     }
 }
 
-class MyNotificationsScreen extends React.Component {
-    static navigationOptions = {
-        drawerLabel: 'Notifications',
-        drawerIcon: ({ tintColor }) => (
-            <Image
-                source={require('./notif-icon.png')}
-                style={[styles.icon, { tintColor: tintColor }]}
-            />
-        ),
-    };
-
-    render() {
-        return (
-            <Button
-                onPress={() => this.props.navigation.goBack()}
-                title="Go back home"
-            />
-        );
-    }
-}
-
+DrawerScreen.propTypes = {
+    navigation: PropTypes.object
+};
 const styles = StyleSheet.create({
-    icon: {
-        width: 24,
-        height: 24,
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
     },
+    heading: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    },
+    menuItem: {
+        padding: 10,
+        borderWidth: 0.5,
+        borderColor: '#d6d7da'
+    }
 });
-
-const Drawer = createDrawerNavigator({
-    Home: {
-        screen: MyHomeScreen,
-    },
-    Notifications: {
-        screen: MyNotificationsScreen,
-    },
-});
-export default Drawer;
+export default DrawerScreen;

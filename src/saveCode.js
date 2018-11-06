@@ -124,3 +124,113 @@ export default class dashboard extends Component {
                                 </ListItem>}
                         />
                     } */}
+
+<View style={style.container}>
+    <ScrollView>
+        <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
+
+            <View style={{ width: GLOBALS.WIDTH, paddingLeft: GLOBALS.WIDTH / 25, paddingRight: GLOBALS.WIDTH / 25 }}>
+
+                {
+                    this.state.ListToken &&
+                    <Dropdown
+                        onChangeText={(item) => this.selectToken(item)}
+                        label={Language.t('Send.SendForm.SelectToken')}
+                        data={this.state.ListToken}
+                        value={'NTY'}
+                    />
+                }
+            </View>
+
+            <Form style={style.FormSend}>
+                <View style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    width: GLOBALS.WIDTH,
+                }}>
+                    <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.4 }} error={this.state.errorAddress} >
+                        <Label>{Language.t('Send.SendForm.To')}</Label>
+                        <Input
+                            value={this.state.addresswallet}
+                            onChangeText={(val) => this.CheckAddress(val)}
+                            returnKeyType={"next"}
+                            blurOnSubmit={false}
+                            onSubmitEditing={() => { this.focusTheField('field2'); }}
+                        />
+                    </Item>
+
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <TouchableOpacity style={style.buttonScan} onPress={this.navigateToScan.bind(this)}>
+                            <Icon name="md-qr-scanner" size={30} color="#fff">
+                            </Icon>
+                        </TouchableOpacity>
+                    </Item>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
+                    </Item>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    width: GLOBALS.WIDTH,
+                }}>
+                    <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
+                        <Label>{this.state.viewSymbol}</Label>
+                        <Input
+                            keyboardType="numeric"
+                            onChangeText={(val) => this.CheckNTY(val)}
+                            value={this.state.NTY}
+                            getRef={input => { this.inputs['field2'] = input }}
+                        />
+                    </Item>
+                    <Icon name="md-swap" size={20} style={{ marginTop: 40 }}></Icon>
+                    <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
+                        <Label>USD</Label>
+                        <Input
+                            keyboardType="numeric"
+                            onChangeText={(val) => this.CheckUSD(val)}
+                            value={this.state.USD} />
+                    </Item>
+                    <Item style={{ borderBottomWidth: 0 }}>
+                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorNTY}</Text>
+                    </Item>
+                </View>
+                <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.VisibaleButton).button} disabled={this.state.VisibaleButton} onPress={() => this.setState({ dialogSend: true })}>
+                    <Text style={style.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
+                </TouchableOpacity>
+            </Form>
+
+            <Dialog.Container visible={this.state.dialogSend} >
+                <Dialog.Title>{Language.t('Send.ConfirmSend.Title')}</Dialog.Title>
+                <Dialog.Description>
+                    {Language.t('Send.ConfirmSend.Content')}
+                </Dialog.Description>
+                <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
+                <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
+                <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.doSend.bind(this)} />
+            </Dialog.Container>
+        </KeyboardAvoidingView>
+    </ScrollView>
+
+    <PopupDialog
+        dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: GLOBALS.HEIGHT / 4 }}
+        ref={(popupDialog) => {
+            this.scaleAnimationDialog = popupDialog;
+        }}
+        dialogAnimation={scaleAnimation}
+        dialogTitle={<DialogTitle title={this.state.titleDialog} />}
+        actions={[
+            <DialogButton
+                text={Language.t('Send.Ok')}
+                onPress={() => {
+                    this.scaleAnimationDialog.dismiss();
+                }}
+                key="button-1"
+            />,
+        ]}
+    >
+        <View style={style.dialogContentView}>
+            <Text style={{ textAlign: 'center', marginTop: 10 }}>{this.state.contentDialog}</Text>
+        </View>
+    </PopupDialog>
+</View >

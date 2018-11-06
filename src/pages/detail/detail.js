@@ -40,7 +40,7 @@ export default class DetailHis extends Component {
             <Container style={{ backgroundColor: "#fff" }}>
                 <View >
 
-                    <ListItem icon>
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5 }} >
                         <Body>
                             <Text style={styleText}>{Language.t('DetailHistory.Txhash')}</Text>
                             <Text style={styleText} note numberOfLines={1}>{data.tx}</Text>
@@ -49,7 +49,7 @@ export default class DetailHis extends Component {
 
                     {
                         data.type == 'arrow-up' &&
-                        <ListItem icon>
+                        <ListItem icon style={{ marginTop: 5, marginBottom: 5 }}>
                             <Body>
                                 <Text style={styleText}>{Language.t('DetailHistory.To')}</Text>
                                 <Text style={styleText} note numberOfLines={1}>{data.data.to}</Text>
@@ -59,7 +59,7 @@ export default class DetailHis extends Component {
 
                     {
                         data.type == 'arrow-down' &&
-                        <ListItem icon>
+                        <ListItem icon style={{ marginTop: 5, marginBottom: 5 }}>
                             <Body>
                                 <Text style={styleText}>{Language.t('DetailHistory.From')}</Text>
                                 <Text style={styleText} note numberOfLines={1}>{data.data.from}</Text>
@@ -67,21 +67,21 @@ export default class DetailHis extends Component {
                         </ListItem>
                     }
 
-                    <ListItem icon>
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5 }}>
                         <Body>
                             <Text style={styleText}>{Language.t('DetailHistory.Amount')}</Text>
                             <Text style={styleText} note numberOfLines={1}>{data.quantity}</Text>
                         </Body>
                     </ListItem>
 
-                    <ListItem icon>
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5 }}>
                         <Body>
                             <Text style={styleText}>{Language.t('DetailHistory.Date')}</Text>
                             <Text note numberOfLines={1} style={styleText}>{data.datetime}</Text>
                         </Body>
                     </ListItem>
 
-                    <ListItem icon >
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5 }}>
                         <Body>
                             <Text style={styleText}>{Language.t('DetailHistory.Status')}</Text>
                             <Text style={{ color: "green", fontFamily: GLOBALS.font.Poppins }} note numberOfLines={1} >COMPLETE</Text>

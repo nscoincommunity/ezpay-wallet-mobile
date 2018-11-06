@@ -61,7 +61,9 @@
         "AlerError": {
             "Error": "错误",
             "Content": "本地密码无效",
-            "NotEnoughNTY": "您没有足够NTY进行此笔交易"
+            "NotEnoughNTY": "您没有足够NTY进行此笔交易",
+            "NotEnoughToken": "您没有足够代币进行此笔交易",
+            "TransactionFail": "交易失败"
         },
         "SendSuccess": {
             "Title": "发送成功"
@@ -72,7 +74,7 @@
     },
     "Request": {
         "Title": "申请",
-        "TitleCopy": "点击以下图片复制或分享此钱包地址或通过电子邮件或文本",
+        "TitleCopy": "点击以下图片复制或分享钱包地址或通过电子邮件或文本",
         "Share": "共享",
         "Toast": "复制到剪贴板"
     },

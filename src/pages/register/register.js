@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Platform, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking, Modal } from 'react-native';
-import { Form, Item, Input, Label } from 'native-base'
+import { Form, Item, Input, Label, Spinner } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { checkIOS, Register } from '../../services/auth.service';
 import { setData } from '../../services/data.service'
@@ -14,6 +14,7 @@ class ScreenRegister extends Component {
         this.state = {
             password: '',
             confirmpassword: '',
+            loading: false,
             submit: false,
             TexterrorPw: '',
             TexterrorCPw: '',
@@ -26,11 +27,13 @@ class ScreenRegister extends Component {
 
 
     async  register() {
-        // this.setState({ visibaleMd: true })
-        Register(this.state.password)
-        setData('isBackup', '0');
-        const { navigate } = this.props.data.navigation;
-        navigate('TabNavigator');
+        this.setState({ loading: true })
+        Register(this.state.password).then(() => {
+            this.setState({ loading: false })
+            const { navigate } = this.props.data.navigation;
+            navigate('TabNavigator');
+            setData('isBackup', '0');
+        })
     }
     async validatePass(value) {
         this.setState({ password: value })
@@ -105,14 +108,26 @@ class ScreenRegister extends Component {
                         <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorCPw}</Text>
                     </Item>
                 </Form>
-                <Text style={{ fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }}>{Lang.t("Register.policy")}</Text>
-                <Text style={{ color: GLOBALS.Color.primary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy.html') }}> Term of Service</Text>
+                <View style={{ justifyContent: 'space-between', alignItems: 'center', padding: 5 }}>
+                    <Text style={{ fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }}>{Lang.t("Register.policy")}</Text>
+                </View>
+                <Text style={{ color: GLOBALS.Color.primary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy/') }}> Term of Service</Text>
 
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.register.bind(this)} disabled={this.state.typeButton}>
                         <Text style={style.TextButton}>{Lang.t("Register.TitleButton")}</Text>
                     </TouchableOpacity>
                 </View>
+                {
+                    this.state.loading ?
+                        <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
+                            <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}>
+                                <Spinner color={GLOBALS.Color.primary} />
+                                <Text>{Lang.t('Register.TitleButton')}</Text>
+                            </View>
+                        </View>
+                        : null
+                }
             </View>
 
         )

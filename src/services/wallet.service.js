@@ -95,7 +95,7 @@ export async function SendService(address: string, nty: number, password: string
     let sendValue = CONSTANTS.BASE_NTY2.valueOf() * nty;
     let hexValue = '0x' + bigInt(sendValue).toString(16);
     let txData: Tx;
-    if (exData || exData != null) {
+    if (exData || exData != null || exData != '') {
         txData = {
             from: Address,
             to: address,
@@ -147,7 +147,7 @@ export async function SendService(address: string, nty: number, password: string
                 })
             }).catch(err => {
                 console.log('err', err)
-                reject('Check your banlance')
+                reject(Language.t('Send.AlerError.TransactionFail'))
             })
 
     })
@@ -159,7 +159,7 @@ export async function SendToken(toAddress: string, tokenAddress, ABI, token: num
         throw (Language.t('Send.AlerError.Content'))
     }
     // check address
-    if (! await WEB3.utils.isAddress(address)) {
+    if (! await WEB3.utils.isAddress(toAddress)) {
         throw (Language.t('Send.ValidAddress'));
     }
 
@@ -212,7 +212,7 @@ export async function SendToken(toAddress: string, tokenAddress, ABI, token: num
                 })
             }).catch(err => {
                 console.log('err', err)
-                reject('server error')
+                reject('Returned error: insufficient funds for gas * price + value')
             })
 
     })

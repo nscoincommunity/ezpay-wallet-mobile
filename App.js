@@ -10,17 +10,17 @@ import { getData } from './src/services/data.service'
 export default class Setup extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    try {
-      getData('languages').then(lang => {
-        if (lang == null) {
-          DeviceLanguage()
-        } else {
-          selectLang()
-        }
-      })
-    } catch (error) {
-      DeviceLanguage()
-    }
+    // try {
+    //   getData('languages').then(lang => {
+    //     if (lang == null) {
+    //       DeviceLanguage()
+    //     } else {
+    //       selectLang()
+    //     }
+    //   })
+    // } catch (error) {
+    //   DeviceLanguage()
+    // }
 
   }
 
@@ -31,50 +31,3 @@ export default class Setup extends Component {
     );
   }
 }
-/* ************************************** */
-/* test code */
-/* ************************************** */
-// import React, { Component } from "react";
-// import { View, Text } from "react-native";
-// import { TabNavigator, DrawerNavigator, StackNavigator } from "react-navigation";
-
-// class DrawerScreen extends Component {
-//   render() {
-//     return (
-//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-
-//         <Text >
-//           Drawer Screen Content
-//       </Text>
-//       </View>
-//     );
-//   }
-// }
-// class TabScreen extends Component {
-//   render() {
-//     return (
-//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//         <Text >
-//           Tab Screen Content
-//       </Text>
-//       </View>
-//     );
-//   }
-// }
-
-// export default class NavSample extends Component {
-//   state = {};
-
-//   render() {
-//     const Drawer = DrawerNavigator(
-//       { DrawerScreen: { screen: DrawerScreen } },
-//       { drawerPosition: "right" }
-//     );
-
-//     const Tab = TabNavigator({
-//       TabScreen: { screen: Drawer }
-//     });
-
-//     return <Tab />;
-//   }
-// }

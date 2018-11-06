@@ -1,131 +1,6 @@
-// import React from 'react';
-// import { Button, Text, View, TouchableOpacity, Keyboard } from 'react-native';
-// import { createBottomTabNavigator, createStackNavigator, createTabNavigator } from 'react-navigation';
-// import dashboard from './pages/dashboard/dashboard';
-// import request from './pages/request/request';
-// import send from './pages/send/send';
-// import GLOBALS from './helper/variables'
-// import Icon from "react-native-vector-icons/FontAwesome";
-// import { exchangeRate } from '../src/services/rate.service';
-
-// Keyboard.dismiss()
-// const DashboardScreen = createStackNavigator(
-//     {
-//         dashboard: dashboard
-//     },
-//     {
-//         navigationOptions: ({ navigation }) => ({
-//             headerLeft: (
-//                 <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => navigation.openDrawer()}>
-//                     <Icon name="bars" color='#fff' size={25}></Icon>
-//                 </TouchableOpacity>
-//             ),
-//             title: '1 NTY = ' + exchangeRate.toFixed(6) + ' USD'
-
-//         })
-//     }
-// );
-
-// const RequestSceen = createStackNavigator(
-//     {
-//         request: request,
-//     },
-//     {
-//         navigationOptions: ({ navigation }) => ({
-//             headerLeft: (
-//                 <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => navigation.openDrawer()}>
-//                     <Icon name="bars" color='#fff' size={25}></Icon>
-//                 </TouchableOpacity>
-//             ),
-//         })
-//     }
-// );
-// const SendSceen = createStackNavigator(
-//     {
-//         send: send,
-//     },
-//     {
-//         navigationOptions: ({ navigation }) => ({
-//             headerLeft: (
-//                 <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => { navigation.openDrawer(); Keyboard.dismiss() }}>
-//                     <Icon name="bars" color='#fff' size={25}></Icon>
-//                 </TouchableOpacity>
-//             ),
-//         })
-//     }
-// );
-
-// export default createBottomTabNavigator(
-//     {
-//         SEND: {
-//             screen: SendSceen,
-//             navigationOptions: () => ({
-//                 tabBarIcon: ({ tintColor }) => (
-//                     <Icon
-//                         color={tintColor}
-//                         type="FontAwesome"
-//                         name="arrow-up"
-//                         size={25}
-//                     />
-//                 )
-//             })
-//         },
-//         DASHBOARD: {
-//             screen: DashboardScreen,
-//             navigationOptions: () => ({
-//                 tabBarIcon: ({ tintColor }) => (
-//                     <Icon
-//                         color={tintColor}
-//                         type="FontAwesome"
-//                         name="home"
-//                         size={25}
-//                     />
-//                 )
-//             })
-//         },
-//         REQUEST: {
-//             screen: RequestSceen,
-//             navigationOptions: () => ({
-//                 showLabel: false, // hide labels
-//                 activeTintColor: '#F8F8F8', // active icon color
-//                 inactiveTintColor: '#586589',  // inactive icon color
-//                 tabBarIcon: ({ tintColor }) => (
-//                     <Icon
-//                         type="FontAwesome"
-//                         name="arrow-down"
-//                         color={tintColor}
-//                         size={25}
-//                     />
-//                 )
-//             })
-//         },
-//     },
-//     {
-//         initialRouteName: 'DASHBOARD',
-//         tabBarPosition: 'bottom',
-//         /* Other configuration remains unchanged */
-//         tabBarOptions: {
-//             showLabel: true,
-//             activeTintColor: '#F8F8F8',
-//             inactiveTintColor: '#586589',
-//             upperCaseLabel: true,
-
-//             labelStyle: {
-//                 fontSize: 15,
-//                 fontFamily: GLOBALS.font.Poppins
-//             },
-//             style: {
-//                 backgroundColor: GLOBALS.Color.primary,
-//             },
-//             tabStyle: {},
-//         },
-
-//     }
-// );
-
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Keyboard, Platform, BackHandler, BackAndroid, Alert } from 'react-native';
-import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Keyboard, Platform, BackHandler, Alert, Linking } from 'react-native';
+import { createTabNavigator, TabBarBottom, NavigationActions } from 'react-navigation';
 import Dashboard from './pages/dashboard/dashboard';
 import Request from './pages/request/request';
 import Send from './pages/send/send';
@@ -133,7 +8,7 @@ import GLOBALS from './helper/variables'
 import Iccon from "react-native-vector-icons/FontAwesome";
 import { Container, Header, Left, Body, Title, Right, Button, Icon, Input, Item } from 'native-base'
 import { exchangeRate } from '../src/services/rate.service';
-import Language from './i18n/i18n'
+import Language from './i18n/i18n';
 
 class SendSceen extends React.Component {
 
@@ -167,7 +42,7 @@ class SendSceen extends React.Component {
                     </Body>
                     <Right />
                 </Header>
-                <Send navigation={this.props.navigation} />
+                <Send {...this.props} />
             </Container>
         );
     }
@@ -204,7 +79,7 @@ class DashboardScreen extends React.Component {
                     </Body>
                     <Right />
                 </Header>
-                <Dashboard navigation={this.props.navigation} />
+                <Dashboard {...this.props} />
             </Container>
         );
     }
@@ -241,7 +116,7 @@ class RequestSceen extends React.Component {
                     </Body>
                     <Right />
                 </Header>
-                <Request navigation={this.props.navigation} />
+                <Request {...this.props} />
             </Container>
         );
     }
@@ -258,9 +133,48 @@ const styles = StyleSheet.create({
 // export default MyApp
 
 export default class TabFooder extends React.Component {
+    state = { routerLinking: false }
+    constructor(props) {
+        super(props)
+        this.backButtonClick = this.backButtonClick.bind(this)
+    }
 
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backButtonClick);
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener("hardwareBackPress", this.backButtonClick);
+    }
+
+    backButtonClick() {
+        console.log('props: ', this.props.navigation)
+        const { dispatch } = this.props.navigation;
+        if (this.props.navigation.isFocused() == true) {
+            BackHandler.exitApp()
+            return false;
+        } else {
+            dispatch(NavigationActions.back());
+            this.props.navigation.goBack()
+            return true;
+        }
+    }
+
+
+    componentWillMount() {
+        Linking.getInitialURL().then(url => {
+            if (!url || url == "" || url == null) {
+                return;
+            } else {
+                this.setState({ routerLinking: true })
+            }
+            console.log(url)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
     render() {
-        const MyApp = TabNavigator(
+        const MyApp = createTabNavigator(
             {
                 Send: {
                     screen: props => <SendSceen {...this.props} />,
@@ -307,9 +221,10 @@ export default class TabFooder extends React.Component {
             },
             {
                 tabBarComponent: TabBarBottom,
-                initialRouteName: 'Dashboard',
+                initialRouteName: this.state.routerLinking == true ? 'Send' : 'Dashboard',
                 tabBarPosition: 'bottom',
                 animationEnabled: true,
+
                 tabBarOptions: {
                     showIcon: true,
                     showLabel: true,
@@ -322,8 +237,6 @@ export default class TabFooder extends React.Component {
                     },
                     style: {
                         backgroundColor: GLOBALS.Color.primary,
-                        // paddingTop: Platform.OS == 'android' ? 5 : 'auto'
-
                     },
                     tabStyle: {},
                 }

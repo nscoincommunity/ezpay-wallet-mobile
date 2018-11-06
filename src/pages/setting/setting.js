@@ -14,9 +14,6 @@ import {
     Body,
     List,
     ListItem,
-    Toast,
-    Root,
-    ActionSheet,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CustomToast from '../../components/toast';
@@ -89,7 +86,7 @@ export default class Setting extends Component {
                     <Right />
                 </Header>
 
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <List
                         style={{ width: GLOBALS.WIDTH }}
                         dataArray={datas}
@@ -108,8 +105,8 @@ export default class Setting extends Component {
                                 </Right>
                             </ListItem>}
                     />
+                    <CustomToast ref="defaultToastBottom" position="bottom" top="70%" />
                 </View>
-                <CustomToast ref="defaultToastBottom" position="bottom" />
             </Container>
         )
     }

@@ -47,7 +47,7 @@ export default class CustomToast extends Component {
                 this.animateOpacityValue,
                 {
                     toValue: 0,
-                    duration: 500
+                    duration: 700
                 }
                 ).start(() => {
                     this.setState({ ShowToast: false });
@@ -60,9 +60,18 @@ export default class CustomToast extends Component {
         if (this.state.ShowToast) {
             return (
 
-                <Animated.View style={[styles.animatedToastView, { opacity: this.animateOpacityValue, top: (this.props.position == 'top') ? '10%' : '80%', backgroundColor: this.props.backgroundColor }]}>
+                <Animated.View
+                    style={[styles.animatedToastView, {
+                        opacity: this.animateOpacityValue,
+                        top: (this.props.position == 'top') ? '10%' : '90%',
+                        backgroundColor: this.props.backgroundColor,
+                    }]}>
 
-                    <Text numberOfLines={1} style={[styles.ToastBoxInsideText, { color: this.props.textColor }]}>{this.ToastMessage}</Text>
+                    <Text
+                        numberOfLines={1}
+                        style={[styles.ToastBoxInsideText, {
+                            color: this.props.textColor
+                        }]}>{this.ToastMessage}</Text>
 
                 </Animated.View>
 
@@ -73,51 +82,6 @@ export default class CustomToast extends Component {
         }
     }
 }
-/*
-class Mynewproject extends Component {
-
-    Default_Toast_Bottom = () => {
-
-        this.refs.defaultToastBottom.ShowToastFunction('Default Toast Bottom Message.');
-
-    }
-
-    Default_Toast_Top = () => {
-
-        this.refs.defaultToastTop.ShowToastFunction('Default Toast Top Message.');
-
-    }
-
-    Default_Toast_Bottom_With_Different_Color = () => {
-
-        this.refs.defaultToastBottomWithDifferentColor.ShowToastFunction('Default Toast Bottom Message With Different Color.');
-
-    }
-
-    Default_Toast_Top_With_Different_Color = () => {
-
-        this.refs.defaultToastTopWithDifferentColor.ShowToastFunction('Default Toast Top Message With Different Color.');
-
-    }
-
-    render() {
-
-        return (
-
-            <View style={styles.MainContainer}>
-                <CustomToast ref="defaultToastBottom" position="bottom" />
-                <CustomToast ref="defaultToastTop" position="top" />
-                <CustomToast ref="defaultToastBottomWithDifferentColor" backgroundColor='#4CAF50' position="bottom" />
-                <CustomToast ref="defaultToastTopWithDifferentColor" backgroundColor='#E91E63' position="top" />
-
-
-            </View>
-
-
-        );
-    }
-}
-*/
 
 CustomToast.propTypes = {
     backgroundColor: PropTypes.string,
@@ -130,32 +94,29 @@ CustomToast.propTypes = {
 
 CustomToast.defaultProps =
     {
-        backgroundColor: '#666666',
-        textColor: '#fff'
+        backgroundColor: '#bfbfbf',
+        textColor: '#fff',
     }
 
 const styles = StyleSheet.create({
 
     MainContainer: {
-
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: (Platform.OS == 'ios') ? 20 : 0,
-        margin: 10
-
+        margin: 10,
+        alignContent: 'center',
     },
 
     animatedToastView:
         {
-            // marginHorizontal: 30,
-            paddingHorizontal: 25,
-            paddingVertical: 20,
-            borderRadius: 5,
-            zIndex: 9999,
+            paddingHorizontal: 15,
+            paddingVertical: 10,
+            borderRadius: 20,
+            // zIndex: 9999,
             position: 'absolute',
             justifyContent: 'center',
-            width: GLOBALS.WIDTH
         },
 
     ToastBoxInsideText:

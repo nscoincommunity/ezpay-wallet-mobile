@@ -69,15 +69,21 @@ export default class listCoin extends Component {
     }
 
     async updateBalTK() {
+        try {
+            updateBalanceTK().then(async data => {
+                if (data == 1) {
+                    await this.loadListToken();
+                    setTimeout(() => {
+                        this.updateBalTK();
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error)
+        }
 
-        updateBalanceTK().then(async data => {
-            if (data == 1) {
-                await this.loadListToken();
-                setTimeout(() => {
-                    this.updateBalTK();
-                }, 2000);
-            }
-        })
     }
 
     componentWillUnmount() {

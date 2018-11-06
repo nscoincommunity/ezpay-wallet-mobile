@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, StyleSheet, Alert, Clipboard } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Alert, Clipboard, Platform } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
 import { getPrivateKey } from '../../services/auth.service'
-import { showToastBottom } from '../../services/loading.service'
 import {
     Container,
     Header,
@@ -11,20 +10,22 @@ import {
     Content,
     Text,
     Button,
-    Footer,
-    FooterTab,
     Left,
     Right,
     Body,
-    Tabs,
-    Tab,
-    Root
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { from } from 'rxjs';
 import Language from '../../i18n/i18n'
+import CustomToast from '../../components/toast';
 
 export default class privateKey extends Component {
+
+    Default_Toast_Bottom = (message) => {
+
+        this.refs.defaultToastBottom.ShowToastFunction(message);
+
+    }
     constructor(props) {
         super(props)
 
@@ -35,6 +36,7 @@ export default class privateKey extends Component {
             getsuccess: false,
             isCopy: false
         };
+        this.styleHeaderIOS = this.styleHeaderIOS.bind(this)
     };
 
 
@@ -86,71 +88,79 @@ export default class privateKey extends Component {
     }
     Copy() {
         Clipboard.setString(this.state.privatekey);
-        showToastBottom(Language.t('PrivateKey.Toast'));
+        this.Default_Toast_Bottom(Language.t('PrivateKey.Toast'));
         this.setState({ isCopy: true })
+    }
+    styleHeaderIOS() {
+        if (Platform.OS == 'ios') {
+            return {
+                flex: 10,
+                backgroundColor: 'red'
+            }
+        } else {
+            return {}
+        }
     }
 
     render() {
         return (
-            <Root>
-                <Container style={{ backgroundColor: "#fff" }}>
-                    <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
-                        <Left>
-                            <Button
-                                transparent
-                                onPress={() => this.props.navigation.openDrawer()}
-                            >
-                                <Icon name="bars" color='#fff' size={25}></Icon>
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Title style={{ color: '#fff', fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.Title')}</Title>
-                        </Body>
-                        <Right />
-                    </Header>
+            <Container style={{ backgroundColor: "#fff" }}>
+                <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
+                    <Left>
+                        <Button
+                            transparent
+                            onPress={() => this.props.navigation.openDrawer()}
+                        >
+                            <Icon name="bars" color='#fff' size={25}></Icon>
+                        </Button>
+                    </Left>
+                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
+                        <Title style={{ color: '#fff' }}>{Language.t('PrivateKey.Title')}</Title>
+                    </Body>
+                    <Right />
+                </Header>
 
-                    <Content >
-                        {
-                            this.state.getsuccess ?
-                                <View>
-                                    <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('PrivateKey.Title')}</Text>
-                                    <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.privatekey}</Text>
-                                    <View style={style.FormRouter}>
-                                        <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)}>
-                                            {
-                                                !this.state.isCopy ?
-                                                    <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleButton')}</Text>
-                                                    :
-                                                    <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleCopied')}</Text>
-                                            }
-                                        </TouchableOpacity>
-                                    </View>
+                <View style={{ flex: 1, alignItems: 'center' }}>
+                    {
+                        this.state.getsuccess ?
+                            <View>
+                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('PrivateKey.Title')}</Text>
+                                <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.privatekey}</Text>
+                                <View style={style.FormRouter}>
+                                    <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)}>
+                                        {
+                                            !this.state.isCopy ?
+                                                <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleButton')}</Text>
+                                                :
+                                                <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleCopied')}</Text>
+                                        }
+                                    </TouchableOpacity>
                                 </View>
-                                :
-                                <View>
-                                    <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.InitForm.Content')}</Text>
-                                    <View style={style.FormRouter}>
-                                        <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
-                                            <Text style={style.TextButton}>{Language.t('PrivateKey.InitForm.TitleButton')}</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                            </View>
+                            :
+                            <View>
+                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.InitForm.Content')}</Text>
+                                <View style={style.FormRouter}>
+                                    <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
+                                        <Text style={style.TextButton}>{Language.t('PrivateKey.InitForm.TitleButton')}</Text>
+                                    </TouchableOpacity>
                                 </View>
-                        }
+                            </View>
+                    }
 
 
-                        <Dialog.Container visible={this.state.dialogVisible}>
-                            <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.DialogConfirm.Title')}</Dialog.Title>
-                            <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
-                                {Language.t('PrivateKey.DialogConfirm.Content')}
-                            </Dialog.Description>
-                            <Dialog.Input placeholder={Language.t('PrivateKey.DialogConfirm.Placeholder')} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
-                            <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
-                            <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
-                        </Dialog.Container>
-
-                    </Content>
-                </Container >
-            </Root>
+                    <Dialog.Container visible={this.state.dialogVisible}>
+                        <Dialog.Title style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.DialogConfirm.Title')}</Dialog.Title>
+                        <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
+                            {Language.t('PrivateKey.DialogConfirm.Content')}
+                        </Dialog.Description>
+                        <Dialog.Input placeholder={Language.t('PrivateKey.DialogConfirm.Placeholder')} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
+                        <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
+                        <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
+                    </Dialog.Container>
+                    <CustomToast ref="defaultToastBottom" position="bottom" />
+                </View>
+            </Container >
         )
     }
 }

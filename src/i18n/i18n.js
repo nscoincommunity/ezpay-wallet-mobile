@@ -20,7 +20,8 @@ I18n.translations = {
     vi: require('./vi.json'),
     ko: require('./ko.json'),
     zh: require('./zh.json'),
-    pt: require('./pt.json')
+    pt: require('./pt.json'),
+    es: require('./es.json')
 };
 
 // I18n.locale = 'en';
@@ -28,25 +29,40 @@ I18n.translations = {
 
 
 export const ListLanguage = [
-    { View: 'Tiếng Việt', type: 'vi' },
     { View: 'English', type: 'en' },
+    { View: 'Tiếng Việt', type: 'vi' },
     { View: '한국어', type: 'ko' },
-    { View: '中国', type: 'zh' },
-    { View: 'Português', type: 'pt' }
+    { View: '简体中文', type: 'zh' },
+    { View: 'Português', type: 'pt' },
+    { View: 'Español', type: 'es' }
 ]
 export function DeviceLanguage() {
     getLanguages().then(lang => {
-        ListLanguage.forEach(data => {
-            if (data.type == lang[0]) {
-                I18n.locale = lang[0];
-                setData('languages', lang[0])
-                return;
-            } else {
-                I18n.locale = 'en';
-                setData('languages', 'en');
-                return;
-            }
-        })
+        var languages = lang[0].substr(0, 2);
+        console.log('language:', languages)
+        var indexLanguages = ListLanguage.findIndex(x => x.type == languages);
+        console.log('index: ' + indexLanguages)
+        if (indexLanguages > -1) {
+            console.log('chay vao if')
+            I18n.locale = languages;
+            setData('languages', languages)
+        }
+        else {
+            console.log('chay vao else')
+            I18n.locale = 'en';
+            setData('languages', 'en');
+        }
+        // ListLanguage.forEach(data => {
+        //     if (data.type == languages) {
+        //         I18n.locale = languages;
+        //         setData('languages', languages)
+        //         return;
+        //     } else {
+        //         I18n.locale = 'en';
+        //         setData('languages', 'en');
+        //         return;
+        //     }
+        // })
     }).catch(err => {
         console.log(err)
     })
