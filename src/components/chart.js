@@ -119,8 +119,9 @@ export default class Chart extends Component {
                     </View>
                 }
                 <FlatList
-                    style={{ marginTop: 5 }}
-                    horizontal={true}
+                    style={{ marginTop: 5, }}
+                    // horizontal={true}
+                    numColumns={4}
                     data={HorizontalData}
                     renderItem={({ item, index }) => {
                         return (
@@ -131,16 +132,7 @@ export default class Chart extends Component {
                                     selectedBtn(this.state.selected === item.type).selected
                                 }
                             >
-                                <View style={{
-                                    flex: 1,
-                                    flexDirection: 'column',
-                                    alignContent: 'center',
-                                    width: GLOBALS.WIDTH / 4,
-                                    // backgroundColor: GLOBALS.Color.primary,
-                                    padding: 10
-                                }}>
-                                    <Text style={[styles.text, selectedBtn(this.state.selected === item.type).text]}>{item.show}</Text>
-                                </View>
+                                <Text style={[styles.text, selectedBtn(this.state.selected === item.type).text]}>{item.show}</Text>
                             </TouchableOpacity>
                         )
                     }}
@@ -153,8 +145,8 @@ export default class Chart extends Component {
 
 const selectedBtn = (type) => StyleSheet.create({
     selected: {
-        // backgroundColor: type ? 'rgba(255, 255, 255,0.1)' : GLOBALS.Color.primary,
-        borderRadius: 50,
+        flex: 1,
+        justifyContent: 'space-between'
     },
     text: {
         fontWeight: type ? 'bold' : 'normal',

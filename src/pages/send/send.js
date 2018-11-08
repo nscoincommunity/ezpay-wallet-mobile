@@ -206,6 +206,7 @@ export default class FormSend extends Component {
     }
 
     async  doSend() {
+        Keyboard.dismiss()
         if (this.state.walletaddress == '') {
             console.log('chay vao day')
             return;
@@ -258,6 +259,7 @@ export default class FormSend extends Component {
     }
 
     handleCancel() {
+        Keyboard.dismiss()
         this.setState({ dialogSend: false })
     }
 
@@ -364,9 +366,8 @@ export default class FormSend extends Component {
     render() {
         return (
             <View style={style.container}>
-                <ScrollView style={{ flex: 1, height: GLOBALS.HEIGHT }}>
-                    <KeyboardAvoidingView style={{ flex: 1, padding: 5 }} behavior="position" keyboardVerticalOffset={65} enabled>
-
+                <ScrollView style={{ height: GLOBALS.HEIGHT, padding: 10, paddingTop: 30, paddingBottom: 30 }}>
+                    <KeyboardAvoidingView behavior="position" enabled>
                         <FlatList
                             style={{
                                 paddingTop: Platform.OS == 'ios' ? 15 : 10,
@@ -502,7 +503,7 @@ export default class FormSend extends Component {
                 </Dialog.Container>
 
                 <PopupDialog
-                    dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: GLOBALS.HEIGHT / 4 }}
+                    dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: 'auto' }}
                     ref={(popupDialog) => {
                         this.scaleAnimationDialog = popupDialog;
                     }}
@@ -545,8 +546,8 @@ const style = StyleSheet.create({
     container: {
         flex: 1,
         alignContent: 'center',
-        padding: 10,
-        backgroundColor: '#fafafa'
+        // padding: 10,
+        backgroundColor: '#fafafa',
     },
     ColumItem: {
         width: GLOBALS.WIDTH / 2.4,
@@ -560,8 +561,8 @@ const style = StyleSheet.create({
         fontFamily: GLOBALS.font.Poppins
     },
     dialogContentView: {
-        flex: 1,
-        alignItems: 'center',
+        // flex: 1,
+        // alignItems: 'center',
         justifyContent: 'center',
     },
     FormAddressTo: {

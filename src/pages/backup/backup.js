@@ -27,6 +27,7 @@ export default class backup extends Component {
         },
         headerTitleStyle: {
             color: 'white',
+            width: GLOBALS.WIDTH
         },
         headerBackTitleStyle: {
             color: 'white',
@@ -161,7 +162,7 @@ export default class backup extends Component {
             <View style={{ flex: 1, alignItems: 'center' }}>
                 {
                     this.state.getsuccess ?
-                        <View>
+                        <View style={{ flex: 1 }}>
                             <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('Backup.GetSuccess.Title')}</Text>
                             <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.backupcode}</Text>
                             <View style={style.FormRouter}>
@@ -206,7 +207,7 @@ export default class backup extends Component {
 const style = StyleSheet.create({
 
     FormRouter: {
-        flexDirection: 'column',
+        // flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -218,9 +219,8 @@ const style = StyleSheet.create({
     button: {
         backgroundColor: GLOBALS.Color.secondary,
         marginBottom: GLOBALS.HEIGHT / 40,
-        height: GLOBALS.HEIGHT / 17,
+        padding: 10,
         justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6,
         shadowOffset: { width: 3, height: 3, },
         shadowColor: 'black',
         shadowOpacity: 0.2,

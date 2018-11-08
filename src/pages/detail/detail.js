@@ -25,6 +25,7 @@ export default class DetailHis extends Component {
         },
         headerTitleStyle: {
             color: 'white',
+            width: GLOBALS.WIDTH
         },
         headerBackTitleStyle: {
             color: 'white',

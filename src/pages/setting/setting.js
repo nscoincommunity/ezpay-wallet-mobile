@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View } from 'react-native';
 import GLOBALS from '../../helper/variables';
+import { Platform } from 'react-native'
 // import Icon from "react-native-vector-icons/FontAwesome";
 import {
     Container,
@@ -80,7 +81,7 @@ export default class Setting extends Component {
                             <Icon name="bars" color='#fff' size={25}></Icon>
                         </Button>
                     </Left>
-                    <Body>
+                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: '#fff' }}>{Language.t('Settings.Title')}</Title>
                     </Body>
                     <Right />

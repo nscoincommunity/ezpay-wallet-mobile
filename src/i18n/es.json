@@ -73,7 +73,7 @@
             "ValidAddress": "Dirección no válida"
         },
         "Request": {
-            "Title": "Pedido",
+            "Title": "Recibir",
             "TitleCopy": "Toque la siguiente imagen para copiar esta dirección de la cartera o compartirla por correo electrónico o texto",
             "Share": "Comparta",
             "Toast": "Copiado al portapapeles"
@@ -179,8 +179,8 @@
             "Title": "Configuración",
             "Backup": "Copia de seguridad",
             "Languages": "Idiomas",
-            "ChangePIN": " Cambiar PIN ",
-            "TouchID": " Usar ID de timbre como PIN ",
+            "ChangePIN": "Cambiar PIN",
+            "TouchID": "Usar ID de timbre como PIN",
             "Toast": " Esta función estará disponible en breve "
         },
         "Backup": {

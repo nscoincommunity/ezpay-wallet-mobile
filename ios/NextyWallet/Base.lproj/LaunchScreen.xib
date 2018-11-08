@@ -11,24 +11,21 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+        <view contentMode="scaleToFill" id="ilE-Uv-YZ3">
+            <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+            <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="cV5-fi-7DT">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="wff-H3-HWC">
+                    <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.34199946778497969" green="0.32265321537528224" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="cV5-fi-7DT" secondAttribute="bottom" id="Ew4-EQ-WKa"/>
-                <constraint firstItem="cV5-fi-7DT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HeG-hG-Gpb"/>
-                <constraint firstAttribute="trailing" secondItem="cV5-fi-7DT" secondAttribute="trailing" id="Ts0-c5-Lek"/>
-                <constraint firstItem="cV5-fi-7DT" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="qN1-5m-LwA"/>
+                <constraint firstAttribute="bottom" secondItem="wff-H3-HWC" secondAttribute="bottom" id="2VE-TY-4aS"/>
+                <constraint firstItem="wff-H3-HWC" firstAttribute="leading" secondItem="ilE-Uv-YZ3" secondAttribute="leading" id="IHQ-iA-d1B"/>
+                <constraint firstAttribute="trailing" secondItem="wff-H3-HWC" secondAttribute="trailing" id="VUE-zA-PQ2"/>
+                <constraint firstItem="wff-H3-HWC" firstAttribute="top" secondItem="ilE-Uv-YZ3" secondAttribute="top" id="vHO-cN-jTC"/>
             </constraints>
-            <nil key="simulatedStatusBarMetrics"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
     <resources>

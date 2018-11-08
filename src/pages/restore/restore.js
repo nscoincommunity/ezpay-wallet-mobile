@@ -457,7 +457,7 @@ export default class restore extends Component {
     render() {
         return (
             <ScrollView >
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
+                <KeyboardAvoidingView style={style.container} behavior="position" enabled>
                     <ScreenRestore navigator={this.props.navigation}></ScreenRestore>
                 </KeyboardAvoidingView>
             </ScrollView>
