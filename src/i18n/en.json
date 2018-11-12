@@ -1,9 +1,9 @@
 {
     "Login": {
         "Title": "Login",
-        "PHAddress": "Address wallet",
+        "PHAddress": "Wallet address",
         "PHLocalPasscode": "Wallet local passcode",
-        "TitleButton": "Continue",
+        "TitleButton": "Sign in",
         "InvalidCredentials": "Invalid credentials",
         "InvalidLocalPasscode": "Please enter a valid local passcode",
         "InvalidAddress": "Please enter a valid address"
@@ -13,7 +13,7 @@
         "TitleButton": "Create a wallet",
         "PHWalletLocalPasscode": "Wallet local passcode",
         "PHConfirmLocalPasscode": "Confirm wallet local passcode",
-        "policy": "By creating a new wallet you agree to the Term of Service",
+        "policy": "By creating a new wallet you agree to the ",
         "ErrorLocalPasscode": "Wallet local passcode needs at least 6 characters",
         "ErrorNotMatch": "Wallet local passcodes do not match"
     },

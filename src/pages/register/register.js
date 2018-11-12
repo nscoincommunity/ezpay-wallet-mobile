@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Platform, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking, Modal } from 'react-native';
+import { StyleSheet, Platform, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking, Modal, TextInput } from 'react-native';
 import { Form, Item, Input, Label, Spinner } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { checkIOS, Register } from '../../services/auth.service';
 import { setData } from '../../services/data.service'
 import Lang from '../../i18n/i18n'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
+import Gradient from 'react-native-linear-gradient'
 
 
 class ScreenRegister extends Component {
@@ -26,7 +28,7 @@ class ScreenRegister extends Component {
     };
 
 
-    async  register() {
+    async register() {
         this.setState({ loading: true })
         Register(this.state.password).then(() => {
             this.setState({ loading: false })
@@ -35,6 +37,7 @@ class ScreenRegister extends Component {
             setData('isBackup', '0');
         })
     }
+
     async validatePass(value) {
         this.setState({ password: value })
         if (value.length > 5) {
@@ -68,56 +71,80 @@ class ScreenRegister extends Component {
     }
 
     focusTheField = (id) => {
-        this.inputs[id]._root.focus();
+        this.inputs[id].focus();
     }
     inputs = {};
     render() {
         return (
             <View style={style.container}>
-                {/* <ModalLoading visibleModal={this.state.visibaleMd} /> */}
-                <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
-                <Form style={style.FormLogin}>
-                    <Item floatingLabel error={this.state.errorPw}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Register.PHWalletLocalPasscode")}</Label>
-                        <Input
-                            secureTextEntry={true}
-                            onChangeText={(value) => { this.validatePass(value) }}
-                            returnKeyType={"next"}
-                            blurOnSubmit={false}
-                            onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorPw}</Text>
-                    </Item>
-                    <Item floatingLabel error={this.state.errorCPw}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Register.PHConfirmLocalPasscode")}</Label>
-                        <Input
-                            secureTextEntry={true}
-                            onChangeText={(value) => { this.validateConfirmPass(value) }}
-                            getRef={input => { this.inputs['field2'] = input }}
-                            returnKeyType={'done'}
-                            onSubmitEditing={() => {
-                                if (this.state.typeButton == false) {
-                                    this.register()
-                                }
-                            }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorCPw}</Text>
-                    </Item>
-                </Form>
-                <View style={{ justifyContent: 'space-between', alignItems: 'center', padding: 5 }}>
-                    <Text style={{ fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }}>{Lang.t("Register.policy")}</Text>
-                </View>
-                <Text style={{ color: GLOBALS.Color.primary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy/') }}> Term of Service</Text>
 
+                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>Create Wallet</Text>
+                <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }} >
+                    {Lang.t("Register.policy")}
+                    <Text style={{ color: GLOBALS.Color.secondary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy/') }}> Term of Service</Text>
+                </Text>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                    marginTop: hp('20%')
+                }}>
+                    <TextInput
+                        placeholder={Lang.t("Register.PHWalletLocalPasscode")}
+                        secureTextEntry={true}
+                        onChangeText={(value) => { this.validatePass(value) }}
+                        returnKeyType={"next"}
+                        blurOnSubmit={false}
+                        onSubmitEditing={() => { this.focusTheField('field2'); }}
+                        style={{ flex: 10, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorPw}</Text>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Lang.t("Register.PHConfirmLocalPasscode")}
+                        secureTextEntry={true}
+                        onChangeText={(value) => { this.validateConfirmPass(value) }}
+                        ref={input => { this.inputs['field2'] = input }}
+                        returnKeyType={'done'}
+                        onSubmitEditing={() => {
+                            if (this.state.typeButton == false) {
+                                this.register()
+                            }
+                        }}
+                        style={{ flex: 10, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorCPw}</Text>
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.register.bind(this)} disabled={this.state.typeButton}>
-                        <Text style={style.TextButton}>{Lang.t("Register.TitleButton")}</Text>
+                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.register.bind(this)} disabled={this.state.typeButton}>
+                        <Gradient
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                            start={{ x: 1, y: 0.7 }}
+                            end={{ x: 0, y: 3 }}
+                            style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
+                        >
+                            <Text style={style.TextButton}>{Lang.t("Register.TitleButton")}</Text>
+                        </Gradient>
                     </TouchableOpacity>
                 </View>
+
+
+
+
+
                 {
                     this.state.loading ?
                         <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
@@ -136,23 +163,25 @@ class ScreenRegister extends Component {
 }
 export default class register extends Component {
     static navigationOptions = () => ({
-        title: Lang.t('Register.Title'),
+        // title: Lang.t('Login.Title'),
         headerStyle: {
-            backgroundColor: GLOBALS.Color.primary,
+            backgroundColor: '#fff',
+            borderBottomWidth: 0,
+            elevation: 0
         },
         headerTitleStyle: {
             color: 'white',
         },
         headerBackTitleStyle: {
-            color: 'white',
+            color: '#0C449A'
         },
-        headerTintColor: 'white',
+        headerTintColor: '#0C449A',
     });
 
     render() {
         return (
-            <ScrollView >
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={55} enabled>
+            <ScrollView style={{ backgroundColor: '#fff' }}>
+                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={hp('14%')} enabled>
                     <ScreenRegister data={this.props}></ScreenRegister>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -162,16 +191,18 @@ export default class register extends Component {
 
 
 
-var typeButton = (color, type) => StyleSheet.create({
+var styleButton = (color, type) => StyleSheet.create({
     button: {
-        backgroundColor: type == true ? '#cccccc' : color,
-        marginBottom: GLOBALS.HEIGHT / 40,
-        height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6,
-        shadowOffset: { width: 3, height: 3, },
-        shadowColor: 'black',
-        shadowOpacity: 0.2,
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: -1,
+            height: 3,
+        },
+        shadowOpacity: 0.24,
+        shadowRadius: 5.27,
+        elevation: 30,
     }
 })
 
@@ -179,28 +210,19 @@ var typeButton = (color, type) => StyleSheet.create({
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-    },
-    logo: {
-        height: GLOBALS.HEIGHT / 3,
-        width: GLOBALS.WIDTH / 1.6,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    FormRouter: {
-        paddingLeft: GLOBALS.WIDTH / 5,
-        paddingRight: GLOBALS.WIDTH / 5
+        padding: hp('2%')
     },
     TextButton: {
         color: 'white',
         textAlign: 'center',
         fontSize: 15,
-        fontFamily: GLOBALS.font.Poppins
+        fontWeight: '400'
     },
     FormLogin: {
         width: GLOBALS.WIDTH,
-        marginBottom: GLOBALS.HEIGHT / 50,
-        paddingLeft: GLOBALS.WIDTH / 25,
-        paddingRight: GLOBALS.WIDTH / 25
+        marginBottom: GLOBALS.HEIGHT / 20,
+    },
+    FormRouter: {
+        marginTop: hp('5%'),
     }
 })

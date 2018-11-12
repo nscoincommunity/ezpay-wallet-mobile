@@ -3,7 +3,7 @@
         "Title": "登录",
         "PHAddress": "钱包地址",
         "PHLocalPasscode": "钱包本地密码",
-        "TitleButton": "继续访问",
+        "TitleButton": "登录",
         "InvalidCredentials": "登录信息失效",
         "InvalidLocalPasscode": "请输入有效的本地密码",
         "InvalidAddress": "请输入有效地址"

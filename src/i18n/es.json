@@ -3,7 +3,7 @@
             "Title": "Login",
             "PHAddress": "Dirección de Wallet",
             "PHLocalPasscode": "Contraseña de Wallet",
-            "TitleButton": "Continuar",
+            "TitleButton": "Login",
             "InvalidCredentials": "Credenciales inválidas",
             "InvalidLocalPasscode": "Por favor, introduzca una contraseña válida",
             "InvalidAddress": "Por favor, introduzca una dirección válida"

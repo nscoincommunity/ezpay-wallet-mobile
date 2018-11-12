@@ -1,18 +1,25 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, AsyncStorage } from 'react-native';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    ScrollView,
+    AsyncStorage,
+    TextInput
+} from 'react-native';
 import { Form, Item, Input, Label, Title, Spinner } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
 import { initAuth, Address, isAuth, Login } from '../../services/auth.service'
 import { getData, checkAuth } from '../../services/data.service'
-import Lang from '../../i18n/i18n'
-// import I18n from 'react-native-i18n';
+import Lang from '../../i18n/i18n';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
+import Gradient from 'react-native-linear-gradient'
 
-// I18n.fallbacks = true;
-// I18n.translations = {
-//     'en': require('../../i18n/en'),
-//     'vi': require('../../i18n/vi')
-// };
 
 class ScreenLogin extends Component {
 
@@ -38,12 +45,6 @@ class ScreenLogin extends Component {
 
     };
 
-    // componentDidMount() {
-    //     console.log(Lang)
-    //     initAuth().then(data => {
-    //         this.setState({ Address: Address })
-    //     })
-    // }
 
 
     static navigationOptions = {
@@ -95,54 +96,76 @@ class ScreenLogin extends Component {
     }
 
     focusTheField = (id) => {
-        this.inputs[id]._root.focus();
+        this.inputs[id].focus();
     }
     inputs = {};
+
 
     render() {
         return (
             <View style={style.container}>
-                <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
-                <Form style={style.FormLogin}>
-                    <Item floatingLabel error={this.state.ErrorAddress}>
-                        <Label>{Lang.t('Login.PHAddress')}</Label>
-                        {/* <Label>Address wallet</Label> */}
-                        <Input
-                            autoFocus={true}
-                            onChangeText={(val) => this.checkAddress(val)}
-                            value={this.state.Address}
-                            returnKeyType={"next"}
-                            blurOnSubmit={false}
-                            onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
-                    </Item>
-                    <Item floatingLabel error={this.state.ErrorPwd}>
-                        <Label>{Lang.t('Login.PHLocalPasscode')}</Label>
-                        <Input
-                            onChangeText={(val) => this.checkPassword(val)}
-                            secureTextEntry={true}
-                            returnKeyType="done"
-                            getRef={input => { this.inputs['field2'] = input }}
-                            onSubmitEditing={() => {
-                                if (this.state.typeButton == false) {
-                                    this.LoginNTY()
-                                }
-                            }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorPwd}</Text>
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextError}</Text>
-                    </Item>
-                </Form>
+                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>Sign in to continue</Text>
+                <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                    marginTop: hp('20%')
+                }}>
+                    <TextInput
+                        placeholder={Lang.t('Login.PHAddress')}
+                        onChangeText={(val) => this.checkAddress(val)}
+                        value={this.state.Address}
+                        returnKeyType={"next"}
+                        blurOnSubmit={false}
+                        onSubmitEditing={() => { this.focusTheField('field2'); }}
+                        style={{ flex: 9, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                    <Image source={require('../../images/icon/wallet.png')} style={{ flex: 1 }} resizeMode="contain" />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Lang.t('Login.PHLocalPasscode')}
+                        onChangeText={(val) => this.checkPassword(val)}
+                        secureTextEntry={true}
+                        returnKeyType="done"
+                        ref={input => { this.inputs['field2'] = input }}
+                        onSubmitEditing={() => {
+                            if (this.state.typeButton == false) {
+                                this.LoginNTY()
+                            }
+                        }}
+                        style={{ flex: 9, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                    <Image source={require('../../images/icon/Private-key.png')} style={{ flex: 1 }} resizeMode="contain" />
+
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorPwd}</Text>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextError}</Text>
+
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={() => this.LoginNTY()} disabled={this.state.typeButton}>
-                        <Text style={style.TextButton}>{Lang.t('Login.TitleButton')}</Text>
+                        <Gradient
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                            start={{ x: 1, y: 0.7 }}
+                            end={{ x: 0, y: 3 }}
+                            style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
+                        >
+                            <Text style={style.TextButton}>{Lang.t('Login.TitleButton')}</Text>
+                        </Gradient>
                     </TouchableOpacity>
                 </View>
 
@@ -164,23 +187,25 @@ class ScreenLogin extends Component {
 }
 export default class login extends Component {
     static navigationOptions = () => ({
-        title: Lang.t('Login.Title'),
+        // title: Lang.t('Login.Title'),
         headerStyle: {
-            backgroundColor: GLOBALS.Color.primary,
+            backgroundColor: '#fff',
+            borderBottomWidth: 0,
+            elevation: 0
         },
         headerTitleStyle: {
             color: 'white',
         },
         headerBackTitleStyle: {
-            color: 'white',
+            color: '#0C449A'
         },
-        headerTintColor: 'white',
+        headerTintColor: '#0C449A',
     });
 
     render() {
         return (
-            <ScrollView >
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
+            <ScrollView style={{ backgroundColor: '#fff' }}>
+                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={Platform.OS == 'ios' ? hp('15%') : hp('3%')} enabled>
                     <ScreenLogin {...this.props} />
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -190,37 +215,29 @@ export default class login extends Component {
 /* style button */
 var styleButton = (color, type) => StyleSheet.create({
     button: {
-        backgroundColor: type == true ? '#cccccc' : color,
-        marginBottom: GLOBALS.HEIGHT / 40,
-        height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: -1,
+            height: 3,
+        },
+        shadowOpacity: 0.24,
+        shadowRadius: 5.27,
+        elevation: 30,
     }
 })
 
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        // marginTop: Platform.OS === 'ios' ? 25 : 0,
-        alignItems: 'center',
-    },
-    logo: {
-        height: GLOBALS.HEIGHT / 3,
-        width: GLOBALS.WIDTH / 1.6,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    FormRouter: {
-        // paddingLeft: GLOBALS.WIDTH / 5,
-        // paddingRight: GLOBALS.WIDTH / 5
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        padding: hp('2%')
     },
     TextButton: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 15
+        fontSize: 15,
+        fontWeight: '400'
     },
     FormLogin: {
         width: GLOBALS.WIDTH,

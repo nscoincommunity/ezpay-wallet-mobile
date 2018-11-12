@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { initAuth, isAuth, Address, cachePwd } from '../../services/auth.service'
 import { getExchangeRate } from '../../services/rate.service'
 import { Spinner } from 'native-base';
 import Lang from '../../i18n/i18n';
+import Gradient from "react-native-linear-gradient"
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 
 
 export default class unlogin extends Component {
@@ -51,17 +53,36 @@ export default class unlogin extends Component {
     }
     render() {
         return (
-            < View style={style.container} >
-                <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
+            < ImageBackground style={style.container} source={require('../../images/bg.png')}>
+                <Image style={style.logo} source={require('../../images/Logo.png')} resizeMode="contain" />
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.primary).button} onPress={this.goLogin.bind(this)} >
-                        <Text style={style.TextButton}>{Lang.t('Unlogin.Login')}</Text>
+                    <TouchableOpacity style={style.button} onPress={this.goLogin.bind(this)} >
+                        <Gradient
+                            colors={['#0C449A', '#082B5F']}
+                            start={{ x: 1, y: 0.7 }}
+                            end={{ x: 0, y: 3 }}
+                            style={style.gradient}
+                        >
+                            <Text style={style.TextButton}>{Lang.t('Unlogin.Login')}</Text>
+                        </Gradient>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary).button} onPress={this.goRegister.bind(this)}>
-                        <Text style={style.TextButton}>{Lang.t('Unlogin.CreateWallet')}</Text>
+                    <TouchableOpacity style={style.button} onPress={this.goRegister.bind(this)}>
+                        <Gradient
+                            colors={['#EDA420', '#FCB415']}
+                            start={{ x: 0, y: 0 }}
+                            style={style.gradient}
+                        >
+                            <Text style={style.TextButton}>{Lang.t('Unlogin.CreateWallet')}</Text>
+                        </Gradient>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.tertiary).button} onPress={this.goRestore.bind(this)}>
-                        <Text style={style.TextButton}>{Lang.t('Unlogin.Restore')}</Text>
+                    <TouchableOpacity style={style.button} onPress={this.goRestore.bind(this)}>
+                        <Gradient
+                            colors={['#30C7D3', '#17AAEC']}
+                            start={{ x: 1, y: 0.4 }}
+                            style={style.gradient}
+                        >
+                            <Text style={style.TextButton}>{Lang.t('Unlogin.Restore')}</Text>
+                        </Gradient>
                     </TouchableOpacity>
                 </View>
                 {
@@ -74,22 +95,12 @@ export default class unlogin extends Component {
                         </View>
                         : null
                 }
-
-            </View >
+            </ ImageBackground >
         )
     }
     // }
 }
 
-var styleButton = (color) => StyleSheet.create({
-    button: {
-        backgroundColor: color,
-        marginBottom: GLOBALS.HEIGHT / 40,
-        height: GLOBALS.HEIGHT / 17,
-        justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6
-    }
-})
 
 const style = StyleSheet.create({
     container: {
@@ -97,17 +108,34 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    gradient: {
+        paddingHorizontal: GLOBALS.WIDTH / 5,
+        paddingVertical: GLOBALS.HEIGHT / 60,
+        borderRadius: 5
+    },
+    button: {
+        marginBottom: GLOBALS.HEIGHT / 30,
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: -1,
+            height: 1,
+        },
+        shadowOpacity: 0.54,
+        shadowRadius: 5.27,
+        elevation: 30,
+    },
     logo: {
         height: GLOBALS.HEIGHT / 2.1,
         width: GLOBALS.WIDTH / 1.6,
         justifyContent: 'center',
-    },
-    FormRouter: {
-
+        marginBottom: GLOBALS.HEIGHT / 13,
     },
     TextButton: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 15
+        fontSize: hp('2.3%'),
+        fontFamily: GLOBALS.font.Poppins,
+        fontWeight: '400',
     }
 })

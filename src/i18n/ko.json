@@ -3,7 +3,7 @@
         "Title": "로그인",
         "PHAddress": "지갑주소",
         "PHLocalPasscode": "월렛 로컬 패스 코드",
-        "TitleButton": "다음",
+        "TitleButton": "로그인",
         "InvalidCredentials": "잘못된 자격 증명",
         "InvalidLocalPasscode": "올바른 패스 코드를 입력하십시오",
         "InvalidAddress": "올바른 주소를 입력하십시오"

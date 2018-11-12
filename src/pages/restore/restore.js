@@ -1,5 +1,18 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, SegmentedControlIOS, Alert } from 'react-native';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    ScrollView,
+    SegmentedControlIOS,
+    Alert,
+    FlatList,
+    TextInput
+} from 'react-native';
 import { Form, Item, Input, Label, Spinner } from 'native-base'
 import SegmentControl from 'react-native-segment-controller';
 import GLOBALS from '../../helper/variables';
@@ -8,7 +21,10 @@ import { restoreByBackup, restoreByPk } from './restore.service';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
 import { setData } from '../../services/data.service'
-import Lang from '../../i18n/i18n'
+import Lang from '../../i18n/i18n';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
+import Gradient from 'react-native-linear-gradient'
+
 class ScreenRestore extends Component {
     constructor() {
         super();
@@ -28,20 +44,35 @@ class ScreenRestore extends Component {
     showLoading(type: boolean) {
         this.setState({ loading: type })
     }
+    selectItem(item) {
+        this.setState({ index: item.value })
+    }
 
     render() {
+        const SwitchSeg = [{ type: Lang.t('Restore.BackUpCode'), value: 0 }, { type: Lang.t('Restore.Privatekey'), value: 1 }]
         return (
-            <View style={style.container}>
-                <Image style={style.logo} source={require('../../images/logo-with-text.png')} resizeMode="contain" />
+            <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t('Restore.Title')}</Text>
 
-                <SegmentControl
-                    values={[Lang.t('Restore.BackUpCode'), Lang.t('Restore.Privatekey')]}
-                    selectedIndex={this.state.index}
-                    height={30}
-                    onTabPress={this.handlePress}
-                    borderRadius={5}
-                    activeTabStyle={{ backgroundColor: GLOBALS.Color.primary }}
-                    borderRadius={9}
+                <FlatList
+                    style={{ marginTop: hp('2%') }}
+                    data={SwitchSeg}
+                    horizontal={true}
+                    scrollEnabled={false}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <TouchableOpacity
+                                onPress={() => this.selectItem(item)}
+                                style={
+                                    selectedBtn(this.state.index === item.value).selected
+                                }
+                            >
+                                <Text style={[selectedBtn(this.state.index === item.value).text]}>{item.type}</Text>
+                            </TouchableOpacity>
+                        )
+                    }}
+                    keyExtractor={(item) => item.type}
+                    extraData={this.state}
                 />
 
                 {this.state.index === 0 && <FormBackupcode navigator={this.props.navigator} showLoading={this.showLoading.bind(this)} />}
@@ -63,6 +94,31 @@ class ScreenRestore extends Component {
     }
 
 }
+
+const selectedBtn = (type) => StyleSheet.create({
+    selected: {
+        backgroundColor: type ? GLOBALS.Color.secondary : '#fff',
+        borderRadius: 20,
+        padding: wp('3%'),
+        margin: hp('0.5%'),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: type ? 0.34 : 0,
+        shadowRadius: 2.27,
+        elevation: type ? 5 : 0,
+        alignItems: 'center',
+        width: hp('23%')
+    },
+    text: {
+        fontWeight: type ? 'bold' : 'normal',
+        color: type ? '#FFFFFF' : "#000",
+        fontFamily: GLOBALS.font.Poppins,
+        textAlign: 'center'
+    }
+})
 
 class FormBackupcode extends Component {
     InitState = {
@@ -172,6 +228,7 @@ class FormBackupcode extends Component {
                     '\n- ' + res.fileName,
                     '\n- ' + res.fileSize
                 );
+
                 if ((res.fileName).substring((res.fileName).lastIndexOf('.') + 1, (res.fileName).length) == 'txt' && (res.fileName).indexOf('nexty') > -1) {
                     RNFS.readFile(res.uri).then(data => {
                         console.log(data)
@@ -192,80 +249,93 @@ class FormBackupcode extends Component {
 
     }
     focusTheField = (id) => {
-        this.inputs[id]._root.focus();
+        this.inputs[id].focus();
     }
     inputs = {};
 
     render() {
         return (
-            <View>
-                <Form style={style.FormLogin}>
-                    <View style={{
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        width: GLOBALS.WIDTH,
-                    }}>
-                        <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.3 }} error={this.state.errBUcode}>
-                            <Label>{Lang.t('Restore.BackUpCode')}/ {Lang.t('Restore.ChooserFile')}</Label>
-                            <Input
-                                onChangeText={(val) => this.validateBuCode(val)}
-                                value={this.state.backupCode}
-                                returnKeyType={"next"}
-                                blurOnSubmit={false}
-                                onSubmitEditing={() => { this.focusTheField('field2'); }}
-                            />
-                        </Item>
-
-                        <TouchableOpacity style={style.buttonFolder} onPress={() => this.SelectFile()}>
-                            <Icon name="folder-open" backgroundColor="#3b5998" color="rgb(170, 170, 27)" size={35}>
-                            </Icon>
-                        </TouchableOpacity>
-                    </View>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrBUcode}</Text>
-                    </Item>
-
-                    <Item floatingLabel error={this.state.errPwd}>
-                        <Label>{Lang.t('Restore.LocalPasscode')}</Label>
-                        <Input
-                            value={this.state.password}
-                            secureTextEntry={true}
-                            onChangeText={(val) => this.validatePwd(val)}
-                            getRef={input => { this.inputs['field2'] = input }}
-                            returnKeyType={'next'}
-                            blurOnSubmit={false}
-                            onSubmitEditing={() => { this.focusTheField('field3'); }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
-                    </Item>
-
-                    <Item floatingLabel error={this.state.errCfPwd}>
-                        <Label>{Lang.t('Restore.ComfirmLocalPasscode')}</Label>
-                        <Input
-                            value={this.state.confirmPwd}
-                            secureTextEntry={true}
-                            onChangeText={(val) => this.validateCfPwd(val)}
-                            getRef={input => { this.inputs['field3'] = input }}
-                            returnKeyType={'done'}
-                            onSubmitEditing={() => {
-                                if (this.state.typeButton == false) {
-                                    this.restoreByBackupCode()
-                                }
-                            }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
-                    </Item>
-
-                </Form>
-                <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.primary, this.state.typeButton).button} onPress={() => this.restoreByBackupCode()} disabled={this.state.typeButton}>
-                        <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
+            <View style={{ marginTop: hp('12%') }}>
+                <View style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Lang.t('Restore.BackUpCode') + '/' + Lang.t('Restore.ChooserFile')}
+                        onChangeText={(val) => this.validateBuCode(val)}
+                        value={this.state.backupCode}
+                        returnKeyType={"next"}
+                        blurOnSubmit={false}
+                        onSubmitEditing={() => { this.focusTheField('field2'); }}
+                        style={{ flex: 8, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                    <TouchableOpacity style={style.buttonFolder} onPress={() => this.SelectFile()}>
+                        <Icon name="folder-open" color={GLOBALS.Color.secondary} size={35} />
                     </TouchableOpacity>
                 </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrBUcode}</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Lang.t('Restore.LocalPasscode')}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        onChangeText={(val) => this.validatePwd(val)}
+                        ref={input => { this.inputs['field2'] = input }}
+                        returnKeyType={'next'}
+                        blurOnSubmit={false}
+                        onSubmitEditing={() => { this.focusTheField('field3'); }}
+                        style={{ flex: 10, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}
+                >
+                    <TextInput
+                        placeholder={Lang.t('Restore.ComfirmLocalPasscode')}
+                        value={this.state.confirmPwd}
+                        secureTextEntry={true}
+                        onChangeText={(val) => this.validateCfPwd(val)}
+                        ref={input => { this.inputs['field3'] = input }}
+                        returnKeyType={'done'}
+                        onSubmitEditing={() => {
+                            if (this.state.typeButton == false) {
+                                this.restoreByBackupCode()
+                            }
+                        }}
+                        style={{ flex: 10, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
+
+                <TouchableOpacity style={style.button} onPress={() => this.restoreByBackupCode()} disabled={this.state.typeButton}>
+                    <Gradient
+                        colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                        start={{ x: 1, y: 0.7 }}
+                        end={{ x: 0, y: 3 }}
+                        style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
+                    >
+                        <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
+                    </Gradient>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -372,68 +442,90 @@ class FormPrivateKey extends Component {
     }
 
     focusTheField = (id) => {
-        this.inputs[id]._root.focus();
+        this.inputs[id].focus();
     }
     inputs = {};
 
     render() {
         return (
-            <View>
-                <Form style={style.FormLogin}>
-                    <Item floatingLabel error={this.state.errPKcode}>
-                        <Label>{Lang.t("Restore.Privatekey")}</Label>
-                        <Input
-                            value={this.state.privateKey}
-                            onChangeText={(val) => this.validatePKCode(val)}
-                            returnKeyType={"next"}
-                            blurOnSubmit={false}
-                            onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPKcode}</Text>
-                    </Item>
-
-                    <Item floatingLabel error={this.state.errPwd}>
-                        <Label>{Lang.t("Restore.LocalPasscode")}</Label>
-                        <Input
-                            value={this.state.password}
-                            secureTextEntry={true}
-                            onChangeText={(val) => this.validatePwd(val)}
-                            getRef={input => { this.inputs['field2'] = input }}
-                            returnKeyType={'next'}
-                            blurOnSubmit={false}
-                            onSubmitEditing={() => { this.focusTheField('field3'); }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
-                    </Item>
-
-                    <Item floatingLabel error={this.state.errCfPwd}>
-                        <Label>{Lang.t("Restore.ComfirmLocalPasscode")}</Label>
-                        <Input
-                            value={this.state.confirmPwd}
-                            secureTextEntry={true}
-                            onChangeText={(val) => this.validateCfPwd(val)}
-                            getRef={input => { this.inputs['field3'] = input }}
-                            returnKeyType={'done'}
-                            onSubmitEditing={() => {
-                                if (this.state.typeButton == false) {
-                                    this.restoreByPK()
-                                }
-                            }}
-                        />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
-                    </Item>
-                </Form>
-                <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.primary, this.state.typeButton).button} disabled={this.state.typeButton} onPress={() => this.restoreByPK()}>
-                        <Text style={style.TextButton}>{Lang.t("Restore.TitleButton")}</Text>
-                    </TouchableOpacity>
+            <View style={{ marginTop: hp('14.5%') }}>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Lang.t("Restore.Privatekey")}
+                        value={this.state.privateKey}
+                        onChangeText={(val) => this.validatePKCode(val)}
+                        returnKeyType={"next"}
+                        blurOnSubmit={false}
+                        onSubmitEditing={() => { this.focusTheField('field2'); }}
+                        style={{ flex: 10, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
                 </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPKcode}</Text>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Lang.t("Restore.LocalPasscode")}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        onChangeText={(val) => this.validatePwd(val)}
+                        ref={input => { this.inputs['field2'] = input }}
+                        returnKeyType={'next'}
+                        blurOnSubmit={false}
+                        onSubmitEditing={() => { this.focusTheField('field3'); }}
+                        style={{ flex: 10, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Lang.t("Restore.ComfirmLocalPasscode")}
+                        value={this.state.confirmPwd}
+                        secureTextEntry={true}
+                        onChangeText={(val) => this.validateCfPwd(val)}
+                        ref={input => { this.inputs['field3'] = input }}
+                        returnKeyType={'done'}
+                        onSubmitEditing={() => {
+                            if (this.state.typeButton == false) {
+                                this.restoreByPK()
+                            }
+                        }}
+                        style={{ flex: 10, fontSize: hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
+                <TouchableOpacity style={style.button} onPress={() => this.restoreByPK()} disabled={this.state.typeButton}>
+                    <Gradient
+                        colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                        start={{ x: 1, y: 0.7 }}
+                        end={{ x: 0, y: 3 }}
+                        style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
+                    >
+                        <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
+                    </Gradient>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -441,23 +533,25 @@ class FormPrivateKey extends Component {
 
 export default class restore extends Component {
     static navigationOptions = () => ({
-        title: Lang.t('Restore.Title'),
+        // title: Lang.t('Login.Title'),
         headerStyle: {
-            backgroundColor: GLOBALS.Color.primary,
+            backgroundColor: '#fff',
+            borderBottomWidth: 0,
+            elevation: 0
         },
         headerTitleStyle: {
             color: 'white',
         },
         headerBackTitleStyle: {
-            color: 'white',
+            color: '#0C449A'
         },
-        headerTintColor: 'white',
+        headerTintColor: '#0C449A',
     });
 
     render() {
         return (
-            <ScrollView >
-                <KeyboardAvoidingView style={style.container} behavior="position" enabled>
+            <ScrollView style={{ backgroundColor: '#fff' }}>
+                <KeyboardAvoidingView style={style.container} keyboardVerticalOffset={Platform.OS == 'ios' ? hp('15%') : hp('3%')} behavior="position" enabled>
                     <ScreenRestore navigator={this.props.navigation}></ScreenRestore>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -481,11 +575,22 @@ var styleButton = (color, type) => StyleSheet.create({
 })
 
 const style = StyleSheet.create({
+    button: {
+        justifyContent: 'center',
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: -1,
+            height: 3,
+        },
+        shadowOpacity: 0.24,
+        shadowRadius: 5.27,
+        elevation: 30,
+        marginTop: hp('2%'),
+    },
     container: {
         flex: 1,
-        // marginTop: Platform.OS === 'ios' ? 25 : 0,
-
-        alignItems: 'center',
+        padding: hp('4%')
     },
     logo: {
         height: GLOBALS.HEIGHT / 3,
@@ -494,27 +599,14 @@ const style = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 20,
     },
-    FormRouter: {
-        alignItems: 'center',
-        // paddingLeft: GLOBALS.WIDTH / 5,
-        // paddingRight: GLOBALS.WIDTH / 5
-    },
     TextButton: {
         color: 'white',
         textAlign: 'center',
         fontSize: 15
     },
-    FormLogin: {
-        width: GLOBALS.WIDTH,
-        marginBottom: GLOBALS.HEIGHT / 20,
-    },
     buttonFolder: {
-        flexDirection: 'column',
-        width: GLOBALS.WIDTH / 6,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 10,
-        backgroundColor: GLOBALS.Color.primary,
-        borderRadius: 5
+        flex: 2,
     }
 })

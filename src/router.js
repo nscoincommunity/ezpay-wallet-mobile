@@ -111,7 +111,12 @@ export default class Router extends Component {
                         header: () => null,
                     }
                 },
-                login: { screen: login },
+                login: {
+                    screen: login,
+                    // navigationOptions: {
+                    //     header: () => null,
+                    // }
+                },
                 register: { screen: register },
                 restore: { screen: restore },
                 Backup: { screen: Backup },
