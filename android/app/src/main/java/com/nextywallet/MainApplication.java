@@ -44,21 +44,10 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-              new MainReactPackage(),
-            new LinearGradientPackage(),
-            new RNViewOverflowPackage(),
-              new RNI18nPackage(),
-              new SplashScreenReactPackage(),
-              new SvgPackage(),
-              new VectorIconsPackage(),
-              new UdpSocketsModule(),
-              new TcpSocketsModule(),
-              new RandomBytesPackage(),
-              new RNOSModule(),
-              new RNFSPackage(),
-              new ReactNativeDocumentPicker(),
-              new RNCameraPackage());
+      return Arrays.<ReactPackage>asList(new MainReactPackage(), new LinearGradientPackage(),
+          new RNViewOverflowPackage(), new RNI18nPackage(), new SplashScreenReactPackage(), new SvgPackage(),
+          new VectorIconsPackage(), new UdpSocketsModule(), new TcpSocketsModule(), new RandomBytesPackage(),
+          new RNOSModule(), new RNFSPackage(), new ReactNativeDocumentPicker(), new RNCameraPackage());
     }
 
     @Override

@@ -63,12 +63,12 @@ export default class CustomToast extends Component {
                 <Animated.View
                     style={[styles.animatedToastView, {
                         opacity: this.animateOpacityValue,
-                        top: (this.props.position == 'top') ? '10%' : '80%',
+                        top: (this.props.position == 'top') ? '10%' : '95%',
                         backgroundColor: this.props.backgroundColor,
                     }]}>
 
                     <Text
-                        // numberOfLines={1}
+                        numberOfLines={3}
                         style={[styles.ToastBoxInsideText, {
                             color: this.props.textColor
                         }]}>{this.ToastMessage}</Text>
@@ -111,12 +111,14 @@ const styles = StyleSheet.create({
 
     animatedToastView:
         {
+            flex: 1,
             paddingHorizontal: 15,
             paddingVertical: 10,
             borderRadius: 20,
-            // zIndex: 9999,
+            zIndex: 9999,
             position: 'absolute',
             justifyContent: 'center',
+            elevation: 9999999
         },
 
     ToastBoxInsideText:

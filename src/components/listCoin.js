@@ -137,7 +137,7 @@ export default class listCoin extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 38,
-        backgroundColor: GLOBALS.Color.primary,
+        backgroundColor: 'transparent',
         padding: 6,
     },
     ItemHozi: {

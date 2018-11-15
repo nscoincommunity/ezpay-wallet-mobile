@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from './Reponsive';
 
 export default {
     WIDTH: Dimensions.get('window').width,
@@ -15,5 +16,7 @@ export default {
     },
     font: {
         Poppins: 'Poppins-Light'
-    }
+    },
+    wp,
+    hp
 }

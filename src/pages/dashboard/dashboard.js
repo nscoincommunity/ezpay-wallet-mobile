@@ -94,7 +94,7 @@ export default class dashboard extends Component {
                 </TouchableOpacity> */}
                 {
                     !this.state.isBackup ?
-                        <View style={{ flexDirection: 'row', backgroundColor: '#D50000', justifyContent: 'space-between', alignItems: 'center', padding: 5 }}>
+                        <View style={{ flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between', alignItems: 'center', padding: 5 }}>
                             <Text style={{ flex: 8, color: '#fff' }}>{Language.t('Dashboard.CheckBackup')}</Text>
                             <TouchableOpacity
                                 style={{ backgroundColor: GLOBALS.Color.primary, borderRadius: 3, justifyContent: 'center', padding: 5, margin: 4 }}
@@ -114,6 +114,6 @@ export default class dashboard extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: GLOBALS.Color.primary
+        backgroundColor: 'transparent'
     }
 })

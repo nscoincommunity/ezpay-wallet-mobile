@@ -17,6 +17,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@remobile/react-native-toast": "^1.0.7",
     "@warren-bank/ethereumjs-tx-sign": "^2.0.0",
     "asyncstorage-down": "^4.0.1",
     "axios": "^0.18.0",

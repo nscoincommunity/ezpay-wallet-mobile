@@ -366,8 +366,8 @@ export default class FormSend extends Component {
     render() {
         return (
             <View style={style.container}>
-                <ScrollView style={{ height: GLOBALS.HEIGHT, padding: 10, paddingTop: 30, paddingBottom: 30 }}>
-                    <KeyboardAvoidingView behavior="position" enabled>
+                <ScrollView >
+                    <KeyboardAvoidingView behavior="position" enabled style={{ padding: GLOBALS.hp('2%') }}>
                         <FlatList
                             style={{
                                 paddingTop: Platform.OS == 'ios' ? 15 : 10,

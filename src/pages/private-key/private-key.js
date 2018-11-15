@@ -1,5 +1,13 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, StyleSheet, Alert, Clipboard, Platform } from 'react-native';
+import {
+    View,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
+    Clipboard,
+    Platform,
+    Image
+} from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
 import { getPrivateKey } from '../../services/auth.service'
@@ -15,9 +23,9 @@ import {
     Body,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { from } from 'rxjs';
 import Language from '../../i18n/i18n'
 import CustomToast from '../../components/toast';
+import Gradient from 'react-native-linear-gradient';
 
 export default class privateKey extends Component {
 
@@ -104,47 +112,94 @@ export default class privateKey extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: "#fff" }}>
-                <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
+            <Container style={{ backgroundColor: "#fafafa" }}>
+                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
                     <Left>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.openDrawer()}
+                            onPress={() => {
+                                this.props.navigation.openDrawer();
+                            }}
                         >
-                            <Icon name="bars" color='#fff' size={25}></Icon>
+                            <Icon type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
                         </Button>
                     </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: '#fff' }}>{Language.t('PrivateKey.Title')}</Title>
+                    <Body>
+                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('PrivateKey.Title')}</Title>
                     </Body>
                     <Right />
                 </Header>
 
-                <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={style.container}>
                     {
                         this.state.getsuccess ?
-                            <View>
-                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20 }}>{Language.t('PrivateKey.Title')}</Text>
-                                <Text style={{ textAlign: 'center', marginBottom: GLOBALS.HEIGHT / 20 }}>{this.state.privatekey}</Text>
-                                <View style={style.FormRouter}>
-                                    <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)}>
+                            <View style={style.MainForm}>
+                                <Text style={{
+                                    textAlign: 'center',
+                                    fontFamily: GLOBALS.font.Poppins,
+                                    fontSize: GLOBALS.wp('5%'),
+                                    fontWeight: '400',
+                                }}>{Language.t('PrivateKey.Title')}</Text>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Image
+                                        source={require('../../images/privatekey.png')}
+                                        resizeMode="contain"
+                                        style={{
+                                            height: GLOBALS.hp('40%'),
+                                            width: GLOBALS.wp('40%'),
+                                            marginLeft: GLOBALS.wp('5%')
+                                        }}
+                                    />
+                                </View>
+                                <Text style={{
+                                    textAlign: 'center',
+                                    fontFamily: GLOBALS.font.Poppins,
+                                    fontSize: GLOBALS.wp('4%'),
+                                }}>{this.state.privatekey}</Text>
+                                <TouchableOpacity style={style.button} onPress={this.Copy.bind(this)}>
+                                    <Gradient
+                                        colors={['#0C449A', '#082B5F']}
+                                        start={{ x: 1, y: 0.7 }}
+                                        end={{ x: 0, y: 3 }}
+                                        style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
+                                    >
                                         {
                                             !this.state.isCopy ?
                                                 <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleButton')}</Text>
                                                 :
                                                 <Text style={style.TextButton}>{Language.t('PrivateKey.GetSuccess.TitleCopied')}</Text>
                                         }
-                                    </TouchableOpacity>
-                                </View>
+                                    </Gradient>
+                                </TouchableOpacity>
                             </View>
                             :
-                            <View>
-                                <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 20, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }}>{Language.t('PrivateKey.InitForm.Content')}</Text>
-                                <View style={style.FormRouter}>
-                                    <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
-                                        <Text style={style.TextButton}>{Language.t('PrivateKey.InitForm.TitleButton')}</Text>
-                                    </TouchableOpacity>
+                            <View style={style.MainForm}>
+                                <Text
+                                    style={{
+                                        textAlign: 'center',
+                                        fontFamily: GLOBALS.font.Poppins,
+                                        fontSize: GLOBALS.wp('5%'),
+                                        fontWeight: '400'
+                                    }}>
+                                    {Language.t('PrivateKey.InitForm.Content')}
+                                </Text>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Image
+                                        source={require('../../images/privatekey.png')}
+                                        resizeMode="contain"
+                                        style={{ height: GLOBALS.hp('40%'), width: GLOBALS.wp('40%'), marginLeft: GLOBALS.wp('5%') }}
+                                    />
                                 </View>
+                                <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
+                                    <Gradient
+                                        colors={['#0C449A', '#082B5F']}
+                                        start={{ x: 1, y: 0.7 }}
+                                        end={{ x: 0, y: 3 }}
+                                        style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
+                                    >
+                                        <Text style={style.TextButton}>{Language.t('PrivateKey.InitForm.TitleButton')}</Text>
+                                    </Gradient>
+                                </TouchableOpacity>
                             </View>
                     }
 
@@ -158,31 +213,52 @@ export default class privateKey extends Component {
                         <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label={Language.t('PrivateKey.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
                     </Dialog.Container>
-                    <CustomToast ref="defaultToastBottom" position="bottom" />
+                    <View
+                        style={{
+                            position: 'absolute',
+                            bottom: GLOBALS.hp('10%'),
+                            width: GLOBALS.wp('100%'),
+                            elevation: 999,
+                            alignItems: 'center',
+                        }}
+                    >
+                        <CustomToast ref="defaultToastBottom" position="bottom" />
+                    </View>
+                    {/* <CustomToast ref="defaultToastBottom" position="bottom" /> */}
                 </View>
             </Container >
         )
     }
 }
 const style = StyleSheet.create({
-
-    FormRouter: {
+    container: {
+        flex: 1,
+        padding: GLOBALS.hp('2%'),
+    },
+    MainForm: {
+        flex: 1,
+        backgroundColor: '#fff',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: -1,
+            height: 3,
+        },
+        shadowOpacity: 0.24,
+        shadowRadius: 2.27,
+        elevation: 2,
+        borderRadius: 5,
+        padding: GLOBALS.hp('2.5%'),
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'space-around'
     },
     TextButton: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 15,
+        fontSize: GLOBALS.wp('4%'),
         fontFamily: GLOBALS.font.Poppins
     },
     button: {
-        backgroundColor: GLOBALS.Color.secondary,
-        marginBottom: GLOBALS.HEIGHT / 40,
-        height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6,
         shadowOffset: { width: 3, height: 3, },
         shadowColor: 'black',
         shadowOpacity: 0.2,

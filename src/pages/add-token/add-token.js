@@ -32,7 +32,7 @@ export default class Addtoken extends Component {
                             transparent
                             onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
                         >
-                            <Icon name="bars" color='#fff' size={25}></Icon>
+                            <Icon name="align-left" color='#fff' size={25}></Icon>
                         </Button>
                     </Left>
                     <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>

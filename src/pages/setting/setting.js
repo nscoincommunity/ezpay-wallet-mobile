@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'react-native';
+import { View, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { Platform } from 'react-native'
 // import Icon from "react-native-vector-icons/FontAwesome";
@@ -8,17 +8,16 @@ import {
     Header,
     Title,
     Content,
-    Text,
     Button,
     Left,
     Right,
     Body,
-    List,
-    ListItem,
+
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CustomToast from '../../components/toast';
 import Language from '../../i18n/i18n';
+
 
 
 export default class Setting extends Component {
@@ -71,44 +70,89 @@ export default class Setting extends Component {
             }
         ];
         return (
-            <Container style={{ backgroundColor: "#fff" }}>
-                <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
+            <Container style={{ backgroundColor: "#fafafa" }}>
+                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
                     <Left>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.openDrawer()}
+                            onPress={() => {
+                                this.props.navigation.openDrawer();
+                            }}
                         >
-                            <Icon name="bars" color='#fff' size={25}></Icon>
+                            <Icon type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
                         </Button>
                     </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: '#fff' }}>{Language.t('Settings.Title')}</Title>
+                    <Body>
+                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('Settings.Title')}</Title>
                     </Body>
                     <Right />
                 </Header>
 
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <List
-                        style={{ width: GLOBALS.WIDTH }}
-                        dataArray={datas}
-                        renderRow={data =>
-                            <ListItem
-                                button
-                                onPress={() => this.pushToPage(data.status, data.route)}
-                            >
-                                <Left>
-                                    <Text>
-                                        {data.text}
-                                    </Text>
-                                </Left>
-                                <Right>
-                                    <Icon name="angle-right" />
-                                </Right>
-                            </ListItem>}
+                <View style={styles.container}>
+                    <FlatList
+                        style={{ padding: GLOBALS.hp('2%') }}
+                        data={datas}
+                        extraData={this.state}
+                        renderItem={({ item }) => {
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => this.pushToPage(item.status, item.route)}
+                                    style={styles.row}>
+                                    <Text style={{
+                                        flex: 9,
+                                        fontFamily: GLOBALS.font.Poppins,
+                                        fontSize: GLOBALS.wp('4%')
+                                    }}>{item.text}</Text>
+                                    <Icon
+                                        name="angle-right"
+                                        style={{ flex: 1, textAlign: 'right' }}
+                                        size={GLOBALS.wp('6%')}
+                                        color="#AAA"
+                                    />
+                                </TouchableOpacity>
+                            )
+                        }}
+                        keyExtractor={(item) => item.text}
                     />
-                    <CustomToast ref="defaultToastBottom" position="bottom" top="70%" />
+                    <View
+                        style={{
+                            position: 'absolute',
+                            bottom: GLOBALS.hp('10%'),
+                            width: GLOBALS.wp('100%'),
+                            elevation: 999,
+                            alignItems: 'center',
+                            backgroundColor: 'red'
+                        }}
+                    >
+                        <CustomToast ref="defaultToastBottom" position="bottom" />
+                    </View>
                 </View>
-            </Container>
+            </Container >
         )
     }
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    row: {
+        borderLeftWidth: Platform.OS == 'ios' ? 0 : 0.2,
+        borderRightWidth: Platform.OS == 'ios' ? 0 : 0.2,
+        borderColor: '#c1bfbf',
+        paddingVertical: GLOBALS.hp('3%'),
+        paddingHorizontal: GLOBALS.hp('4%'),
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        // flexWrap: 'wrap',
+        marginVertical: GLOBALS.hp('1%'),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.14,
+        shadowRadius: 2.27,
+        elevation: 2,
+        borderRadius: 10,
+    }
+})

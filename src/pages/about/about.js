@@ -32,7 +32,7 @@ export default class About extends Component {
                             transparent
                             onPress={() => this.props.navigation.openDrawer()}
                         >
-                            <Icon name="bars" color='#fff' size={25}></Icon>
+                            <Icon name="align-left" color='#fff' size={25}></Icon>
                         </Button>
                     </Left>
                     <Body>

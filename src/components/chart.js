@@ -3,9 +3,9 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity } from 'react
 import GLOBALS from '../helper/variables';
 import { Spinner } from "native-base";
 import Constants from '../helper/constants'
-import { VictoryArea, VictoryStack } from "victory-native";
+import { VictoryArea, VictoryStack, VictoryChart } from "victory-native";
 import Language from '../i18n/i18n'
-
+import { Defs, Stop, LinearGradient } from 'react-native-svg'
 
 
 export default class Chart extends Component {
@@ -14,12 +14,12 @@ export default class Chart extends Component {
 
         this.state = {
             DataChart: [],
-            selected: 'W'
+            selected: 'D'
         };
     };
 
     componentDidMount() {
-        this.changeChart('W')
+        this.changeChart('D')
 
     }
 
@@ -93,6 +93,18 @@ export default class Chart extends Component {
         return (
             <View style={styles.container}>
                 {this.state.DataChart.length > 0 ?
+                    // <VictoryChart    >
+                    //     <Defs>
+                    //         <LinearGradient id="gradientStroke"
+                    //             x1="0%"
+                    //             x2="0%"
+                    //             y1="0%"
+                    //             y2="100%"
+                    //         >
+                    //             <Stop offset="0%" stopColor="#1E93FA" stopOpacity="1" />
+                    //             <Stop offset="70%" stopColor="#1E93FA" stopOpacity="0" />
+                    //         </LinearGradient>
+                    //     </Defs>
                     <VictoryArea
                         style={{
                             data: {
@@ -100,6 +112,9 @@ export default class Chart extends Component {
                                 fillOpacity: 0.3,
                                 stroke: "#286bb7",
                                 strokeWidth: 2,
+                                // fill: 'url(#gradientStroke)',
+                                // stroke: '#1E93FA',
+                                // strokeWidth: 2
                             }
                         }}
                         data={this.state.DataChart}
@@ -110,7 +125,10 @@ export default class Chart extends Component {
                         width={GLOBALS.WIDTH}
                         height={GLOBALS.HEIGHT / 2.75}
                         padding={{ top: 20, bottom: 0, left: 10, right: 10 }}
-                    />
+                    >
+
+                    </VictoryArea>
+                    // </VictoryChart>
                     :
                     <View style={{ width: GLOBALS.WIDTH, height: GLOBALS.HEIGHT / 2.75, justifyContent: 'center', alignItems: 'center' }}>
                         {/* <Spinner color="#fff" /> */}
@@ -157,7 +175,7 @@ const selectedBtn = (type) => StyleSheet.create({
 const styles = StyleSheet.create({
     container: {
         flex: 42, // take 38% of the screen height
-        backgroundColor: GLOBALS.Color.primary,
+        backgroundColor: 'transparent',
     },
     text: {
         textAlign: 'center',

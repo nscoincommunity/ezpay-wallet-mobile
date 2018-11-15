@@ -63,6 +63,11 @@ const Drawer = createDrawerNavigator(
 
     }, {
         initialRouteName: "TabNavigator",
+        drawerBackgroundColor: 'transparent',
+        style: {
+            backgroundColor: 'transparent'
+        },
+        drawerWidth: GLOBALS.wp('100%'),
         /** customize drawer*/
         contentComponent: props => <Sidebar {...props} />
     }

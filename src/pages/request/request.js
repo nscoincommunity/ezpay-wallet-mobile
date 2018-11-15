@@ -84,7 +84,7 @@ export default class request extends Component {
 
     render() {
         return (
-            <ScrollView >
+            <ScrollView style={{ backgroundColor: '#fafafa', }}>
                 <View style={style.container}>
                     <View style={style.FormAddress}>
                         <Text numberOfLines={1} style={{ flex: 8, fontFamily: GLOBALS.font.Poppins, fontSize: 15, alignContent: 'center' }} ellipsizeMode="middle" >{this.state.address} </Text>
@@ -99,7 +99,7 @@ export default class request extends Component {
                                 <TouchableOpacity onPress={this.CopyAddress.bind(this)} style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
                                     <QRCode
                                         value={this.state.address}
-                                        size={200}
+                                        size={GLOBALS.wp('50%')}
                                         bgColor='black'
                                         fgColor="white"
                                     />
@@ -117,15 +117,12 @@ export default class request extends Component {
                                 <Text style={style.TextButton}>{Language.t('Request.Share')}</Text>
                             </Gradient>
                         </TouchableOpacity>
-                        {
+                        {/* {
                             Platform.OS == 'android' &&
                             <CustomToast ref="defaultToastBottom" position="top" />
-                        }
+                        } */}
                     </View>
-                    {
-                        Platform.OS == 'ios' &&
-                        <CustomToast ref="defaultToastBottom" position="bottom" />
-                    }
+                    <CustomToast ref="defaultToastBottom" position="bottom" />
                 </View>
             </ScrollView>
         )
