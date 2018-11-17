@@ -3,6 +3,8 @@ import { View, Image, StyleSheet } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Language from '../../i18n/i18n'
 // import Icon from "react-native-vector-icons/FontAwesome";
+import IconFeather from "react-native-vector-icons/Feather"
+
 import {
     Container,
     Header,
@@ -32,7 +34,7 @@ export default class About extends Component {
                             transparent
                             onPress={() => this.props.navigation.openDrawer()}
                         >
-                            <Icon name="align-left" color='#fff' size={25}></Icon>
+                            <IconFeather name="align-left" color='#fff' size={25} />
                         </Button>
                     </Left>
                     <Body>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Platform } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Chart from '../../components/chart';
@@ -92,21 +92,36 @@ export default class dashboard extends Component {
                     onPress={() => this.resetTypeBackup()}>
                     <Text style={{ color: '#fff' }}>Reset type backup</Text>
                 </TouchableOpacity> */}
+
+                <List />
                 {
                     !this.state.isBackup ?
                         <View style={{ flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between', alignItems: 'center', padding: 5 }}>
-                            <Text style={{ flex: 8, color: '#fff' }}>{Language.t('Dashboard.CheckBackup')}</Text>
+                            <Text style={{ flex: 8, color: '#fff', fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.wp('4%') }}>{Language.t('Dashboard.CheckBackup')}</Text>
                             <TouchableOpacity
-                                style={{ backgroundColor: GLOBALS.Color.primary, borderRadius: 3, justifyContent: 'center', padding: 5, margin: 4 }}
+                                style={{
+                                    backgroundColor: GLOBALS.Color.secondary,
+                                    borderRadius: 20,
+                                    justifyContent: 'center',
+                                    padding: GLOBALS.wp('2.5%'),
+                                    margin: 4,
+                                    shadowColor: GLOBALS.Color.secondary,
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 0,
+                                    },
+                                    shadowOpacity: Platform.OS == 'ios' ? 0.6 : 10,
+                                    shadowRadius: 6.27,
+                                    elevation: Platform.OS == 'ios' ? 20 : 3,
+                                }}
                                 onPress={() => this.gotoBackup()}
                             >
-                                <Text style={{ color: '#fff', textAlign: 'center' }}>{Language.t('Dashboard.ButtonBackup')}</Text>
+                                <Text style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.wp('4%') }}>{Language.t('Dashboard.ButtonBackup')}</Text>
                             </TouchableOpacity>
                         </View>
                         : null
                 }
                 <Chart />
-                <List />
             </ScrollView>
         )
     }

@@ -26,6 +26,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Language from '../../i18n/i18n'
 import CustomToast from '../../components/toast';
 import Gradient from 'react-native-linear-gradient';
+import IconFeather from "react-native-vector-icons/Feather"
 
 export default class privateKey extends Component {
 
@@ -121,7 +122,7 @@ export default class privateKey extends Component {
                                 this.props.navigation.openDrawer();
                             }}
                         >
-                            <Icon type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
+                            <IconFeather type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
                         </Button>
                     </Left>
                     <Body>

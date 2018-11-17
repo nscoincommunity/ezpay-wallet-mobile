@@ -7,6 +7,7 @@ import { POSTAPI } from '../../helper/utils'
 import { Address } from '../../services/auth.service'
 import { getDataHis, HistoryModel, historyData } from './history.service'
 import Language from '../../i18n/i18n'
+import IconFeather from "react-native-vector-icons/Feather"
 
 import {
     Container,
@@ -131,7 +132,7 @@ export default class History extends Component {
                                 transparent
                                 onPress={() => this.props.navigation.openDrawer()}
                             >
-                                <Icon name="align-left" color={GLOBALS.Color.primary} size={25}></Icon>
+                                <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
                             </Button>
                         </Left>
                         <Body>
@@ -154,7 +155,7 @@ export default class History extends Component {
                                 transparent
                                 onPress={() => this.props.navigation.openDrawer()}
                             >
-                                <Icon name="align-left" color={GLOBALS.Color.primary} size={25}></Icon>
+                                <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
                             </Button>
                         </Left>
                         <Body>

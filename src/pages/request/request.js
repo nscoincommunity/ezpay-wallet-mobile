@@ -10,7 +10,8 @@ import {
     Image,
     TextInput,
     ScrollView,
-    Platform
+    Platform,
+    ToastAndroid
 } from 'react-native';
 // import Icon from "react-native-vector-icons/FontAwesome";
 import GLOBALS from '../../helper/variables';
@@ -28,8 +29,11 @@ const pt = PixelRatio.get()
 export default class request extends Component {
 
     Default_Toast_Bottom = (message) => {
-
-        this.refs.defaultToastBottom.ShowToastFunction(message);
+        if (Platform.OS === 'ios') {
+            this.refs.defaultToastBottom.ShowToastFunction(message);
+        } else {
+            ToastAndroid.show(message, ToastAndroid.SHORT)
+        }
 
     }
     constructor(props) {

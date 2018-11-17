@@ -3,7 +3,9 @@ import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpac
 import GLOBALS from '../../helper/variables';
 import { GetInfoToken } from '../../services/wallet.service';
 import { setData, getData, rmData } from '../../services/data.service'
-import Language from '../../i18n/i18n'
+import Language from '../../i18n/i18n';
+import IconFeather from "react-native-vector-icons/Feather"
+
 import {
     Container,
     Header,
@@ -32,7 +34,7 @@ export default class Addtoken extends Component {
                             transparent
                             onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
                         >
-                            <Icon name="align-left" color='#fff' size={25}></Icon>
+                            <IconFeather name="align-left" color='#fff' size={25} />
                         </Button>
                     </Left>
                     <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>

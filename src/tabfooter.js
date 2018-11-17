@@ -11,7 +11,8 @@ import {
     Alert,
     Linking,
     TouchableWithoutFeedback,
-    ImageBackground
+    ImageBackground,
+    ToastAndroid
 } from 'react-native';
 import { createTabNavigator, TabBarBottom, NavigationActions } from 'react-navigation';
 import Dashboard from './pages/dashboard/dashboard';
@@ -22,6 +23,8 @@ import Iccon from "react-native-vector-icons/FontAwesome";
 import { Container, Header, Left, Body, Title, Right, Button, Icon, Input, Item } from 'native-base'
 import { exchangeRate } from '../src/services/rate.service';
 import Language from './i18n/i18n';
+import IconFeather from "react-native-vector-icons/Feather"
+
 const IconSend = require('./images/iconTabBar/send.png');
 const IconHome = require('./images/iconTabBar/home.png');
 const IconRequest = require('./images/iconTabBar/Qrcode.png');
@@ -52,11 +55,11 @@ class SendSceen extends React.Component {
                             transparent
                             onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
                         >
-                            <Icon type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
+                            <IconFeather name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: GLOBALS.Color.primary, fontFamily: GLOBALS.font.Poppins }}>{Language.t("Send.Title")}</Title>
+                        <Title style={{ color: GLOBALS.Color.primary, fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>{Language.t("Send.Title")}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -92,17 +95,17 @@ class DashboardScreen extends React.Component {
                 resizeMode="cover"
             >
                 <Container style={{ backgroundColor: 'transpatent' }}>
-                    <Header style={{ borderBottomWidth: 0, backgroundColor: 'transparent' }}>
+                    <Header style={{ borderBottomWidth: 0, backgroundColor: 'transparent', borderBottomColor: 'transparent' }}>
                         <Left style={{ flex: 0 }}>
                             <Button
                                 transparent
                                 onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
                             >
-                                <Icon type="FontAwesome" name="align-left" style={{ color: '#fff', fontSize: 25 }} />
+                                <IconFeather name="align-left" style={{ color: '#fff', fontSize: 25 }} />
                             </Button>
                         </Left>
                         <Body style={{ flex: 10, alignItems: 'center', backgroundColor: 'tranparent' }}>
-                            <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins }}>1 NTY = {exchangeRate.toFixed(6)} USD</Title>
+                            <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>1 NTY = {exchangeRate.toFixed(6)} USD</Title>
                         </Body>
                         <Right />
                     </Header>
@@ -139,11 +142,11 @@ class RequestSceen extends React.Component {
                                 Keyboard.dismiss()
                             }}
                         >
-                            <Icon type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
+                            <IconFeather name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25, fontWeight: '100', }} />
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: GLOBALS.Color.primary, fontFamily: GLOBALS.font.Poppins }}>{Language.t("Request.Title")}</Title>
+                        <Title style={{ color: GLOBALS.Color.primary, fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>{Language.t("Request.Title")}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -181,16 +184,32 @@ export default class TabFooder extends React.Component {
     backButtonClick() {
         console.log('props: ', this.props.navigation)
         const { dispatch } = this.props.navigation;
+        const parent = this.props.navigation.dangerouslyGetParent();
+        const isDrawerOpen = parent && parent.state && parent.state.isDrawerOpen;
+        console.log(isDrawerOpen)
         if (this.props.navigation.isFocused() == true) {
-            BackHandler.exitApp()
-            return false;
-        } else {
+            this.props.navigation.closeDrawer();
+            if (isDrawerOpen == true) {
+                this.props.navigation.closeDrawer();
+                return true;
+            } else {
+                Alert.alert(
+                    'Confirm exit',
+                    'Are you want exit app',
+                    [
+                        { text: 'Cancel', style: 'cancel', onPress: () => { return true } },
+                        { text: 'Exit', onPress: () => { BackHandler.exitApp(); return false } }
+                    ]
+                )
+                return true
+            }
+        }
+        else {
             dispatch(NavigationActions.back());
             this.props.navigation.goBack()
             return true;
         }
     }
-
 
     componentWillMount() {
         Linking.getInitialURL().then(url => {
@@ -331,9 +350,9 @@ class CustomTab extends React.Component {
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             {
                                 focused ?
-                                    <Image source={IconSendActive} style={{ height: GLOBALS.wp('8%'), width: GLOBALS.wp('8%') }} resizeMode="center" />
+                                    <Image source={IconSendActive} style={{ height: GLOBALS.wp('5%'), width: GLOBALS.wp('5%') }} resizeMode="contain" />
                                     :
-                                    <Image source={IconSend} style={{ height: GLOBALS.wp('8%'), width: GLOBALS.wp('8%') }} resizeMode="center" />
+                                    <Image source={IconSend} style={{ height: GLOBALS.wp('5%'), width: GLOBALS.wp('5%') }} resizeMode="contain" />
                             }
                         </View>
                     }
@@ -356,8 +375,8 @@ class CustomTab extends React.Component {
                                         <Image source={IconHomeActive} style={{ height: GLOBALS.wp('12%'), width: GLOBALS.wp('12%') }} resizeMode="contain" />
                                     </View>
                                     :
-                                    <View style={{ paddingVertical: GLOBALS.wp('2%'), paddingHorizontal: GLOBALS.wp('2%') }}>
-                                        <Image source={IconHome} style={{ height: GLOBALS.wp('8%'), width: GLOBALS.wp('8%') }} resizeMode="center" />
+                                    <View style={{ paddingVertical: GLOBALS.wp('3.5%'), paddingHorizontal: GLOBALS.wp('3.3%') }}>
+                                        <Image source={IconHome} style={{ height: GLOBALS.wp('5%'), width: GLOBALS.wp('5%') }} resizeMode="contain" />
                                     </View>
                             }
                         </View>
@@ -367,9 +386,9 @@ class CustomTab extends React.Component {
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             {
                                 focused ?
-                                    <Image source={IconRequestActive} style={{ height: GLOBALS.wp('8%'), width: GLOBALS.wp('8%') }} resizeMode="center" />
+                                    <Image source={IconRequestActive} style={{ height: GLOBALS.wp('5%'), width: GLOBALS.wp('5%') }} resizeMode="contain" />
                                     :
-                                    <Image source={IconRequest} style={{ height: GLOBALS.wp('8%'), width: GLOBALS.wp('8%') }} resizeMode="center" />
+                                    <Image source={IconRequest} style={{ height: GLOBALS.wp('5%'), width: GLOBALS.wp('5%') }} resizeMode="contain" />
                             }
                         </View>
                     }
@@ -387,7 +406,6 @@ class CustomTab extends React.Component {
             routes,
         } = navigation.state;
 
-        console.log(this.props)
         return (
             <View style={[this.props.style, { flexDirection: 'row', padding: GLOBALS.wp('2%'), justifyContent: 'center', alignItems: 'center' }]
             }>

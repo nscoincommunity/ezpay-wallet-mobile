@@ -21,6 +21,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Address } from '../../services/auth.service';
 import Language from '../../i18n/i18n'
+import IconFeather from "react-native-vector-icons/Feather"
 
 export default class Redeem extends Component {
 
@@ -167,7 +168,7 @@ export default class Redeem extends Component {
                             transparent
                             onPress={() => this.props.navigation.openDrawer()}
                         >
-                            <Icon name="bars" color='#fff' size={25}></Icon>
+                            <IconFeather name="align-left" color='#fff' size={25} />
                         </Button>
                     </Left>
                     <Body>

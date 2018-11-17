@@ -15,6 +15,7 @@ import {
     Footer,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Ionicons from "react-native-vector-icons/Ionicons"
 import Language from './i18n/i18n';
 
 
@@ -102,9 +103,10 @@ export default class sidebar extends Component {
             <View style={{ backgroundColor: 'rgba(0,0,0,0.3)', flex: 1, paddingTop: GLOBALS.hp('10%') }}>
                 <View style={{ alignItems: 'center', marginBottom: GLOBALS.hp('10%') }}>
                     <TouchableOpacity
-                        style={{ height: 50, width: 50 }}
+                        style={{ height: 50, width: 50, alignItems: 'center' }}
                         onPress={() => { this.props.navigation.closeDrawer() }}>
-                        <Text style={{ color: '#fff', fontSize: GLOBALS.wp('15%'), textAlign: 'center' }}>X</Text>
+                        {/* <Text style={{ color: '#fff', fontSize: GLOBALS.wp('15%'), textAlign: 'center' }}>X</Text> */}
+                        <Ionicons name="ios-close" size={GLOBALS.wp('17%')} color="#fff" />
                     </TouchableOpacity>
                 </View>
                 <FlatList

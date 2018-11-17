@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { StyleSheet, View, Text, FlatList, Dimensions, ImageBackground, Image } from 'react-native';
 import GLOBALS from '../helper/variables'
 import { Item } from 'native-base'
 import { updateBalance, balance, updateBalanceTK } from '../services/wallet.service';
@@ -7,6 +7,22 @@ import { Utils } from '../helper/utils';
 import CONSTANTS from '../helper/constants';
 import { getData } from '../services/data.service'
 import Language from '../i18n/i18n'
+import Carousel, { ParallaxImage } from 'react-native-snap-carousel';
+
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+function wp(percentage) {
+    const value = (percentage * viewportWidth) / 100;
+    return Math.round(value);
+}
+
+const slideHeight = viewportHeight * 0.4;
+const slideWidth = wp(65);
+const itemHorizontalMargin = wp(2);
+
+export const sliderWidth = viewportWidth;
+export const itemWidth = slideWidth + itemHorizontalMargin * 6;
+const DataCoin = [];
+
 
 class HorizontalItem extends Component {
     render() {
@@ -33,23 +49,75 @@ class ListTokenShow extends Component {
 var interval;
 export default class listCoin extends Component {
 
-
-
     constructor(props) {
         super(props)
         this.state = {
             balanceNTY: '',
-            ListToken: []
+            ListToken: [],
+            slider1ActiveSlide: 0
         };
-        updateBalance().then(res => {
-            this.setState({ balanceNTY: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })
-        }).catch(err => {
-            console.log('catch', err)
-            this.setState({ balanceNTY: '0' })
-        })
+        updateBalance()
+            .then(res => {
+                this.setState({ balanceNTY: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })
+            }).catch(err => {
+                console.log('catch', err)
+                this.setState({ balanceNTY: '0' })
+            })
         this.loadListToken()
 
     };
+
+    _renderItem({ item, index }, parallaxProps) {
+        return (
+            <View style={{ paddingVertical: 10 }}>
+                <ImageBackground
+                    source={require('../images/background-balance.png')}
+                    style={{
+                        alignContent: "center",
+                        paddingVertical: GLOBALS.wp('10%'),
+                        shadowColor: "#2CC8D4",
+                        shadowOffset: {
+                            width: 0,
+                            height: 0,
+                        },
+                        shadowOpacity: 0.6,
+                        shadowRadius: 6.27,
+                        elevation: 20,
+                        flexDirection: 'row'
+                    }}
+                    imageStyle={{
+                        borderRadius: 10,
+
+                    }}
+                >
+                    {/* <Text>
+                        {item.nameToken}
+                    </Text> */}
+                    <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image
+                            source={require('../images/wallet.png')}
+                            resizeMode="cover"
+                            style={{ width: GLOBALS.wp('16%'), height: GLOBALS.wp('16%') }}
+                        />
+                    </View>
+                    <View style={{ flex: 7 }}>
+                        <Text style={{
+                            color: '#fff',
+                            fontWeight: '400',
+                            fontFamily: GLOBALS.font.Poppins,
+                            fontSize: GLOBALS.wp('4%')
+                        }}>Balance: {item.nameToken}</Text>
+                        <Text style={{
+                            color: '#fff',
+                            fontWeight: '400',
+                            fontFamily: GLOBALS.font.Poppins,
+                            fontSize: GLOBALS.wp('8%')
+                        }}>{item.balance}</Text>
+                    </View>
+                </ImageBackground>
+            </View>
+        );
+    }
 
     loadListToken() {
         getData('ListToken').then(data => {
@@ -97,15 +165,19 @@ export default class listCoin extends Component {
             {
                 nameToken: 'NTY',
                 balance: this.state.balanceNTY
+            },
+            {
+                nameToken: 'NTY',
+                balance: this.state.balanceNTY
+            },
+            {
+                nameToken: 'NTY',
+                balance: this.state.balanceNTY
             }
         ]
         return (
             <View style={styles.container}>
-                <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingBottom: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Dashboard.YourBalance')}</Text>
-                {/* <View style={styles.ItemHozi}>
-                    <Text style={styles.contenCoin}>NTY</Text>
-                    <Text style={styles.contenCoin}>204847</Text>
-                </View> */}
+                {/* <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingBottom: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Dashboard.YourBalance')}</Text>
                 <View>
                     <FlatList
                         data={HorizontalData}
@@ -128,7 +200,17 @@ export default class listCoin extends Component {
                             keyExtractor={(item, index) => item.symbol}
                         />
                     }
-                </View>
+                </View> */}
+                <Carousel
+                    ref={(c) => { this._carousel = c; }}
+                    data={HorizontalData}
+                    renderItem={this._renderItem}
+                    sliderWidth={sliderWidth}
+                    itemWidth={itemWidth}
+                    firstItem={HorizontalData.length > 2 ? 1 : 0}
+                    hasParallaxImages={true}
+                    loop={true}
+                />
             </View>
         )
     }
