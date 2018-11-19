@@ -9,9 +9,10 @@ import {
     KeyboardAvoidingView,
     ScrollView,
     AsyncStorage,
-    TextInput
+    TextInput,
+    Modal,
+    ActivityIndicator
 } from 'react-native';
-import { Form, Item, Input, Label, Title, Spinner } from 'native-base'
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
 import { initAuth, Address, isAuth, Login } from '../../services/auth.service'
@@ -171,12 +172,14 @@ class ScreenLogin extends Component {
 
                 {
                     this.state.loading ?
-                        <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Platform.OS == 'ios' ? 'rgba(155, 155, 155, 0.63)' : 'tranparent', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
-                            <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}>
-                                <Spinner color={GLOBALS.Color.primary} />
-                                <Text>{Lang.t('Login.TitleButton')}</Text>
+                        <Modal
+                            animationType='fade'
+                            transparent={true}
+                            visible={true}>
+                            <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
+                                <ActivityIndicator size='large' color={GLOBALS.Color.primary} style={{ flex: 1 }} />
                             </View>
-                        </View>
+                        </Modal>
                         : null
                 }
             </View >

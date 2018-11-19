@@ -9,7 +9,9 @@ import {
     Share,
     Image,
     Text,
-    ScrollView
+    ScrollView,
+    Modal,
+    ActivityIndicator
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
@@ -246,6 +248,18 @@ export default class backup extends Component {
                         <Dialog.Input placeholder={Language.t('Backup.DialogConfirm.Placeholder')} style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
+                        {
+                            this.state.loading ?
+                                <Modal
+                                    animationType='fade'
+                                    transparent={true}
+                                    visible={true}>
+                                    <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
+                                        <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
+                                    </View>
+                                </Modal>
+                                : null
+                        }
                     </Dialog.Container>
                     <View
                         style={{
@@ -259,6 +273,7 @@ export default class backup extends Component {
                         <CustomToast ref="defaultToastBottom" position="bottom" />
                     </View>
                 </View >
+
             </ScrollView >
         )
     }

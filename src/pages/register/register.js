@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, Platform, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking, Modal, TextInput } from 'react-native';
-import { Form, Item, Input, Label, Spinner } from 'native-base'
+import {
+    StyleSheet,
+    Platform,
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    ScrollView,
+    Linking,
+    Modal,
+    TextInput,
+    ActivityIndicator
+} from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { checkIOS, Register } from '../../services/auth.service';
 import { setData } from '../../services/data.service'
@@ -147,12 +159,14 @@ class ScreenRegister extends Component {
 
                 {
                     this.state.loading ?
-                        <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
-                            <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}>
-                                <Spinner color={GLOBALS.Color.primary} />
-                                <Text>{Lang.t('Register.TitleButton')}</Text>
+                        <Modal
+                            animationType='fade'
+                            transparent={true}
+                            visible={true}>
+                            <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
+                                <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
                             </View>
-                        </View>
+                        </Modal>
                         : null
                 }
             </View>

@@ -27,15 +27,25 @@ export async function updateBalanceTK(params) {
             if (data != null) {
                 ListToken = JSON.parse(data);
                 for (let i = 0; i < ListToken.length; i++) {
-                    var contract = await new WEB3.eth.Contract(ListToken[i].ABI, ListToken[i].tokenAddress)
-                    await contract.methods.balanceOf(Address).call().then(bal => {
-                        ListToken[i].balance = bal;
-                    })
-
-                    if (i == (ListToken.length - 1)) {
-                        setData('ListToken', JSON.stringify(ListToken)).then(() => { })
-                        resolve('1')
-                        break;
+                    if (ListToken[i].symbol == 'NTY') {
+                        console.log('check symbol: ', ListToken[i].symbol)
+                        updateBalance().then(() => {
+                            ListToken[i].balance = balance;
+                            console.log(ListToken[i].balance)
+                            if (i == (ListToken.length - 1)) {
+                                setData('ListToken', JSON.stringify(ListToken))
+                                resolve('1')
+                            }
+                        })
+                    } else {
+                        var contract = await new WEB3.eth.Contract(ListToken[i].ABI, ListToken[i].tokenAddress)
+                        await contract.methods.balanceOf(Address).call().then(bal => {
+                            ListToken[i].balance = bal;
+                        })
+                        if (i == (ListToken.length - 1)) {
+                            setData('ListToken', JSON.stringify(ListToken))
+                            resolve('1')
+                        }
                     }
                 }
             }
@@ -53,7 +63,11 @@ export async function updateBalance() {
         .subscribe(value => {
             // console.log('Address', Address);
             if (value > 0) {
-                balance = parseFloat(value / CONSTANTS.BASE_NTY).toFixed(3)
+                if (parseFloat(value / CONSTANTS.BASE_NTY) % 1 == 0) {
+                    balance = parseFloat(value / CONSTANTS.BASE_NTY).toLocaleString()
+                } else {
+                    balance = parseFloat(value / CONSTANTS.BASE_NTY).toFixed(2).toLocaleString()
+                }
             } else {
                 balance = 0
             }

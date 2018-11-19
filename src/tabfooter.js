@@ -228,58 +228,12 @@ export default class TabFooder extends React.Component {
             {
                 Send: {
                     screen: props => <SendSceen {...this.props} />,
-                    // navigationOptions: {
-                    //     tabBarLabel: Language.t("Send.Title"),
-                    //     tabBarIcon: (icon) => {
-                    //         console.log(icon)
-                    //         if (icon.focused) {
-                    //             return (
-                    //                 <Image style={{ height: GLOBALS.wp('10%'), width: GLOBALS.wp('10%') }} source={require('./images/icon/activesend.png')} />
-                    //             )
-                    //         } else {
-                    //             return (
-                    //                 <Image style={{ height: GLOBALS.wp('10%'), width: GLOBALS.wp('10%') }} source={require('./images/icon/send.png')} />
-                    //             )
-                    //         }
-                    //     }
-                    // }
                 },
                 Dashboard: {
                     screen: props => <DashboardScreen {...this.props} />,
-                    // navigationOptions: {
-                    //     tabBarLabel: Language.t("Dashboard.Title"),
-                    //     tabBarIcon: (icon) => {
-                    //         console.log(icon)
-                    //         if (icon.focused) {
-                    //             return (
-                    //                 <Image style={{ height: GLOBALS.wp('10%'), width: GLOBALS.wp('10%') }} source={require('./images/icon/activehome.png')} />
-                    //             )
-                    //         } else {
-                    //             return (
-                    //                 <Image style={{ height: GLOBALS.wp('10%'), width: GLOBALS.wp('10%') }} source={require('./images/icon/home.png')} />
-                    //             )
-                    //         }
-                    //     }
-                    // }
                 },
                 Request: {
                     screen: props => <RequestSceen {...this.props} />,
-                    // navigationOptions: {
-                    //     tabBarLabel: Language.t("Request.Title"),
-                    //     tabBarIcon: (icon) => {
-                    //         console.log(icon)
-                    //         if (icon.focused) {
-                    //             return (
-                    //                 <Image style={{ height: GLOBALS.wp('10%'), width: GLOBALS.wp('10%') }} source={require('./images/icon/activeQrcode.png')} />
-                    //             )
-                    //         } else {
-                    //             return (
-                    //                 <Image style={{ height: GLOBALS.wp('10%'), width: GLOBALS.wp('10%') }} source={require('./images/icon/Qrcode.png')} />
-                    //             )
-                    //         }
-                    //     },
-
-                    // }
                 }
             },
             {

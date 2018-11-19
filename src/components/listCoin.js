@@ -8,6 +8,7 @@ import CONSTANTS from '../helper/constants';
 import { getData } from '../services/data.service'
 import Language from '../i18n/i18n'
 import Carousel, { ParallaxImage } from 'react-native-snap-carousel';
+import { setInterval } from 'timers';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 function wp(percentage) {
@@ -24,28 +25,6 @@ export const itemWidth = slideWidth + itemHorizontalMargin * 6;
 const DataCoin = [];
 
 
-class HorizontalItem extends Component {
-    render() {
-        return (
-            <View style={styles.ItemHozi}>
-                <Text style={styles.contenCoin}>{this.props.item.nameToken}</Text>
-                <Text style={styles.contenCoin}>{this.props.item.balance}</Text>
-            </View>
-        )
-    }
-}
-
-class ListTokenShow extends Component {
-    render() {
-        return (
-            <View style={styles.ItemHozi}>
-                <Text style={styles.contenCoin}>{this.props.item.symbol}</Text>
-                <Text style={styles.contenCoin}>{this.props.item.balance}</Text>
-            </View>
-        )
-    }
-}
-
 var interval;
 export default class listCoin extends Component {
 
@@ -54,17 +33,18 @@ export default class listCoin extends Component {
         this.state = {
             balanceNTY: '',
             ListToken: [],
-            slider1ActiveSlide: 0
+            slider1ActiveSlide: 0,
+            NTY: []
         };
         updateBalance()
             .then(res => {
+                console.log('first: ', balance)
                 this.setState({ balanceNTY: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })
             }).catch(err => {
                 console.log('catch', err)
                 this.setState({ balanceNTY: '0' })
             })
         this.loadListToken()
-
     };
 
     _renderItem({ item, index }, parallaxProps) {
@@ -100,19 +80,19 @@ export default class listCoin extends Component {
                             style={{ width: GLOBALS.wp('16%'), height: GLOBALS.wp('16%') }}
                         />
                     </View>
-                    <View style={{ flex: 7 }}>
+                    <View style={{ flex: 7, justifyContent: 'center' }}>
                         <Text style={{
                             color: '#fff',
                             fontWeight: '400',
                             fontFamily: GLOBALS.font.Poppins,
                             fontSize: GLOBALS.wp('4%')
-                        }}>Balance: {item.nameToken}</Text>
+                        }}>Balance: {item.symbol}</Text>
                         <Text style={{
                             color: '#fff',
                             fontWeight: '400',
                             fontFamily: GLOBALS.font.Poppins,
-                            fontSize: GLOBALS.wp('8%')
-                        }}>{item.balance}</Text>
+                            fontSize: GLOBALS.wp('8%'),
+                        }}>{item.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
                     </View>
                 </ImageBackground>
             </View>
@@ -121,7 +101,11 @@ export default class listCoin extends Component {
 
     loadListToken() {
         getData('ListToken').then(data => {
-            this.state.ListToken = JSON.parse(data)
+            if (data != null) {
+                this.state.ListToken = JSON.parse(data)
+            } else {
+                console.log('list token null')
+            }
         })
     }
 
@@ -161,46 +145,9 @@ export default class listCoin extends Component {
 
 
     render() {
-        var HorizontalData = [
-            {
-                nameToken: 'NTY',
-                balance: this.state.balanceNTY
-            },
-            {
-                nameToken: 'NTY',
-                balance: this.state.balanceNTY
-            },
-            {
-                nameToken: 'NTY',
-                balance: this.state.balanceNTY
-            }
-        ]
+        var HorizontalData = this.state.ListToken
         return (
             <View style={styles.container}>
-                {/* <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingBottom: 10, fontFamily: GLOBALS.font.Poppins }}>{Language.t('Dashboard.YourBalance')}</Text>
-                <View>
-                    <FlatList
-                        data={HorizontalData}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <HorizontalItem item={item} index={index} parentLatList={this} />
-                            )
-                        }}
-                        keyExtractor={(item, index) => item.nameToken}
-                    />
-                    {
-                        this.state.ListToken &&
-                        <FlatList
-                            data={this.state.ListToken}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <ListTokenShow item={item} index={index} parentLatList={this} />
-                                )
-                            }}
-                            keyExtractor={(item, index) => item.symbol}
-                        />
-                    }
-                </View> */}
                 <Carousel
                     ref={(c) => { this._carousel = c; }}
                     data={HorizontalData}

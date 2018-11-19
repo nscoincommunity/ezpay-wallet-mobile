@@ -264,7 +264,6 @@ export default class FormSend extends Component {
     }
 
     componentWillMount() {
-        this.state.ListToken.push({ value: 'NTY', label: 'NTY' })
         getData('ListToken')
             .then(data => {
                 if (data != null) {

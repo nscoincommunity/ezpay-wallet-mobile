@@ -1,5 +1,15 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    ImageBackground,
+    Alert
+} from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { initAuth, isAuth, Address, cachePwd } from '../../services/auth.service'
 import { getExchangeRate } from '../../services/rate.service'
@@ -14,25 +24,35 @@ export default class unlogin extends Component {
         super(props)
 
         this.state = {
-            isAuth: false
+            isAuth: false,
+            err: false
         };
     };
 
 
     componentDidMount() {
-        // const { navigate } = this.props.navigation;
-        // navigate('Drawer');
         initAuth()
             .then(async data => {
                 if (isAuth) {
-                    await this.setState({ isAuth });
+                    await this.setState({ isAuth: isAuth });
                     await getExchangeRate()
-                    const { navigate } = await this.props.navigation;
-                    navigate('TabNavigator');
-                    setTimeout(() => {
-                        this.setState({ isAuth: false })
+                        .catch(err => {
+                            this.setState({ isAuth: false, err: true })
+                            Alert.alert(
+                                'Error',
+                                err['request']["_response"],
+                                [{ text: 'Ok', style: 'cancel' }]
+                            )
+                            return;
+                        })
+                    if (!this.state.err) {
+                        const { navigate } = await this.props.navigation;
+                        navigate('TabNavigator');
+                        setTimeout(() => {
+                            this.setState({ isAuth: false })
 
-                    }, 100);
+                        }, 100);
+                    }
                 }
             }
 
@@ -86,7 +106,7 @@ export default class unlogin extends Component {
                     </TouchableOpacity>
                 </View>
                 {
-                    this.state.isAuth ?
+                    this.state.isAuth == true ?
                         <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
                             <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10, aspectRatio: 1 }}>
                                 <Spinner color={GLOBALS.Color.primary} />
