@@ -22,7 +22,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { restoreByBackup, restoreByPk } from './restore.service';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
-import { setData } from '../../services/data.service'
+import { setData, rmData, getData } from '../../services/data.service'
 import Lang from '../../i18n/i18n';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
@@ -200,9 +200,20 @@ class FormBackupcode extends Component {
             .then(rCode => {
                 this.props.showLoading(false);
                 if (rCode == 0) {
-                    setData('isBackup', '0');
-                    const { navigate } = this.props.navigator;
-                    navigate('TabNavigator');
+                    rmData('ListToken').then(() => {
+                        var initialData = [{
+                            "tokenAddress": '',
+                            "balance": '0',
+                            "symbol": 'NTY',
+                            "decimals": '',
+                            "ABI": ''
+                        }]
+                        setData('ListToken', JSON.stringify(initialData)).then(() => {
+                            setData('isBackup', '0');
+                            const { navigate } = this.props.navigator;
+                            navigate('TabNavigator');
+                        })
+                    })
                 } else {
                     Alert.alert(
                         Lang.t("Restore.Error"),
@@ -424,9 +435,20 @@ class FormPrivateKey extends Component {
             .then(rCode => {
                 this.props.showLoading(false);
                 if (rCode == 0) {
-                    setData('isBackup', '0');
-                    const { navigate } = this.props.navigator;
-                    navigate('TabNavigator');
+                    rmData('ListToken').then(() => {
+                        var initialData = [{
+                            "tokenAddress": '',
+                            "balance": '0',
+                            "symbol": 'NTY',
+                            "decimals": '',
+                            "ABI": ''
+                        }]
+                        setData('ListToken', JSON.stringify(initialData)).then(() => {
+                            setData('isBackup', '0');
+                            const { navigate } = this.props.navigator;
+                            navigate('TabNavigator');
+                        })
+                    })
                 } else {
                     Alert.alert(
                         Lang.t("Restore.Error"),
@@ -571,8 +593,11 @@ var styleButton = (color, type) => StyleSheet.create({
         height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
         width: GLOBALS.WIDTH / 1.6,
-        shadowOffset: { width: 3, height: 3, },
-        shadowColor: 'black',
+        shadowOffset: {
+            width: 3,
+            height: 3,
+        },
+        shadowColor: '#000',
         shadowOpacity: 0.2,
         borderRadius: 2
     }
@@ -584,12 +609,12 @@ const style = StyleSheet.create({
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {
-            width: -1,
-            height: 3,
+            width: 0,
+            height: 0,
         },
-        shadowOpacity: 0.24,
-        shadowRadius: 5.27,
-        elevation: 30,
+        shadowOpacity: 0.64,
+        shadowRadius: 2.27,
+        elevation: 7,
         marginTop: hp('2%'),
     },
     container: {

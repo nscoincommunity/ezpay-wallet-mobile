@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { checkIOS, Register } from '../../services/auth.service';
-import { setData } from '../../services/data.service'
+import { setData, rmData } from '../../services/data.service'
 import Lang from '../../i18n/i18n'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
@@ -43,10 +43,22 @@ class ScreenRegister extends Component {
     async register() {
         this.setState({ loading: true })
         Register(this.state.password).then(() => {
-            this.setState({ loading: false })
-            const { navigate } = this.props.data.navigation;
-            navigate('TabNavigator');
-            setData('isBackup', '0');
+            rmData('ListToken').then(() => {
+                var initialData = [{
+                    "tokenAddress": '',
+                    "balance": '0',
+                    "symbol": 'NTY',
+                    "decimals": '',
+                    "ABI": ''
+                }]
+                setData('ListToken', JSON.stringify(initialData)).then(() => {
+                    this.setState({ loading: false })
+                    const { navigate } = this.props.data.navigation;
+                    navigate('TabNavigator');
+                    setData('isBackup', '0');
+                })
+            })
+
         })
     }
 
@@ -211,12 +223,12 @@ var styleButton = (color, type) => StyleSheet.create({
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {
-            width: -1,
-            height: 3,
+            width: 0,
+            height: 0,
         },
-        shadowOpacity: 0.24,
-        shadowRadius: 5.27,
-        elevation: 30,
+        shadowOpacity: 0.64,
+        shadowRadius: 2.27,
+        elevation: 7,
     }
 })
 

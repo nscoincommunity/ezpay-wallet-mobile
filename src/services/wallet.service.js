@@ -28,10 +28,8 @@ export async function updateBalanceTK(params) {
                 ListToken = JSON.parse(data);
                 for (let i = 0; i < ListToken.length; i++) {
                     if (ListToken[i].symbol == 'NTY') {
-                        console.log('check symbol: ', ListToken[i].symbol)
                         updateBalance().then(() => {
                             ListToken[i].balance = balance;
-                            console.log(ListToken[i].balance)
                             if (i == (ListToken.length - 1)) {
                                 setData('ListToken', JSON.stringify(ListToken))
                                 resolve('1')

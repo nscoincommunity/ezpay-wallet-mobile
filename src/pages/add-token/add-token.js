@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard, Platform } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard, Platform, TextInput } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { GetInfoToken } from '../../services/wallet.service';
 import { setData, getData, rmData } from '../../services/data.service'
 import Language from '../../i18n/i18n';
 import IconFeather from "react-native-vector-icons/Feather"
+import Gradient from 'react-native-linear-gradient'
 
 import {
     Container,
@@ -28,17 +29,17 @@ export default class Addtoken extends Component {
     render() {
         return (
             <Container style={{ backgroundColor: "#fff" }}>
-                <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
+                <Header style={{ borderBottomColor: '#fff', borderBottomWidth: 0, backgroundColor: 'transparent' }}>
                     <Left>
                         <Button
                             transparent
                             onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
                         >
-                            <IconFeather name="align-left" color='#fff' size={25} />
+                            <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
                         </Button>
                     </Left>
                     <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: '#fff' }}>{Language.t("AddToken.Title")}</Title>
+                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t("AddToken.Title")}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -168,66 +169,81 @@ class FormAddToken extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Form style={styles.FormAddToken} >
-                    <Item floatingLabel error={this.state.ValidToken}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }}>{Language.t("AddToken.FormAdd.PlaceholderToken")}</Label>
-                        <Input onChangeText={(value) => { this.setValue(value) }} value={this.state.addressTK} />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0, marginBottom: 10, marginTop: 10 }} >
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErr}</Text>
-                    </Item>
-                    <Item floatingLabel disabled={true}>
-                        <Label style={{ fontFamily: GLOBALS.font.Poppins }} >{Language.t("AddToken.FormAdd.PlaceholderSymbol")}</Label>
-                        <Input disabled={true} value={this.state.symbol} />
-                    </Item>
-                </Form>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Language.t("AddToken.FormAdd.PlaceholderToken")}
+                        value={this.state.addressTK}
+                        onChangeText={(value) => { this.setValue(value) }}
+                        style={{ flex: 10, fontSize: GLOBALS.hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger, textAlign: 'left' }}>{this.state.txtErr}</Text>
 
-                <TouchableOpacity style={typeButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.addToken.bind(this)} disabled={this.state.typeButton}>
-                    <Text style={styles.TextButton}>{Language.t("AddToken.FormAdd.TitleButton")}</Text>
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#AAAAAA',
+                    paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
+                }}>
+                    <TextInput
+                        placeholder={Language.t("AddToken.FormAdd.PlaceholderSymbol")}
+                        editable={false}
+                        value={this.state.symbol}
+                        style={{ flex: 10, fontSize: GLOBALS.hp('3%') }}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <TouchableOpacity style={styles.button} onPress={() => this.addToken.bind(this)} disabled={this.state.typeButton}>
+                    <Gradient
+                        colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                        start={{ x: 1, y: 0.7 }}
+                        end={{ x: 0, y: 3 }}
+                        style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
+                    >
+                        <Text style={styles.TextButton}>{Language.t('AddToken.FormAdd.TitleButton')}</Text>
+                    </Gradient>
                 </TouchableOpacity>
-                {/* <View>
-                    <TouchableOpacity onPress={() => { rmData('ListToken') }}>
-                        <Text>Remove token</Text>
-                    </TouchableOpacity>
-                </View> */}
             </View>
         )
     }
 }
 
 
-var typeButton = (color, type) => StyleSheet.create({
-    button: {
-        backgroundColor: type == true ? '#cccccc' : color,
-        marginTop: GLOBALS.HEIGHT / 40,
-        height: GLOBALS.HEIGHT / 17,
-        justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6,
-        shadowOffset: { width: 3, height: 3, },
-        shadowColor: 'black',
-        shadowOpacity: 0.2,
-    }
-})
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        marginTop: 20,
+        padding: GLOBALS.hp('4%'),
+        paddingTop: GLOBALS.hp('10%'),
     },
     TextButton: {
         color: 'white',
         textAlign: 'center',
         fontSize: 15,
-        fontFamily: GLOBALS.font.Poppins
+        fontFamily: GLOBALS.font.Poppins,
+        fontWeight: '400',
     },
-    AreaButton: {
-        alignItems: 'center',
-    },
-    FormAddToken: {
-        width: GLOBALS.WIDTH,
-        // padding: 10,
-        // paddingTop: 20,
+    button: {
+        justifyContent: 'center',
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.44,
+        shadowRadius: 1.27,
+        elevation: 7,
+        marginTop: GLOBALS.hp('5%'),
     }
 })
 

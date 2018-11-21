@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, FlatList, Dimensions, ImageBackground, Image } from 'react-native';
+import { StyleSheet, View, Text, FlatList, Dimensions, ImageBackground, Image, Platform } from 'react-native';
 import GLOBALS from '../helper/variables'
 import { Item } from 'native-base'
 import { updateBalance, balance, updateBalanceTK } from '../services/wallet.service';
@@ -36,14 +36,6 @@ export default class listCoin extends Component {
             slider1ActiveSlide: 0,
             NTY: []
         };
-        updateBalance()
-            .then(res => {
-                console.log('first: ', balance)
-                this.setState({ balanceNTY: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })
-            }).catch(err => {
-                console.log('catch', err)
-                this.setState({ balanceNTY: '0' })
-            })
         this.loadListToken()
     };
 
@@ -70,9 +62,6 @@ export default class listCoin extends Component {
 
                     }}
                 >
-                    {/* <Text>
-                        {item.nameToken}
-                    </Text> */}
                     <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
                         <Image
                             source={require('../images/wallet.png')}
@@ -87,12 +76,22 @@ export default class listCoin extends Component {
                             fontFamily: GLOBALS.font.Poppins,
                             fontSize: GLOBALS.wp('4%')
                         }}>Balance: {item.symbol}</Text>
-                        <Text style={{
-                            color: '#fff',
-                            fontWeight: '400',
-                            fontFamily: GLOBALS.font.Poppins,
-                            fontSize: GLOBALS.wp('8%'),
-                        }}>{item.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                        {
+                            Platform.OS == 'ios' ?
+                                <Text style={{
+                                    color: '#fff',
+                                    fontWeight: '400',
+                                    fontFamily: GLOBALS.font.Poppins,
+                                    fontSize: GLOBALS.wp('8%'),
+                                }}>{item.balance}</Text>
+                                :
+                                <Text style={{
+                                    color: '#fff',
+                                    fontWeight: '400',
+                                    fontFamily: GLOBALS.font.Poppins,
+                                    fontSize: GLOBALS.wp('8%'),
+                                }}>{(item.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                        }
                     </View>
                 </ImageBackground>
             </View>
@@ -102,7 +101,7 @@ export default class listCoin extends Component {
     loadListToken() {
         getData('ListToken').then(data => {
             if (data != null) {
-                this.state.ListToken = JSON.parse(data)
+                this.setState({ ListToken: JSON.parse(data) })
             } else {
                 console.log('list token null')
             }
@@ -110,13 +109,13 @@ export default class listCoin extends Component {
     }
 
     componentDidMount() {
-        interval = setInterval(() => {
-            updateBalance().then(res => {
-                this.setState({ balanceNTY: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })
-            }).catch(err => {
-                this.setState({ balanceNTY: '0' })
-            })
-        }, 2000)
+        // interval = setInterval(() => {
+        //     updateBalance().then(res => {
+        //         this.setState({ balanceNTY: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })
+        //     }).catch(err => {
+        //         this.setState({ balanceNTY: '0' })
+        //     })
+        // }, 2000)
         this.updateBalTK()
     }
 
@@ -145,19 +144,40 @@ export default class listCoin extends Component {
 
 
     render() {
-        var HorizontalData = this.state.ListToken
+        var HorizontalData = this.state.ListToken;
         return (
             <View style={styles.container}>
-                <Carousel
-                    ref={(c) => { this._carousel = c; }}
-                    data={HorizontalData}
-                    renderItem={this._renderItem}
-                    sliderWidth={sliderWidth}
-                    itemWidth={itemWidth}
-                    firstItem={HorizontalData.length > 2 ? 1 : 0}
-                    hasParallaxImages={true}
-                    loop={true}
-                />
+                {
+                    HorizontalData.length > 0 ?
+                        <Carousel
+                            ref={(c) => { this._carousel = c; }}
+                            data={HorizontalData}
+                            renderItem={this._renderItem}
+                            sliderWidth={sliderWidth}
+                            itemWidth={itemWidth}
+                            firstItem={HorizontalData.length > 2 ? 1 : 0}
+                            hasParallaxImages={true}
+                            loop={true}
+                        />
+                        :
+                        <Carousel
+                            ref={(c) => { this._carousel = c; }}
+                            data={[{
+                                "tokenAddress": '',
+                                "balance": '0',
+                                "symbol": '~~~',
+                                "decimals": '',
+                                "ABI": ''
+                            }]}
+                            renderItem={this._renderItem}
+                            sliderWidth={sliderWidth}
+                            itemWidth={itemWidth}
+                            firstItem={HorizontalData.length > 2 ? 1 : 0}
+                            hasParallaxImages={true}
+                            loop={true}
+                        />
+                }
+
             </View>
         )
     }

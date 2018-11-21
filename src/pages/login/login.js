@@ -222,12 +222,12 @@ var styleButton = (color, type) => StyleSheet.create({
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {
-            width: -1,
-            height: 3,
+            width: 0,
+            height: 0,
         },
-        shadowOpacity: 0.24,
-        shadowRadius: 5.27,
-        elevation: 30,
+        shadowOpacity: 0.64,
+        shadowRadius: 2.27,
+        elevation: 7,
     }
 })
 
