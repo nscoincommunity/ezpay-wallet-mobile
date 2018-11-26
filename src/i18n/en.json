@@ -181,7 +181,9 @@
         "Languages": "Languages",
         "ChangePIN": "Change PIN",
         "TouchID": "Use Touch ID as PIN",
-        "Toast": "This feature is coming soon"
+        "Toast": "This feature is coming soon",
+        "EnableTouchID": "Confirm",
+        "Success": "Enabled touch ID successfully"
     },
     "Backup": {
         "Title": "Backup",
@@ -196,7 +198,7 @@
         },
         "DialogConfirm": {
             "Title": "Confirm backup",
-            "Content": "Enter you local passcode to process",
+            "Content": "Enter your local passcode to process",
             "Placeholder": "Wallet local passcode",
             "TitleButtonGet": "Backup",
             "TitleButtonCancel": "Cancel"
@@ -221,9 +223,21 @@
         "Title": "QR scan"
     },
     "ConfirmLogout": {
+        "Title": "Confirm exit",
         "Content": "Do you want to logout?",
         "ButtonAgree": "AGREE",
         "ButtonCancel": "DISAGREE"
+    },
+    "ChangePIN": {
+        "Title": "Change wallet local passcode",
+        "PlaceholderOld": "Old wallet local passcode",
+        "ValidOldPasscode": "Invalid old wallet local passcode",
+        "InvalidCredentials": "Invalid credentials",
+        "PlaceholderNewPasscode": "New wallet local passcode",
+        "ErrNewPasscode": "Invalid new wallet local passcode",
+        "PlaceholderConfirmNew": "Confirm new wallet local passcode",
+        "ErrorNotMatch": "New wallet local passcodes do not match",
+        "TitleButton": "Continue"
     },
     "LOGIN_TITLE": "Login"
 }

@@ -20,6 +20,7 @@ import DetailHis from './pages/detail/detail';
 import QRscan from "./components/qrscan";
 import Language from "./pages/languages/language"
 import TempPage from './Drawer';
+import ChangePIN from './pages/changePIN/changePIN'
 
 /* screen drawer*/
 import Setting from './pages/setting/setting';
@@ -60,7 +61,6 @@ const Drawer = createDrawerNavigator(
         History: { screen: history },
         About: { screen: About },
         Redeem: { screen: redeem },
-
     }, {
         initialRouteName: "TabNavigator",
         drawerBackgroundColor: 'transparent',
@@ -127,7 +127,8 @@ export default class Router extends Component {
                 Backup: { screen: Backup },
                 DetailsHis: { screen: DetailHis },
                 QRscan: { screen: QRscan },
-                Language: { screen: Language }
+                Language: { screen: Language },
+                ChangePIN: { screen: ChangePIN }
             },
             {
                 initialRouteName: "Unlogin",

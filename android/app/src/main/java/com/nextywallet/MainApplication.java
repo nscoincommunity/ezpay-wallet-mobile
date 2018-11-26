@@ -3,6 +3,9 @@ package com.nextywallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfingerprint.FingerprintAuthPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.entria.views.RNViewOverflowPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -31,6 +34,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,10 +49,25 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(new MainReactPackage(), new LinearGradientPackage(),
-          new RNViewOverflowPackage(), new RNI18nPackage(), new SplashScreenReactPackage(), new SvgPackage(),
-          new VectorIconsPackage(), new UdpSocketsModule(), new TcpSocketsModule(), new RandomBytesPackage(),
-          new RNOSModule(), new RNFSPackage(), new ReactNativeDocumentPicker(), new RNCameraPackage());
+      return Arrays.<ReactPackage>asList(
+              new MainReactPackage(),
+            new FingerprintAuthPackage(),
+              new RNFirebasePackage(),
+              new LinearGradientPackage(),
+              new RNViewOverflowPackage(),
+              new RNI18nPackage(),
+              new SplashScreenReactPackage(),
+              new SvgPackage(),
+              new VectorIconsPackage(),
+              new UdpSocketsModule(),
+              new TcpSocketsModule(),
+              new RandomBytesPackage(),
+              new RNOSModule(),
+              new RNFSPackage(),
+              new ReactNativeDocumentPicker(),
+              new RNCameraPackage(),
+              new RNFirebaseAnalyticsPackage()
+      );
     }
 
     @Override

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "80769899133",
+    "firebase_url": "https://nexty-wallet-cca06.firebaseio.com",
+    "project_id": "nexty-wallet-cca06",
+    "storage_bucket": "nexty-wallet-cca06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80769899133:android:46a3393468c12125",
+        "android_client_info": {
+          "package_name": "io.nexty.wallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "80769899133-c8rpu3tsfh3p24up46vs3nocbb835d9k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGUYJdzCuUof0EAU4B-H1RiJdQduBYnrw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

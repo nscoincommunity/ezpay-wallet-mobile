@@ -181,7 +181,9 @@
         "Languages": "언어",
         "ChangePIN": "PIN 변경",
         "TouchID": "터치 ID를 PIN으로 사용",
-        "Toast": "이 기능은 곧 제공 될 예정입니다."
+        "Toast": "이 기능은 곧 제공 될 예정입니다.",
+        "EnableTouchID": "확인",
+        "Success": "Touch ID를 사용하도록 설정했습니다."
     },
     "Backup": {
         "Title": "백업",
@@ -221,6 +223,7 @@
         "Title": "QR 스캔"
     },
     "ConfirmLogout": {
+        "Title": "이탈 확인",
         "Content": "로그 아웃 하시겠습니까?",
         "ButtonAgree": "동의하다",
         "ButtonCancel": "동의하지 않는다"

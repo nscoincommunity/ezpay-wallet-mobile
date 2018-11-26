@@ -18,6 +18,7 @@ import { createTabNavigator, TabBarBottom, NavigationActions } from 'react-navig
 import Dashboard from './pages/dashboard/dashboard';
 import Request from './pages/request/request';
 import Send from './pages/send/send';
+// import Send from './saveCode';
 import GLOBALS from './helper/variables'
 import Iccon from "react-native-vector-icons/FontAwesome";
 import { Container, Header, Left, Body, Title, Right, Button, Icon, Input, Item } from 'native-base'
@@ -31,20 +32,8 @@ const IconRequest = require('./images/iconTabBar/Qrcode.png');
 const IconSendActive = require('./images/iconTabBar/activeSend.png');
 const IconHomeActive = require('./images/iconTabBar/activeHome.png');
 const IconRequestActive = require('./images/iconTabBar/activeQrcode.png');
-class SendSceen extends React.Component {
 
-    static navigationOptions = {
-        // tabBarLabel: Language.t("Send.Title"),
-        // Note: By default the icon is only shown on iOS. Search the showIcon option below.
-        // tabBarIcon: ({ tintColor }) => (
-        //     <Iccon
-        //         color={tintColor}
-        //         type="FontAwesome"
-        //         name="arrow-up"
-        //         size={25}
-        //     />
-        // ),
-    };
+class SendSceen extends React.Component {
 
     render() {
         return (
@@ -70,18 +59,6 @@ class SendSceen extends React.Component {
 }
 
 class DashboardScreen extends React.Component {
-
-    // static navigationOptions = {
-    //     tabBarLabel: Language.t("Dashboard.Title"),
-    //     tabBarIcon: ({ tintColor }) => (
-    //         <Iccon
-    //             type="FontAwesome"
-    //             name="home"
-    //             color={tintColor}
-    //             size={25}
-    //         />
-    //     ),
-    // };
 
     render() {
         return (
@@ -117,18 +94,6 @@ class DashboardScreen extends React.Component {
 }
 
 class RequestSceen extends React.Component {
-
-    // static navigationOptions = {
-    //     tabBarLabel: Language.t("Request.Title"),
-    //     tabBarIcon: ({ tintColor }) => (
-    //         <Iccon
-    //             type="FontAwesome"
-    //             name="arrow-down"
-    //             color={tintColor}
-    //             size={25}
-    //         />
-    //     ),
-    // };
 
     render() {
         return (
@@ -194,11 +159,11 @@ export default class TabFooder extends React.Component {
                 return true;
             } else {
                 Alert.alert(
-                    'Confirm exit',
-                    'Are you want exit app',
+                    Language.t('ConfirmLogout.Title'),
+                    Language.t('ConfirmLogout.Content'),
                     [
-                        { text: 'Cancel', style: 'cancel', onPress: () => { return true } },
-                        { text: 'Exit', onPress: () => { BackHandler.exitApp(); return false } }
+                        { text: Language.t('ConfirmLogout.ButtonCancel'), style: 'cancel', onPress: () => { return true } },
+                        { text: Language.t('ConfirmLogout.ButtonAgree'), onPress: () => { BackHandler.exitApp(); return false } }
                     ]
                 )
                 return true
@@ -263,10 +228,6 @@ export default class TabFooder extends React.Component {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        borderRadius: 1000
-                    },
-                    tabStyle: {
-                        borderRadius: 100
                     },
                 }
 
@@ -359,9 +320,8 @@ class CustomTab extends React.Component {
         const {
             routes,
         } = navigation.state;
-
         return (
-            <View style={[this.props.style, { flexDirection: 'row', padding: GLOBALS.wp('2%'), justifyContent: 'center', alignItems: 'center' }]
+            <View style={[this.props.style, { flexDirection: 'row', padding: GLOBALS.wp('2%'), justifyContent: 'center', alignItems: 'center', backgroundColor: navigation.state.index == 0 ? '#fafafa' : 'transparent' }]
             }>
                 {routes && routes.map(this.renderItem)}
             </View >

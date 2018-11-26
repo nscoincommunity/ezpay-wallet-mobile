@@ -17,6 +17,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Language from './i18n/i18n';
+import FireAnalytics from "./services/fcm.service"
 
 
 
@@ -38,11 +39,13 @@ export default class sidebar extends Component {
                 Language.t("ConfirmLogout.Content"),
                 '',
                 [
-                    { text: Language.t("ConfirmLogout.ButtonCancel"), style: 'Cancel' },
+                    { text: Language.t("ConfirmLogout.ButtonCancel"), style: 'Cancel', onPress: () => { this.props.navigation.closeDrawer() } },
                     {
                         text: Language.t("ConfirmLogout.ButtonAgree"), onPress: () => {
                             logout().then(() => {
                                 this.props.navigation.navigate(route);
+                                FireAnalytics.setUserProperty('Action', 'Log_out')
+                                FireAnalytics.logEvent(this)
                             })
                         }
                     }
@@ -51,6 +54,7 @@ export default class sidebar extends Component {
 
         } else {
             this.props.navigation.navigate(route);
+            this.props.navigation.closeDrawer()
         }
     }
 

@@ -14,17 +14,16 @@ import {
     ActivityIndicator
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
-import { checkIOS, Register } from '../../services/auth.service';
+import { checkIOS, Register, Address } from '../../services/auth.service';
 import { setData, rmData } from '../../services/data.service'
 import Lang from '../../i18n/i18n'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
-
+import FbAnalytics from '../../services/fcm.service'
 
 class ScreenRegister extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
             password: '',
             confirmpassword: '',
@@ -41,6 +40,8 @@ class ScreenRegister extends Component {
 
 
     async register() {
+        FbAnalytics.setUserProperty('action', 'create wallet')
+        FbAnalytics.logEvent('view_action', { 'action_name': 'register' })
         this.setState({ loading: true })
         Register(this.state.password).then(() => {
             rmData('ListToken').then(() => {
@@ -164,11 +165,6 @@ class ScreenRegister extends Component {
                         </Gradient>
                     </TouchableOpacity>
                 </View>
-
-
-
-
-
                 {
                     this.state.loading ?
                         <Modal

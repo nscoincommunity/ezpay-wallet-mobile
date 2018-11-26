@@ -59,7 +59,6 @@ export default class listCoin extends Component {
                     }}
                     imageStyle={{
                         borderRadius: 10,
-
                     }}
                 >
                     <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>

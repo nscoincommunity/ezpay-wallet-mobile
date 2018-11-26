@@ -181,7 +181,9 @@
         "Languages": "Ngôn ngữ",
         "ChangePIN": "Đổi mã PIN",
         "TouchID": "Sử dụng vân tay",
-        "Toast": "Chức năng đang được phát triển"
+        "Toast": "Chức năng đang được phát triển",
+        "EnableTouchID": "Đăng ký vân tay",
+        "Success": "Đăng ký vân tay thành công"
     },
     "Backup": {
         "Title": "Sao lưu",
@@ -221,6 +223,7 @@
         "Title": "Quét mã QR"
     },
     "ConfirmLogout": {
+        "Title": "Xác nhận đăng xuất",
         "Content": "Bạn có muốn đăng xuất?",
         "ButtonAgree": "Đồng ý",
         "ButtonCancel": "Hủy"

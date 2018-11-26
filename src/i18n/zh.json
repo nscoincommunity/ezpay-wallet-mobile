@@ -181,7 +181,9 @@
         "Languages": "语言",
         "ChangePIN": "修改个人密码",
         "TouchID": "使用Touch ID 作为个人密码",
-        "Toast": "此功能即将推出"
+        "Toast": "此功能即将推出",
+        "EnableTouchID": "確認",
+        "Success": "已成功啟用Touch ID"
     },
     "Backup": {
         "Title": "备份",
@@ -221,6 +223,7 @@
         "Title": "QR扫描"
     },
     "ConfirmLogout": {
+        "Title": "確認退出",
         "Content": "您是否要退出？",
         "ButtonAgree": "同意",
         "ButtonCancel": "拒绝"

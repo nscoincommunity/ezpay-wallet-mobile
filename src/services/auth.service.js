@@ -141,26 +141,26 @@ export async function initAuth() {
             return of(0)
         }
     })
-
-    // await checkAuth()
-    //     .then(data => {
-    //         isAuth = await data;
-    //     })
-    // await getData('current').then(data => {
-    //     Address = await data
-    // })
-    // if (isAuth) {
-    //     Observable.forkJoin(
-
-    //     )
-    // } else {
-
-    // }
 }
 
 export async function validatePassword(password): boolean {
     var passEncrypt = await encryptPassword(password);
     return (cachePwd == passEncrypt)
+}
+
+export async function EnableTouchID(passcode) {
+    passcode = await encryptPassword(passcode);
+    return new Promise((resolve, rejects) => {
+        getData(Address).then(async pwd => {
+            if (passcode != pwd) {
+                rejects('invalid passcode');
+                return;
+            } else {
+                setData('TouchID', '1');
+                resolve('enable touch id')
+            }
+        })
+    })
 }
 
 export async function Login(address: string, password: string) {
@@ -183,6 +183,36 @@ export async function Login(address: string, password: string) {
         }
     })
 }
+
+export async function changePasscode(passwordOld: string, passwordNew: string) {
+    var EnpasswordOld = await encryptPassword(passwordOld);
+    var EnpasswordNew = await encryptPassword(passwordNew);
+    return new Promise((resolve, rejects) => {
+        getData(Address).then(async pwd => {
+            if (EnpasswordOld != pwd) {
+                rejects('invalid passcode');
+                return;
+            } else {
+                let oldPk = CryptoJS.AES.decrypt(privateKey, passwordOld).toString(CryptoJS.enc.Utf8);
+                console.log('old', oldPk, passwordOld)
+                let newPk = CryptoJS.AES.encrypt(oldPk, passwordNew).toString();
+                console.log('new', passwordNew, newPk)
+                try {
+                    await addAddress(Address, EnpasswordNew, newPk);
+                    privateKey = newPk;
+                    cachePwd = EnpasswordNew;
+                } catch (error) {
+                    console.log(error)
+                    rejects(error);
+                    return;
+                }
+                resolve('change success')
+            }
+        })
+    })
+}
+
+
 export async function AutoLogin(address: string, password: string) {
     return getData(address).then(pwd => {
         if (password != pwd) {

@@ -11,7 +11,9 @@ import {
     Text,
     ScrollView,
     Modal,
-    ActivityIndicator
+    ActivityIndicator,
+    PermissionsAndroid,
+    ToastAndroid,
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
@@ -82,7 +84,7 @@ export default class backup extends Component {
                         var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.txt'
                         var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
                         RNFS.writeFile(path, bc)
-                            .then(success => {
+                            .then(async success => {
                                 if (Platform.OS == 'ios') {
                                     console.log('this is iporn')
                                     setTimeout(() => {
@@ -101,34 +103,48 @@ export default class backup extends Component {
                                     }, 1000)
                                 }
                                 if (Platform.OS == 'android') {
-                                    this.Default_Toast_Bottom(Language.t('Backup.ToastSaveFile'))
                                     var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
-                                    console.log(newPath)
-                                    if (RNFS.exists(newPath)) {
-                                        console.log('exist dir')
+                                    console.log(newPath, await RNFS.exists(newPath))
+                                    if (await RNFS.exists(newPath)) {
+                                        RNFS.writeFile(newPath + '/' + NameFile, bc).then(cp => {
+                                            ToastAndroid.show(Language.t('Backup.ToastSaveFile'), ToastAndroid.SHORT)
+                                            console.log(cp)
+                                        }).catch(errCopy => {
+                                            console.log(errCopy)
+                                        })
                                     } else {
                                         try {
-                                            const granted = PermissionsAndroid.request(
+                                            const granted = await PermissionsAndroid.request(
                                                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-                                                    title: "Grant SD card access",
+                                                    title: "Grant store access",
                                                     message: "We need access",
                                                 },
                                             );
                                             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                                                console.log("Permission OK");
-                                            } else {
-                                                console.log("Permission failed");
-                                            }
-                                            RNFS.mkdir(newPath).then(ssFolder => {
-                                                RNFS.copyFile(path, newPath).then(cp => {
-                                                    console.log(cp)
-                                                }).catch(errCopy => {
-                                                    console.log(errCopy)
-                                                })
-                                            }).catch(errFolder => {
-                                                console.log(errFolder)
+                                                console.log("Permission OK", granted);
+                                                RNFS.mkdir(newPath).then(ssFolder => {
+                                                    var decodedURL = decodeURIComponent(path)
+                                                    RNFS.writeFile(newPath + '/' + NameFile, bc).then(cp => {
+                                                        ToastAndroid.show(Language.t('Backup.ToastSaveFile'), ToastAndroid.SHORT)
+                                                        console.log(cp)
+                                                    }).catch(errCopy => {
+                                                        console.log(errCopy)
+                                                    })
+                                                }).catch(errFolder => {
+                                                    console.log(errFolder)
 
-                                            })
+                                                })
+                                            } else {
+                                                Alert.alert(
+                                                    "Error",
+                                                    "Write External Storage permission allows us to do store files. Please allow this permission in App Settings.",
+                                                    [
+                                                        { text: 'Ok', style: 'cancel' }
+                                                    ]
+                                                )
+                                                console.log("Permission failed", granted);
+                                            }
+
                                         } catch (error) {
                                             console.log(error)
                                         }
@@ -159,12 +175,44 @@ export default class backup extends Component {
             })
     }
 
+    createDir() {
+        var directory = RNFS.ExternalStorageDirectoryPath + '/Haha';
+        if (!RNFS.exists(directory)) {
+            console.log('exist dir')
+            RNFS.writeFile(directory + '/hahafile.txt', "hahahaa").then(cp => {
+                console.log(cp)
+            }).catch(errCopy => {
+                console.log(errCopy)
+            })
+        } else {
+            try {
+                const granted = PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+                        title: "Grant SD card access",
+                        message: "We need access",
+                    },
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log("Permission OK");
+                } else {
+                    console.log("Permission failed");
+                }
+                RNFS.mkdir(directory).then(ssFolder => {
+                    console.log(ssFolder)
+                    RNFS.writeFile(directory + '/hahafile.txt', "hahahaa").then(cp => {
+                        console.log(cp)
+                    }).catch(errCopy => {
+                        console.log(errCopy)
+                    })
+                }).catch(errFolder => {
+                    console.log(errFolder)
 
-    // componentDidMount() {
-    //     setInterval(() => {
-    //         this.Default_Toast_Bottom('Valid passcode')
-    //     }, 3000);
-    // }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
 
     Copy() {
         Clipboard.setString(this.state.backupcode);

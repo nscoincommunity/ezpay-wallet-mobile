@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { View, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, FlatList, TouchableOpacity, Text, StyleSheet, ToastAndroid, Platform, Alert } from 'react-native';
 import GLOBALS from '../../helper/variables';
-import { Platform } from 'react-native'
-// import Icon from "react-native-vector-icons/FontAwesome";
+
 import {
     Container,
     Header,
@@ -12,39 +11,82 @@ import {
     Left,
     Right,
     Body,
-
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CustomToast from '../../components/toast';
 import Language from '../../i18n/i18n';
-import IconFeather from "react-native-vector-icons/Feather"
-
-
+import IconFeather from "react-native-vector-icons/Feather";
+import Dialog from "react-native-dialog";
+import { EnableTouchID } from "../../services/auth.service"
+import AlertModal from "../../components/Modal"
 
 export default class Setting extends Component {
-    Default_Toast_Bottom = () => {
-
-        this.refs.defaultToastBottom.ShowToastFunction(Language.t('Settings.Toast'));
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            dialogVisible: false,
+            passcode: ''
+        }
     }
 
 
 
+    Default_Toast_Bottom = () => {
+        if (Platform.OS == 'ios') {
+            this.refs.defaultToastBottom.ShowToastFunction(Language.t('Settings.Toast'));
+        } else {
+            ToastAndroid.show(Language.t('Settings.Toast'), ToastAndroid.SHORT)
+        }
+    }
+
+    handleCancel() {
+        this.setState({ dialogVisible: false, passcode: '' })
+    }
+
+    async handleGet() {
+        if (this.state.passcode == '') {
+            Alert.alert(
+                Language.t('Send.AlerError.Error'),
+                Language.t('PrivateKey.Aler.Content'),
+                [
+                    { text: Language.t('PrivateKey.Aler.TitleButtonCancel'), onPress: () => { this.setState({ dialogVisible: false, privatekey: '' }) }, style: 'cancel' },
+                    { text: Language.t('PrivateKey.Aler.TitleButtonTry'), onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
+                ]
+            )
+            return;
+        }
+        await EnableTouchID(this.state.passcode).then(() => {
+            this.setState({ dialogVisible: false, passcode: '' }, () => {
+                setTimeout(() => {
+                    Alert.alert(
+                        Language.t('AddToken.AlerSuccess.Title'),
+                        Language.t('Settings.Success'),
+                        [
+                            { text: "Ok", style: 'cancel' },
+                        ]
+                    )
+                }, 350);
+            })
+        }).catch(() => {
+            Alert.alert(
+                Language.t('Send.AlerError.Error'),
+                Language.t('PrivateKey.Aler.Content'),
+                [
+                    { text: Language.t('PrivateKey.Aler.TitleButtonCancel'), onPress: () => { this.setState({ dialogVisible: false, privatekey: '', passcode: '' }) }, style: 'cancel' },
+                    { text: Language.t('PrivateKey.Aler.TitleButtonTry'), onPress: () => this.setState({ dialogVisible: true, passcode: '' }) }
+                ]
+            )
+        })
+    }
+
+
     pushToPage(Status: boolean, Router) {
+        if (Router == "TouchID") {
+            this.setState({ dialogVisible: true });
+            return;
+        }
         if (Status == true) {
             this.props.navigation.navigate(Router)
-        }
-        else {
-            this.Default_Toast_Bottom()
-            // try {
-            //     Toast.show({
-            //         text: "This feature is coming soon",
-            //         position: "bottom"
-            //     })
-            // } catch (error) {
-            //     console.log(error)
-            // }
-
         }
     }
     render() {
@@ -62,7 +104,7 @@ export default class Setting extends Component {
             {
                 route: "ChangePIN",
                 text: Language.t('Settings.ChangePIN'),
-                status: false
+                status: true
             },
             {
                 route: "TouchID",
@@ -115,18 +157,32 @@ export default class Setting extends Component {
                         }}
                         keyExtractor={(item) => item.text}
                     />
-                    <View
-                        style={{
-                            position: 'absolute',
-                            bottom: GLOBALS.hp('10%'),
-                            width: GLOBALS.wp('100%'),
-                            elevation: 999,
-                            alignItems: 'center',
-                            backgroundColor: 'red'
-                        }}
-                    >
-                        <CustomToast ref="defaultToastBottom" position="bottom" />
-                    </View>
+                    <CustomToast ref="defaultToastBottom" position="bottom" />
+
+                    <Dialog.Container visible={this.state.dialogVisible} >
+                        <Dialog.Title
+                            style={{ fontFamily: GLOBALS.font.Poppins }}
+                        >
+                            {Language.t('Settings.EnableTouchID')}
+                        </Dialog.Title>
+                        <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
+                            {Language.t('PrivateKey.DialogConfirm.Content')}
+                        </Dialog.Description>
+                        <Dialog.Input
+                            placeholder={Language.t('PrivateKey.DialogConfirm.Placeholder')}
+                            onChangeText={(val) => this.setState({ passcode: val })}
+                            secureTextEntry={true} value={this.state.passcode}
+                            autoFocus={true}
+                        />
+                        <Dialog.Button
+                            label={Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')}
+                            onPress={this.handleCancel.bind(this)}
+                        />
+                        <Dialog.Button
+                            label="Ok"
+                            onPress={this.handleGet.bind(this)}
+                        />
+                    </Dialog.Container>
                 </View>
             </Container >
         )

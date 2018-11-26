@@ -181,7 +181,9 @@
             "Languages": "Idiomas",
             "ChangePIN": "Cambiar PIN",
             "TouchID": "Usar ID de timbre como PIN",
-            "Toast": " Esta función estará disponible en breve "
+            "Toast": " Esta función estará disponible en breve ",
+            "EnableTouchID": "Confirmar",
+            "Success": "ID de toque ativado com sucesso"
         },
         "Backup": {
             "Title": " Copia de seguridad ",
@@ -221,7 +223,8 @@
             "Title": "QR scan"
         },
         "ConfirmLogout": {
-            "Content": "Quieres salir? ",
+            "Title": "Confirmar salida",
+            "Content": "Quieres salir?",
             "ButtonAgree": "CONCORDO ",
             "ButtonCancel": "NO ACEPTAR "
         },

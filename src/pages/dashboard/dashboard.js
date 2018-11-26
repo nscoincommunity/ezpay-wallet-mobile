@@ -17,32 +17,9 @@ export default class dashboard extends Component {
             balanceNTY: '',
             isBackup: true
         };
-        // this.backButtonClick = this.backButtonClick.bind(this)
     };
 
-    // componentWillUnmount() {
-    //     console.log('aaa')
-    //     BackHandler.removeEventListener("hardwareBackPress");
-    // }
-
-
-    // backButtonClick() {
-    //     console.log('props', this.props.navigation)
-    //     const { dispatch, nav } = this.props.navigation;
-    //     const { state } = this.props.navigation.dangerouslyGetParent()
-    //     console.log("Back pressed", state);
-    //     const activeRoute = state.routes[state.index];
-    //     if (activeRoute.index === 0) {
-    //         return false;
-    //     }
-    //     dispatch(this.props.navigation.goBack());
-    //     return true;
-    //     // BackHandler.exitApp()
-    //     // return false;
-    // }
-
     componentDidMount() {
-        // BackHandler.addEventListener("hardwareBackPress", this.backButtonClick);
         getData('isBackup').then(data => {
             if (data == 1) {
                 this.setState({ isBackup: true });
@@ -86,18 +63,23 @@ export default class dashboard extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
-                {/* <View style={styles.container}> */}
-                {/* <TouchableOpacity
-                    style={{ backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}
-                    onPress={() => this.resetTypeBackup()}>
-                    <Text style={{ color: '#fff' }}>Reset type backup</Text>
-                </TouchableOpacity> */}
-
                 <List />
                 {
                     !this.state.isBackup ?
-                        <View style={{ flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between', alignItems: 'center', padding: 5 }}>
-                            <Text style={{ flex: 8, color: '#fff', fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.wp('4%') }}>{Language.t('Dashboard.CheckBackup')}</Text>
+                        <View style={{
+                            flexDirection: 'row',
+                            backgroundColor: 'transparent',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            paddingHorizontal: GLOBALS.wp('3%'),
+                            paddingVertical: GLOBALS.hp('1%')
+                        }}>
+                            <Text style={{
+                                flex: 8,
+                                color: '#fff',
+                                fontFamily: GLOBALS.font.Poppins,
+                                fontSize: GLOBALS.wp('4%')
+                            }}>{Language.t('Dashboard.CheckBackup')}</Text>
                             <TouchableOpacity
                                 style={{
                                     backgroundColor: GLOBALS.Color.secondary,

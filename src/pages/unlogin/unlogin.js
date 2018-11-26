@@ -17,6 +17,7 @@ import { Spinner } from 'native-base';
 import Lang from '../../i18n/i18n';
 import Gradient from "react-native-linear-gradient"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
+import FbAnalytics from '../../services/fcm.service'
 
 
 export default class unlogin extends Component {
@@ -31,6 +32,7 @@ export default class unlogin extends Component {
 
 
     componentDidMount() {
+        FbAnalytics.setCurrentScreen('root_screen')
         initAuth()
             .then(async data => {
                 if (isAuth) {
@@ -50,7 +52,6 @@ export default class unlogin extends Component {
                         navigate('TabNavigator');
                         setTimeout(() => {
                             this.setState({ isAuth: false })
-
                         }, 100);
                     }
                 }

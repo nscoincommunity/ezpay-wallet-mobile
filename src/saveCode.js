@@ -1,236 +1,218 @@
 import React, { Component } from 'react'
-import { View } from 'react-native';
-// import Icon from "react-native-vector-icons/FontAwesome";
-import GLOBALS from '../../helper/variables';
-// import Icon from "react-native-vector-icons/FontAwesome";
 import {
-    Container,
-    Header,
-    Title,
-    Content,
     Text,
-    Button,
-    Footer,
-    FooterTab,
-    Left,
-    Right,
-    Body,
-    Icon,
-    Tabs,
-    Tab,
-} from "native-base";
-export default class dashboard extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tab1: false,
-            tab2: true,
-            tab3: false,
-        };
+    View,
+    StyleSheet,
+    FlatList,
+    Platform,
+    TouchableHighlight,
+    TextInput,
+    KeyboardAvoidingView,
+    ScrollView,
+    Image,
+    TouchableOpacity,
+    Keyboard
+} from 'react-native';
+import { getData } from './services/data.service';
+import GLOBALS from './helper/variables';
+import Icon from "react-native-vector-icons/FontAwesome";
+import Gradient from 'react-native-linear-gradient'
+import Language from './i18n/i18n';
+import Dialog from "react-native-dialog";
+import PopupDialog, {
+    ScaleAnimation, DialogTitle, DialogButton
+} from "react-native-popup-dialog";
+import DiaLog from "./components/Modal"
+
+
+const scaleAnimation = new ScaleAnimation();
+
+export default class componentName extends Component {
+    state = {
+        ListToken: [],
+        selected: 'NTY',
+        dialogSend: false
     }
-    toggleTab1() {
-        const { navigate } = this.props.navigation;
-        navigate('Sendpage');
-        this.setState({
-            tab1: true,
-            tab2: false,
-            tab3: false,
-        });
+    componentDidMount() {
+        getData('ListToken')
+            .then(data => {
+                if (data != null) {
+                    var tempArray = []
+                    JSON.parse(data).forEach(element => {
+                        tempArray.push({
+                            value: JSON.stringify(element),
+                            label: element.symbol
+                        })
+                    });
+                }
+                this.setState({ ListToken: tempArray })
+            })
     }
-    toggleTab3() {
-        const { navigate } = this.props.navigation;
-        navigate('Request');
-        this.setState({
-            tab1: false,
-            tab2: false,
-            tab3: true,
-        });
+    showScaleAnimationDialog = () => {
+        this.scaleAnimationDialog.show();
+        this.refs.TouchID.openModal('success', 'Confirm', 'sdsdsds')
     }
+
     render() {
-        console.log(this.props.navigation)
         return (
-            <Container style={{ backgroundColor: "#fff" }}>
-                <Header style={{ backgroundColor: GLOBALS.Color.primary }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.openDrawer()}
-                        >
-                            <Icon type="FontAwesome" name="bars" style={{ color: '#fff' }} />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title style={{ color: '#fff' }}>Header</Title>
-                    </Body>
-                    <Right />
-                </Header>
+            <ScrollView
+            // contentContainerStyle={{ flex: 1, flexGrow: 1 }}
+            >
+                <KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    behavior={'position'}
+                    // contentContainerStyle={{ flex: 1, flexGrow: 1 }}
+                    enabled
+                    keyboardVerticalOffset={Platform.OS == 'ios' ? GLOBALS.hp('-1') : GLOBALS.hp('-5%')}
+                >
+                    <View style={Styles.container}>
+                        {
+                            this.state.ListToken.length > 0 &&
+                            <FlatList
+                                style={{ paddingVertical: GLOBALS.hp('3%') }}
+                                horizontal={true}
+                                data={this.state.ListToken}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <TouchableHighlight
+                                            onPress={() => this.Selected(item)}
+                                            style={
+                                                selectedBtn(this.state.selected === item.label).selected
+                                            }
+                                        >
+                                            <Text style={[selectedBtn(this.state.selected === item.label).text]}>{item.label}</Text>
+                                        </TouchableHighlight>
+                                    )
+                                }}
+                                keyExtractor={(item, index) => item.value}
+                            />
+                        }
+                        <View style={[Styles.Form, { height: GLOBALS.hp('11%') }]}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TextInput placeholder="Address wallet" style={{ flex: 9 }} underlineColorAndroid='transparent' />
+                                <Image source={require('./images/icon/dollar.png')} />
+                            </View>
+                        </View>
 
-                <Content padder>
-                    <Text>tab dashboard</Text>
-                </Content>
+                        <View style={[Styles.Form, { height: GLOBALS.hp('50%') },]}>
+                            <View style={{ flexDirection: 'row', }}>
+                                <TextInput placeholder="Address wallet" style={{ flex: 100 }} underlineColorAndroid='transparent' />
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TextInput placeholder="Address wallet" style={{ flex: 9 }} underlineColorAndroid='transparent' />
+                                <Image source={require('./images/icon/dollar.png')} />
+                            </View>
+                            <TouchableOpacity style={Styles.button} onPress={() => { this.showScaleAnimationDialog(); Keyboard.dismiss() }}>
+                                <Gradient
+                                    colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                                    style={{ borderRadius: 5, paddingVertical: GLOBALS.hp('2%') }}
+                                    start={{ x: 0.7, y: 0.0 }}
+                                    end={{ x: 0.0, y: 0.0 }}
+                                >
+                                    <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
+                                </Gradient>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1 }} />
+                    </View>
 
-                <Footer>
-                    <FooterTab>
-                        <Button active={this.state.tab1} onPress={() => this.toggleTab1()}>
-                            <Icon active={this.state.tab1} type="FontAwesome" name="arrow-up" />
-                            <Text>SEND</Text>
-                        </Button>
+                    <Dialog.Container visible={this.state.dialogSend} >
+                        <Dialog.Title>{Language.t('Send.ConfirmSend.Title')}</Dialog.Title>
+                        <Dialog.Description>
+                            {Language.t('Send.ConfirmSend.Content')}
+                        </Dialog.Description>
+                        <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
+                        <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={() => { this.setState({ dialogSend: false }) }} />
+                        <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={() => { this.showScaleAnimationDialog() }} />
+                    </Dialog.Container>
 
-                        <Button active={this.state.tab2}>
-                            <Icon active={this.state.tab2} type="FontAwesome" name="home" />
-                            <Text>DASHBOARD</Text>
-                        </Button>
+                    <PopupDialog
+                        dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: 'auto' }}
+                        ref={(popupDialog) => {
+                            this.scaleAnimationDialog = popupDialog;
+                        }}
+                        dialogAnimation={scaleAnimation}
+                        dialogTitle={<DialogTitle title={this.state.titleDialog} />}
+                        actions={[
+                            <DialogButton
+                                text={Language.t('Send.Ok')}
+                                onPress={() => {
+                                    this.scaleAnimationDialog.dismiss();
+                                }}
+                                key="button-1"
+                            />,
+                        ]}
+                    >
+                        <View style={{ justifyContent: 'center' }}>
+                            <Text style={{ textAlign: 'center', marginTop: 10 }}>{this.state.contentDialog}</Text>
+                        </View>
+                    </PopupDialog>
+                    <DiaLog ref="TouchID" />
 
-                        <Button active={this.state.tab3} onPress={() => this.toggleTab3()}>
-                            <Icon active={this.state.tab3} type="FontAwesome" name="arrow-down" />
-                            <Text>REQUEST</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer>
-            </Container>
+
+                </KeyboardAvoidingView>
+            </ScrollView >
         )
     }
 }
-{/* {
-                        this.state.transactions &&
-                        <List
-                            dataArray={this.state.transactions}
-                            renderFooter={() => { return (<Spinner color={GLOBALS.Color.primary} />) }}
-                            renderRow={data =>
-                                < ListItem
-                                    button
-                                    noBorder
-                                    onPress={() => this.props.navigation.navigate("DetailsHis", { data: data })
-                                    }
-                                >
-                                    <Left>
-                                        <Icon
-                                            active
-                                            name={data.type}
-                                            style={{ color: data.type == "arrow-down" ? "green" : 'red', fontSize: 26, width: 30, marginRight: 10 }}
-                                        />
-                                        // <Text style={{ fontWeight: 'bold', marginRight: 10, color: data.type == "arrow-down" ? "green" : 'red', }}>
-                                        //   {data.quantity}
-                                        //</Text>
-                                        <Text style={{ fontFamily: GLOBALS.font.Poppins }}>
-                                            {data.datetime}
-                                        </Text>
-                                    </Left>
-                                    <Right>
-                                        <Icon name="angle-right"
-                                            style={{ fontSize: 26 }}
-                                        />
-                                    </Right>
-                                </ListItem>}
-                        />
-                    } */}
 
-<View style={style.container}>
-    <ScrollView>
-        <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={65} enabled>
+/* style button */
+const selectedBtn = (type) => StyleSheet.create({
+    selected: {
+        backgroundColor: type ? '#EDA420' : '#fafafa',
+        borderRadius: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
+        margin: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: type ? 0.34 : 0,
+        shadowRadius: 2.27,
+        elevation: type ? 5 : 0,
+    },
+    text: {
+        fontWeight: type ? 'bold' : 'normal',
+        color: type ? '#FFFFFF' : "#000",
+        fontFamily: GLOBALS.font.Poppins
+    }
+})
 
-            <View style={{ width: GLOBALS.WIDTH, paddingLeft: GLOBALS.WIDTH / 25, paddingRight: GLOBALS.WIDTH / 25 }}>
-
-                {
-                    this.state.ListToken &&
-                    <Dropdown
-                        onChangeText={(item) => this.selectToken(item)}
-                        label={Language.t('Send.SendForm.SelectToken')}
-                        data={this.state.ListToken}
-                        value={'NTY'}
-                    />
-                }
-            </View>
-
-            <Form style={style.FormSend}>
-                <View style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    width: GLOBALS.WIDTH,
-                }}>
-                    <Item floatingLabel style={{ width: GLOBALS.WIDTH / 1.4 }} error={this.state.errorAddress} >
-                        <Label>{Language.t('Send.SendForm.To')}</Label>
-                        <Input
-                            value={this.state.addresswallet}
-                            onChangeText={(val) => this.CheckAddress(val)}
-                            returnKeyType={"next"}
-                            blurOnSubmit={false}
-                            onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        />
-                    </Item>
-
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <TouchableOpacity style={style.buttonScan} onPress={this.navigateToScan.bind(this)}>
-                            <Icon name="md-qr-scanner" size={30} color="#fff">
-                            </Icon>
-                        </TouchableOpacity>
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
-                    </Item>
-                </View>
-                <View style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    width: GLOBALS.WIDTH,
-                }}>
-                    <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
-                        <Label>{this.state.viewSymbol}</Label>
-                        <Input
-                            keyboardType="numeric"
-                            onChangeText={(val) => this.CheckNTY(val)}
-                            value={this.state.NTY}
-                            getRef={input => { this.inputs['field2'] = input }}
-                        />
-                    </Item>
-                    <Icon name="md-swap" size={20} style={{ marginTop: 40 }}></Icon>
-                    <Item floatingLabel style={style.ColumItem} error={this.state.errorNTY}>
-                        <Label>USD</Label>
-                        <Input
-                            keyboardType="numeric"
-                            onChangeText={(val) => this.CheckUSD(val)}
-                            value={this.state.USD} />
-                    </Item>
-                    <Item style={{ borderBottomWidth: 0 }}>
-                        <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorNTY}</Text>
-                    </Item>
-                </View>
-                <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.VisibaleButton).button} disabled={this.state.VisibaleButton} onPress={() => this.setState({ dialogSend: true })}>
-                    <Text style={style.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
-                </TouchableOpacity>
-            </Form>
-
-            <Dialog.Container visible={this.state.dialogSend} >
-                <Dialog.Title>{Language.t('Send.ConfirmSend.Title')}</Dialog.Title>
-                <Dialog.Description>
-                    {Language.t('Send.ConfirmSend.Content')}
-                </Dialog.Description>
-                <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
-                <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
-                <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.doSend.bind(this)} />
-            </Dialog.Container>
-        </KeyboardAvoidingView>
-    </ScrollView>
-
-    <PopupDialog
-        dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: GLOBALS.HEIGHT / 4 }}
-        ref={(popupDialog) => {
-            this.scaleAnimationDialog = popupDialog;
-        }}
-        dialogAnimation={scaleAnimation}
-        dialogTitle={<DialogTitle title={this.state.titleDialog} />}
-        actions={[
-            <DialogButton
-                text={Language.t('Send.Ok')}
-                onPress={() => {
-                    this.scaleAnimationDialog.dismiss();
-                }}
-                key="button-1"
-            />,
-        ]}
-    >
-        <View style={style.dialogContentView}>
-            <Text style={{ textAlign: 'center', marginTop: 10 }}>{this.state.contentDialog}</Text>
-        </View>
-    </PopupDialog>
-</View >
+const Styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: GLOBALS.hp('2%'),
+        backgroundColor: '#fafafa',
+        // flexDirection: 'column'
+    },
+    Form: {
+        padding: GLOBALS.hp('2.5%'),
+        borderRadius: 7,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.24,
+        shadowRadius: 1.27,
+        elevation: 2,
+        backgroundColor: '#fff',
+        marginVertical: GLOBALS.hp('0.5%'),
+        justifyContent: 'space-around'
+    },
+    button: {
+        borderRadius: 5,
+        justifyContent: 'center',
+        borderWidth: 1,
+    },
+    TextButton: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 17,
+        fontFamily: GLOBALS.font.Poppins
+    }
+})

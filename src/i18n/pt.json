@@ -181,7 +181,9 @@
         "Languages": "Idiomas",
         "ChangePIN": "Alterar PIN",
         "TouchID": "Usar ID de toque como PIN",
-        "Toast": "Este recurso estará disponível em breve"
+        "Toast": "Este recurso estará disponível em breve",
+        "EnableTouchID": "confirme",
+        "Success": "Habilitado la ID táctil con éxito"
     },
     "Backup": {
         "Title": "Backup",
@@ -221,6 +223,7 @@
         "Title": "QR scan"
     },
     "ConfirmLogout": {
+        "Title": "Confirme a saída",
         "Content": "Você quer sair?",
         "ButtonAgree": "CONCORDO",
         "ButtonCancel": "NÃO CONCORDO"
