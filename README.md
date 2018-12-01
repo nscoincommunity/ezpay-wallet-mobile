@@ -54,6 +54,8 @@ After node module has been install success then shim:
   * react-native run-android # for android
   ```
   ## Contributing
-  * Facebook: https://www.facebook.com/huu.tho.92754
+   * Facebook:
+  * Google:
+  * LinkedIn:
   ## License
   
