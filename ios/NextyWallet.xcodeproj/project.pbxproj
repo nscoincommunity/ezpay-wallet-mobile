@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -41,6 +42,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* NextyWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NextyWalletTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2E1973BE2124060800E63A27 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E197394212405E300E63A27 /* libART.a */; };
+		2E55BEA621AF9E3000647B6F /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E55BEA421AF9E0D00647B6F /* libTouchID.a */; };
 		2E8A439321A538F500ABA5AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */; };
 		2EF631712191668200F16474 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2EF631702191668200F16474 /* Images.xcassets */; };
 		3247920F6A9546548A1D0D1E /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F14846E1DD648E39817E0B7 /* libRNI18n.a */; };
@@ -305,6 +307,20 @@
 			remoteGlobalIDString = E01DD9DB1D2311A600C39062;
 			remoteInfo = RNDocumentPicker;
 		};
+		2E55BDB621AF9B2D00647B6F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 83CBBA2D1A601D0E00E9B192;
+			remoteInfo = React;
+		};
+		2E55BEA321AF9E0D00647B6F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E55BE6721AF9E0D00647B6F /* TouchID.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = TouchID;
+		};
 		2E581EAE215DE87A00C6EA23 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E29D7F11BEC14BC189878726 /* SplashScreen.xcodeproj */;
@@ -556,6 +572,7 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E19738E212405E300E63A27 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		2E4957D1214F93CE00157036 /* NextyWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NextyWallet.entitlements; path = NextyWallet/NextyWallet.entitlements; sourceTree = "<group>"; };
+		2E55BE6721AF9E0D00647B6F /* TouchID.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TouchID.xcodeproj; path = "../node_modules/react-native-touch-id/TouchID.xcodeproj"; sourceTree = "<group>"; };
 		2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2EC11B5A88A14277A9C9F661 /* RNDocumentPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDocumentPicker.xcodeproj; path = "../node_modules/react-native-document-picker/ios/RNDocumentPicker.xcodeproj"; sourceTree = "<group>"; };
 		2EF631702191668200F16474 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NextyWallet/Images.xcassets; sourceTree = "<group>"; };
@@ -643,6 +660,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E55BEA621AF9E3000647B6F /* libTouchID.a in Frameworks */,
 				2E1973BE2124060800E63A27 /* libART.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
@@ -924,6 +942,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2E55BE6821AF9E0D00647B6F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2E55BEA421AF9E0D00647B6F /* libTouchID.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		2E581EAB215DE87A00C6EA23 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1028,6 +1054,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2E55BE6721AF9E0D00647B6F /* TouchID.xcodeproj */,
 				2E19738E212405E300E63A27 /* ART.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -1179,6 +1206,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2E55BDB721AF9B2D00647B6F /* PBXTargetDependency */,
 			);
 			name = NextyWallet;
 			productName = "Hello World";
@@ -1241,6 +1269,12 @@
 						DevelopmentTeam = T3UGY87QM5;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
@@ -1374,6 +1408,10 @@
 				{
 					ProductGroup = 2E0BEC7521462F5900E759FD /* Products */;
 					ProjectRef = 8154286F52D2484A919E7526 /* TcpSockets.xcodeproj */;
+				},
+				{
+					ProductGroup = 2E55BE6821AF9E0D00647B6F /* Products */;
+					ProjectRef = 2E55BE6721AF9E0D00647B6F /* TouchID.xcodeproj */;
 				},
 				{
 					ProductGroup = 2E0BEC7B21462F5900E759FD /* Products */;
@@ -1585,6 +1623,13 @@
 			fileType = archive.ar;
 			path = libRNDocumentPicker.a;
 			remoteRef = 2E4957CF214F93C700157036 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2E55BEA421AF9E0D00647B6F /* libTouchID.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libTouchID.a;
+			remoteRef = 2E55BEA321AF9E0D00647B6F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2E581EAF215DE87A00C6EA23 /* libSplashScreen.a */ = {
@@ -2015,6 +2060,11 @@
 			isa = PBXTargetDependency;
 			target = 2D02E47A1E0B4A5D006451C7 /* NextyWallet-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+		};
+		2E55BDB721AF9B2D00647B6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = React;
+			targetProxy = 2E55BDB621AF9B2D00647B6F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -57,6 +57,7 @@ export default class request extends Component {
         try {
             getData('current').then(data => {
                 this.setState({ address: data })
+                console.log(data)
             })
         } catch (error) {
             this.setState({ address: '' })

@@ -71,7 +71,7 @@ class DashboardScreen extends React.Component {
                 }}
                 resizeMode="cover"
             >
-                <Container style={{ backgroundColor: 'transpatent' }}>
+                <Container style={{ backgroundColor: 'transparent' }}>
                     <Header style={{ borderBottomWidth: 0, backgroundColor: 'transparent', borderBottomColor: 'transparent' }}>
                         <Left style={{ flex: 0 }}>
                             <Button
@@ -81,7 +81,7 @@ class DashboardScreen extends React.Component {
                                 <IconFeather name="align-left" style={{ color: '#fff', fontSize: 25 }} />
                             </Button>
                         </Left>
-                        <Body style={{ flex: 10, alignItems: 'center', backgroundColor: 'tranparent' }}>
+                        <Body style={{ flex: 10, alignItems: 'center', backgroundColor: 'transparent' }}>
                             <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>1 NTY = {exchangeRate.toFixed(6)} USD</Title>
                         </Body>
                         <Right />

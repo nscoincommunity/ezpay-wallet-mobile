@@ -5,7 +5,8 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.rnfingerprint.FingerprintAuthPackage;
 import io.invertase.firebase.RNFirebasePackage;
-import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.entria.views.RNViewOverflowPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -18,17 +19,7 @@ import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.rnfs.RNFSPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import org.reactnative.camera.RNCameraPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.horcrux.svg.SvgPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.tradle.react.UdpSocketsModule;
-import com.peel.react.TcpSocketsModule;
-import com.bitgo.randombytes.RandomBytesPackage;
-import com.peel.react.rnos.RNOSModule;
-import com.rnfs.RNFSPackage;
-import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
-import org.reactnative.camera.RNCameraPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -51,7 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
-            new FingerprintAuthPackage(),
+              new FingerprintAuthPackage(),
               new RNFirebasePackage(),
               new LinearGradientPackage(),
               new RNViewOverflowPackage(),
@@ -66,7 +57,9 @@ public class MainApplication extends Application implements ReactApplication {
               new RNFSPackage(),
               new ReactNativeDocumentPicker(),
               new RNCameraPackage(),
-              new RNFirebaseAnalyticsPackage()
+              new RNFirebaseAnalyticsPackage(),
+              new RNFirebaseMessagingPackage(),
+              new RNFirebaseNotificationsPackage()
       );
     }
 

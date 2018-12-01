@@ -11,17 +11,18 @@ import {
     AsyncStorage,
     TextInput,
     Modal,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert,
+    PixelRatio
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
-import { initAuth, Address, isAuth, Login } from '../../services/auth.service'
-import { getData, checkAuth } from '../../services/data.service'
+import { initAuth, Address, isAuth, Login, LoginTouchID } from '../../services/auth.service'
+import { getData, checkAuth, setAuth } from '../../services/data.service'
 import Lang from '../../i18n/i18n';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
-
-
+import TouchID from 'react-native-touch-id'
 class ScreenLogin extends Component {
 
 
@@ -45,8 +46,6 @@ class ScreenLogin extends Component {
         })
 
     };
-
-
 
     static navigationOptions = {
         header: null,
@@ -101,11 +100,39 @@ class ScreenLogin extends Component {
     }
     inputs = {};
 
+    LoginwithFingerprint() {
+        initAuth().then(() => {
+            if (Address) {
+                getData('TouchID').then(check => {
+                    if (check != null) {
+                        TouchID.authenticate().then(success => {
+                            setAuth(true)
+                            const { navigate } = this.props.navigation;
+                            navigate('TabNavigator');
+                        })
+                    } else {
+                        Alert.alert(
+                            'Error',
+                            'Please access touch ID in settings',
+                            [{ text: 'Ok', style: 'cancel' }]
+                        )
+                    }
+                })
+            } else {
+                Alert.alert(
+                    'Error',
+                    'Please register new wallet',
+                    [{ text: 'Ok', style: 'cancel' }]
+                )
+            }
+        })
+    }
 
     render() {
+        // alert(PixelRatio.getFontScale() + '-' + PixelRatio.get() + '-' + PixelRatio.getPixelSizeForLayoutSize() + '-' + PixelRatio.roundToNearestPixel())
         return (
-            <View style={style.container}>
-                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>Sign in to continue</Text>
+            <View style={style.container} >
+                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('7%'), fontFamily: GLOBALS.font.Poppins }}>Sign in to continue</Text>
                 <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text>
                 <View style={{
                     justifyContent: 'center',
@@ -114,7 +141,7 @@ class ScreenLogin extends Component {
                     borderBottomWidth: 1,
                     borderBottomColor: '#AAAAAA',
                     paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                    marginTop: hp('20%')
+                    marginTop: hp('15%')
                 }}>
                     <TextInput
                         placeholder={Lang.t('Login.PHAddress')}
@@ -169,13 +196,36 @@ class ScreenLogin extends Component {
                         </Gradient>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginVertical: GLOBALS.hp('3%')
+                    }}
+                    onPress={() => this.LoginwithFingerprint()}
+                >
+                    <View style={{ flex: 1.5, alignItems: 'flex-end' }}>
+                        <Image
+                            source={require('../../images/icon/touch-icon.png')}
+                            resizeMode={'contain'}
+                        />
+                    </View>
+                    <Text
+                        style={{
+                            flex: 8.5,
+                            fontFamily: GLOBALS.font.Poppins,
+                            fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'),
+                            textAlign: 'center',
+                        }}>Login with Touch ID access</Text>
+                </TouchableOpacity>
 
                 {
                     this.state.loading ?
                         <Modal
                             animationType='fade'
                             transparent={true}
-                            visible={true}>
+                            visible={true} >
                             <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
                                 <ActivityIndicator size='large' color={GLOBALS.Color.primary} style={{ flex: 1 }} />
                             </View>
@@ -188,6 +238,7 @@ class ScreenLogin extends Component {
     }
 
 }
+
 export default class login extends Component {
     static navigationOptions = () => ({
         // title: Lang.t('Login.Title'),
@@ -225,8 +276,8 @@ var styleButton = (color, type) => StyleSheet.create({
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.64,
-        shadowRadius: 2.27,
+        shadowOpacity: 0.24,
+        shadowRadius: type ? 2.27 : 0.22,
         elevation: 7,
     }
 })

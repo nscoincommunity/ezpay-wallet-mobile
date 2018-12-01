@@ -9,7 +9,6 @@ import {
     Alert,
     Keyboard,
     TextInput,
-    TouchableHighlight,
     ScrollView,
     FlatList,
     PixelRatio,
@@ -31,7 +30,9 @@ import PopupDialog, {
     ScaleAnimation, DialogTitle, DialogButton
 } from "react-native-popup-dialog";
 import Gradient from "react-native-linear-gradient"
-
+import TouchID from "react-native-touch-id"
+import CryptoJS from 'crypto-js';
+import { cachePwd } from '../../services/auth.service'
 
 const scaleAnimation = new ScaleAnimation();
 const pt = PixelRatio.get()
@@ -73,7 +74,8 @@ export default class FormSend extends Component {
         editNTY: true,
         editUSD: true,
         buttomReset: false,
-        disabledButtomSend: false
+        disabledButtomSend: false,
+        showTouchID: false
     }
 
     resetState = {
@@ -263,21 +265,16 @@ export default class FormSend extends Component {
         this.setState({ dialogSend: false })
     }
 
-    // componentWillMount() {
-    //     getData('ListToken')
-    //         .then(data => {
-    //             if (data != null) {
-    //                 JSON.parse(data).forEach(element => {
-    //                     this.state.ListToken.push({
-    //                         value: JSON.stringify(element),
-    //                         label: element.symbol
-    //                     })
-    //                 });
-    //             }
-    //         })
-    // }
-
     componentDidMount() {
+        getData('TouchID').then((touch) => {
+            if (touch != null) {
+                this.setState({ showTouchID: true })
+            } else {
+                this.setState({ showTouchID: false })
+            }
+        }).catch(() => {
+            this.setState({ showTouchID: false })
+        })
         getData('ListToken')
             .then(data => {
                 if (data != null) {
@@ -376,6 +373,45 @@ export default class FormSend extends Component {
         this.selectToken(item.value)
     }
 
+    ButtonSend() {
+        Keyboard.dismiss();
+        if (this.state.VisibaleButton == true) {
+
+            return;
+        }
+        getData('TouchID').then(data => {
+            if (data != null) {
+                console.log(data == null)
+                const optionalConfigObject = {
+                    title: "Touch ID", // Android
+                    imageColor: "#e00606", // Android
+                    imageErrorColor: "#ff0000", // Android
+                    sensorDescription: "Touch sensor", // Android
+                    sensorErrorDescription: "Failed", // Android
+                    cancelText: "Cancel", // Android
+                    fallbackLabel: "", // iOS (if empty, then label is hidden)
+                    unifiedErrors: true, // use unified error messages (default false)
+                    passcodeFallback: true // iOS
+                }
+
+                TouchID.authenticate('Use TouchID to send', optionalConfigObject)
+                    .then(success => {
+                        try {
+                            var passwordDecrypt = CryptoJS.AES.decrypt(data, cachePwd).toString(CryptoJS.enc.Utf8)
+                            this.setState({ Password: passwordDecrypt }, () => {
+                                this.doSend()
+                            })
+                        } catch (error) {
+                            console.log(error)
+                        }
+
+                    })
+            } else {
+                this.setState({ dialogSend: true })
+            }
+        })
+    }
+
     render() {
         return (
             <ScrollView style={{ backgroundColor: '#fafafa' }}>
@@ -389,19 +425,19 @@ export default class FormSend extends Component {
                         {
                             this.state.ListToken.length > 0 &&
                             <FlatList
-                                style={{ paddingVertical: GLOBALS.hp('3%') }}
+                                style={{ paddingVertical: GLOBALS.hp('1%') }}
                                 horizontal={true}
                                 data={this.state.ListToken}
                                 renderItem={({ item, index }) => {
                                     return (
-                                        <TouchableHighlight
+                                        <TouchableOpacity
                                             onPress={() => this.Selected(item)}
                                             style={
                                                 selectedBtn(this.state.selected === item.label).selected
                                             }
                                         >
                                             <Text style={[selectedBtn(this.state.selected === item.label).text]}>{item.label}</Text>
-                                        </TouchableHighlight>
+                                        </TouchableOpacity>
                                     )
                                 }}
                                 keyExtractor={(item, index) => item.value}
@@ -433,7 +469,7 @@ export default class FormSend extends Component {
                             }}>{this.state.TextErrorAddress}</Text>
                         </View>
 
-                        <View style={[Styles.Form, { height: GLOBALS.hp('45%') },]}>
+                        <View style={[Styles.Form, { height: GLOBALS.hp('50%') },]}>
                             <View style={{ flexDirection: 'row', borderBottomWidth: 0.5 }}>
                                 <TextInput
                                     editable={this.state.editNTY}
@@ -459,7 +495,7 @@ export default class FormSend extends Component {
                                 <Image source={require('../../images/icon/dollar.png')} />
                             </View>
 
-                            <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorNTY}</Text>
+                            <Text style={{ color: GLOBALS.Color.danger, height: this.state.TextErrorAddress != '' ? 'auto' : 0 }}>{this.state.TextErrorNTY}</Text>
 
                             <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.setState({ dialogSend: true }); Keyboard.dismiss() }}>
                                 <Gradient
@@ -471,6 +507,7 @@ export default class FormSend extends Component {
                                     <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
                                 </Gradient>
                             </TouchableOpacity>
+
                             {this.state.buttomReset &&
                                 <TouchableOpacity style={{
                                     backgroundColor: '#fff',
@@ -478,7 +515,7 @@ export default class FormSend extends Component {
                                     borderRadius: 5,
                                     flexDirection: 'row-reverse',
                                     justifyContent: 'center',
-                                    paddingVertical: GLOBALS.hp('1.7%'),
+                                    paddingVertical: GLOBALS.hp('1%'),
                                     borderWidth: 2,
                                     borderColor: GLOBALS.Color.primary,
                                 }}
@@ -492,6 +529,33 @@ export default class FormSend extends Component {
                                     }}>Reset</Text>
                                 </TouchableOpacity>
                             }
+                            {
+                                this.state.showTouchID && !this.state.VisibaleButton ?
+                                    <TouchableOpacity
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                        onPress={() => this.ButtonSend()}
+                                    >
+                                        <View style={{ flex: 1.5, alignItems: 'flex-end' }}>
+                                            <Image
+                                                source={require('../../images/icon/touch-icon.png')}
+                                                resizeMode='contain'
+                                            />
+                                        </View>
+                                        <Text
+                                            style={{
+                                                flex: 8.5,
+                                                fontFamily: GLOBALS.font.Poppins,
+                                                fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'),
+                                                textAlign: 'center',
+                                            }}>Send with Touch ID access</Text>
+                                    </TouchableOpacity>
+                                    : null
+                            }
+
                         </View>
                         <View style={{ flex: 1 }} />
                     </View>
@@ -600,15 +664,6 @@ const Styles = StyleSheet.create({
         flex: 8,
         fontFamily: GLOBALS.font.Poppins,
         paddingBottom: Platform.OS == 'ios' ? 'auto' : 0
-    },
-    FormInputBalance: {
-        padding: 10,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        borderBottomWidth: 1,
-        borderBottomColor: '#aaaaaa',
-        alignItems: 'center',
-        marginBottom: 10,
     }
 })
 

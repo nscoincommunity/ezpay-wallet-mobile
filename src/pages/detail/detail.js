@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, Linking, StyleSheet, Text } from 'react-native';
+import { View, TouchableOpacity, Linking, StyleSheet, Text, Platform } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import CONSTANTS from '../../helper/constants'
 // import Icon from "react-native-vector-icons/FontAwesome";
@@ -96,7 +96,20 @@ export default class DetailHis extends Component {
                     <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0 }}>
                         <Body>
                             <Text style={styleText}>{Language.t('DetailHistory.Amount')}</Text>
-                            <Text style={styleText} note numberOfLines={1}>{data.quantity}</Text>
+                            {
+                                Platform.OS == "ios" ?
+                                    <Text style={styleText} note numberOfLines={1}>{
+                                        parseFloat(data.quantity) % 1 == 0
+                                            ? parseFloat(data.quantity).toLocaleString()
+                                            : parseFloat(data.quantity).toFixed(2).toLocaleString()
+                                    }</Text>
+                                    :
+                                    <Text style={styleText} note numberOfLines={1}>{
+                                        parseFloat(data.quantity) % 1 == 0
+                                            ? (parseFloat(data.quantity).toLocaleString()).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                            : (parseFloat(data.quantity).toFixed(2).toLocaleString()).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    }</Text>
+                            }
                         </Body>
                     </ListItem>
 

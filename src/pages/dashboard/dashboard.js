@@ -83,7 +83,7 @@ export default class dashboard extends Component {
                             <TouchableOpacity
                                 style={{
                                     backgroundColor: GLOBALS.Color.secondary,
-                                    borderRadius: 20,
+                                    borderRadius: GLOBALS.hp('10%'),
                                     justifyContent: 'center',
                                     padding: GLOBALS.wp('2.5%'),
                                     margin: 4,

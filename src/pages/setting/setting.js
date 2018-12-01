@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, FlatList, TouchableOpacity, Text, StyleSheet, ToastAndroid, Platform, Alert } from 'react-native';
 import GLOBALS from '../../helper/variables';
-
+import { setData } from '../../services/data.service'
 import {
     Container,
     Header,
@@ -19,7 +19,7 @@ import IconFeather from "react-native-vector-icons/Feather";
 import Dialog from "react-native-dialog";
 import { EnableTouchID } from "../../services/auth.service"
 import AlertModal from "../../components/Modal"
-
+import TouchID from "react-native-touch-id"
 export default class Setting extends Component {
     constructor(props) {
         super(props);
@@ -55,9 +55,13 @@ export default class Setting extends Component {
             )
             return;
         }
-        await EnableTouchID(this.state.passcode).then(() => {
+
+        await EnableTouchID(this.state.passcode).then((passcode) => {
             this.setState({ dialogVisible: false, passcode: '' }, () => {
                 setTimeout(() => {
+                    // Success code
+                    console.log(passcode)
+                    setData('TouchID', passcode);
                     Alert.alert(
                         Language.t('AddToken.AlerSuccess.Title'),
                         Language.t('Settings.Success'),
@@ -82,7 +86,18 @@ export default class Setting extends Component {
 
     pushToPage(Status: boolean, Router) {
         if (Router == "TouchID") {
-            this.setState({ dialogVisible: true });
+            TouchID.isSupported().then(() => {
+                console.log('aa')
+                this.setState({ dialogVisible: true });
+            }).catch((error) => {
+                Alert.alert(
+                    error.name,
+                    "Device does not support Touch ID",
+                    [
+                        { text: "Ok", style: 'cancel' },
+                    ]
+                )
+            })
             return;
         }
         if (Status == true) {

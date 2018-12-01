@@ -30,6 +30,12 @@ export async function encryptPassword(password: string): string {
 }
 
 export async function restore(address: string, privateKey: string, password: string) {
+    await getData('TouchID').then(async (touch) => {
+        if (touch != null) {
+            var passcodeEncrypt = CryptoJS.AES.encrypt(password, await encryptPassword(password)).toString()
+            setData('TouchID', passcodeEncrypt)
+        }
+    })
     var cacheAddress;
     var cachePrivatekey;
     privateKey = await CryptoJS.AES.encrypt(privateKey, password).toString();
@@ -42,6 +48,7 @@ export async function restore(address: string, privateKey: string, password: str
     Address = await address;
     await setAuth(true)
     initAuth()
+
 }
 
 export async function createKeystore(keyObject, password: string, address) {
@@ -149,15 +156,16 @@ export async function validatePassword(password): boolean {
 }
 
 export async function EnableTouchID(passcode) {
-    passcode = await encryptPassword(passcode);
+    var passcodeEn = await encryptPassword(passcode);
+    console.log(passcodeEn)
     return new Promise((resolve, rejects) => {
         getData(Address).then(async pwd => {
-            if (passcode != pwd) {
+            if (passcodeEn != pwd) {
                 rejects('invalid passcode');
                 return;
             } else {
-                setData('TouchID', '1');
-                resolve('enable touch id')
+                var passcodeEncrypt = CryptoJS.AES.encrypt(passcode, passcodeEn).toString()
+                resolve(passcodeEncrypt)
             }
         })
     })
@@ -201,6 +209,12 @@ export async function changePasscode(passwordOld: string, passwordNew: string) {
                     await addAddress(Address, EnpasswordNew, newPk);
                     privateKey = newPk;
                     cachePwd = EnpasswordNew;
+                    getData('TouchID').then((touch) => {
+                        if (touch != null) {
+                            var passcodeEncrypt = CryptoJS.AES.encrypt(passwordNew, EnpasswordNew).toString()
+                            setData('TouchID', passcodeEncrypt)
+                        }
+                    })
                 } catch (error) {
                     console.log(error)
                     rejects(error);
