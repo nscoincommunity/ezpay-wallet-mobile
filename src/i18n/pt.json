@@ -70,7 +70,8 @@
         },
         "Ok": "Ok",
         "ValidAmount": "Por favor, insira um valor válido ",
-        "ValidAddress": "Endereço inválido"
+        "ValidAddress": "Endereço inválido",
+        "Copy": "copiar"
     },
     "Request": {
         "Title": "Receber",

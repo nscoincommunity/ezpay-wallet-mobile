@@ -29,7 +29,7 @@ export default class Addtoken extends Component {
     render() {
         return (
             <Container style={{ backgroundColor: "#fff" }}>
-                <Header style={{ borderBottomColor: '#fff', borderBottomWidth: 0, backgroundColor: 'transparent' }}>
+                {/* <Header style={{ borderBottomColor: '#fff', borderBottomWidth: 0, backgroundColor: 'transparent' }}>
                     <Left>
                         <Button
                             transparent
@@ -40,6 +40,20 @@ export default class Addtoken extends Component {
                     </Left>
                     <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: GLOBALS.Color.primary }}>{Language.t("AddToken.Title")}</Title>
+                    </Body>
+                    <Right />
+                </Header> */}
+                <Header style={{ backgroundColor: '#fff', borderBottomWidth: 0, borderBottomColor: '#fff' }}>
+                    <Left>
+                        <Button
+                            transparent
+                            onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
+                        >
+                            <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('AddToken.Title')}</Title>
                     </Body>
                     <Right />
                 </Header>

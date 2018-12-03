@@ -1,23 +1,45 @@
 import React, { Fragment, Component } from "react";
-import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Clipboard, ToastAndroid, Platform } from "react-native";
 import Modal from "react-native-modal";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../helper/Reponsive';
 import Icon from "react-native-vector-icons/FontAwesome";
 import GLOBALS from '../helper/variables';
+import CustomToast from './toast';
+import Language from '../i18n/i18n';
 
 class SwipeableModal extends Component {
     state = {
         visible: false,
         typeModal: '',
         Title: '',
-        content: ''
+        content: '',
+        btnCopy: false,
+        copied: false
     };
 
-    openModal(type, Title, Content) {
-        console.log('aaa', type, Title, Content)
-        this.setState({ visible: true, typeModal: type, Title: Title, content: Content })
+    openModal(type, Title, Content, btnCopy) {
+        if (btnCopy) {
+            this.setState({ visible: true, typeModal: type, Title: Title, content: Content, btnCopy: true })
+        } else {
+            this.setState({ visible: true, typeModal: type, Title: Title, content: Content })
+        }
     };
     closeModal = () => this.setState({ visible: false });
+
+    copy = () => {
+        try {
+            Clipboard.setString(this.state.content);
+            console.log('content', this.state.content);
+            this.setState({ copied: true });
+        } catch (error) {
+            console.log(error)
+        }
+        if (Platform.OS == 'android') {
+            ToastAndroid.show('Copied transaction hash', ToastAndroid.SHORT)
+        } else {
+            this.refs.defaultToastBottom.ShowToastFunction('Copied transaction hash');
+        }
+    }
 
     render() {
         return (
@@ -36,19 +58,31 @@ class SwipeableModal extends Component {
                                 <Icon name="exclamation-circle" color={GLOBALS.Color.danger} size={wp('20%')} />
                         }
 
-                        <Text style={{ fontWeight: 'bold', fontSize: wp('7%'), fontFamily: GLOBALS.font.Poppins }}>{this.state.Title}</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: wp('7%'), fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }}>{this.state.Title}</Text>
 
                         <Text style={styles.description}>
                             {this.state.content}
                         </Text>
-                        <TouchableHighlight
+                        {
+                            this.state.btnCopy == true &&
+                            <TouchableOpacity
+                                onPress={this.copy}
+                                style={{ marginVertical: GLOBALS.hp('2%') }}
+                            >
+                                <Text style={{ fontWeight: 'bold', fontSize: wp('5%') }}>{this.state.copied ? Language.t('Backup.GetSuccess.TitleCopied') : Language.t('Send.Copy')}</Text>
+                            </TouchableOpacity>
+                        }
+
+                        <TouchableOpacity
                             onPress={this.closeModal}
                         >
-                            <Text style={{ fontWeight: 'bold', fontSize: wp('5%') }}>OK</Text>
-                        </TouchableHighlight>
+                            <Text style={{ fontWeight: 'bold', fontSize: wp('5%') }}>{Language.t('Send.Ok')}</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
-
+                <View style={{ alignItems: 'center' }}>
+                    <CustomToast ref="defaultToastBottom" position="bottom" />
+                </View>
             </Fragment>
         );
     }
@@ -67,6 +101,7 @@ const styles = StyleSheet.create({
     description: {
         padding: wp('3%'),
         fontFamily: GLOBALS.font.Poppins,
-        fontSize: wp('4%')
+        fontSize: wp('4%'),
+        textAlign: 'center'
     },
 });

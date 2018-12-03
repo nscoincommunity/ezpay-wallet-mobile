@@ -70,7 +70,8 @@
         },
         "Ok": "Ok",
         "ValidAmount": "请输入有效数额",
-        "ValidAddress": "地址无效"
+        "ValidAddress": "地址无效",
+        "Copy": "复制"
     },
     "Request": {
         "Title": "申请",

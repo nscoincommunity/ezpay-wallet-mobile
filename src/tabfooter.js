@@ -321,7 +321,7 @@ class CustomTab extends React.Component {
             routes,
         } = navigation.state;
         return (
-            <View style={[this.props.style, { flexDirection: 'row', padding: GLOBALS.wp('2%'), justifyContent: 'center', alignItems: 'center', backgroundColor: navigation.state.index == 0 ? '#fafafa' : 'transparent' }]
+            <View style={[this.props.style, { flexDirection: 'row', padding: GLOBALS.wp('2%'), justifyContent: 'center', alignItems: 'center', backgroundColor: Platform.OS == 'android' ? navigation.state.index == 0 ? '#fafafa' : 'transparent' : 'transparent' }]
             }>
                 {routes && routes.map(this.renderItem)}
             </View >

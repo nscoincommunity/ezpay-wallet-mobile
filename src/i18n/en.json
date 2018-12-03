@@ -70,7 +70,8 @@
         },
         "Ok": "Ok",
         "ValidAmount": "Please  enter a valid amount",
-        "ValidAddress": "Invalid address"
+        "ValidAddress": "Invalid address",
+        "Copy": "Copy"
     },
     "Request": {
         "Title": "Request",

@@ -33,6 +33,8 @@ import Gradient from "react-native-linear-gradient"
 import TouchID from "react-native-touch-id"
 import CryptoJS from 'crypto-js';
 import { cachePwd } from '../../services/auth.service'
+import AlerModal from '../../components/Modal';
+
 
 const scaleAnimation = new ScaleAnimation();
 const pt = PixelRatio.get()
@@ -219,7 +221,7 @@ export default class FormSend extends Component {
                     this.setState(this.resetState)
                     console.log('send success: ' + data)
                     this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
-                    this.showScaleAnimationDialog();
+                    this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
                 }).catch(async error => {
                     await this.setState({ dialogSend: false, })
                     console.log('send error: ' + error)
@@ -233,7 +235,7 @@ export default class FormSend extends Component {
                     } else {
                         await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
                     }
-                    await this.showScaleAnimationDialog();
+                    await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
                 })
         } else {
             SendToken(this.state.addresswallet, this.state.tokenSelected.tokenAddress, this.state.tokenSelected.ABI, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
@@ -241,7 +243,7 @@ export default class FormSend extends Component {
                     await this.setState(this.resetState)
                     console.log('send success: ' + data)
                     await this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
-                    await this.showScaleAnimationDialog();
+                    await this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
                 }).catch(async error => {
                     await this.setState({ dialogSend: false, })
                     console.log('send error: ' + error)
@@ -255,7 +257,7 @@ export default class FormSend extends Component {
                     } else {
                         await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
                     }
-                    await this.showScaleAnimationDialog();
+                    await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
                 })
         }
     }
@@ -296,6 +298,7 @@ export default class FormSend extends Component {
             console.log(err)
         })
         Linking.addEventListener('url', this.handleOpenURL);
+
     }
 
     componentWillUnmount() {
@@ -351,8 +354,15 @@ export default class FormSend extends Component {
     }
 
 
-    showScaleAnimationDialog = () => {
-        this.scaleAnimationDialog.show();
+    showScaleAnimationDialog = (typeModal, title, content) => {
+        // this.scaleAnimationDialog.show();
+        setTimeout(() => {
+            if (typeModal == "success") {
+                this.refs.PopupDialog.openModal(typeModal, title, content, true)
+            } else {
+                this.refs.PopupDialog.openModal(typeModal, title, content)
+            }
+        }, 350);
     }
 
     focusTheField = (id) => {
@@ -570,7 +580,9 @@ export default class FormSend extends Component {
                         <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
                     </Dialog.Container>
 
-                    <PopupDialog
+
+                    <AlerModal ref="PopupDialog" />
+                    {/* <PopupDialog
                         dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: 'auto' }}
                         ref={(popupDialog) => {
                             this.scaleAnimationDialog = popupDialog;
@@ -590,7 +602,7 @@ export default class FormSend extends Component {
                         <View style={Styles.dialogContentView}>
                             <Text style={{ textAlign: 'center', marginTop: 10 }}>{this.state.contentDialog}</Text>
                         </View>
-                    </PopupDialog>
+                    </PopupDialog> */}
                 </KeyboardAvoidingView>
             </ScrollView >
         )

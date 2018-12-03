@@ -70,7 +70,8 @@
         },
         "Ok": "Đồng ý",
         "ValidAmount": "Vui lòng nhập số coin",
-        "ValidAddress": "Vui lòng nhập đúng định dạng địa chỉ ví"
+        "ValidAddress": "Vui lòng nhập đúng định dạng địa chỉ ví",
+        "Copy": "sao chép"
     },
     "Request": {
         "Title": "Nhận",

@@ -70,7 +70,8 @@
         },
         "Ok": "Ok",
         "ValidAmount": "유효한 금액을 입력하십시오.",
-        "ValidAddress": "잘못된 주소"
+        "ValidAddress": "잘못된 주소",
+        "Copy": "복사"
     },
     "Request": {
         "Title": "요청",

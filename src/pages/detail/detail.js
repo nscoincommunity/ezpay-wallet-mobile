@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, Linking, StyleSheet, Text, Platform } from 'react-native';
+import { View, TouchableOpacity, Linking, StyleSheet, Text, Platform, Clipboard, ToastAndroid, Vibration, VibrationIOS } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import CONSTANTS from '../../helper/constants'
 // import Icon from "react-native-vector-icons/FontAwesome";
@@ -16,7 +16,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import Language from '../../i18n/i18n';
 import Gradient from 'react-native-linear-gradient';
-
+import CustomToast from '../../components/toast'
 
 export default class DetailHis extends Component {
     static navigationOptions = () => ({
@@ -34,6 +34,16 @@ export default class DetailHis extends Component {
         },
         headerTintColor: '#0C449A',
     });
+
+    copy = (value) => {
+        Clipboard.setString(value)
+        Vibration.vibrate(100)
+        if (Platform.OS == "android") {
+            ToastAndroid.show(Language.t('Backup.GetSuccess.TitleCopied'), ToastAndroid.BOTTOM)
+        } else {
+            this.refs.defaultToastBottom.ShowToastFunction(Language.t('Backup.GetSuccess.TitleCopied'));
+        }
+    }
 
     render() {
         var data = this.props.navigation.getParam('data');
@@ -66,32 +76,26 @@ export default class DetailHis extends Component {
                         textAlign: 'center'
                     }}>{Language.t('DetailHistory.Title')}</Text>
 
-                    <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0 }} >
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0 }} onLongPress={() => { this.copy(data.tx) }} >
                         <Body>
-                            <Text style={styleText}>{Language.t('DetailHistory.Txhash')}</Text>
-                            <Text style={styleText} note numberOfLines={1}>{data.tx}</Text>
+                            <Text style={styleText} >{Language.t('DetailHistory.Txhash')}</Text>
+                            <Text style={styleText} note numberOfLines={1} ellipsizeMode="middle" >{data.tx}</Text>
                         </Body>
                     </ListItem>
 
-                    {
-                        data.type == 'arrow-up' &&
-                        <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0, marginLeft: 0 }}>
-                            <Body>
-                                <Text style={styleText}>{Language.t('DetailHistory.To')}</Text>
-                                <Text style={styleText} note numberOfLines={1}>{data.data.to}</Text>
-                            </Body>
-                        </ListItem>
-                    }
-
-                    {
-                        data.type == 'arrow-down' &&
-                        <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0 }}>
-                            <Body>
-                                <Text style={styleText}>{Language.t('DetailHistory.From')}</Text>
-                                <Text style={styleText} note numberOfLines={1}>{data.data.from}</Text>
-                            </Body>
-                        </ListItem>
-                    }
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0, marginLeft: 0 }} onLongPress={() => { data.type == "arrow-up" ? this.copy(data.data.to) : this.copy(data.data.from) }}>
+                        <Body>
+                            <Text style={styleText}>{data.type == "arrow-up" ? Language.t('DetailHistory.To') : Language.t('DetailHistory.From')}</Text>
+                            <Text
+                                style={styleText}
+                                note
+                                numberOfLines={1}
+                                ellipsizeMode="middle"
+                            >
+                                {data.type == "arrow-up" ? data.data.to : data.data.from}
+                            </Text>
+                        </Body>
+                    </ListItem>
 
                     <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0 }}>
                         <Body>
@@ -141,6 +145,9 @@ export default class DetailHis extends Component {
                         </Gradient>
 
                     </TouchableOpacity>
+                    <View style={{ alignItems: 'center' }}>
+                        <CustomToast ref="defaultToastBottom" position="bottom" />
+                    </View>
                 </View>
             </Container>
         )
