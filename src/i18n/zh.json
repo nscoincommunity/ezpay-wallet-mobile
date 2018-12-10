@@ -1,12 +1,16 @@
 {
     "Login": {
-        "Title": "登录",
+        "Title": "登录以继续",
         "PHAddress": "钱包地址",
         "PHLocalPasscode": "钱包本地密码",
         "TitleButton": "登录",
         "InvalidCredentials": "登录信息失效",
         "InvalidLocalPasscode": "请输入有效的本地密码",
-        "InvalidAddress": "请输入有效地址"
+        "InvalidAddress": "请输入有效地址",
+        "Error": {
+            "AccessTouchID": "请在设置中访问触摸ID",
+            "CreateWallet": "请注册新钱包"
+        }
     },
     "Register": {
         "Title": "创建钱包",
@@ -41,7 +45,7 @@
         "Week": "周",
         "Month": "月",
         "All": "所有",
-        "YourBalance": "您的余额",
+        "YourBalance": "余额",
         "CheckBackup": "钱包尚未备份",
         "ButtonBackup": "备份"
     },
@@ -68,7 +72,7 @@
         "SendSuccess": {
             "Title": "发送成功"
         },
-        "Ok": "Ok",
+        "Ok": "OK",
         "ValidAmount": "请输入有效数额",
         "ValidAddress": "地址无效",
         "Copy": "复制"
@@ -164,7 +168,8 @@
     },
     "History": {
         "Title": "记录",
-        "Loading": "请等一下 ..."
+        "Loading": "请等一下 ...",
+        "NoTransaction": "没有交易记录"
     },
     "DetailHistory": {
         "Title": "交易明细",
@@ -224,10 +229,35 @@
         "Title": "QR扫描"
     },
     "ConfirmLogout": {
-        "Title": "確認退出",
+        "Title": "確認",
         "Content": "您是否要退出？",
         "ButtonAgree": "同意",
-        "ButtonCancel": "拒绝"
+        "ButtonCancel": "拒绝",
+        "exitapp": "你确定要退出吗？"
+    },
+    "ChangePIN": {
+        "Title": "修改钱包本地密码",
+        "PlaceholderOld": "旧钱包本地密码",
+        "ValidOldPasscode": "无效的旧钱包本地密码",
+        "PlaceholderNewPasscode": "新钱包本地密码",
+        "PlaceholderConfirmNew": "确认新钱包本地密码",
+        "TitleButton": "Continue",
+        "Success": "成功更改密码",
+        "OldPasscodeCredentials": "旧的本地密码不正确"
+    },
+    "TouchID": {
+        "Error": {
+            "Title": "Touch ID 错误",
+            "Content": "设备不支持Touch ID”"
+        },
+        "Send": "使用Touch ID访问发送",
+        "Login": "使用Touch ID访问登录",
+        "Options": {
+            "sensorDescription": "触摸传感器",
+            "sensorErrorDescription": "失败",
+            "cancelText": "取消",
+            "reason": "扫描触摸ID进行处理"
+        }
     },
     "LOGIN_TITLE": "登录"
 }

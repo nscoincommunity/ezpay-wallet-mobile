@@ -105,11 +105,11 @@ export default class ChangePIN extends Component {
         changePasscode(this.state.passcodeOld, this.state.passcodeNew)
             .then((result) => {
                 console.log(result)
-                this.refs.ShowDialog.openModal('success', 'Success', 'Change local passcode success');
+                this.refs.ShowDialog.openModal('success', Language.t('AddToken.AlerSuccess.Title'), Language.t('ChangePIN.Success'));
                 this.setState(this.initState)
             }).catch(err => {
                 console.log(err)
-                this.setState({ textErrPcOld: Language.t('Login.InvalidCredentials'), errPcOld: true, typeButton: true })
+                this.setState({ textErrPcOld: Language.t('ChangePIN.OldPasscodeCredentials'), errPcOld: true, typeButton: true })
             })
     }
 
@@ -201,7 +201,7 @@ export default class ChangePIN extends Component {
                                 end={{ x: 0, y: 3 }}
                                 style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5 }}
                             >
-                                <Text style={Styles.TextButton}>{Language.t("ChangePIN.TitleButton")}</Text>
+                                <Text style={Styles.TextButton}>{Language.t("Restore.TitleButton")}</Text>
                             </Gradient>
                         </TouchableOpacity>
                         <DiaLog ref="ShowDialog" />

@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from './Reponsive';
-
+import Language from '../i18n/i18n'
 export default {
     WIDTH: Dimensions.get('window').width,
     HEIGHT: Dimensions.get('window').height,
@@ -18,5 +18,6 @@ export default {
         Poppins: 'Poppins-Light'
     },
     wp,
-    hp
+    hp,
+
 }

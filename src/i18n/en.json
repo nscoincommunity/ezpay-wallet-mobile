@@ -1,12 +1,16 @@
 {
     "Login": {
-        "Title": "Login",
+        "Title": "Sign in to continue",
         "PHAddress": "Wallet address",
         "PHLocalPasscode": "Wallet local passcode",
         "TitleButton": "Sign in",
         "InvalidCredentials": "Invalid credentials",
         "InvalidLocalPasscode": "Please enter a valid local passcode",
-        "InvalidAddress": "Please enter a valid address"
+        "InvalidAddress": "Please enter a valid address",
+        "Error": {
+            "AccessTouchID": "Please access touch ID in settings",
+            "CreateWallet": "Please register new wallet"
+        }
     },
     "Register": {
         "Title": "Create a wallet",
@@ -41,7 +45,7 @@
         "Week": "Week",
         "Month": "Month",
         "All": "All",
-        "YourBalance": "Your balance",
+        "YourBalance": "Balance",
         "CheckBackup": "Wallet hasn't been backed up yet",
         "ButtonBackup": "Backup"
     },
@@ -68,7 +72,7 @@
         "SendSuccess": {
             "Title": "Send successfully"
         },
-        "Ok": "Ok",
+        "Ok": "OK",
         "ValidAmount": "Please  enter a valid amount",
         "ValidAddress": "Invalid address",
         "Copy": "Copy"
@@ -164,7 +168,8 @@
     },
     "History": {
         "Title": "History",
-        "Loading": "Please wait..."
+        "Loading": "Please wait...",
+        "NoTransaction": "No transaction history"
     },
     "DetailHistory": {
         "Title": "Transaction details",
@@ -180,8 +185,8 @@
         "Title": "Setting",
         "Backup": "Backup",
         "Languages": "Languages",
-        "ChangePIN": "Change PIN",
-        "TouchID": "Use Touch ID as PIN",
+        "ChangePIN": "Change local passcode",
+        "TouchID": "Use Touch ID as local passcode",
         "Toast": "This feature is coming soon",
         "EnableTouchID": "Confirm",
         "Success": "Enabled touch ID successfully"
@@ -224,21 +229,35 @@
         "Title": "QR scan"
     },
     "ConfirmLogout": {
-        "Title": "Confirm exit",
+        "Title": "Confirm",
         "Content": "Do you want to logout?",
         "ButtonAgree": "AGREE",
-        "ButtonCancel": "DISAGREE"
+        "ButtonCancel": "DISAGREE",
+        "exitapp": "Do you really want to exit?"
     },
     "ChangePIN": {
         "Title": "Change wallet local passcode",
         "PlaceholderOld": "Old wallet local passcode",
         "ValidOldPasscode": "Invalid old wallet local passcode",
-        "InvalidCredentials": "Invalid credentials",
         "PlaceholderNewPasscode": "New wallet local passcode",
-        "ErrNewPasscode": "Invalid new wallet local passcode",
         "PlaceholderConfirmNew": "Confirm new wallet local passcode",
-        "ErrorNotMatch": "New wallet local passcodes do not match",
-        "TitleButton": "Continue"
+        "TitleButton": "Continue",
+        "Success": "Change local passcode successfully",
+        "OldPasscodeCredentials": "Incorrect old local passcode"
+    },
+    "TouchID": {
+        "Error": {
+            "Title": "Touch ID error",
+            "Content": "Device does not support Touch ID"
+        },
+        "Send": "Send with Touch ID access",
+        "Login": "Login with Touch ID access",
+        "Options": {
+            "sensorDescription": "Touch sensor",
+            "sensorErrorDescription": "Failed",
+            "cancelText": "Cancel",
+            "reason": "Scan Touch ID to process"
+        }
     },
     "LOGIN_TITLE": "Login"
 }

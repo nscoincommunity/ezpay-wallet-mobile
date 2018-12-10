@@ -57,7 +57,7 @@ class ScreenRestore extends Component {
                 <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t('Restore.Title')}</Text>
 
                 <FlatList
-                    style={{ marginTop: hp('2%') }}
+                    style={{ marginTop: hp('2%'), width: GLOBALS.wp('100%') - GLOBALS.hp('4%') }}
                     data={SwitchSeg}
                     horizontal={true}
                     scrollEnabled={false}
@@ -114,7 +114,7 @@ const selectedBtn = (type) => StyleSheet.create({
         shadowRadius: 2.27,
         elevation: type ? 5 : 0,
         alignItems: 'center',
-        width: hp('23%')
+        width: GLOBALS.wp('50%') - GLOBALS.hp('3%')
     },
     text: {
         fontWeight: type ? 'bold' : 'normal',
@@ -285,7 +285,7 @@ class FormBackupcode extends Component {
                         returnKeyType={"next"}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 8, fontSize: hp('3%') }}
+                        style={{ flex: 8, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                     <TouchableOpacity style={style.buttonFolder} onPress={() => this.SelectFile()}>
@@ -309,7 +309,7 @@ class FormBackupcode extends Component {
                         returnKeyType={'next'}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field3'); }}
-                        style={{ flex: 10, fontSize: hp('3%') }}
+                        style={{ flex: 10, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
@@ -335,7 +335,7 @@ class FormBackupcode extends Component {
                                 this.restoreByBackupCode()
                             }
                         }}
-                        style={{ flex: 10, fontSize: hp('3%') }}
+                        style={{ flex: 10, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
@@ -490,7 +490,7 @@ class FormPrivateKey extends Component {
                         returnKeyType={"next"}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 10, fontSize: hp('3%') }}
+                        style={{ flex: 10, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
@@ -512,7 +512,7 @@ class FormPrivateKey extends Component {
                         returnKeyType={'next'}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field3'); }}
-                        style={{ flex: 10, fontSize: hp('3%') }}
+                        style={{ flex: 10, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
@@ -537,7 +537,7 @@ class FormPrivateKey extends Component {
                                 this.restoreByPK()
                             }
                         }}
-                        style={{ flex: 10, fontSize: hp('3%') }}
+                        style={{ flex: 10, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
@@ -619,7 +619,7 @@ const style = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: hp('4%')
+        padding: hp('2%')
     },
     logo: {
         height: GLOBALS.HEIGHT / 3,

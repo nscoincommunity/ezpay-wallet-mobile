@@ -40,9 +40,9 @@ class ScreenRegister extends Component {
 
 
     async register() {
-        FbAnalytics.setUserProperty('action', 'create wallet')
-        FbAnalytics.logEvent('view_action', { 'action_name': 'register' })
-        this.setState({ loading: true })
+        FbAnalytics.setUserProperty('action', 'create_wallet')
+        FbAnalytics.logEvent('view_action', { 'create_wallet': 'create_wallet' })
+        await this.setState({ loading: true })
         Register(this.state.password).then(() => {
             rmData('ListToken').then(() => {
                 var initialData = [{
@@ -52,12 +52,15 @@ class ScreenRegister extends Component {
                     "decimals": '',
                     "ABI": ''
                 }]
-                setData('ListToken', JSON.stringify(initialData)).then(() => {
-                    this.setState({ loading: false })
-                    const { navigate } = this.props.data.navigation;
-                    navigate('TabNavigator');
-                    setData('isBackup', '0');
-                })
+                setTimeout(() => {
+                    setData('ListToken', JSON.stringify(initialData)).then(() => {
+                        this.setState({ loading: false })
+                        const { navigate } = this.props.data.navigation;
+                        navigate('TabNavigator');
+                        setData('isBackup', '0');
+                    })
+                }, 500);
+
             })
 
         })
@@ -101,9 +104,9 @@ class ScreenRegister extends Component {
     inputs = {};
     render() {
         return (
-            <View style={style.container}>
+            <View style={{ flex: 1 }}>
 
-                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>Create Wallet</Text>
+                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Register.Title")}</Text>
                 <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }} >
                     {Lang.t("Register.policy")}
                     <Text style={{ color: GLOBALS.Color.secondary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy/') }}> Term of Service</Text>
@@ -124,7 +127,7 @@ class ScreenRegister extends Component {
                         returnKeyType={"next"}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 10, fontSize: hp('3%') }}
+                        style={{ flex: 10, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
@@ -148,7 +151,7 @@ class ScreenRegister extends Component {
                                 this.register()
                             }
                         }}
-                        style={{ flex: 10, fontSize: hp('3%') }}
+                        style={{ flex: 10, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>

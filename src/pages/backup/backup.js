@@ -100,7 +100,7 @@ export default class backup extends Component {
                                         }).catch(errShare => {
                                             console.log('err', errShare)
                                         })
-                                    }, 1000)
+                                    }, 350)
                                 }
                                 if (Platform.OS == 'android') {
                                     var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
@@ -155,13 +155,6 @@ export default class backup extends Component {
                             })
                     }
                 )
-                // var NameFile = 'backup--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.json'
-                // console.log(NameFile)
-                // saveFile(NameFile, bc).then(ss => {
-                //     console.log(ss)
-                // }).catch(err => {
-                //     console.log(err)
-                // })
             }).catch(err => {
                 this.setState({ loading: false })
                 Alert.alert(
@@ -296,7 +289,7 @@ export default class backup extends Component {
                         <Dialog.Input placeholder={Language.t('Backup.DialogConfirm.Placeholder')} style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
-                        {
+                        {/* {
                             this.state.loading ?
                                 <Modal
                                     animationType='fade'
@@ -307,7 +300,7 @@ export default class backup extends Component {
                                     </View>
                                 </Modal>
                                 : null
-                        }
+                        } */}
                     </Dialog.Container>
                     <View
                         style={{

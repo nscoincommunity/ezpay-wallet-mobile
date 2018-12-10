@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Platform } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Platform, Keyboard } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Chart from '../../components/chart';
@@ -20,6 +20,7 @@ export default class dashboard extends Component {
     };
 
     componentDidMount() {
+        Keyboard.dismiss();
         getData('isBackup').then(data => {
             if (data == 1) {
                 this.setState({ isBackup: true });
@@ -86,6 +87,7 @@ export default class dashboard extends Component {
                                     borderRadius: GLOBALS.hp('10%'),
                                     justifyContent: 'center',
                                     padding: GLOBALS.wp('2.5%'),
+                                    paddingHorizontal: GLOBALS.wp('3%'),
                                     margin: 4,
                                     shadowColor: GLOBALS.Color.secondary,
                                     shadowOffset: {

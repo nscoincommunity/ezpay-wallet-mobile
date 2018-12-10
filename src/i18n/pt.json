@@ -6,7 +6,11 @@
         "TitleButton": "Login",
         "InvalidCredentials": "Credenciais inválidas",
         "InvalidLocalPasscode": "Por favor, insira uma senha válida",
-        "InvalidAddress": "Por favor, insira um endereço válido"
+        "InvalidAddress": "Por favor, insira um endereço válido",
+        "Error": {
+            "AccessTouchID": "Por favor, acesse o ID de toque nas configurações",
+            "CreateWallet": "Por favor registre uma nova carteira"
+        }
     },
     "Register": {
         "Title": "Criar wallet",
@@ -41,7 +45,7 @@
         "Week": "Semana",
         "Month": "Mês",
         "All": "Tudo",
-        "YourBalance": "Seu saldo",
+        "YourBalance": "Saldo",
         "CheckBackup": "O backup da Wallet ainda não foi realizado",
         "ButtonBackup": "Backup"
     },
@@ -68,7 +72,7 @@
         "SendSuccess": {
             "Title": "Enviado com sucesso "
         },
-        "Ok": "Ok",
+        "Ok": "OK",
         "ValidAmount": "Por favor, insira um valor válido ",
         "ValidAddress": "Endereço inválido",
         "Copy": "copiar"
@@ -164,7 +168,8 @@
     },
     "History": {
         "Title": "Histórico",
-        "Loading": "Por favor, aguarde ..."
+        "Loading": "Por favor, aguarde ...",
+        "NoTransaction": "Nenhum histórico de transações"
     },
     "DetailHistory": {
         "Title": "Detalhes da transação",
@@ -224,10 +229,35 @@
         "Title": "QR scan"
     },
     "ConfirmLogout": {
-        "Title": "Confirme a saída",
+        "Title": "Confirme",
         "Content": "Você quer sair?",
         "ButtonAgree": "CONCORDO",
-        "ButtonCancel": "NÃO CONCORDO"
+        "ButtonCancel": "NÃO CONCORDO",
+        "exitapp": "Você realmente deseja sair?"
+    },
+    "ChangePIN": {
+        "Title": "Alterar senha da carteira",
+        "PlaceholderOld": "Senha antiga",
+        "ValidOldPasscode": "Senha antiga inválida",
+        "PlaceholderNewPasscode": "Nova senha",
+        "PlaceholderConfirmNew": "Confirme a nova senha",
+        "TitleButton": "Continue",
+        "Success": "Alterar senha com sucesso",
+        "OldPasscodeCredentials": "Senha local antiga incorreta"
+    },
+    "TouchID": {
+        "Error": {
+            "Title": "Erro no ID de toque",
+            "Content": "O dispositivo não suporta o ID de toque"
+        },
+        "Send": "Enviar com acesso ao ID de toque",
+        "Login": "Login com acesso ao ID de toque",
+        "Options": {
+            "sensorDescription": "Sensor de toque",
+            "sensorErrorDescription": "Falhou",
+            "cancelText": "Cancelar",
+            "reason": "Digitalizar ID de toque para processar"
+        }
     },
     "LOGIN_TITLE": "Login"
 }

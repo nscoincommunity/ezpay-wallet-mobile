@@ -77,7 +77,8 @@ export default class FormSend extends Component {
         editUSD: true,
         buttomReset: false,
         disabledButtomSend: false,
-        showTouchID: false
+        showTouchID: false,
+        deepLink: false,
     }
 
     resetState = {
@@ -297,7 +298,7 @@ export default class FormSend extends Component {
         }).catch(err => {
             console.log(err)
         })
-        Linking.addEventListener('url', this.handleOpenURL);
+        Linking.addEventListener('url', this.handleOpenURL.bind(this));
 
     }
 
@@ -310,6 +311,7 @@ export default class FormSend extends Component {
 
         } else {
             console.log('linking: ', event.url)
+            this.setState({ deepLink: true })
             var tempArr = []
             var CutStr = event.url.substr(event.url.lastIndexOf('://') + 3, (event.url.length) - 1);
             var splStr = CutStr.split('&');
@@ -391,20 +393,16 @@ export default class FormSend extends Component {
         }
         getData('TouchID').then(data => {
             if (data != null) {
-                console.log(data == null)
-                const optionalConfigObject = {
-                    title: "Touch ID", // Android
-                    imageColor: "#e00606", // Android
-                    imageErrorColor: "#ff0000", // Android
-                    sensorDescription: "Touch sensor", // Android
-                    sensorErrorDescription: "Failed", // Android
-                    cancelText: "Cancel", // Android
+                let options = {
+                    title: "Nexty wallet", // Android
+                    sensorDescription: Language.t("TouchID.Options.sensorDescription"), // Android
+                    sensorErrorDescription: Language.t("TouchID.Options.sensorErrorDescription"), // Android
+                    cancelText: Language.t("TouchID.Options.cancelText"), // Android
                     fallbackLabel: "", // iOS (if empty, then label is hidden)
-                    unifiedErrors: true, // use unified error messages (default false)
-                    passcodeFallback: true // iOS
-                }
+                };
+                var reason = Language.t("TouchID.Options.reason");
 
-                TouchID.authenticate('Use TouchID to send', optionalConfigObject)
+                TouchID.authenticate(reason, options)
                     .then(success => {
                         try {
                             var passwordDecrypt = CryptoJS.AES.decrypt(data, cachePwd).toString(CryptoJS.enc.Utf8)
@@ -561,7 +559,7 @@ export default class FormSend extends Component {
                                                 fontFamily: GLOBALS.font.Poppins,
                                                 fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'),
                                                 textAlign: 'center',
-                                            }}>Send with Touch ID access</Text>
+                                            }}>{Language.t('TouchID.Send')}</Text>
                                     </TouchableOpacity>
                                     : null
                             }
@@ -579,30 +577,7 @@ export default class FormSend extends Component {
                         <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
                     </Dialog.Container>
-
-
                     <AlerModal ref="PopupDialog" />
-                    {/* <PopupDialog
-                        dialogStyle={{ width: GLOBALS.WIDTH / 1.2, height: 'auto' }}
-                        ref={(popupDialog) => {
-                            this.scaleAnimationDialog = popupDialog;
-                        }}
-                        dialogAnimation={scaleAnimation}
-                        dialogTitle={<DialogTitle title={this.state.titleDialog} />}
-                        actions={[
-                            <DialogButton
-                                text={Language.t('Send.Ok')}
-                                onPress={() => {
-                                    this.scaleAnimationDialog.dismiss();
-                                }}
-                                key="button-1"
-                            />,
-                        ]}
-                    >
-                        <View style={Styles.dialogContentView}>
-                            <Text style={{ textAlign: 'center', marginTop: 10 }}>{this.state.contentDialog}</Text>
-                        </View>
-                    </PopupDialog> */}
                 </KeyboardAvoidingView>
             </ScrollView >
         )

@@ -23,6 +23,7 @@ import Lang from '../../i18n/i18n';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
 import TouchID from 'react-native-touch-id'
+import { lang } from 'moment';
 class ScreenLogin extends Component {
 
 
@@ -105,23 +106,31 @@ class ScreenLogin extends Component {
             if (Address) {
                 getData('TouchID').then(check => {
                     if (check != null) {
-                        TouchID.authenticate().then(success => {
+                        let options = {
+                            title: "Nexty wallet", // Android
+                            sensorDescription: Lang.t("TouchID.Options.sensorDescription"), // Android
+                            sensorErrorDescription: Lang.t("TouchID.Options.sensorErrorDescription"), // Android
+                            cancelText: Lang.t("TouchID.Options.cancelText"), // Android
+                            fallbackLabel: "", // iOS (if empty, then label is hidden)
+                        }
+                        var reason = Lang.t("TouchID.Options.reason")
+                        TouchID.authenticate(reason, options).then(success => {
                             setAuth(true)
                             const { navigate } = this.props.navigation;
                             navigate('TabNavigator');
                         })
                     } else {
                         Alert.alert(
-                            'Error',
-                            'Please access touch ID in settings',
+                            Lang.t('Restore.Error'),
+                            Lang.t('Login.Error.AccessTouchID'),
                             [{ text: 'Ok', style: 'cancel' }]
                         )
                     }
                 })
             } else {
                 Alert.alert(
-                    'Error',
-                    'Please register new wallet',
+                    Lang.t('Restore.Error'),
+                    Lang.t('Login.Error.CreateWallet'),
                     [{ text: 'Ok', style: 'cancel' }]
                 )
             }
@@ -131,9 +140,9 @@ class ScreenLogin extends Component {
     render() {
         // alert(PixelRatio.getFontScale() + '-' + PixelRatio.get() + '-' + PixelRatio.getPixelSizeForLayoutSize() + '-' + PixelRatio.roundToNearestPixel())
         return (
-            <View style={style.container} >
-                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('7%'), fontFamily: GLOBALS.font.Poppins }}>Sign in to continue</Text>
-                <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text>
+            <View style={{ flex: 1 }} >
+                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('7%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Login.Title")}</Text>
+                {/* <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text> */}
                 <View style={{
                     justifyContent: 'center',
                     flexDirection: 'row',
@@ -141,7 +150,7 @@ class ScreenLogin extends Component {
                     borderBottomWidth: 1,
                     borderBottomColor: '#AAAAAA',
                     paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                    marginTop: hp('15%')
+                    marginTop: hp('25%')
                 }}>
                     <TextInput
                         placeholder={Lang.t('Login.PHAddress')}
@@ -150,7 +159,7 @@ class ScreenLogin extends Component {
                         returnKeyType={"next"}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 9, fontSize: hp('3%') }}
+                        style={{ flex: 9, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                     <Image source={require('../../images/icon/wallet.png')} style={{ flex: 1 }} resizeMode="contain" />
@@ -175,7 +184,7 @@ class ScreenLogin extends Component {
                                 this.LoginNTY()
                             }
                         }}
-                        style={{ flex: 9, fontSize: hp('3%') }}
+                        style={{ flex: 9, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                     <Image source={require('../../images/icon/Private-key.png')} style={{ flex: 1 }} resizeMode="contain" />
@@ -217,7 +226,7 @@ class ScreenLogin extends Component {
                             fontFamily: GLOBALS.font.Poppins,
                             fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'),
                             textAlign: 'center',
-                        }}>Login with Touch ID access</Text>
+                        }}>{Lang.t('TouchID.Login')}</Text>
                 </TouchableOpacity>
 
                 {

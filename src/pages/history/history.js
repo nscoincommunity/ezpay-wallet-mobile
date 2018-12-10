@@ -180,64 +180,60 @@ export default class History extends Component {
                                     elevation: 2,
                                     borderRadius: 10,
                                 }}>
-                                    {/* <View
-                                        style={{
-                                            backgroundColor: '#F1F1F1',
-                                            justifyContent: 'center',
-                                            paddingVertical: GLOBALS.hp('2%')
-                                        }}
-                                    >
-                                        <Text style={{
-                                            fontSize: GLOBALS.hp('4%'),
-                                            fontWeight: '400',
-                                            color: '#444444',
-                                            fontFamily: GLOBALS.font.Poppins,
-                                            textAlign: 'center'
-                                        }}>{Language.t('History.Title')}</Text>
-                                    </View> */}
-                                    <FlatList
-                                        style={{ padding: GLOBALS.hp('2%') }}
-                                        data={this.state.transactions}
-                                        extraData={this.state}
-                                        renderItem={({ item }) => {
-                                            return (
-                                                <TouchableOpacity
-                                                    onPress={() => this.props.navigation.navigate("DetailsHis", { data: item })}
-                                                    style={styles.row}>
-                                                    <Icon
-                                                        active
-                                                        name={item.type}
-                                                        style={{ color: item.type == "arrow-down" ? "green" : 'red', flex: 1 }}
-                                                        size={GLOBALS.wp('6%')}
-                                                    />
-                                                    <Text style={{
-                                                        flex: 7,
-                                                        fontFamily: GLOBALS.font.Poppins,
-                                                        fontSize: GLOBALS.wp('4%')
-                                                    }}>{item.datetime}</Text>
-                                                    <Icon
-                                                        name="angle-right"
-                                                        style={{ flex: 1, textAlign: 'right' }}
-                                                        size={GLOBALS.wp('6%')}
-                                                        color="#AAA"
-                                                    />
-                                                </TouchableOpacity>
-                                            );
-                                        }}
-                                        onEndReached={() => this.onEndReached()}
-                                        onEndReachedThreshold={0.001}
-                                        keyExtractor={(item, index) => index.toString()}
-                                        refreshControl={
-                                            <RefreshControl  //Component cho chức năng Pull to Refresh
-                                                refreshing={this.state.isRefreshing}  // check xem có hành động Pull trên màn hình của user hay không
-                                                onRefresh={() => this.getData()} // mỗi lần pull thì sẽ thực hiện hàm getData để load dữ liệu về
-                                            ></RefreshControl>
-                                        }
+                                    {
+                                        this.state.transactions.length > 0
+                                            ?
+                                            <FlatList
+                                                style={{ padding: GLOBALS.hp('2%') }}
+                                                data={this.state.transactions}
+                                                extraData={this.state}
+                                                renderItem={({ item }) => {
+                                                    return (
+                                                        <TouchableOpacity
+                                                            onPress={() => this.props.navigation.navigate("DetailsHis", { data: item })}
+                                                            style={styles.row}>
+                                                            <Icon
+                                                                active
+                                                                name={item.type}
+                                                                style={{ color: item.type == "arrow-down" ? "green" : 'red', flex: 1 }}
+                                                                size={GLOBALS.wp('6%')}
+                                                            />
+                                                            <Text style={{
+                                                                flex: 7,
+                                                                fontFamily: GLOBALS.font.Poppins,
+                                                                fontSize: GLOBALS.wp('4%')
+                                                            }}>{item.datetime}</Text>
+                                                            <Icon
+                                                                name="angle-right"
+                                                                style={{ flex: 1, textAlign: 'right' }}
+                                                                size={GLOBALS.wp('6%')}
+                                                                color="#AAA"
+                                                            />
+                                                        </TouchableOpacity>
+                                                    );
+                                                }}
+                                                onEndReached={() => this.onEndReached()}
+                                                onEndReachedThreshold={0.001}
+                                                keyExtractor={(item, index) => index.toString()}
+                                                refreshControl={
+                                                    <RefreshControl  //Component cho chức năng Pull to Refresh
+                                                        refreshing={this.state.isRefreshing}  // check xem có hành động Pull trên màn hình của user hay không
+                                                        onRefresh={() => this.getData()} // mỗi lần pull thì sẽ thực hiện hàm getData để load dữ liệu về
+                                                    ></RefreshControl>
+                                                }
 
-                                    />
+                                            />
+                                            :
+                                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                                <Icon name="exclamation-circle" color="#d1d1d1" size={GLOBALS.hp('20%')} />
+                                                <Text style={{ fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.hp('2.5%') }}>{Language.t('History.NoTransaction')}</Text>
+                                            </View>
+                                    }
+
                                 </View>
                             </View>
-                            : null
+                            :
+                            null
                     }
 
                     {/* </Content> */}

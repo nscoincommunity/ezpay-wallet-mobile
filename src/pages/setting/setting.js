@@ -91,10 +91,10 @@ export default class Setting extends Component {
                 this.setState({ dialogVisible: true });
             }).catch((error) => {
                 Alert.alert(
-                    error.name,
-                    "Device does not support Touch ID",
+                    Language.t('TouchID.Error.Title'),
+                    Language.t('TouchID.Error.Content'),
                     [
-                        { text: "Ok", style: 'cancel' },
+                        { text: Language.t('Restore.Ok'), style: 'cancel' },
                     ]
                 )
             })

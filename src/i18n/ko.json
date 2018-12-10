@@ -6,7 +6,11 @@
         "TitleButton": "로그인",
         "InvalidCredentials": "잘못된 자격 증명",
         "InvalidLocalPasscode": "올바른 패스 코드를 입력하십시오",
-        "InvalidAddress": "올바른 주소를 입력하십시오"
+        "InvalidAddress": "올바른 주소를 입력하십시오",
+        "Error": {
+            "AccessTouchID": "설정에서 터치 ID에 액세스하십시오.",
+            "CreateWallet": "새 지갑을 등록하십시오."
+        }
     },
     "Register": {
         "Title": "월렛 생성",
@@ -68,7 +72,7 @@
         "SendSuccess": {
             "Title": "성공적으로 보내기"
         },
-        "Ok": "Ok",
+        "Ok": "OK",
         "ValidAmount": "유효한 금액을 입력하십시오.",
         "ValidAddress": "잘못된 주소",
         "Copy": "복사"
@@ -164,7 +168,8 @@
     },
     "History": {
         "Title": "기록",
-        "Loading": "기다려주십시오. ..."
+        "Loading": "기다려주십시오. ...",
+        "NoTransaction": "거래 내역 없음"
     },
     "DetailHistory": {
         "Title": "상세 거래 내역",
@@ -224,10 +229,35 @@
         "Title": "QR 스캔"
     },
     "ConfirmLogout": {
-        "Title": "이탈 확인",
+        "Title": "확인",
         "Content": "로그 아웃 하시겠습니까?",
         "ButtonAgree": "동의하다",
-        "ButtonCancel": "동의하지 않는다"
+        "ButtonCancel": "동의하지 않는다",
+        "exitapp": "너 정말로 나가고 싶어?"
+    },
+    "ChangePIN": {
+        "Title": "지갑 로컬 패스 코드 변경",
+        "PlaceholderOld": "오래된 지갑 로컬 패스 코드",
+        "ValidOldPasscode": "잘못된 지갑 로컬 패스 코드",
+        "PlaceholderNewPasscode": "새 지갑 로컬 패스 코드",
+        "PlaceholderConfirmNew": "새 지갑 로컬 패스 코드 확인",
+        "TitleButton": "Continue",
+        "Success": "암호를 성공적으로 변경하십시오",
+        "OldPasscodeCredentials": "잘못된 이전 로컬 패스 코드"
+    },
+    "TouchID": {
+        "Error": {
+            "Title": "터치 ID 오류",
+            "Content": "기기가 터치 ID를 지원하지 않습니다"
+        },
+        "Send": "터치 ID 권한으로 보내기",
+        "Login": "터치 ID로 로그인하기",
+        "Options": {
+            "sensorDescription": "터치 센서",
+            "sensorErrorDescription": "실패한",
+            "cancelText": "취소",
+            "reason": "처리 할 터치 ID 스캔"
+        }
     },
     "LOGIN_TITLE": "로그인"
 }

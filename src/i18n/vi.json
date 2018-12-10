@@ -6,7 +6,11 @@
         "TitleButton": "Đăng nhập",
         "InvalidCredentials": "Nhập sai mật khẩu hoặc sai địa chỉ ví",
         "InvalidLocalPasscode": "Sai định dạng mật khẩu",
-        "InvalidAddress": "Sai định dạng địa chỉ ví "
+        "InvalidAddress": "Sai định dạng địa chỉ ví ",
+        "Error": {
+            "AccessTouchID": "Vân tay chưa được kích hoạt",
+            "CreateWallet": "Vui lòng đăng kí ví mới"
+        }
     },
     "Register": {
         "Title": "Tạo ví mới",
@@ -41,7 +45,7 @@
         "Week": "Tuần",
         "Month": "Tháng",
         "All": "Tất cả",
-        "YourBalance": "Số dư của bạn",
+        "YourBalance": "Số dư",
         "CheckBackup": "Ví của bạn chưa được sao lưu",
         "ButtonBackup": "Sao lưu"
     },
@@ -71,7 +75,7 @@
         "Ok": "Đồng ý",
         "ValidAmount": "Vui lòng nhập số coin",
         "ValidAddress": "Vui lòng nhập đúng định dạng địa chỉ ví",
-        "Copy": "sao chép"
+        "Copy": "Sao chép"
     },
     "Request": {
         "Title": "Nhận",
@@ -164,7 +168,8 @@
     },
     "History": {
         "Title": "Lịch sử",
-        "Loading": "Đang lấy dữ liệu ..."
+        "Loading": "Đang lấy dữ liệu ...",
+        "NoTransaction": "Bạn chưa có giao dịch nào"
     },
     "DetailHistory": {
         "Title": "Chi tiết giao dịch",
@@ -224,10 +229,35 @@
         "Title": "Quét mã QR"
     },
     "ConfirmLogout": {
-        "Title": "Xác nhận đăng xuất",
+        "Title": "Xác nhận",
         "Content": "Bạn có muốn đăng xuất?",
         "ButtonAgree": "Đồng ý",
-        "ButtonCancel": "Hủy"
+        "ButtonCancel": "Hủy",
+        "exitapp": "Bạn có muốn thoát ứng dụng?"
+    },
+    "ChangePIN": {
+        "Title": "Đổi mật khẩu ví",
+        "PlaceholderOld": "Mật khẩu ví cũ",
+        "ValidOldPasscode": "Sai định dạng mật khẩu ví",
+        "PlaceholderNewPasscode": "Mật khẩu ví mới",
+        "PlaceholderConfirmNew": "Xác nhận mật khẩu ví mới",
+        "TitleButton": "Tiếp tục",
+        "Success": "Thay đổi mật khẩu thành công",
+        "OldPasscodeCredentials": "Mật khẩu cũ không đúng"
+    },
+    "TouchID": {
+        "Error": {
+            "Title": "Lỗi",
+            "Content": "Thiết bị không hỗ trợ bảo mật vân tay"
+        },
+        "Send": "Sử dụng vân tay để gửi",
+        "Login": "Sử dụng vân tay để đăng nhập",
+        "Options": {
+            "sensorDescription": "Cảm biến vân tay",
+            "sensorErrorDescription": "Thất bại",
+            "cancelText": "Hủy",
+            "reason": "Quét vân tay vào cảm biến"
+        }
     },
     "LOGIN_TITLE": "Đăng nhập"
 }

@@ -6,7 +6,11 @@
             "TitleButton": "Login",
             "InvalidCredentials": "Credenciales inválidas",
             "InvalidLocalPasscode": "Por favor, introduzca una contraseña válida",
-            "InvalidAddress": "Por favor, introduzca una dirección válida"
+            "InvalidAddress": "Por favor, introduzca una dirección válida",
+            "Error": {
+                "AccessTouchID": "Por favor accede a la ID táctil en la configuración",
+                "CreateWallet": "Por favor registre nueva billetera"
+            }
         },
         "Register": {
             "Title": "Crear wallet",
@@ -41,7 +45,7 @@
             "Week": "Semana",
             "Month": "Mes",
             "All": "Tudo",
-            "YourBalance": "Su saldo",
+            "YourBalance": "Saldo",
             "CheckBackup": "Wallet todavía no ha hecho la copia de seguridad",
             "ButtonBackup": "Copia de seguridad"
         },
@@ -68,7 +72,7 @@
             "SendSuccess": {
                 "Title": "Enviado con éxito"
             },
-            "Ok": "Ok",
+            "Ok": "OK",
             "ValidAmount": "Por favor, introduzca un valor válido",
             "ValidAddress": "Dirección no válida",
             "Copy": "Copiar"
@@ -164,7 +168,8 @@
         },
         "History": {
             "Title": "Historia",
-            "Loading": "Por favor, espere..."
+            "Loading": "Por favor, espere...",
+            "NoTransaction": "Sin historia de transacciones"
         },
         "DetailHistory": {
             "Title": "Detalles de la transacción",
@@ -224,10 +229,35 @@
             "Title": "QR scan"
         },
         "ConfirmLogout": {
-            "Title": "Confirmar salida",
+            "Title": "Confirmar",
             "Content": "Quieres salir?",
             "ButtonAgree": "CONCORDO ",
-            "ButtonCancel": "NO ACEPTAR "
+            "ButtonCancel": "NO ACEPTAR ",
+            "exitapp": "Realmente desea salir?"
+        },
+        "ChangePIN": {
+            "Title": "Cambiar contraseña de la cartera",
+            "PlaceholderOld": "Contraseña antigua",
+            "ValidOldPasscode": "Contraseña antigua no válida",
+            "PlaceholderNewPasscode": "Nueva contraseña",
+            "PlaceholderConfirmNew": "Confirme la nueva contraseña",
+            "TitleButton": "Continue",
+            "Success": "Cambiar contraseña con éxito",
+            "OldPasscodeCredentials": "Contraseña local vieja incorrecta"
+        },
+        "TouchID": {
+            "Error": {
+                "Title": "Error en el identificador de toque",
+                "Content": "El dispositivo no admite el identificador de toque"
+            },
+            "Send": "Enviar con acceso al identificador de toque",
+            "Login": "Login con acceso al identificador de toque",
+            "Options": {
+                "sensorDescription": "Sensor tactil",
+                "sensorErrorDescription": "Ha fallado",
+                "cancelText": "Cancela",
+                "reason": "Escanear Touch ID para procesar"
+            }
         },
         "LOGIN_TITLE": "Login"
     }

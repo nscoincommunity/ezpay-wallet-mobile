@@ -160,7 +160,7 @@ export default class TabFooder extends React.Component {
             } else {
                 Alert.alert(
                     Language.t('ConfirmLogout.Title'),
-                    Language.t('ConfirmLogout.Content'),
+                    Language.t('ConfirmLogout.exitapp'),
                     [
                         { text: Language.t('ConfirmLogout.ButtonCancel'), style: 'cancel', onPress: () => { return true } },
                         { text: Language.t('ConfirmLogout.ButtonAgree'), onPress: () => { BackHandler.exitApp(); return false } }

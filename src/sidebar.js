@@ -44,8 +44,6 @@ export default class sidebar extends Component {
                         text: Language.t("ConfirmLogout.ButtonAgree"), onPress: () => {
                             logout().then(() => {
                                 this.props.navigation.navigate(route);
-                                FireAnalytics.setUserProperty('Action', 'Log_out')
-                                FireAnalytics.logEvent(this)
                             })
                         }
                     }

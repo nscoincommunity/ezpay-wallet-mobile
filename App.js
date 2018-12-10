@@ -7,6 +7,7 @@ import { DeviceLanguage, selectLang } from './src/i18n/i18n';
 import { getData, setData } from './src/services/data.service'
 import firebase from 'react-native-firebase';
 import { Alert } from 'react-native'
+import { POSTAPI } from './src/helper/utils'
 
 export default class Setup extends Component {
   async componentDidMount() {
@@ -86,6 +87,22 @@ export default class Setup extends Component {
       let fcmToken = await firebase.messaging().getToken();
       if (fcmToken) {
         console.log('device token', fcmToken)
+        var body = {
+          deviceID: fcmToken
+        }
+        // try {
+        //   POSTAPI('http://172.16.1.66:3000/setDeviceID', body)
+        //     .then(response => response.json())
+        //     .then(response => {
+        //       console.log(response)
+        //     })
+        //     .catch(err => {
+        //       console.log(err)
+        //     })
+        // } catch (error) {
+        //   console.log(error)
+        // }
+
       }
     } else {
       this.requestPermission();

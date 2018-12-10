@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard, Platform, TextInput } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard, Platform, TextInput, PixelRatio } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { GetInfoToken } from '../../services/wallet.service';
 import { setData, getData, rmData } from '../../services/data.service'
@@ -52,7 +52,7 @@ export default class Addtoken extends Component {
                             <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
                         </Button>
                     </Left>
-                    <Body>
+                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('AddToken.Title')}</Title>
                     </Body>
                     <Right />
@@ -118,7 +118,7 @@ class FormAddToken extends Component {
         }
     }
 
-    addToken() {
+    addToken = () => {
         getData('ListToken').then(async data => {
             if (data != null) {
                 this.ListToken = JSON.parse(data);
@@ -195,7 +195,7 @@ class FormAddToken extends Component {
                         placeholder={Language.t("AddToken.FormAdd.PlaceholderToken")}
                         value={this.state.addressTK}
                         onChangeText={(value) => { this.setValue(value) }}
-                        style={{ flex: 10, fontSize: GLOBALS.hp('3%') }}
+                        style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%') }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
@@ -213,11 +213,11 @@ class FormAddToken extends Component {
                         placeholder={Language.t("AddToken.FormAdd.PlaceholderSymbol")}
                         editable={false}
                         value={this.state.symbol}
-                        style={{ flex: 10, fontSize: GLOBALS.hp('3%') }}
+                        style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'), }}
                         underlineColorAndroid="transparent"
                     />
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => this.addToken.bind(this)} disabled={this.state.typeButton}>
+                <TouchableOpacity style={styles.button} onPress={this.addToken} disabled={this.state.typeButton}>
                     <Gradient
                         colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
                         start={{ x: 1, y: 0.7 }}

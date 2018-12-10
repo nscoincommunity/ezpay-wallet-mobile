@@ -74,7 +74,7 @@ export default class listCoin extends Component {
                             fontWeight: '400',
                             fontFamily: GLOBALS.font.Poppins,
                             fontSize: GLOBALS.wp('4%')
-                        }}>Balance: {item.symbol}</Text>
+                        }}>{Language.t('Dashboard.YourBalance')}: {item.symbol}</Text>
                         {
                             Platform.OS == 'ios' ?
                                 <Text style={{
