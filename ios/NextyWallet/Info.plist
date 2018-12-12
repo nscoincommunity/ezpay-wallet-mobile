@@ -30,14 +30,16 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>CFBundleURLName</key>
 			<string>nextywallet</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>nextywallet</string>
+				<string>LuckyDrawer</string>
 			</array>
 		</dict>
+		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.1.8</string>

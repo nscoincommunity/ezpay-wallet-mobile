@@ -105,7 +105,7 @@ export default class dashboard extends Component {
                         </View>
                         : null
                 }
-                <Chart />
+                {/* <Chart /> */}
             </ScrollView>
         )
     }

@@ -360,9 +360,9 @@ export default class FormSend extends Component {
         // this.scaleAnimationDialog.show();
         setTimeout(() => {
             if (typeModal == "success") {
-                this.refs.PopupDialog.openModal(typeModal, title, content, true)
+                this.refs.PopupDialog.openModal(typeModal, title, content, true, this.state.deepLink)
             } else {
-                this.refs.PopupDialog.openModal(typeModal, title, content)
+                this.refs.PopupDialog.openModal(typeModal, title, content, false, this.state.deepLink)
             }
         }, 350);
     }

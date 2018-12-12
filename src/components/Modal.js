@@ -1,11 +1,12 @@
 import React, { Fragment, Component } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Clipboard, ToastAndroid, Platform } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Clipboard, ToastAndroid, Platform, Linking } from "react-native";
 import Modal from "react-native-modal";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../helper/Reponsive';
 import Icon from "react-native-vector-icons/FontAwesome";
 import GLOBALS from '../helper/variables';
 import CustomToast from './toast';
 import Language from '../i18n/i18n';
+import { exitApp } from '../services/exit/index'
 
 class SwipeableModal extends Component {
     state = {
@@ -14,17 +15,25 @@ class SwipeableModal extends Component {
         Title: '',
         content: '',
         btnCopy: false,
-        copied: false
+        copied: false,
+        typeOK: false
     };
 
-    openModal(type, Title, Content, btnCopy) {
+    openModal(type, Title, Content, btnCopy, deeplink) {
+        console.log("deeplink:", deeplink)
         if (btnCopy) {
-            this.setState({ visible: true, typeModal: type, Title: Title, content: Content, btnCopy: true })
+            this.setState({ visible: true, typeModal: type, Title: Title, content: Content, btnCopy: true, typeOK: deeplink })
         } else {
-            this.setState({ visible: true, typeModal: type, Title: Title, content: Content })
+            this.setState({ visible: true, typeModal: type, Title: Title, content: Content, typeOK: deeplink })
         }
     };
-    closeModal = () => this.setState({ visible: false });
+
+    closeModal = () => {
+        this.setState({ visible: false });
+        if (this.state.typeOK) {
+            exitApp()
+        }
+    }
 
     copy = () => {
         try {

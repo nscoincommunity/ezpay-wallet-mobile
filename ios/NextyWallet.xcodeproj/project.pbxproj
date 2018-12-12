@@ -42,6 +42,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* NextyWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NextyWalletTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2E1973BE2124060800E63A27 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E197394212405E300E63A27 /* libART.a */; };
+		2E487CC621BE1C1C00FE31BF /* RNCloseApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E487CC521BE1C1C00FE31BF /* RNCloseApp.m */; };
 		2E55BEA621AF9E3000647B6F /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E55BEA421AF9E0D00647B6F /* libTouchID.a */; };
 		2E8A439321A538F500ABA5AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */; };
 		2EF631712191668200F16474 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2EF631702191668200F16474 /* Images.xcassets */; };
@@ -571,6 +572,8 @@
 		2D02E4901E0B4A5D006451C7 /* NextyWallet-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NextyWallet-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E19738E212405E300E63A27 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		2E487CC421BE1C1C00FE31BF /* RNCloseApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNCloseApp.h; sourceTree = "<group>"; };
+		2E487CC521BE1C1C00FE31BF /* RNCloseApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCloseApp.m; sourceTree = "<group>"; };
 		2E4957D1214F93CE00157036 /* NextyWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NextyWallet.entitlements; path = NextyWallet/NextyWallet.entitlements; sourceTree = "<group>"; };
 		2E55BE6721AF9E0D00647B6F /* TouchID.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TouchID.xcodeproj; path = "../node_modules/react-native-touch-id/TouchID.xcodeproj"; sourceTree = "<group>"; };
 		2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -816,6 +819,8 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				2EF631702191668200F16474 /* Images.xcassets */,
+				2E487CC421BE1C1C00FE31BF /* RNCloseApp.h */,
+				2E487CC521BE1C1C00FE31BF /* RNCloseApp.m */,
 			);
 			name = NextyWallet;
 			sourceTree = "<group>";
@@ -1267,6 +1272,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = T3UGY87QM5;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1274,6 +1280,9 @@
 							};
 							com.apple.Push = {
 								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
+								enabled = 0;
 							};
 							com.apple.iCloud = {
 								enabled = 1;
@@ -2026,6 +2035,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E487CC621BE1C1C00FE31BF /* RNCloseApp.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -2177,6 +2187,7 @@
 			baseConfigurationReference = 842914DED5DD5E07767D5644 /* Pods-NextyWallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NextyWallet/NextyWallet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2214,6 +2225,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.nexty.wallet;
 				PRODUCT_NAME = NextyWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "NextyWallet-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -2224,6 +2238,7 @@
 			baseConfigurationReference = CEF8C2553C68D483A16873BD /* Pods-NextyWallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NextyWallet/NextyWallet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2260,6 +2275,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.nexty.wallet;
 				PRODUCT_NAME = NextyWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "NextyWallet-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
