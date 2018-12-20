@@ -140,10 +140,27 @@ export default class TabFooder extends React.Component {
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backButtonClick);
+        Linking.removeEventListener('url')
     }
 
     componentDidMount() {
         BackHandler.addEventListener("hardwareBackPress", this.backButtonClick);
+        Linking.addEventListener('url', (url) => {
+            if (!url || url == "" || url == null) {
+                return;
+            } else {
+                console.log('url')
+                // if (!this.props.navigation.isFocused()) {
+                //     this.props.navigation.navigate('TabNavigator', { url: url });
+                //     setTimeout(() => {
+                //         this.setState({ routerLinking: true })
+                //     }, 100);
+                // } else {
+                //     this.setState({ routerLinking: true })
+                // }
+                this.props.navigation.navigate('TempPage', { url: url })
+            }
+        })
     }
 
     backButtonClick() {
@@ -181,7 +198,8 @@ export default class TabFooder extends React.Component {
             if (!url || url == "" || url == null) {
                 return;
             } else {
-                this.setState({ routerLinking: true })
+                // this.setState({ routerLinking: true })
+                this.props.navigation.navigate('TempPage', { url: url })
             }
             console.log(url)
         }).catch(err => {

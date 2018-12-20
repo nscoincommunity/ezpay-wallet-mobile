@@ -24,7 +24,6 @@ export async function getBackupCode(password: string) {
     return new Promise((resolve, reject) => {
         POSTAPI(CONSTANTS.WALLET_API + '/api/backup', body)
             .then(response => {
-                console.log(response)
                 resolve(code)
             })
             .catch((err: Response) => {

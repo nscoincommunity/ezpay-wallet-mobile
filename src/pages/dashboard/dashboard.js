@@ -7,8 +7,8 @@ import List from '../../components/listCoin';
 import { getData, rmData } from '../../services/data.service'
 import Language from '../../i18n/i18n'
 
-var interval
 export default class dashboard extends Component {
+    mounted: boolean = true
 
     constructor(props) {
         super(props)
@@ -21,13 +21,18 @@ export default class dashboard extends Component {
 
     componentDidMount() {
         Keyboard.dismiss();
-        getData('isBackup').then(data => {
-            if (data == 1) {
-                this.setState({ isBackup: true });
-            } else {
-                this.setState({ isBackup: false });
-            }
-        })
+        if (this.mounted) {
+            getData('isBackup').then(data => {
+                if (data == 1) {
+                    this.setState({ isBackup: true });
+                } else {
+                    this.setState({ isBackup: false });
+                }
+            })
+        }
+    }
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     static navigationOptions = {
@@ -45,7 +50,6 @@ export default class dashboard extends Component {
 
     checkBackup() {
         getData('isBackup').then(data => {
-            console.log('check backup');
             if (data == 1) {
                 this.setState({ isBackup: true });
             } else {
@@ -105,7 +109,7 @@ export default class dashboard extends Component {
                         </View>
                         : null
                 }
-                {/* <Chart /> */}
+                <Chart />
             </ScrollView>
         )
     }

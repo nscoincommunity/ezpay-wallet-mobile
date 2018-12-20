@@ -28,7 +28,7 @@ import Gradient from "react-native-linear-gradient"
 const pt = PixelRatio.get()
 
 export default class request extends Component {
-
+    mounted: boolean = true;
     Default_Toast_Bottom = (message) => {
         if (Platform.OS === 'ios') {
             this.refs.defaultToastBottom.ShowToastFunction(message);
@@ -52,16 +52,23 @@ export default class request extends Component {
         // }
     };
     componentWillMount() {
-        this.setState({ address: Address })
+        if (this.mounted) {
+            this.setState({ address: Address })
 
-        try {
-            getData('current').then(data => {
-                this.setState({ address: data })
-                console.log(data)
-            })
-        } catch (error) {
-            this.setState({ address: '' })
+            try {
+                getData('current').then(data => {
+                    this.setState({ address: data })
+                    console.log(data)
+                })
+            } catch (error) {
+                this.setState({ address: '' })
+            }
         }
+
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     static navigationOptions = {

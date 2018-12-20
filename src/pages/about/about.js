@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Platform } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Language from '../../i18n/i18n'
 // import Icon from "react-native-vector-icons/FontAwesome";
@@ -12,13 +12,9 @@ import {
     Content,
     Text,
     Button,
-    Footer,
-    FooterTab,
     Left,
     Right,
     Body,
-    Tabs,
-    Tab,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -37,7 +33,7 @@ export default class About extends Component {
                             <IconFeather name="align-left" color='#fff' size={25} />
                         </Button>
                     </Left>
-                    <Body>
+                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: '#fff' }}>{Language.t('About.Title')}</Title>
                     </Body>
                     <Right />

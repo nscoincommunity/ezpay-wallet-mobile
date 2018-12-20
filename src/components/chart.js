@@ -9,6 +9,7 @@ import { Defs, Stop, LinearGradient } from 'react-native-svg'
 
 
 export default class Chart extends Component {
+    mounted: boolean = true
     constructor(props) {
         super(props)
 
@@ -19,9 +20,14 @@ export default class Chart extends Component {
     };
 
     componentDidMount() {
-        this.changeChart('D')
-
+        if (this.mounted) {
+            this.changeChart('D')
+        }
     }
+    componentWillUnmount() {
+        this.mounted = false;
+    }
+
 
     changeChart(type) {
         this.setState({ DataChart: [], selected: type })

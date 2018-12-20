@@ -20,7 +20,6 @@ class SwipeableModal extends Component {
     };
 
     openModal(type, Title, Content, btnCopy, deeplink) {
-        console.log("deeplink:", deeplink)
         if (btnCopy) {
             this.setState({ visible: true, typeModal: type, Title: Title, content: Content, btnCopy: true, typeOK: deeplink })
         } else {

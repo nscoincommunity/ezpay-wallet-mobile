@@ -118,7 +118,7 @@ export default class Setting extends Component {
             },
             {
                 route: "ChangePIN",
-                text: Language.t('Settings.ChangePIN'),
+                text: Language.t('ChangePIN.Title'),
                 status: true
             },
             {
@@ -140,7 +140,7 @@ export default class Setting extends Component {
                             <IconFeather type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
                         </Button>
                     </Left>
-                    <Body>
+                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('Settings.Title')}</Title>
                     </Body>
                     <Right />

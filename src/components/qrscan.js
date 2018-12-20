@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Platform, Animated } from 'react-native';
+import { StyleSheet, Dimensions, View, Text, Platform, Animated, BackHandler } from 'react-native';
 import Camera from 'react-native-camera'
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button } from 'native-base'
@@ -55,7 +55,8 @@ export default class CameraScreen extends React.Component<any, any> {
                 orientation: Camera.constants.Orientation.auto,
                 flashMode: Camera.constants.FlashMode.auto,
                 barcodeFinderVisible: true
-            }
+            },
+            ResultScan: ''
         };
     }
     componentDidMount() {
@@ -69,6 +70,9 @@ export default class CameraScreen extends React.Component<any, any> {
         //         }
         //     )
         // ).start()
+        BackHandler.addEventListener('BackHandler', () => {
+            this.props.navigation.state.params.onSelect({ result: 'cancelScan' })
+        })
     }
 
     AnimatedMargin() {
@@ -96,6 +100,7 @@ export default class CameraScreen extends React.Component<any, any> {
 
     onBarCodeRead(scanResult) {
         if (scanResult.data != null) {
+            this.setState({ ResultScan: scanResult.data })
             this.props.navigation.goBack();
             this.props.navigation.state.params.onSelect({ result: scanResult.data });
         }
@@ -103,7 +108,10 @@ export default class CameraScreen extends React.Component<any, any> {
     }
 
     componentWillUnmount() {
-        this.props.navigation.state.params.onSelect({ result: 'cancelScan' })
+        BackHandler.removeEventListener('BackHandler');
+        if (this.state.ResultScan == '') {
+            this.props.navigation.state.params.onSelect({ result: 'cancelScan' })
+        }
     }
 
     defaultStyles() {

@@ -27,7 +27,7 @@ const DataCoin = [];
 
 var interval;
 export default class listCoin extends Component {
-
+    mounted: boolean = true;
     constructor(props) {
         super(props)
         this.state = {
@@ -98,13 +98,15 @@ export default class listCoin extends Component {
     }
 
     loadListToken() {
-        getData('ListToken').then(data => {
-            if (data != null) {
-                this.setState({ ListToken: JSON.parse(data) })
-            } else {
-                console.log('list token null')
-            }
-        })
+        if (this.mounted) {
+            getData('ListToken').then(data => {
+                if (data != null) {
+                    this.setState({ ListToken: JSON.parse(data) })
+                } else {
+                    console.log('list token null')
+                }
+            })
+        }
     }
 
     componentDidMount() {
@@ -123,7 +125,7 @@ export default class listCoin extends Component {
             updateBalanceTK().then(async data => {
                 if (data == 1) {
                     await this.loadListToken();
-                    setTimeout(() => {
+                    interval = setTimeout(() => {
                         this.updateBalTK();
                     }, 2000);
                 }
@@ -137,7 +139,9 @@ export default class listCoin extends Component {
     }
 
     componentWillUnmount() {
-        clearInterval(interval)
+        // clearInterval(interval)
+        clearTimeout(interval)
+        this.mounted = false;
     }
 
 

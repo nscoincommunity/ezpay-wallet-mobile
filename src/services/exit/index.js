@@ -14,7 +14,9 @@ export function exitApp(isError = false) {
     } else {
         try {
             Linking.openURL('LuckyDrawer://Deposit success/')
-            // NativeModules.RNCloseApp.exitApp(isError);
+            setTimeout(() => {
+                NativeModules.RNCloseApp.exitApp(isError);
+            }, 200)
         } catch (error) {
             console.log(error)
         }

@@ -17,7 +17,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(exitApp:(BOOL)isError )
 {
   RCTLogTrace(@"RNCloseApp is closing application bacause you asked to.");
-  
-  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"LuckyDrawer:"]];
+  exit(isError);
+ // [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"LuckyDrawer:"]];
 }
 @end

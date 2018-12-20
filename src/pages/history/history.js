@@ -114,13 +114,6 @@ export default class History extends Component {
 
     }
 
-    handleLoadMore = () => {
-        console.log('load more')
-        // this.onEndReached()
-        // this.setState({ index: transactions.length }, () => {
-        //     this._onEndReached()
-        // })
-    }
 
     render() {
         if (this.state.isLoading) {
@@ -135,7 +128,7 @@ export default class History extends Component {
                                 <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
                             </Button>
                         </Left>
-                        <Body>
+                        <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                             <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('History.Title')}</Title>
                         </Body>
                         <Right />

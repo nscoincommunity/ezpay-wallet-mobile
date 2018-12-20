@@ -6,9 +6,8 @@ import { getExchangeRate } from './src/services/rate.service';
 import { DeviceLanguage, selectLang } from './src/i18n/i18n';
 import { getData, setData } from './src/services/data.service'
 import firebase from 'react-native-firebase';
-import { Alert } from 'react-native'
+import { Alert, Platform } from 'react-native'
 import { POSTAPI } from './src/helper/utils'
-
 export default class Setup extends Component {
   async componentDidMount() {
     getData('ListToken').then((data) => {
@@ -38,7 +37,6 @@ export default class Setup extends Component {
     * Triggered when a particular notification has been received in foreground
     * */
     this.notificationListener = firebase.notifications().onNotification((notification) => {
-      console.log(notification)
       const { title, body } = notification;
       this.showAlert(title, body);
     });
@@ -64,7 +62,6 @@ export default class Setup extends Component {
     * */
     this.messageListener = firebase.messaging().onMessage((message) => {
       //process data message
-      console.log(JSON.stringify(message));
     });
   }
 
@@ -72,7 +69,7 @@ export default class Setup extends Component {
     Alert.alert(
       title, body,
       [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
+        { text: 'OK', style: 'cancel' },
       ],
       { cancelable: false },
     );
@@ -86,12 +83,12 @@ export default class Setup extends Component {
       // this.getToken();
       let fcmToken = await firebase.messaging().getToken();
       if (fcmToken) {
-        console.log('device token', fcmToken)
         var body = {
-          deviceID: fcmToken
+          deviceID: fcmToken,
+          platform: Platform.OS
         }
         // try {
-        //   POSTAPI('http://172.16.1.66:3000/setDeviceID', body)
+        //   POSTAPI('http://172.16.1.56:3000/setDeviceID', body)
         //     .then(response => response.json())
         //     .then(response => {
         //       console.log(response)
@@ -116,7 +113,6 @@ export default class Setup extends Component {
       // User has authorised
       let fcmToken = await firebase.messaging().getToken();
       if (fcmToken) {
-        console.log('device token', fcmToken)
       }
     } catch (error) {
       // User has rejected permissions

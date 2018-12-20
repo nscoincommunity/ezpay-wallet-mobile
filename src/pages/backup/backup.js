@@ -86,7 +86,6 @@ export default class backup extends Component {
                         RNFS.writeFile(path, bc)
                             .then(async success => {
                                 if (Platform.OS == 'ios') {
-                                    console.log('this is iporn')
                                     setTimeout(() => {
                                         Share.share({
                                             url: path,
@@ -104,11 +103,9 @@ export default class backup extends Component {
                                 }
                                 if (Platform.OS == 'android') {
                                     var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
-                                    console.log(newPath, await RNFS.exists(newPath))
                                     if (await RNFS.exists(newPath)) {
                                         RNFS.writeFile(newPath + '/' + NameFile, bc).then(cp => {
                                             ToastAndroid.show(Language.t('Backup.ToastSaveFile'), ToastAndroid.SHORT)
-                                            console.log(cp)
                                         }).catch(errCopy => {
                                             console.log(errCopy)
                                         })
@@ -121,14 +118,11 @@ export default class backup extends Component {
                                                 },
                                             );
                                             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                                                console.log("Permission OK", granted);
                                                 RNFS.mkdir(newPath).then(ssFolder => {
                                                     var decodedURL = decodeURIComponent(path)
                                                     RNFS.writeFile(newPath + '/' + NameFile, bc).then(cp => {
                                                         ToastAndroid.show(Language.t('Backup.ToastSaveFile'), ToastAndroid.SHORT)
-                                                        console.log(cp)
                                                     }).catch(errCopy => {
-                                                        console.log(errCopy)
                                                     })
                                                 }).catch(errFolder => {
                                                     console.log(errFolder)
@@ -142,7 +136,6 @@ export default class backup extends Component {
                                                         { text: 'Ok', style: 'cancel' }
                                                     ]
                                                 )
-                                                console.log("Permission failed", granted);
                                             }
 
                                         } catch (error) {
@@ -166,45 +159,6 @@ export default class backup extends Component {
                     ]
                 )
             })
-    }
-
-    createDir() {
-        var directory = RNFS.ExternalStorageDirectoryPath + '/Haha';
-        if (!RNFS.exists(directory)) {
-            console.log('exist dir')
-            RNFS.writeFile(directory + '/hahafile.txt', "hahahaa").then(cp => {
-                console.log(cp)
-            }).catch(errCopy => {
-                console.log(errCopy)
-            })
-        } else {
-            try {
-                const granted = PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-                        title: "Grant SD card access",
-                        message: "We need access",
-                    },
-                );
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log("Permission OK");
-                } else {
-                    console.log("Permission failed");
-                }
-                RNFS.mkdir(directory).then(ssFolder => {
-                    console.log(ssFolder)
-                    RNFS.writeFile(directory + '/hahafile.txt', "hahahaa").then(cp => {
-                        console.log(cp)
-                    }).catch(errCopy => {
-                        console.log(errCopy)
-                    })
-                }).catch(errFolder => {
-                    console.log(errFolder)
-
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        }
     }
 
     Copy() {

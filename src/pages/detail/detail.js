@@ -76,14 +76,14 @@ export default class DetailHis extends Component {
                         textAlign: 'center'
                     }}>{Language.t('DetailHistory.Title')}</Text>
 
-                    <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0 }} onLongPress={() => { this.copy(data.tx) }} >
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0 }} onPress={() => { this.copy(data.tx) }} >
                         <Body>
                             <Text style={styleText} >{Language.t('DetailHistory.Txhash')}</Text>
                             <Text style={styleText} note numberOfLines={1} ellipsizeMode="middle" >{data.tx}</Text>
                         </Body>
                     </ListItem>
 
-                    <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0, marginLeft: 0 }} onLongPress={() => { data.type == "arrow-up" ? this.copy(data.data.to) : this.copy(data.data.from) }}>
+                    <ListItem icon style={{ marginTop: 5, marginBottom: 5, marginLeft: 0, marginLeft: 0 }} onPress={() => { data.type == "arrow-up" ? this.copy(data.data.to) : this.copy(data.data.from) }}>
                         <Body>
                             <Text style={styleText}>{data.type == "arrow-up" ? Language.t('DetailHistory.To') : Language.t('DetailHistory.From')}</Text>
                             <Text

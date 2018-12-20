@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
 
     },
     textItem: {
-        fontSize: GLOBALS.wp('5%'),
+        fontSize: GLOBALS.wp('4.5%'),
         color: '#fff',
         textAlign: 'center',
         fontFamily: GLOBALS.font.Poppins,

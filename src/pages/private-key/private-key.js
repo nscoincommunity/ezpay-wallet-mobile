@@ -112,6 +112,7 @@ export default class privateKey extends Component {
     }
 
     render() {
+        console.log(this.state.privatekey)
         return (
             <Container style={{ backgroundColor: "#fafafa" }}>
                 <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
@@ -125,7 +126,7 @@ export default class privateKey extends Component {
                             <IconFeather type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
                         </Button>
                     </Left>
-                    <Body>
+                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('PrivateKey.Title')}</Title>
                     </Body>
                     <Right />

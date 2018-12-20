@@ -7,6 +7,7 @@ import '../shim.js';
 import crypto from 'crypto';
 import Lang, { DeviceLanguage, selectLang } from './i18n/i18n';
 import { getData } from './services/data.service'
+import SplashScreen from 'react-native-splash-screen';
 
 /* screen stack */
 import Sidebar from "./sidebar";
@@ -18,9 +19,9 @@ import restore from './pages/restore/restore';
 import Backup from './pages/backup/backup';
 import DetailHis from './pages/detail/detail';
 import QRscan from "./components/qrscan";
-import Language from "./pages/languages/language"
-import TempPage from './Drawer';
-import ChangePIN from './pages/changePIN/changePIN'
+import Language from "./pages/languages/language";
+import ChangePIN from './pages/changePIN/changePIN';
+import TempPage from './Drawer'
 
 /* screen drawer*/
 import Setting from './pages/setting/setting';
@@ -78,6 +79,7 @@ export default class Router extends Component {
     state = { InitLanguage: false }
 
     componentWillMount() {
+        SplashScreen.hide();
         try {
             getData('languages').then(lang => {
                 console.log('languages router', lang)
@@ -122,6 +124,7 @@ export default class Router extends Component {
                     //     header: () => null,
                     // }
                 },
+                TempPage: { screen: TempPage },
                 register: { screen: register },
                 restore: { screen: restore },
                 Backup: { screen: Backup },

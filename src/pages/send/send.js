@@ -40,8 +40,11 @@ const scaleAnimation = new ScaleAnimation();
 const pt = PixelRatio.get()
 
 export default class FormSend extends Component {
+    mouted: boolean = true;
+
+
     static navigationOptions = {
-        title: 'Send',
+        title: Language.t('Send.Title'),
         headerStyle: {
             backgroundColor: GLOBALS.Color.primary,
         },
@@ -175,7 +178,7 @@ export default class FormSend extends Component {
             return
         }
 
-        if (val < 1 || value.length < 1) {
+        if (val < 0 || value.length < 1) {
             await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '' })
         } else {
             var usd = await Utils.round(val * exchangeRate, 5);
@@ -193,7 +196,7 @@ export default class FormSend extends Component {
             await this.setState({ errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '', NTY: '' })
             return
         }
-        if (val < 1 || value.length < 1) {
+        if (val < 0 || value.length < 1) {
             await this.setState({ USD: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, NTY: '' })
         } else {
             var nty = await Utils.round(val / exchangeRate);
@@ -269,92 +272,36 @@ export default class FormSend extends Component {
     }
 
     componentDidMount() {
-        getData('TouchID').then((touch) => {
-            if (touch != null) {
-                this.setState({ showTouchID: true })
-            } else {
-                this.setState({ showTouchID: false })
-            }
-        }).catch(() => {
-            this.setState({ showTouchID: false })
-        })
-        getData('ListToken')
-            .then(data => {
-                if (data != null) {
-                    var tempArray = []
-                    JSON.parse(data).forEach(element => {
-                        tempArray.push({
-                            value: JSON.stringify(element),
-                            label: element.symbol
-                        })
-                    });
+        if (this.mouted) {
+            getData('TouchID').then((touch) => {
+                if (touch != null) {
+                    this.setState({ showTouchID: true })
+                } else {
+                    this.setState({ showTouchID: false })
                 }
-                this.setState({ ListToken: tempArray })
+            }).catch(() => {
+                this.setState({ showTouchID: false })
             })
 
-        Linking.getInitialURL().then(url => {
-            console.log(url)
-            this.handleOpenURL({ url })
-        }).catch(err => {
-            console.log(err)
-        })
-        Linking.addEventListener('url', this.handleOpenURL.bind(this));
-
-    }
-
-    componentWillUnmount() {
-        Linking.removeEventListener('url', this.handleOpenURL);
-    }
-
-    handleOpenURL(event) {
-        if (!event['url'] || event['url'] == "" || event['url'] == null) {
-
-        } else {
-            console.log('linking: ', event.url)
-            this.setState({ deepLink: true })
-            var tempArr = []
-            var CutStr = event.url.substr(event.url.lastIndexOf('://') + 3, (event.url.length) - 1);
-            var splStr = CutStr.split('&');
-            splStr.forEach(element => {
-                tempArr.push(element.split("="))
-            });
-            var tempExtraData = '{"' + tempArr[0][0] + '":"' + tempArr[0][1] + '","' + tempArr[3][0] + '":"' + tempArr[3][1] + '"}';
-            var hexExtraData = '';
-            console.log('hexExtra: ' + tempExtraData)
-            for (let i = 0; i < tempExtraData.length; i++) {
-                hexExtraData += '' + tempExtraData.charCodeAt(i).toString(16);
-            }
-            if (tempArr[1][1] != '0' || tempArr[1][1] != null || tempArr[1][1] != '') {
-
-                var val = parseFloat(tempArr[1][1])
-                var usd = Utils.round(val * exchangeRate, 5);
-
-                this.setState({
-                    addresswallet: tempArr[2][1],
-                    NTY: tempArr[1][1],
-                    extraData: '0x' + hexExtraData,
-                    USD: usd.toString(),
-                    editAddress: false,
-                    editNTY: false,
-                    editUSD: false,
-                    VisibaleButton: false,
-                    buttomReset: true
+            getData('ListToken')
+                .then(data => {
+                    if (data != null) {
+                        var tempArray = []
+                        JSON.parse(data).forEach(element => {
+                            tempArray.push({
+                                value: JSON.stringify(element),
+                                label: element.symbol
+                            })
+                        });
+                    }
+                    this.setState({ ListToken: tempArray })
                 })
-                console.log('hex extra data: ' + hexExtraData)
-            } else {
-                this.setState({
-                    addresswallet: tempArr[2][1],
-                    NTY: tempArr[1][1],
-                    extraData: '0x' + hexExtraData,
-                    editAddress: false,
-                    editNTY: true,
-                    editUSD: true,
-                    buttomReset: true
-                })
-            }
         }
     }
 
+    componentWillUnmount() {
+        this.mouted = false;
+    }
 
     showScaleAnimationDialog = (typeModal, title, content) => {
         // this.scaleAnimationDialog.show();

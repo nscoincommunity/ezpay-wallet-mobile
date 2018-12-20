@@ -16,10 +16,6 @@ import {
     Left,
     Right,
     Body,
-    Form,
-    Item,
-    Input,
-    Label
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 

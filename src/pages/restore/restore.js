@@ -215,19 +215,27 @@ class FormBackupcode extends Component {
                         })
                     })
                 } else {
+                    console.log('else:', rCode)
+                    setTimeout(() => {
+                        Alert.alert(
+                            Lang.t("Restore.Error"),
+                            Lang.t("Restore.InvalidRestoreCode"),
+                            [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
+                        )
+                    }, 350);
+
+                }
+            }).catch(err => {
+                console.log('catch: ', err)
+                this.props.showLoading(false);
+                setTimeout(() => {
                     Alert.alert(
                         Lang.t("Restore.Error"),
                         Lang.t("Restore.InvalidRestoreCode"),
-                        [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
+                        [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
                     )
-                }
-            }).catch(err => {
-                this.props.showLoading(false);
-                Alert.alert(
-                    Lang.t("Restore.Error"),
-                    Lang.t("Restore.InvalidRestoreCode"),
-                    [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
-                )
+                }, 350);
+
             })
     }
     SelectFile() {
@@ -450,20 +458,24 @@ class FormPrivateKey extends Component {
                         })
                     })
                 } else {
-                    Alert.alert(
-                        Lang.t("Restore.Error"),
-                        Lang.t("Restore.AlertInvalidPK"),
-                        [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
-                    )
+                    setTimeout(() => {
+                        Alert.alert(
+                            Lang.t("Restore.Error"),
+                            Lang.t("Restore.AlertInvalidPK"),
+                            [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
+                        )
+                    }, 350);
                 }
             }).catch(err => {
                 this.props.showLoading(false);
                 console.log('cache', err)
-                Alert.alert(
-                    Lang.t("Restore.Error"),
-                    Lang.t("Restore.AlertInvalidPK"),
-                    [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
-                )
+                setTimeout(() => {
+                    Alert.alert(
+                        Lang.t("Restore.Error"),
+                        Lang.t("Restore.AlertInvalidPK"),
+                        [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
+                    )
+                }, 350);
             })
     }
 

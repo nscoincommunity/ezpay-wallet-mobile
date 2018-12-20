@@ -76,10 +76,8 @@ export async function updateBalance() {
 }
 
 export async function getBalance(address) {
-    return of(
-        WEB3.eth.getBalance(address)
-    ).subscribe(bal => {
-        return bal;
+    return new Promise((resolve, reject) => {
+        resolve(WEB3.eth.getBalance(address))
     })
 }
 
@@ -165,6 +163,61 @@ export async function SendService(address: string, nty: number, password: string
     })
 
 }
+
+export async function Redeem(AddressSend: string, nty: number, privateKey: string) {
+
+    let sendValue = CONSTANTS.BASE_NTY2.valueOf() * nty;
+    let hexValue = '0x' + bigInt(sendValue).toString(16);
+    let txData: Tx = {
+        from: AddressSend,
+        to: Address,
+        value: hexValue
+    }
+    return new Promise((resolve, reject) => {
+        WEB3.eth.getTransactionCount(AddressSend)
+            .then(async (nonce) => {
+                console.log('getTransactionCount')
+                txData.nonce = nonce;
+
+                await estimateGas(txData).then(async (gas) => {
+                    console.log("gas first: " + gas)
+                    console.log('estimateGas')
+                    txData.gas = gas;
+                    let rawTx;
+                    try {
+                        rawTx = '0x' + await signTransaction(txData, privateKey)
+                    } catch (ex) {
+                        console.log(ex);
+                        reject('cannot sign transaction')
+                        return;
+                    }
+
+                    console.log('gas: ' + txData.gas)
+
+                    WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
+                        console.log('sendSignedTransactionCount')
+                        if (error) {
+                            reject(error.message);
+                            console.log('error' + error.message)
+                        } else {
+                            // update balance
+                            console.log('send success')
+                            updateBalance().then(() => {
+                                console.log('update balance')
+                                resolve(hash)
+                            });
+                        }
+                    })
+                })
+            }).catch(err => {
+                console.log('err', err)
+                reject(Language.t('Send.AlerError.TransactionFail'))
+            })
+
+    })
+
+}
+
 
 export async function SendToken(toAddress: string, tokenAddress, ABI, token: number, password: string, exData?: string) {
     if (! await validatePassword(password)) {
