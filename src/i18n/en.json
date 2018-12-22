@@ -109,7 +109,7 @@
         },
         "Congratulation": {
             "Title": "Congratulations",
-            "Content": "You have received ",
+            "Content": "You have received",
             "TitleButton": "Ok"
         },
         "Error": {
