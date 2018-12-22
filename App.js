@@ -83,10 +83,10 @@ export default class Setup extends Component {
       // this.getToken();
       let fcmToken = await firebase.messaging().getToken();
       if (fcmToken) {
-        var body = {
-          deviceID: fcmToken,
-          platform: Platform.OS
-        }
+        // var body = {
+        //   deviceID: fcmToken,
+        //   platform: Platform.OS
+        // }
         // try {
         //   POSTAPI('http://172.16.1.56:3000/setDeviceID', body)
         //     .then(response => response.json())

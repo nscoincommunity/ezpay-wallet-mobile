@@ -37,7 +37,6 @@ class SwipeableModal extends Component {
     copy = () => {
         try {
             Clipboard.setString(this.state.content);
-            console.log('content', this.state.content);
             this.setState({ copied: true });
         } catch (error) {
             console.log(error)

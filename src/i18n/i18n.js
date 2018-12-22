@@ -39,16 +39,12 @@ export const ListLanguage = [
 export function DeviceLanguage() {
     getLanguages().then(lang => {
         var languages = lang[0].substr(0, 2);
-        console.log('language:', languages)
         var indexLanguages = ListLanguage.findIndex(x => x.type == languages);
-        console.log('index: ' + indexLanguages)
         if (indexLanguages > -1) {
-            console.log('chay vao if')
             I18n.locale = languages;
             setData('languages', languages)
         }
         else {
-            console.log('chay vao else')
             I18n.locale = 'en';
             setData('languages', 'en');
         }

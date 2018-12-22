@@ -290,7 +290,6 @@ export async function signTransaction(txData: Tx, privateKey: string) {
 }
 export async function estimateGas(transaction: Tx): number {
     let gas = WEB3.eth.estimateGas(transaction);
-    console.log(gas)
     return gas;
 }
 export async function getAddressFromPK(privateKey) {

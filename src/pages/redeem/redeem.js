@@ -27,6 +27,8 @@ import { HandleCoupon } from './redeem.service'
 
 export default class Redeem extends Component {
 
+    mounted: boolean = true;
+
     initState = {
         error: false,
         amount: '',
@@ -47,6 +49,7 @@ export default class Redeem extends Component {
     }
 
     onSelect = data => {
+        console.log(data)
         if (data['result'] == 'cancelScan') {
             this.setState({ RedeemStatus: 'ER01', error: true })
             return;
@@ -54,17 +57,22 @@ export default class Redeem extends Component {
         if (data['result'] != null) {
             try {
                 var dataCoupon = JSON.parse("{" + data['result'] + "}");
-                if (dataCoupon['appName'] || dataCoupon['appName'] == 'nexty-wallet' || dataCoupon['privateKey'] != '' || dataCoupon['privateKey'].length != 64) {
-                    HandleCoupon(dataCoupon['privateKey']).then(res => {
-                        this.setState({ RedeemStatus: 'SS01', amount: res, error: false })
+                if (!dataCoupon['appName'] || dataCoupon['appName'] != 'nexty-wallet' || dataCoupon['privateKey'] == '' || dataCoupon['privateKey'].length != 64) {
+                    this.setState({ RedeemStatus: 'ER01', error: true })
+                    console.log('ko phai QR')
+                } else {
+                    HandleCoupon(dataCoupon['privateKey']).then(async (res) => {
+                        await this.setState({ RedeemStatus: 'SS01', amount: res, error: false })
+                        console.log('redeem success: ', res)
+                        return;
                     }).catch(err => {
                         this.setState({ RedeemStatus: err, error: true })
+                        console.log('catch promise ', err)
                         return;
                     })
-                } else {
-                    this.setState({ RedeemStatus: 'ER01', error: true })
                 }
             } catch (error) {
+                console.log('err cacth', error)
                 this.setState({ RedeemStatus: 'ER01', error: true })
             }
         }
@@ -77,10 +85,14 @@ export default class Redeem extends Component {
     }
 
     componentWillMount() {
-        setTimeout(() => {
+        this.mounted && setTimeout(() => {
             this.navigateToOFO();
             this.setState({ loadding: false })
         }, Platform.OS == 'android' ? 2000 : 1000);
+    }
+
+    componentWillUnmount() {
+        this.mounted = false
     }
 
     render() {

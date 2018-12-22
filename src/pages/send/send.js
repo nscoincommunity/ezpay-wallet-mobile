@@ -109,6 +109,7 @@ export default class FormSend extends Component {
     };
 
     onSelect = data => {
+        console.log('data', data)
         if (data['result'] == 'cancelScan') {
             return;
         }

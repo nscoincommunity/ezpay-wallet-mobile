@@ -97,13 +97,17 @@ export default class CameraScreen extends React.Component<any, any> {
             this.AnimatedMargin()
         })
     }
-
-    onBarCodeRead(scanResult) {
-        if (scanResult.data != null) {
-            this.setState({ ResultScan: scanResult.data })
-            this.props.navigation.goBack();
-            this.props.navigation.state.params.onSelect({ result: scanResult.data });
+    i = 0;
+    onBarCodeRead = (scanResult) => {
+        console.log('aaa')
+        if (this.i == 0) {
+            if (scanResult.data != null) {
+                this.setState({ ResultScan: scanResult.data })
+                this.props.navigation.state.params.onSelect({ result: scanResult.data });
+                this.props.navigation.goBack();
+            }
         }
+        this.i++
         return;
     }
 
@@ -194,7 +198,7 @@ export default class CameraScreen extends React.Component<any, any> {
                     type={this.state.camera.type}
                     flashMode={this.state.camera.flashMode}
                     barcodeFinderVisible={this.state.camera.barcodeFinderVisible}
-                    onBarCodeRead={this.onBarCodeRead.bind(this)}
+                    onBarCodeRead={(scanresult) => this.onBarCodeRead(scanresult)}
                 >
                     <View style={styles.maskOutter}>
                         <View style={[{ flex: maskRowHeight }, styles.maskRow, styles.maskFrame]} />

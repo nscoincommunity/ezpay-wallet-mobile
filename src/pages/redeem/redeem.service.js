@@ -3,7 +3,7 @@ import CONSTANTS from '../../helper/constants';
 
 export function HandleCoupon(privateKey: string) {
     return new Promise((resolve, reject) => {
-        getAddressFromPK(privateKey).then(async (address) => {
+        getAddressFromPK(privateKey).then(address => {
             getBalance(address).then(balance => {
                 balance = parseFloat(balance / CONSTANTS.BASE_NTY)
                 if (balance > 0) {
