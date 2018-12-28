@@ -66,7 +66,7 @@ export default class Setting extends Component {
                         Language.t('AddToken.AlerSuccess.Title'),
                         Language.t('Settings.Success'),
                         [
-                            { text: "Ok", style: 'cancel' },
+                            { text: "OK", style: 'cancel' },
                         ]
                     )
                 }, 350);
@@ -194,7 +194,7 @@ export default class Setting extends Component {
                             onPress={this.handleCancel.bind(this)}
                         />
                         <Dialog.Button
-                            label="Ok"
+                            label="OK"
                             onPress={this.handleGet.bind(this)}
                         />
                     </Dialog.Container>

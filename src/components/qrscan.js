@@ -47,7 +47,7 @@ export default class CameraScreen extends React.Component<any, any> {
         this.camera = null;
         this.barcodeCodes = 'Please scan the barcode.';
         this.state = {
-            MargintopLine: new Animated.Value(0),
+            MargintopLine: new Animated.Value(3),
             camera: {
                 aspect: Camera.constants.Aspect.fill,
                 captureTarget: Camera.constants.CaptureTarget.cameraRoll,
@@ -81,14 +81,14 @@ export default class CameraScreen extends React.Component<any, any> {
                 Animated.timing(
                     this.state.MargintopLine,
                     {
-                        toValue: 265,
+                        toValue: 260,
                         duration: 3000
                     }
                 ),
                 Animated.timing(
                     this.state.MargintopLine,
                     {
-                        toValue: 0,
+                        toValue: 3,
                         duration: 3000
                     }
                 )
@@ -165,7 +165,7 @@ export default class CameraScreen extends React.Component<any, any> {
             maskInner: {
                 width: 300,
                 backgroundColor: 'transparent',
-                borderColor: '#32CD32',
+                borderColor: GLOBALS.Color.primary,
                 borderWidth: 3,
             },
             maskFrame: {
@@ -206,7 +206,7 @@ export default class CameraScreen extends React.Component<any, any> {
                             <View style={[{ width: maskColWidth }, styles.maskFrame]} />
                             <View style={styles.maskInner} >
                                 <View style={{ height: 300, width: 300 }}>
-                                    <Animated.View style={{ backgroundColor: '#32CD32', width: 294, height: 3, marginTop: this.state.MargintopLine }} />
+                                    <Animated.View style={{ backgroundColor: GLOBALS.Color.danger, width: 294, height: 1, marginTop: this.state.MargintopLine }} />
                                 </View>
                             </View>
                             {/* <BarcodeFinder width={300} height={274} borderColor="red" borderWidth={3} /> */}

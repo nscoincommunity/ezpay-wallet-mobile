@@ -104,7 +104,6 @@ export default class Redeem extends Component {
     }
 
     render() {
-        this.state.amount = 100
         return (
             <Container style={{ backgroundColor: "#fafafa" }}>
                 <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
@@ -152,7 +151,7 @@ export default class Redeem extends Component {
                             <View style={styles.centerView}>
                                 <Image source={require('../../images/like.png')} resizeMode="contain" style={{ width: GLOBALS.wp('30%'), height: GLOBALS.wp('30%'), margin: GLOBALS.wp('7%') }} />
                                 <Text style={styles.Titlebox}>{Language.t('Redeem.Congratulation.Title')}!</Text>
-                                <Text style={{ fontFamily: GLOBALS.font.Poppins }}>
+                                <Text style={{ fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }}>
                                     {Language.t('Redeem.Congratulation.Content')}
                                     <Text style={{ fontFamily: GLOBALS.font.Poppins, color: GLOBALS.Color.primary, fontSize: GLOBALS.wp('7%'), fontWeight: '400' }}> {this.state.amount}</Text> NTY</Text>
                             </View>
@@ -180,11 +179,11 @@ export default class Redeem extends Component {
                                 <Text style={styles.Titlebox}>{Language.t('Redeem.Error.Title')}</Text>
                                 {
                                     this.state.RedeemStatus == 'ER02' &&
-                                    <Text style={{ fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.wp('6%') }}>{Language.t('Redeem.Error.Content.Used')}</Text>
+                                    <Text style={{ fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.wp('5%'), textAlign: 'center' }}>{Language.t('Redeem.Error.Content.Used')}</Text>
                                 }
                                 {
                                     this.state.RedeemStatus == 'ER01' &&
-                                    <Text style={{ fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.wp('6%') }}>{Language.t('Redeem.Error.Content.NotFound')}</Text>
+                                    <Text style={{ fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.wp('5%'), textAlign: 'center' }}>{Language.t('Redeem.Error.Content.NotFound')}</Text>
                                 }
 
                             </View>

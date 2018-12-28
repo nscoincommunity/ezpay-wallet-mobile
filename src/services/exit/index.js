@@ -13,7 +13,7 @@ export function exitApp(isError = false) {
         BackHandler.exitApp();
     } else {
         try {
-            Linking.openURL('LuckyDrawer://Deposit success/')
+            Linking.openURL('LuckyDrawer://')
             setTimeout(() => {
                 NativeModules.RNCloseApp.exitApp(isError);
             }, 200)
