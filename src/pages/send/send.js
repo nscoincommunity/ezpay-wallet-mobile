@@ -243,7 +243,7 @@ export default class FormSend extends Component {
                     await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
                 })
         } else {
-            SendToken(this.state.addresswallet, this.state.tokenSelected.tokenAddress, this.state.tokenSelected.ABI, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
+            SendToken(this.state.addresswallet, this.state.tokenSelected.tokenAddress, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
                 .then(async data => {
                     await this.setState(this.resetState)
                     console.log('send success: ' + data)

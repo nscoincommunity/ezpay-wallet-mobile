@@ -83,6 +83,7 @@ class ScreenRestore extends Component {
                 {
                     this.state.loading ?
                         <Modal
+                            onRequestClose={() => null}
                             animationType='fade'
                             transparent={true}
                             visible={true}>
@@ -207,8 +208,15 @@ class FormBackupcode extends Component {
                             "symbol": 'NTY',
                             "decimals": '',
                             "ABI": ''
+                        }, {
+                            "tokenAddress": '0x73c99a8a9f82a4df0c6b5819f68ecc732d7bdc3d',
+                            "balance": '0',
+                            "symbol": 'NTF',
+                            "decimals": '',
+                            "ABI": ''
                         }]
-                        setData('ListToken', JSON.stringify(initialData)).then(() => {
+                        setData('ListToken', JSON.stringify(initialData)).then((data) => {
+                            console.log(data)
                             setData('isBackup', '0');
                             const { navigate } = this.props.navigator;
                             navigate('TabNavigator');
@@ -450,8 +458,15 @@ class FormPrivateKey extends Component {
                             "symbol": 'NTY',
                             "decimals": '',
                             "ABI": ''
+                        }, {
+                            "tokenAddress": '0x73c99a8a9f82a4df0c6b5819f68ecc732d7bdc3d',
+                            "balance": '0',
+                            "symbol": 'NTF',
+                            "decimals": '',
+                            "ABI": ''
                         }]
-                        setData('ListToken', JSON.stringify(initialData)).then(() => {
+                        setData('ListToken', JSON.stringify(initialData)).then((data) => {
+                            console.log(data)
                             setData('isBackup', '0');
                             const { navigate } = this.props.navigator;
                             navigate('TabNavigator');

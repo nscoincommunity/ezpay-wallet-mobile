@@ -124,8 +124,8 @@ export default class listCoin extends Component {
         try {
             updateBalanceTK().then(async data => {
                 if (data == 1) {
-                    await this.loadListToken();
                     interval = setTimeout(() => {
+                        this.loadListToken();
                         this.updateBalTK();
                     }, 2000);
                 }

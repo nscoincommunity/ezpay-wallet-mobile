@@ -173,6 +173,7 @@ export default class backup extends Component {
         this.setState({ dialogVisible: false, passcode: '' })
     }
     render() {
+        console.log(this.state.backupcode)
         return (
             <ScrollView contentContainerStyle={{ flex: 1 }}>
                 <View style={style.container} pointerEvents="box-none">

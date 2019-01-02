@@ -74,7 +74,6 @@ class FormAddToken extends Component {
         typeButton: true,
         ValidToken: false,
         ExistToken: false,
-        ABI: [],
         balance: ''
     }
     constructor(props) {
@@ -88,7 +87,7 @@ class FormAddToken extends Component {
         if (val.length > 0) {
             GetInfoToken(val).then(async data => {
                 if (data.symbol != null) {
-                    await this.setState({ symbol: data.symbol, decimals: data.decimals, ABI: data.ABI, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
+                    await this.setState({ symbol: data.symbol, decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
                         this.disableButton()
                     })
                 }
@@ -132,7 +131,7 @@ class FormAddToken extends Component {
                             "balance": this.state.balance,
                             "symbol": this.state.symbol,
                             "decimals": this.state.decimals,
-                            "ABI": this.state.ABI
+                            "ABI": ''
                         })
                         setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
                             Alert.alert(
@@ -156,7 +155,7 @@ class FormAddToken extends Component {
                         'balance': this.state.balance,
                         'symbol': this.state.symbol,
                         'decimals': this.state.decimals,
-                        'ABI': this.state.ABI
+                        'ABI': ''
                     })
                     setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
                         Alert.alert(
