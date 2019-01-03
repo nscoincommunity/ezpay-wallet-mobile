@@ -38,6 +38,7 @@ export async function updateBalanceTK(params) {
                     } else {
                         var contract = await new WEB3.eth.Contract(ABI, ListToken[i].tokenAddress)
                         await contract.methods.balanceOf(Address).call().then(bal => {
+                            console.log(bal)
                             if (bal > 0) {
                                 contract.methods.decimals().call().then(decimal => {
                                     if (parseFloat(bal / Math.pow(10, decimal)) % 1 == 0) {
@@ -51,11 +52,13 @@ export async function updateBalanceTK(params) {
                             } else {
                                 ListToken[i].balance = 0;
                             }
+                            setTimeout(() => {
+                                if (i == (ListToken.length - 1)) {
+                                    setData('ListToken', JSON.stringify(ListToken))
+                                    resolve('1')
+                                }
+                            }, 500)
                         })
-                        if (i == (ListToken.length - 1)) {
-                            setData('ListToken', JSON.stringify(ListToken))
-                            resolve('1')
-                        }
                     }
                 }
             }
@@ -239,17 +242,23 @@ export async function SendToken(toAddress: string, tokenAddress, token: number, 
     if (! await WEB3.utils.isAddress(toAddress)) {
         throw (Language.t('Send.ValidAddress'));
     }
-    console.log('number token: ', token)
-    var Contract = new WEB3.eth.Contract(ABI, tokenAddress, { from: Address });
 
+    var Contract = new WEB3.eth.Contract(ABI, tokenAddress, { from: Address });
     let txData: Tx;
-    txData = {
-        from: Address,
-        to: tokenAddress,
-        value: '0x0',
-        data: Contract.methods.transfer(toAddress, token).encodeABI(),
-        chainId: 66666
-    }
+
+    await Contract.methods.decimals().call().then(decimal => {
+        console.log(decimal);
+        var valueToken = (token * bigInt(10).pow(decimal)).toString();
+        console.log(valueToken, parseFloat(valueToken))
+        txData = {
+            from: Address,
+            to: tokenAddress,
+            value: '0x0',
+            data: Contract.methods.transfer(toAddress, parseFloat(valueToken)).encodeABI(),
+            chainId: 66666,
+            gasPrice: 0
+        }
+    })
 
     return new Promise((resolve, reject) => {
         WEB3.eth.getTransactionCount(Address)

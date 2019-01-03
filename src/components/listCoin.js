@@ -75,22 +75,17 @@ export default class listCoin extends Component {
                             fontFamily: GLOBALS.font.Poppins,
                             fontSize: GLOBALS.wp('4%')
                         }}>{Language.t('Dashboard.YourBalance')}: {item.symbol}</Text>
-                        {
-                            Platform.OS == 'ios' ?
-                                <Text style={{
-                                    color: '#fff',
-                                    fontWeight: '400',
-                                    fontFamily: GLOBALS.font.Poppins,
-                                    fontSize: GLOBALS.wp('8%'),
-                                }}>{item.balance}</Text>
-                                :
-                                <Text style={{
-                                    color: '#fff',
-                                    fontWeight: '400',
-                                    fontFamily: GLOBALS.font.Poppins,
-                                    fontSize: GLOBALS.wp('8%'),
-                                }}>{(item.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
-                        }
+                        <Text
+                            style={{
+                                color: '#fff',
+                                fontWeight: '400',
+                                fontFamily: GLOBALS.font.Poppins,
+                                fontSize: item.balance.length > 9 ? GLOBALS.wp('7%') : GLOBALS.wp('8%'),
+                            }}
+                        >
+                            {(item.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </Text>
+
                     </View>
                 </ImageBackground>
             </View>

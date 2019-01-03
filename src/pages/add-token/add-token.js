@@ -117,7 +117,7 @@ class FormAddToken extends Component {
         getData('ListToken').then(async data => {
             if (data != null) {
                 this.ListToken = JSON.parse(data);
-                if (this.ListToken.findIndex(x => x['tokenAddress'] == this.state.addressTK) > -1) {
+                if (this.ListToken.findIndex(x => x['tokenAddress'] == this.state.addressTK) > -1 || this.ListToken.findIndex(x => x['symbol'] == this.state.symbol) > -1) {
                     this.setState({ ExistToken: true });
                     Alert.alert(
                         Language.t('AddToken.AlerError.Title'),

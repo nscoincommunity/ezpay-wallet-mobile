@@ -175,7 +175,7 @@ export default class backup extends Component {
     render() {
         console.log(this.state.backupcode)
         return (
-            <ScrollView contentContainerStyle={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flex: 1 }} style={{ backgroundColor: '#fafafa' }}>
                 <View style={style.container} pointerEvents="box-none">
                     {
                         this.state.getsuccess ?
