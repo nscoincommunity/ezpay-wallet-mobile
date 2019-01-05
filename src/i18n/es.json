@@ -156,7 +156,7 @@
             },
             "AlerError": {
                 "Title": "Error",
-                "Content": "La dirección del token ya existía",
+                "Content": "Del token ya existía",
                 "TitleButton": "Ok"
             },
             "AlerSuccess": {
@@ -232,7 +232,7 @@
             "Title": "Confirmar",
             "Content": "Quieres salir?",
             "ButtonAgree": "CONCORDO ",
-            "ButtonCancel": "NO ACEPTAR ",
+            "ButtonCancel": "NO ACEPTAR",
             "exitapp": "Realmente desea salir?"
         },
         "ChangePIN": {
@@ -258,6 +258,16 @@
                 "cancelText": "Cancela",
                 "reason": "Escanear Touch ID para procesar"
             }
+        },
+        "Token": {
+            "Title": "Token de lista",
+            "AlertDelete": {
+                "Title": "Confirmar",
+                "Content": "Quieres eliminar token?",
+                "ButtonAgree": "CONCORDO",
+                "ButtonCancel": "NO ACEPTAR"
+            },
+            "TitleButton": "Eliminar"
         },
         "LOGIN_TITLE": "Login"
     }

@@ -19,13 +19,13 @@ export default class Setup extends Component {
           "decimals": '',
           "ABI": ''
         },
-          // {
-          // "tokenAddress": '0x73c99a8a9f82a4df0c6b5819f68ecc732d7bdc3d',
-          // "balance": '0',
-          // "symbol": 'NTF',
-          // "decimals": '',
-          // "ABI": ''
-          // }
+        {
+          "tokenAddress": '0xf426016c5335399bd8f8798abf7c55264e0c1dba',
+          "balance": '0',
+          "symbol": 'NTF',
+          "decimals": '',
+          "ABI": ''
+        }
         ]
         setData('ListToken', JSON.stringify(initialData))
       }

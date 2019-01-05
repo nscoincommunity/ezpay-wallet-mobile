@@ -156,7 +156,7 @@
         },
         "AlerError": {
             "Title": "Error",
-            "Content": "Token address has already existed",
+            "Content": "Token has already existed",
             "TitleButton": "Ok"
         },
         "AlerSuccess": {
@@ -258,6 +258,16 @@
             "cancelText": "Cancel",
             "reason": "Scan Touch ID to process"
         }
+    },
+    "Token": {
+        "Title": "List tokens",
+        "AlertDelete": {
+            "Title": "Confirm",
+            "Content": "Do you want to delete token?",
+            "ButtonAgree": "AGREE",
+            "ButtonCancel": "DISAGREE"
+        },
+        "TitleButton": "Delete"
     },
     "LOGIN_TITLE": "Login"
 }

@@ -1,5 +1,18 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert, Keyboard, Platform, TextInput, PixelRatio } from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Text,
+    ScrollView,
+    KeyboardAvoidingView,
+    TouchableOpacity,
+    Alert,
+    Keyboard,
+    Platform,
+    TextInput,
+    PixelRatio,
+    Image
+} from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { GetInfoToken } from '../../services/wallet.service';
 import { setData, getData, rmData } from '../../services/data.service'
@@ -24,22 +37,8 @@ export default class Addtoken extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: "#fff" }}>
-                {/* <Header style={{ borderBottomColor: '#fff', borderBottomWidth: 0, backgroundColor: 'transparent' }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
-                        >
-                            <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
-                        </Button>
-                    </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t("AddToken.Title")}</Title>
-                    </Body>
-                    <Right />
-                </Header> */}
-                <Header style={{ backgroundColor: '#fff', borderBottomWidth: 0, borderBottomColor: '#fff' }}>
+            <Container style={{ backgroundColor: "#fafafa" }}>
+                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0, borderBottomColor: '#fff' }}>
                     <Left>
                         <Button
                             transparent
@@ -51,11 +50,18 @@ export default class Addtoken extends Component {
                     <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
                         <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('AddToken.Title')}</Title>
                     </Body>
-                    <Right />
+                    <Right>
+                        <Button
+                            transparent
+                            onPress={() => this.props.navigation.navigate('ListToken')}
+                        >
+                            <Icon name="list-alt" color={GLOBALS.Color.primary} size={25} />
+                        </Button>
+                    </Right>
                 </Header>
 
-                <ScrollView style={{ flex: 1 }}>
-                    <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} enabled style={{ flex: 1 }}>
+                <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
+                    <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={Platform.OS == "ios" ? 0 : GLOBALS.hp('-30%')} enabled style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
                         <FormAddToken />
                     </KeyboardAvoidingView>
                 </ScrollView>
@@ -87,9 +93,16 @@ class FormAddToken extends Component {
         if (val.length > 0) {
             GetInfoToken(val).then(async data => {
                 if (data.symbol != null) {
-                    await this.setState({ symbol: data.symbol, decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
-                        this.disableButton()
-                    })
+                    if (val == "0x73c99a8a9f82a4df0c6b5819f68ecc732d7bdc3d") {
+                        await this.setState({ symbol: "NTF OLD", decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
+                            this.disableButton()
+                        })
+                    } else {
+                        await this.setState({ symbol: data.symbol, decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
+                            this.disableButton()
+                        })
+                    }
+
                 }
                 else {
                     await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken'), symbol: '' }, () => {
@@ -126,6 +139,7 @@ class FormAddToken extends Component {
                     )
                 } else {
                     try {
+                        console.log(this.ListToken)
                         await this.ListToken.push({
                             "tokenAddress": this.state.addressTK,
                             "balance": this.state.balance,
@@ -133,6 +147,7 @@ class FormAddToken extends Component {
                             "decimals": this.state.decimals,
                             "ABI": ''
                         })
+                        console.log(this.ListToken)
                         setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
                             Alert.alert(
                                 Language.t('AddToken.AlerSuccess.Title'),
@@ -178,50 +193,58 @@ class FormAddToken extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
-                }}>
-                    <TextInput
-                        placeholder={Language.t("AddToken.FormAdd.PlaceholderToken")}
-                        value={this.state.addressTK}
-                        onChangeText={(value) => { this.setValue(value) }}
-                        style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%') }}
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-                <Text style={{ color: GLOBALS.Color.danger, textAlign: 'left' }}>{this.state.txtErr}</Text>
+                <View style={styles.MainForm}>
+                    <View style={{ alignItems: 'center', paddingVertical: GLOBALS.hp('5%') }}>
+                        <Image
+                            source={require('../../images/Add-token.png')}
+                            resizeMode="contain"
+                            style={{ height: GLOBALS.wp('40%'), width: GLOBALS.wp('40%') }} />
+                    </View>
+                    <View style={{
+                        justifyContent: 'center',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#d8d8d8',
+                        paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
+                    }}>
+                        <TextInput
+                            placeholder={Language.t("AddToken.FormAdd.PlaceholderToken")}
+                            value={this.state.addressTK}
+                            onChangeText={(value) => { this.setValue(value) }}
+                            style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%') }}
+                            underlineColorAndroid="transparent"
+                        />
+                    </View>
+                    <Text style={{ color: GLOBALS.Color.danger, textAlign: 'left' }}>{this.state.txtErr}</Text>
 
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
-                }}>
-                    <TextInput
-                        placeholder={Language.t("AddToken.FormAdd.PlaceholderSymbol")}
-                        editable={false}
-                        value={this.state.symbol}
-                        style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'), }}
-                        underlineColorAndroid="transparent"
-                    />
+                    <View style={{
+                        justifyContent: 'center',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#d8d8d8',
+                        paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
+                    }}>
+                        <TextInput
+                            placeholder={Language.t("AddToken.FormAdd.PlaceholderSymbol")}
+                            editable={false}
+                            value={this.state.symbol}
+                            style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'), }}
+                            underlineColorAndroid="transparent"
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.button} onPress={this.addToken} disabled={this.state.typeButton}>
+                        <Gradient
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                            start={{ x: 1, y: 0.7 }}
+                            end={{ x: 0, y: 3 }}
+                            style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
+                        >
+                            <Text style={styles.TextButton}>{Language.t('AddToken.FormAdd.TitleButton')}</Text>
+                        </Gradient>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={this.addToken} disabled={this.state.typeButton}>
-                    <Gradient
-                        colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
-                        start={{ x: 1, y: 0.7 }}
-                        end={{ x: 0, y: 3 }}
-                        style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
-                    >
-                        <Text style={styles.TextButton}>{Language.t('AddToken.FormAdd.TitleButton')}</Text>
-                    </Gradient>
-                </TouchableOpacity>
             </View>
         )
     }
@@ -231,8 +254,25 @@ class FormAddToken extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: GLOBALS.hp('4%'),
-        paddingTop: GLOBALS.hp('10%'),
+        // padding: GLOBALS.hp('4%'),
+        // paddingTop: GLOBALS.hp('10%'),
+        padding: GLOBALS.hp('2%'),
+        backgroundColor: '#fafafa',
+    },
+    MainForm: {
+        flex: 1,
+        backgroundColor: '#fff',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: -1,
+            height: 3,
+        },
+        shadowOpacity: 0.24,
+        shadowRadius: 2.27,
+        elevation: 2,
+        borderRadius: 5,
+        padding: GLOBALS.hp('2.5%'),
+        justifyContent: 'center'
     },
     TextButton: {
         color: 'white',

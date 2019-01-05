@@ -116,12 +116,15 @@ export default class listCoin extends Component {
     }
 
     async updateBalTK() {
+        console.log('update balance token')
         try {
             updateBalanceTK().then(async data => {
                 if (data == 1) {
                     interval = setTimeout(() => {
                         this.loadListToken();
-                        this.updateBalTK();
+                        if (this.mounted) {
+                            this.updateBalTK();
+                        }
                     }, 2000);
                 }
             }).catch(err => {

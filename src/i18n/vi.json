@@ -156,7 +156,7 @@
         },
         "AlerError": {
             "Title": "Lỗi",
-            "Content": "Địa chỉ token đã tồn tại",
+            "Content": "Token đã tồn tại",
             "TitleButton": "Đồng ý"
         },
         "AlerSuccess": {
@@ -258,6 +258,16 @@
             "cancelText": "Hủy",
             "reason": "Quét vân tay vào cảm biến"
         }
+    },
+    "Token": {
+        "Title": "Danh sách token",
+        "AlertDelete": {
+            "Title": "Xác nhận",
+            "Content": "Bạn có muốn xóa token này?",
+            "ButtonAgree": "Đồng ý",
+            "ButtonCancel": "Hủy"
+        },
+        "TitleButton": "Xóa"
     },
     "LOGIN_TITLE": "Đăng nhập"
 }

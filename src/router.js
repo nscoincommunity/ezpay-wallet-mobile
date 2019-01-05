@@ -21,7 +21,8 @@ import DetailHis from './pages/detail/detail';
 import QRscan from "./components/qrscan";
 import Language from "./pages/languages/language";
 import ChangePIN from './pages/changePIN/changePIN';
-import TempPage from './Drawer'
+import TempPage from './Drawer';
+import ListToken from './pages/list-token/token';
 
 /* screen drawer*/
 import Setting from './pages/setting/setting';
@@ -125,6 +126,7 @@ export default class Router extends Component {
                     // }
                 },
                 TempPage: { screen: TempPage },
+                ListToken: { screen: ListToken },
                 register: { screen: register },
                 restore: { screen: restore },
                 Backup: { screen: Backup },

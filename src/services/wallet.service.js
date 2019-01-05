@@ -38,7 +38,6 @@ export async function updateBalanceTK(params) {
                     } else {
                         var contract = await new WEB3.eth.Contract(ABI, ListToken[i].tokenAddress)
                         await contract.methods.balanceOf(Address).call().then(bal => {
-                            console.log(bal)
                             if (bal > 0) {
                                 contract.methods.decimals().call().then(decimal => {
                                     if (parseFloat(bal / Math.pow(10, decimal)) % 1 == 0) {
@@ -329,7 +328,6 @@ export function GetInfoToken(TokenAddress) {
     return new Promise((resolve, reject) => {
         try {
             var ContractABI = new WEB3.eth.Contract(ABI, TokenAddress);
-            console.log(ContractABI.methods);
             try {
             } catch (error) {
                 console.log(error)
@@ -352,20 +350,20 @@ export function GetInfoToken(TokenAddress) {
             of(ABI)
         ]).subscribe(data => {
             console.log(data);
-            if (parseFloat(data[2] / CONSTANTS.BASE_NTY) % 1 == 0) {
-                balance = parseFloat(data[2] / CONSTANTS.BASE_NTY).toLocaleString()
+            if ((parseFloat(data[0]) / Math.pow(10, data[2])) % 1 == 0) {
+                balance = (parseFloat(data[0]) / Math.pow(10, data[2])).toLocaleString()
                 var infoTK = {
-                    "balance": data[0],
+                    "balance": balance,
                     "symbol": data[1],
-                    "decimals": balance,
+                    "decimals": data[2],
                     "ABI": data[3]
                 }
             } else {
-                balance = parseFloat(data[2] / CONSTANTS.BASE_NTY).toFixed(2).toLocaleString()
+                balance = (parseFloat(data[0]) / Math.pow(10, data[2])).toFixed(2).toLocaleString()
                 var infoTK = {
-                    "balance": data[0],
+                    "balance": balance,
                     "symbol": data[1],
-                    "decimals": balance,
+                    "decimals": data[2],
                     "ABI": data[3]
                 }
             }

@@ -156,7 +156,7 @@
         },
         "AlerError": {
             "Title": "오류",
-            "Content": "토큰 주소가 이미 존재 함",
+            "Content": "토큰 가 이미 존재 함",
             "TitleButton": "Ok"
         },
         "AlerSuccess": {
@@ -258,6 +258,16 @@
             "cancelText": "취소",
             "reason": "처리 할 터치 ID 스캔"
         }
+    },
+    "Token": {
+        "Title": "목록 토큰",
+        "AlertDelete": {
+            "Title": "확인",
+            "Content": "삭제하다 하시겠습니까?",
+            "ButtonAgree": "동의하다",
+            "ButtonCancel": "동의하지 않는다"
+        },
+        "TitleButton": "삭제"
     },
     "LOGIN_TITLE": "로그인"
 }

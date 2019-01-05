@@ -156,7 +156,7 @@
         },
         "AlerError": {
             "Title": "错误",
-            "Content": "令牌地址已经存在",
+            "Content": "令牌已经存在",
             "TitleButton": "Ok"
         },
         "AlerSuccess": {
@@ -258,6 +258,16 @@
             "cancelText": "取消",
             "reason": "扫描触摸ID进行处理"
         }
+    },
+    "Token": {
+        "Title": "名單代币",
+        "AlertDelete": {
+            "Title": "確認",
+            "Content": "您是否要删除代币",
+            "ButtonAgree": "同意",
+            "ButtonCancel": "拒绝"
+        },
+        "TitleButton": "删除"
     },
     "LOGIN_TITLE": "登录"
 }

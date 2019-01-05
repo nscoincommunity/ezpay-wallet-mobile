@@ -13,7 +13,9 @@ import {
     FlatList,
     PixelRatio,
     Image,
-    Linking
+    Linking,
+    Modal,
+    ActivityIndicator
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { Form, Item, Input, Label } from 'native-base'
@@ -82,6 +84,7 @@ export default class FormSend extends Component {
         disabledButtomSend: false,
         showTouchID: false,
         deepLink: false,
+        loading: false,
     }
 
     resetState = {
@@ -216,6 +219,7 @@ export default class FormSend extends Component {
 
     async  doSend() {
         Keyboard.dismiss()
+        this.setState({ loading: true })
         if (this.state.walletaddress == '') {
             console.log('chay vao day')
             return;
@@ -228,7 +232,7 @@ export default class FormSend extends Component {
                     this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
                     this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
                 }).catch(async error => {
-                    await this.setState({ dialogSend: false, })
+                    await this.setState({ dialogSend: false })
                     console.log('send error: ' + error)
                     console.log(error.slice(0, 34))
                     if (error.slice(0, 34) == "Returned error: known transaction:") {
@@ -250,7 +254,7 @@ export default class FormSend extends Component {
                     await this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
                     await this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
                 }).catch(async error => {
-                    await this.setState({ dialogSend: false, })
+                    await this.setState({ dialogSend: false })
                     console.log('send error: ' + error)
                     console.log(error.slice(0, 34))
                     if (error.slice(0, 34) == "Returned error: known transaction:") {
@@ -307,6 +311,7 @@ export default class FormSend extends Component {
     showScaleAnimationDialog = (typeModal, title, content) => {
         // this.scaleAnimationDialog.show();
         setTimeout(() => {
+            this.setState({ loading: false })
             if (typeModal == "success") {
                 this.refs.PopupDialog.openModal(typeModal, title, content, true, this.state.deepLink)
             } else {
@@ -524,6 +529,19 @@ export default class FormSend extends Component {
                         <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
+
+                        {
+                            this.state.loading ?
+                                <Modal
+                                    animationType='fade'
+                                    transparent={true}
+                                    visible={true}>
+                                    <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
+                                        <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
+                                    </View>
+                                </Modal>
+                                : null
+                        }
                     </Dialog.Container>
                     <AlerModal ref="PopupDialog" />
                 </KeyboardAvoidingView>

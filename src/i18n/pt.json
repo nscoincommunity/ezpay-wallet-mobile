@@ -156,7 +156,7 @@
         },
         "AlerError": {
             "Title": "Erro",
-            "Content": "O endereço do token já existe",
+            "Content": "Do token já existe",
             "TitleButton": "Ok"
         },
         "AlerSuccess": {
@@ -258,6 +258,16 @@
             "cancelText": "Cancelar",
             "reason": "Digitalizar ID de toque para processar"
         }
+    },
+    "Token": {
+        "Title": "Token de lista",
+        "AlertDelete": {
+            "Title": "Confirme",
+            "Content": "Você quer excluir token?",
+            "ButtonAgree": "CONCORDO",
+            "ButtonCancel": "NÃO CONCORDO"
+        },
+        "TitleButton": "Excluir"
     },
     "LOGIN_TITLE": "Login"
 }
