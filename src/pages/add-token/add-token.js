@@ -88,6 +88,9 @@ class FormAddToken extends Component {
         this.state = this.initState
     };
 
+    componentWillUnmount() {
+        this.ListToken = []
+    }
     async setValue(val: string) {
         this.setState({ addressTK: val });
         if (val.length > 0) {

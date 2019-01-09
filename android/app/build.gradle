@@ -100,8 +100,8 @@ android {
         applicationId "io.nexty.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 101041
-        versionName "1.1.4"
+        versionCode 101050
+        versionName "1.1.5"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

@@ -169,8 +169,6 @@ const styles = StyleSheet.create({
         borderLeftWidth: Platform.OS == 'ios' ? 0 : 0.2,
         borderRightWidth: Platform.OS == 'ios' ? 0 : 0.2,
         borderColor: '#c1bfbf',
-
-        paddingVertical: GLOBALS.hp('2%'),
         flexDirection: 'row',
         backgroundColor: '#fff',
         shadowColor: "#000",
@@ -184,6 +182,5 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: GLOBALS.hp('2.5%'),
         marginVertical: GLOBALS.hp('1%'),
-
     }
 })

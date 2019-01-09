@@ -110,7 +110,7 @@
             "Congratulation": {
                 "Title": "Enhorabuena",
                 "Content": "Usted recibió",
-                "TitleButton": "Ok"
+                "TitleButton": "OK"
             },
             "Error": {
                 "Title": "Error",
@@ -157,12 +157,12 @@
             "AlerError": {
                 "Title": "Error",
                 "Content": "Del token ya existía",
-                "TitleButton": "Ok"
+                "TitleButton": "OK"
             },
             "AlerSuccess": {
                 "Title": "Con éxito",
                 "Content": "Token agregado con éxito",
-                "TitleButton": "Ok"
+                "TitleButton": "OK"
             },
             "ValidToken": "La dirección del símbolo no es válida"
         },

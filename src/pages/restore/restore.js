@@ -53,11 +53,11 @@ class ScreenRestore extends Component {
     render() {
         const SwitchSeg = [{ type: Lang.t('Restore.BackUpCode'), value: 0 }, { type: Lang.t('Restore.Privatekey'), value: 1 }]
         return (
-            <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t('Restore.Title')}</Text>
+            <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'column' }}>
+                <Text style={{ flex: 1, fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t('Restore.Title')}</Text>
 
                 <FlatList
-                    style={{ marginTop: hp('2%'), width: GLOBALS.wp('100%') - GLOBALS.hp('4%') }}
+                    style={{ flex: 2, marginTop: hp('2%'), width: GLOBALS.wp('100%') - GLOBALS.hp('4%') }}
                     data={SwitchSeg}
                     horizontal={true}
                     scrollEnabled={false}
@@ -102,7 +102,7 @@ class ScreenRestore extends Component {
 
 const selectedBtn = (type) => StyleSheet.create({
     selected: {
-        backgroundColor: type ? GLOBALS.Color.secondary : '#fff',
+        backgroundColor: type ? GLOBALS.Color.secondary : 'transparent',
         borderRadius: 20,
         padding: wp('3%'),
         margin: hp('0.5%'),
@@ -115,7 +115,8 @@ const selectedBtn = (type) => StyleSheet.create({
         shadowRadius: 2.27,
         elevation: type ? 5 : 0,
         alignItems: 'center',
-        width: GLOBALS.wp('50%') - GLOBALS.hp('3%')
+        width: GLOBALS.wp('50%') - GLOBALS.hp('3%'),
+        justifyContent: 'center'
     },
     text: {
         fontWeight: type ? 'bold' : 'normal',
@@ -288,7 +289,7 @@ class FormBackupcode extends Component {
 
     render() {
         return (
-            <View style={{ marginTop: hp('12%') }}>
+            <View style={{ flex: 5, paddingTop: Platform.OS == "ios" ? GLOBALS.hp('10%') : GLOBALS.hp('15%') }}>
                 <View style={{
                     flexDirection: 'row',
                     flexWrap: 'wrap',
@@ -305,6 +306,7 @@ class FormBackupcode extends Component {
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
                         style={{ flex: 8, fontSize: hp('2.5%') }}
                         underlineColorAndroid="transparent"
+                        numberOfLines={1}
                     />
                     <TouchableOpacity style={style.buttonFolder} onPress={() => this.SelectFile()}>
                         <Icon name="folder-open" color={GLOBALS.Color.secondary} size={35} />
@@ -505,7 +507,7 @@ class FormPrivateKey extends Component {
 
     render() {
         return (
-            <View style={{ marginTop: hp('14.5%') }}>
+            <View style={{ flex: 5, paddingTop: Platform.OS == "ios" ? GLOBALS.hp('10%') : GLOBALS.hp('15%') }}>
                 <View style={{
                     justifyContent: 'center',
                     flexDirection: 'row',
@@ -607,9 +609,14 @@ export default class restore extends Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff' }}>
-                <KeyboardAvoidingView style={style.container} keyboardVerticalOffset={Platform.OS == 'ios' ? hp('15%') : hp('3%')} behavior="position" enabled>
-                    <ScreenRestore navigator={this.props.navigation}></ScreenRestore>
+            <ScrollView style={{ backgroundColor: '#fff' }} contentContainerStyle={{ flex: 1 }}>
+                <KeyboardAvoidingView
+                    style={style.container}
+                    keyboardVerticalOffset={Platform.OS == 'ios' ? hp('10%') : hp('0')}
+                    behavior="position"
+                    contentContainerStyle={{ flex: 1 }}
+                    enabled>
+                    <ScreenRestore navigator={this.props.navigation} />
                 </KeyboardAvoidingView>
             </ScrollView>
         )

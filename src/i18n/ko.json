@@ -110,7 +110,7 @@
         "Congratulation": {
             "Title": "축하",
             "Content": "당신은 받았습니다",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "Error": {
             "Title": "오류",
@@ -157,12 +157,12 @@
         "AlerError": {
             "Title": "오류",
             "Content": "토큰 가 이미 존재 함",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "AlerSuccess": {
             "Title": "성공적으로",
             "Content": "토큰이 성공적으로 추가되었습니다",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "ValidToken": "토큰 주소가 잘못되었습니다."
     },

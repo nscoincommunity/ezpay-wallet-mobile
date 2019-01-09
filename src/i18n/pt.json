@@ -110,7 +110,7 @@
         "Congratulation": {
             "Title": "Parabéns",
             "Content": "Você recebeu ",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "Error": {
             "Title": "Erro",
@@ -157,12 +157,12 @@
         "AlerError": {
             "Title": "Erro",
             "Content": "Do token já existe",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "AlerSuccess": {
             "Title": "Com sucesso",
             "Content": "Token adicionado com sucesso",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "ValidToken": "O endereço do token é inválido"
     },

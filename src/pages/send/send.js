@@ -43,7 +43,7 @@ const pt = PixelRatio.get()
 
 export default class FormSend extends Component {
     mouted: boolean = true;
-
+    spamPress: boolean = false;
 
     static navigationOptions = {
         title: Language.t('Send.Title'),
@@ -218,57 +218,62 @@ export default class FormSend extends Component {
     }
 
     async  doSend() {
-        Keyboard.dismiss()
-        this.setState({ loading: true })
-        if (this.state.walletaddress == '') {
-            console.log('chay vao day')
-            return;
-        }
-        if (this.state.viewSymbol == 'NTY') {
-            SendService(this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
-                .then(data => {
-                    this.setState(this.resetState)
-                    console.log('send success: ' + data)
-                    this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
-                    this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
-                }).catch(async error => {
-                    await this.setState({ dialogSend: false })
-                    console.log('send error: ' + error)
-                    console.log(error.slice(0, 34))
-                    if (error.slice(0, 34) == "Returned error: known transaction:") {
-                        this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
-                        return;
-                    }
-                    if (error == 'Returned error: insufficient funds for gas * price + value') {
-                        await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
-                    } else {
-                        await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
-                    }
-                    await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
-                })
-        } else {
-            SendToken(this.state.addresswallet, this.state.tokenSelected.tokenAddress, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
-                .then(async data => {
-                    await this.setState(this.resetState)
-                    console.log('send success: ' + data)
-                    await this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
-                    await this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
-                }).catch(async error => {
-                    await this.setState({ dialogSend: false })
-                    console.log('send error: ' + error)
-                    console.log(error.slice(0, 34))
-                    if (error.slice(0, 34) == "Returned error: known transaction:") {
-                        this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
-                        return;
-                    }
-                    if (error == 'Returned error: insufficient funds for gas * price + value') {
-                        await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughToken') })
-                    } else {
-                        await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
-                    }
-                    await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
-                })
-        }
+        this.spamPress = true;
+        Keyboard.dismiss();
+        this.setState({ dialogSend: false }, () => {
+            setTimeout(() => {
+                this.setState({ loading: true })
+                if (this.state.walletaddress == '') {
+                    console.log('chay vao day')
+                    return;
+                }
+                if (this.state.viewSymbol == 'NTY') {
+                    SendService(this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
+                        .then(data => {
+                            this.setState(this.resetState)
+                            console.log('send success: ' + data)
+                            this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
+                            this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
+                        }).catch(async error => {
+                            // await this.setState({ dialogSend: false })
+                            console.log('send error: ' + error)
+                            console.log(error.slice(0, 34))
+                            if (error.slice(0, 34) == "Returned error: known transaction:") {
+                                this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
+                                return;
+                            }
+                            if (error == 'Returned error: insufficient funds for gas * price + value') {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
+                            } else {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
+                            }
+                            await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
+                        })
+                } else {
+                    SendToken(this.state.addresswallet, this.state.tokenSelected.tokenAddress, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
+                        .then(async data => {
+                            await this.setState(this.resetState)
+                            console.log('send success: ' + data)
+                            await this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
+                            await this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
+                        }).catch(async error => {
+                            // await this.setState({ dialogSend: false })
+                            console.log('send error: ' + error)
+                            console.log(error.slice(0, 34))
+                            if (error.slice(0, 34) == "Returned error: known transaction:") {
+                                this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
+                                return;
+                            }
+                            if (error == 'Returned error: insufficient funds for gas * price + value') {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughToken') })
+                            } else {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
+                            }
+                            await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
+                        })
+                }
+            }, Platform.OS == 'android' ? 0 : 350);
+        })
     }
 
     handleCancel() {
@@ -309,15 +314,19 @@ export default class FormSend extends Component {
     }
 
     showScaleAnimationDialog = (typeModal, title, content) => {
+        this.spamPress = false;
+        this.setState({ loading: false }, () => {
+            console.log(this.state.loading)
+            setTimeout(() => {
+                if (typeModal == "success") {
+                    this.refs.PopupDialog.openModal(typeModal, title, content, true, this.state.deepLink)
+                } else {
+                    this.refs.PopupDialog.openModal(typeModal, title, content, false, this.state.deepLink)
+                }
+            }, 350);
+        })
         // this.scaleAnimationDialog.show();
-        setTimeout(() => {
-            this.setState({ loading: false })
-            if (typeModal == "success") {
-                this.refs.PopupDialog.openModal(typeModal, title, content, true, this.state.deepLink)
-            } else {
-                this.refs.PopupDialog.openModal(typeModal, title, content, false, this.state.deepLink)
-            }
-        }, 350);
+
     }
 
     focusTheField = (id) => {
@@ -325,7 +334,7 @@ export default class FormSend extends Component {
     }
     inputs = {};
 
-    selectToken(token) {
+    selectToken = (token) => {
         if (token == 'NTY') {
             this.setState({ viewSymbol: token })
         } else {
@@ -334,8 +343,7 @@ export default class FormSend extends Component {
         }
     }
     Selected(item) {
-        this.setState({ selected: item.label })
-        this.selectToken(item.value)
+        this.setState({ selected: item.label }, () => this.selectToken(item.value))
     }
 
     ButtonSend() {
@@ -528,22 +536,21 @@ export default class FormSend extends Component {
                         </Dialog.Description>
                         <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
-                        <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
-
-                        {
-                            this.state.loading ?
-                                <Modal
-                                    animationType='fade'
-                                    transparent={true}
-                                    visible={true}>
-                                    <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
-                                        <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
-                                    </View>
-                                </Modal>
-                                : null
-                        }
+                        <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.spamPress == true ? null : this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
                     </Dialog.Container>
                     <AlerModal ref="PopupDialog" />
+                    {
+                        this.state.loading ?
+                            <Modal
+                                animationType='fade'
+                                transparent={true}
+                                visible={true}>
+                                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
+                                    <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
+                                </View>
+                            </Modal>
+                            : null
+                    }
                 </KeyboardAvoidingView>
             </ScrollView >
         )

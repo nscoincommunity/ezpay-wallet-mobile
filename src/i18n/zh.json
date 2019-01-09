@@ -110,7 +110,7 @@
         "Congratulation": {
             "Title": "祝贺",
             "Content": "你收到了",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "Error": {
             "Title": "错误",
@@ -157,12 +157,12 @@
         "AlerError": {
             "Title": "错误",
             "Content": "令牌已经存在",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "AlerSuccess": {
             "Title": "成功",
             "Content": "代币添加成功",
-            "TitleButton": "Ok"
+            "TitleButton": "OK"
         },
         "ValidToken": "无效代币地址"
     },
