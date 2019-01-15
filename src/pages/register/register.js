@@ -53,7 +53,7 @@ class ScreenRegister extends Component {
                     "ABI": ''
                 },
                 {
-                    "tokenAddress": '0xf426016c5335399bd8f8798abf7c55264e0c1dba',
+                    "tokenAddress": '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
                     "balance": '0',
                     "symbol": 'NTF',
                     "decimals": '',

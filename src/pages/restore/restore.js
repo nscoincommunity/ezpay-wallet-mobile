@@ -13,7 +13,7 @@ import {
     FlatList,
     TextInput,
     Modal,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
 import { Form, Item, Input, Label, Spinner } from 'native-base'
 import SegmentControl from 'react-native-segment-controller';
@@ -57,7 +57,7 @@ class ScreenRestore extends Component {
                 <Text style={{ flex: 1, fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t('Restore.Title')}</Text>
 
                 <FlatList
-                    style={{ flex: 2, marginTop: hp('2%'), width: GLOBALS.wp('100%') - GLOBALS.hp('4%') }}
+                    style={{ flex: 2, padding: GLOBALS.hp('1%'), width: GLOBALS.wp('100%') - GLOBALS.hp('4%') }}
                     data={SwitchSeg}
                     horizontal={true}
                     scrollEnabled={false}
@@ -69,7 +69,7 @@ class ScreenRestore extends Component {
                                     selectedBtn(this.state.index === item.value).selected
                                 }
                             >
-                                <Text style={[selectedBtn(this.state.index === item.value).text]}>{item.type}</Text>
+                                <Text numberOfLines={3} style={[selectedBtn(this.state.index === item.value).text]}>{item.type}</Text>
                             </TouchableOpacity>
                         )
                     }}
@@ -104,8 +104,8 @@ const selectedBtn = (type) => StyleSheet.create({
     selected: {
         backgroundColor: type ? GLOBALS.Color.secondary : 'transparent',
         borderRadius: 20,
-        padding: wp('3%'),
-        margin: hp('0.5%'),
+        padding: wp('1%'),
+        // margin: hp('0.5%'),
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -114,7 +114,7 @@ const selectedBtn = (type) => StyleSheet.create({
         shadowOpacity: type ? 0.34 : 0,
         shadowRadius: 2.27,
         elevation: type ? 5 : 0,
-        alignItems: 'center',
+        // alignItems: 'center',
         width: GLOBALS.wp('50%') - GLOBALS.hp('3%'),
         justifyContent: 'center'
     },
@@ -122,7 +122,7 @@ const selectedBtn = (type) => StyleSheet.create({
         fontWeight: type ? 'bold' : 'normal',
         color: type ? '#FFFFFF' : "#000",
         fontFamily: GLOBALS.font.Poppins,
-        textAlign: 'center'
+        textAlign: 'center',
     }
 })
 
@@ -211,7 +211,7 @@ class FormBackupcode extends Component {
                             "ABI": ''
                         },
                         {
-                            "tokenAddress": '0xf426016c5335399bd8f8798abf7c55264e0c1dba',
+                            "tokenAddress": '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
                             "balance": '0',
                             "symbol": 'NTF',
                             "decimals": '',
@@ -464,7 +464,7 @@ class FormPrivateKey extends Component {
                             "ABI": ''
                         },
                         {
-                            "tokenAddress": '0xf426016c5335399bd8f8798abf7c55264e0c1dba',
+                            "tokenAddress": '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
                             "balance": '0',
                             "symbol": 'NTF',
                             "decimals": '',

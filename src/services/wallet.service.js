@@ -247,13 +247,14 @@ export async function SendToken(toAddress: string, tokenAddress, token: number, 
 
     await Contract.methods.decimals().call().then(decimal => {
         console.log(decimal);
-        var valueToken = (token * bigInt(10).pow(decimal)).toString();
-        console.log(valueToken, parseFloat(valueToken))
+        var valueToken = (token * bigInt(10).pow(decimal).valueOf()).toString(16);
+        var hexValueToken = '0x' + valueToken;
+        console.log(hexValueToken, parseFloat(valueToken))
         txData = {
             from: Address,
             to: tokenAddress,
             value: '0x0',
-            data: Contract.methods.transfer(toAddress, parseFloat(valueToken)).encodeABI(),
+            data: Contract.methods.transfer(toAddress, hexValueToken).encodeABI(),
             chainId: 66666,
             gasPrice: 0
         }

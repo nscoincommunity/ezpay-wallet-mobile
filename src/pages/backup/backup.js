@@ -44,6 +44,7 @@ export default class backup extends Component {
         },
         headerTitleStyle: {
             color: '#0C449A',
+            width: Platform.OS == "ios" ? GLOBALS.wp('70%') : 'auto'
         },
         headerBackTitleStyle: {
             color: '#0C449A'

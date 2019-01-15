@@ -158,6 +158,7 @@ export default class listCoin extends Component {
                             firstItem={HorizontalData.length > 2 ? 1 : 0}
                             hasParallaxImages={true}
                             loop={true}
+                        // loopClonesPerSide={10}
                         />
                         :
                         <Carousel
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 38,
         backgroundColor: 'transparent',
-        padding: 6,
+        // padding: 6,
     },
     ItemHozi: {
         flexDirection: 'row',

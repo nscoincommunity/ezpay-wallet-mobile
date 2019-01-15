@@ -61,6 +61,7 @@ class SendSceen extends React.Component {
 class DashboardScreen extends React.Component {
 
     render() {
+        var exchange = exchangeRate.toFixed(6);
         return (
             <ImageBackground
                 source={require('./images/background.png')}
@@ -82,7 +83,7 @@ class DashboardScreen extends React.Component {
                             </Button>
                         </Left>
                         <Body style={{ flex: 10, alignItems: 'center', backgroundColor: 'transparent' }}>
-                            <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>1 NTY = {exchangeRate.toFixed(6)} USD</Title>
+                            <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>1 NTY = {exchange} USD</Title>
                         </Body>
                         <Right />
                     </Header>

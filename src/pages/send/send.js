@@ -185,7 +185,11 @@ export default class FormSend extends Component {
         if (val < 0 || value.length < 1) {
             await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '' })
         } else {
-            var usd = await Utils.round(val * exchangeRate, 5);
+            if (this.state.viewSymbol == "NTY") {
+                var usd = await Utils.round(val * exchangeRate, 5);
+            } else {
+                var usd = 0;
+            }
             await this.setState({ errorNTY: false, USD: usd.toString(), NTY: value });
         }
         if (this.state.errorNTY == true || this.state.errorAddress == true || this.state.addresswallet == '' || this.state.NTY == '') {
@@ -203,8 +207,13 @@ export default class FormSend extends Component {
         if (val < 0 || value.length < 1) {
             await this.setState({ USD: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, NTY: '' })
         } else {
-            var nty = await Utils.round(val / exchangeRate);
-            await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+            if (this.state.viewSymbol == "NTY") {
+                var nty = await Utils.round(val / exchangeRate);
+                await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+            } else {
+                var nty = 0;
+                await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+            }
         }
         if (this.state.errorNTY == true || this.state.errorAddress == true || this.state.addresswallet == '' || this.state.NTY == '') {
         } else {
@@ -335,11 +344,21 @@ export default class FormSend extends Component {
     inputs = {};
 
     selectToken = (token) => {
-        if (token == 'NTY') {
-            this.setState({ viewSymbol: token })
+        if (JSON.parse(token).symbol == 'NTY') {
+            if (parseFloat(this.state.NTY) > 0) {
+                var usd = Utils.round(parseFloat(this.state.NTY) * exchangeRate, 5);
+                console.log("usd", usd)
+                this.setState({ viewSymbol: JSON.parse(token).symbol, USD: usd.toString() })
+            } else {
+                this.setState({ viewSymbol: JSON.parse(token).symbol })
+            }
         } else {
             this.state.tokenSelected = JSON.parse(token)
-            this.setState({ viewSymbol: this.state.tokenSelected.symbol })
+            if (parseFloat(this.state.NTY) > 0) {
+                this.setState({ viewSymbol: this.state.tokenSelected.symbol, USD: "0" })
+            } else {
+                this.setState({ viewSymbol: this.state.tokenSelected.symbol, USD: "" })
+            }
         }
     }
     Selected(item) {
@@ -388,7 +407,7 @@ export default class FormSend extends Component {
                     style={{ flex: 1 }}
                     behavior={'position'}
                     enabled
-                    keyboardVerticalOffset={Platform.OS == 'ios' ? GLOBALS.hp('-1') : GLOBALS.hp('-5%')}
+                    keyboardVerticalOffset={GLOBALS.hp('-10%')}
                 >
                     <View style={Styles.container}>
                         {
