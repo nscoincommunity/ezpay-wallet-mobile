@@ -251,6 +251,8 @@ export default class TabFooder extends React.Component {
                 }
 
             });
+
+        console.log('render dasboard')
         return (
             <MyApp />
         )

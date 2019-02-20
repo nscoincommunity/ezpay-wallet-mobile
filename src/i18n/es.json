@@ -186,7 +186,7 @@
             "Backup": "Copia de seguridad",
             "Languages": "Idiomas",
             "ChangePIN": "Cambiar PIN",
-            "TouchID": "Usar ID de timbre como PIN",
+            "TouchID": "Usar Touch ID como PIN",
             "Toast": " Esta función estará disponible en breve ",
             "EnableTouchID": "Confirmar",
             "Success": "ID de toque ativado com sucesso"
@@ -268,6 +268,12 @@
                 "ButtonCancel": "NO ACEPTAR"
             },
             "TitleButton": "Eliminar"
+        },
+        "AlertTouchID": {
+            "Title": "Touch ID",
+            "Content": "Use su Touch ID para un acceso más rápido y fácil a Wallet",
+            "BtnCancel": "Ahora no",
+            "BtnSetting": "Usar Touch ID"
         },
         "LOGIN_TITLE": "Login"
     }

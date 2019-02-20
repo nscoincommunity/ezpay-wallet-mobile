@@ -269,5 +269,11 @@
         },
         "TitleButton": "Excluir"
     },
+    "AlertTouchID": {
+        "Title": "ID de toque",
+        "Content": "Use sua ID de toque para acesso mais rápido e fácil à Wallet",
+        "BtnCancel": "Agora não",
+        "BtnSetting": "Use o ID de toque"
+    },
     "LOGIN_TITLE": "Login"
 }

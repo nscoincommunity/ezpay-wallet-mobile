@@ -63,9 +63,10 @@ class ScreenRegister extends Component {
                 setTimeout(() => {
                     setData('ListToken', JSON.stringify(initialData)).then(() => {
                         this.setState({ loading: false })
+                        setData('activeTouchID', '0');
+                        setData('isBackup', '0');
                         const { navigate } = this.props.data.navigation;
                         navigate('TabNavigator');
-                        setData('isBackup', '0');
                     })
                 }, 500);
 

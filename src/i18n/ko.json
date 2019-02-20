@@ -269,5 +269,11 @@
         },
         "TitleButton": "삭제"
     },
+    "AlertTouchID": {
+        "Title": "터치 ID",
+        "Content": "터치 ID 사용하여 월렛에 더 빠르고 쉽게 액세스하십시오",
+        "BtnCancel": "지금은 안돼.",
+        "BtnSetting": "터치 ID 사용"
+    },
     "LOGIN_TITLE": "로그인"
 }

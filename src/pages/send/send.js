@@ -365,39 +365,47 @@ export default class FormSend extends Component {
         this.setState({ selected: item.label }, () => this.selectToken(item.value))
     }
 
-    ButtonSend() {
+    ButtonSend = () => {
         Keyboard.dismiss();
         if (this.state.VisibaleButton == true) {
-
             return;
         }
-        getData('TouchID').then(data => {
-            if (data != null) {
-                let options = {
-                    title: "Nexty wallet", // Android
-                    sensorDescription: Language.t("TouchID.Options.sensorDescription"), // Android
-                    sensorErrorDescription: Language.t("TouchID.Options.sensorErrorDescription"), // Android
-                    cancelText: Language.t("TouchID.Options.cancelText"), // Android
-                    fallbackLabel: "", // iOS (if empty, then label is hidden)
-                };
-                var reason = Language.t("TouchID.Options.reason");
+        if (this.state.showTouchID && !this.state.VisibaleButton) {
+            getData('TouchID').then(data => {
+                if (data != null) {
+                    let options = {
+                        title: "Nexty wallet", // Android
+                        sensorDescription: Language.t("TouchID.Options.sensorDescription"), // Android
+                        sensorErrorDescription: Language.t("TouchID.Options.sensorErrorDescription"), // Android
+                        cancelText: Language.t("TouchID.Options.cancelText"), // Android
+                        fallbackLabel: "", // iOS (if empty, then label is hidden)
+                    };
+                    var reason = Language.t("TouchID.Options.reason");
 
-                TouchID.authenticate(reason, options)
-                    .then(success => {
-                        try {
-                            var passwordDecrypt = CryptoJS.AES.decrypt(data, cachePwd).toString(CryptoJS.enc.Utf8)
-                            this.setState({ Password: passwordDecrypt }, () => {
-                                this.doSend()
-                            })
-                        } catch (error) {
-                            console.log(error)
-                        }
+                    TouchID.authenticate(reason, options)
+                        .then(success => {
+                            try {
+                                var passwordDecrypt = CryptoJS.AES.decrypt(data, cachePwd).toString(CryptoJS.enc.Utf8)
+                                this.setState({ Password: passwordDecrypt }, () => {
+                                    this.doSend()
+                                })
+                            } catch (error) {
+                                console.log(error)
+                            }
 
-                    })
-            } else {
-                this.setState({ dialogSend: true })
-            }
-        })
+                        }).catch(err => {
+                            setTimeout(() => {
+                                this.setState({ dialogSend: true })
+                            }, 350);
+                        })
+                } else {
+                    this.setState({ dialogSend: true })
+                }
+            })
+        } else {
+            this.setState({ dialogSend: true })
+        }
+
     }
 
     render() {
@@ -485,7 +493,7 @@ export default class FormSend extends Component {
 
                             <Text style={{ color: GLOBALS.Color.danger, height: this.state.TextErrorAddress != '' ? 'auto' : 0 }}>{this.state.TextErrorNTY}</Text>
 
-                            <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.setState({ dialogSend: true }); Keyboard.dismiss() }}>
+                            <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.ButtonSend(); Keyboard.dismiss() }}>
                                 <Gradient
                                     colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
                                     style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
@@ -517,7 +525,7 @@ export default class FormSend extends Component {
                                     }}>Reset</Text>
                                 </TouchableOpacity>
                             }
-                            {
+                            {/* {
                                 this.state.showTouchID && !this.state.VisibaleButton ?
                                     <TouchableOpacity
                                         style={{
@@ -542,7 +550,7 @@ export default class FormSend extends Component {
                                             }}>{Language.t('TouchID.Send')}</Text>
                                     </TouchableOpacity>
                                     : null
-                            }
+                            } */}
 
                         </View>
                         <View style={{ flex: 1 }} />

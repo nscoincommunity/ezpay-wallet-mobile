@@ -70,6 +70,7 @@ const Drawer = createDrawerNavigator(
             backgroundColor: 'transparent'
         },
         drawerWidth: GLOBALS.wp('100%'),
+        backBehavior: 'initialRoute',
         /** customize drawer*/
         contentComponent: props => <Sidebar {...props} />
     }
@@ -133,7 +134,8 @@ export default class Router extends Component {
                 DetailsHis: { screen: DetailHis },
                 QRscan: { screen: QRscan },
                 Language: { screen: Language },
-                ChangePIN: { screen: ChangePIN }
+                ChangePIN: { screen: ChangePIN },
+                Setting: { screen: Setting },
             },
             {
                 initialRouteName: "Unlogin",

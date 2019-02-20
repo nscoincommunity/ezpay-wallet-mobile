@@ -33,7 +33,7 @@ export default class sidebar extends Component {
         };
     }
 
-    navigationPage(route) {
+    navigationPage = (route) => {
         if (route == 'Unlogin') {
             Alert.alert(
                 Language.t("ConfirmLogout.Content"),
@@ -54,6 +54,42 @@ export default class sidebar extends Component {
             this.props.navigation.navigate(route);
             this.props.navigation.closeDrawer()
         }
+
+        // switch (route) {
+        //     case "Unlogin":
+        //         {
+        //             Alert.alert(
+        //                 Language.t("ConfirmLogout.Content"),
+        //                 '',
+        //                 [
+        //                     { text: Language.t("ConfirmLogout.ButtonCancel"), style: 'Cancel', onPress: () => { this.props.navigation.closeDrawer() } },
+        //                     {
+        //                         text: Language.t("ConfirmLogout.ButtonAgree"), onPress: () => {
+        //                             logout().then(() => {
+        //                                 this.props.navigation.navigate(route);
+        //                             })
+        //                         }
+        //                     }
+        //                 ]
+        //             )
+        //         }
+        //         break;
+        //     case "TabNavigator":
+        //         {
+        //             console.log('touch in', route);
+        //             console.log(this.props.navigation)
+        //             this.props.navigation.goBack(null);
+        //             this.props.navigation.closeDrawer();
+        //         }
+        //         break;
+        //     default:
+        //         {
+        //             this.props.navigation.navigate(route);
+        //             this.props.navigation.closeDrawer()
+        //         }
+        //         break;
+        // }
+
     }
 
     render() {

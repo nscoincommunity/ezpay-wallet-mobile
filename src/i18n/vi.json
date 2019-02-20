@@ -269,5 +269,11 @@
         },
         "TitleButton": "Xóa"
     },
+    "AlertTouchID": {
+        "Title": "Sử dụng vân tay",
+        "Content": "Sử dụng vân tay để truy cập nhanh hơn",
+        "BtnCancel": "Để sau",
+        "BtnSetting": "Bật vân tay"
+    },
     "LOGIN_TITLE": "Đăng nhập"
 }

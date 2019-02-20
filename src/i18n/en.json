@@ -269,5 +269,11 @@
         },
         "TitleButton": "Delete"
     },
+    "AlertTouchID": {
+        "Title": "Touch ID",
+        "Content": "Use your Touch ID for faster, easier access to Wallet",
+        "BtnCancel": "Not Now",
+        "BtnSetting": "Use Touch ID"
+    },
     "LOGIN_TITLE": "Login"
 }

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Platform, Keyboard } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Platform, Keyboard, Alert } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Chart from '../../components/chart';
 import List from '../../components/listCoin';
-import { getData, rmData } from '../../services/data.service'
-import Language from '../../i18n/i18n'
+import { getData, rmData, setData } from '../../services/data.service';
+import Language from '../../i18n/i18n';
+import TouchID from 'react-native-touch-id';
+
 
 export default class dashboard extends Component {
     mounted: boolean = true
@@ -20,6 +22,8 @@ export default class dashboard extends Component {
     };
 
     componentDidMount() {
+        console.log('didMount')
+
         Keyboard.dismiss();
         if (this.mounted) {
             getData('isBackup').then(data => {
@@ -29,8 +33,34 @@ export default class dashboard extends Component {
                     this.setState({ isBackup: false });
                 }
             })
+            getData('activeTouchID')
+                .then(data => {
+                    console.log('check data', data)
+                    TouchID.isSupported().then(() => {
+                        if (data == 0) {
+                            Alert.alert(
+                                Language.t('AlertTouchID.Title'),
+                                Language.t('AlertTouchID.Content'),
+                                [
+                                    {
+                                        text: Language.t('AlertTouchID.BtnSetting'), onPress: () => {
+                                            this.props.navigation.navigate('Setting');
+                                            setData('activeTouchID', '1');
+                                        }
+                                    },
+                                    { text: Language.t('AlertTouchID.BtnCancel'), onPress: () => { setData('activeTouchID', '1') }, style: 'cancel' }
+                                ]
+                            )
+                        }
+                    })
+                }).catch(err => {
+                    console.log('aaa', err)
+                })
         }
     }
+
+
+
     componentWillUnmount() {
         this.mounted = false;
     }

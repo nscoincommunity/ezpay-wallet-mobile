@@ -220,7 +220,8 @@ class FormBackupcode extends Component {
                         ]
                         setData('ListToken', JSON.stringify(initialData)).then((data) => {
                             console.log(data)
-                            setData('isBackup', '0');
+                            // setData('isBackup', '0');
+                            setData('activeTouchID', '0');
                             const { navigate } = this.props.navigator;
                             navigate('TabNavigator');
                         })
@@ -473,7 +474,8 @@ class FormPrivateKey extends Component {
                         ]
                         setData('ListToken', JSON.stringify(initialData)).then((data) => {
                             console.log(data)
-                            setData('isBackup', '0');
+                            // setData('isBackup', '0');
+                            setData('activeTouchID', '0');
                             const { navigate } = this.props.navigator;
                             navigate('TabNavigator');
                         })

@@ -269,5 +269,11 @@
         },
         "TitleButton": "删除"
     },
+    "AlertTouchID": {
+        "Title": "Touch ID",
+        "Content": "使用您的 Touch ID 可以更快、更轻松地访问电子钱包。",
+        "BtnCancel": "不是现在",
+        "BtnSetting": "使用 Touch ID"
+    },
     "LOGIN_TITLE": "登录"
 }
