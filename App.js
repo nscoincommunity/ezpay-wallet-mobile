@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import App from "./src/router";
 import './global';
 import { exChange } from './src/tabfooter'
-import { getExchangeRate } from './src/services/rate.service';
+import { getExchangeRate, getExchangeRateETH } from './src/services/rate.service';
 import { DeviceLanguage, selectLang } from './src/i18n/i18n';
 import { getData, setData } from './src/services/data.service'
 import firebase from 'react-native-firebase';
@@ -30,6 +30,20 @@ export default class Setup extends Component {
         setData('ListToken', JSON.stringify(initialData))
       }
     })
+
+    getData('ListTokenETH').then((data) => {
+      if (data == null) {
+        var initialData = [{
+          "tokenAddress": '',
+          "balance": '0',
+          "symbol": 'ETH',
+          "decimals": '',
+          "ABI": ''
+        }]
+        setData('ListTokenETH', JSON.stringify(initialData))
+      }
+    })
+
     this.checkPermission();
     this.createNotificationListeners();
   }
@@ -129,7 +143,8 @@ export default class Setup extends Component {
   }
 
   render() {
-    getExchangeRate()
+    getExchangeRate();
+    getExchangeRateETH()
     return (
       <App />
     );

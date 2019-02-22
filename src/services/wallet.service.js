@@ -17,8 +17,31 @@ import Language from '../i18n/i18n'
 var ABI = [{ "constant": true, "inputs": [{ "name": "", "type": "uint256" }], "name": "owners", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_to", "type": "address" }, { "name": "_amount", "type": "uint256" }], "name": "sendTokens", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "name", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "approve", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_from", "type": "address" }, { "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "INITIAL_SUPPLY", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "manager", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_subtractedValue", "type": "uint256" }], "name": "decreaseApproval", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "_owner", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "balance", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "symbol", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getOwners", "outputs": [{ "name": "", "type": "address[]" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transfer", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "tokenWallet", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "endDate", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_addedValue", "type": "uint256" }], "name": "increaseApproval", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "_owner", "type": "address" }, { "name": "_spender", "type": "address" }], "name": "allowance", "outputs": [{ "name": "remaining", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "ownerByAddress", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_owners", "type": "address[]" }], "name": "setOwners", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "name": "tokenOwner", "type": "address" }, { "name": "_endDate", "type": "uint256" }], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "owners", "type": "address[]" }], "name": "SetOwners", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "owner", "type": "address" }, { "indexed": true, "name": "spender", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }];
 // export var Web3: web3 = new web3(new web3.providers.HttpProvider(GLOBALS.WEB3_API));
 const WEB3 = new Web3();
-WEB3.setProvider(new WEB3.providers.HttpProvider(CONSTANTS.WEB3_API));
 export var balance: number = 0
+export function setProvider() {
+    getData('Network').then(net => {
+        switch (net) {
+            case 'Ethereum':
+                WEB3.setProvider(new WEB3.providers.HttpProvider('https://mainnet.infura.io/v3/b174a1cc2f7441eb94ed9ea18c384730'));
+                break;
+            default:
+                WEB3.setProvider(new WEB3.providers.HttpProvider(CONSTANTS.WEB3_API));
+                break;
+        }
+    })
+}
+// (function () {
+//     getData('Network').then(net => {
+//         switch (net) {
+//             case 'Ethereum':
+//                 WEB3.setProvider(new WEB3.providers.HttpProvider('https://mainnet.infura.io/v3/b174a1cc2f7441eb94ed9ea18c384730'));
+//                 break;
+//             default:
+//                 WEB3.setProvider(new WEB3.providers.HttpProvider(CONSTANTS.WEB3_API));
+//                 break;
+//         }
+//     })
+// })()
 
 export async function updateBalanceTK(params) {
     return new Promise(resolve => {
@@ -66,6 +89,52 @@ export async function updateBalanceTK(params) {
 
 }
 
+export async function updateBalanceETH(params) {
+    return new Promise(resolve => {
+        var ListToken: Array = [];
+        getData('ListTokenETH').then(async data => {
+            if (data != null) {
+                ListToken = JSON.parse(data);
+                for (let i = 0; i < ListToken.length; i++) {
+                    if (ListToken[i].symbol == 'ETH') {
+                        updateBalance().then(() => {
+                            ListToken[i].balance = balance;
+                            if (i == (ListToken.length - 1)) {
+                                setData('ListTokenETH', JSON.stringify(ListToken))
+                                resolve('1')
+                            }
+                        })
+                    } else {
+                        var contract = await new WEB3.eth.Contract(ABI, ListToken[i].tokenAddress)
+                        await contract.methods.balanceOf(Address).call().then(bal => {
+                            if (bal > 0) {
+                                contract.methods.decimals().call().then(decimal => {
+                                    if (parseFloat(bal / Math.pow(10, decimal)) % 1 == 0) {
+                                        balance = parseFloat(bal / Math.pow(10, decimal)).toLocaleString()
+                                        ListToken[i].balance = balance;
+                                    } else {
+                                        balance = parseFloat(bal / Math.pow(10, decimal)).toFixed(2).toLocaleString()
+                                        ListToken[i].balance = balance;
+                                    }
+                                })
+                            } else {
+                                ListToken[i].balance = 0;
+                            }
+                            setTimeout(() => {
+                                if (i == (ListToken.length - 1)) {
+                                    setData('ListTokenETH', JSON.stringify(ListToken))
+                                    resolve('1')
+                                }
+                            }, 500)
+                        })
+                    }
+                }
+            }
+        })
+    })
+
+}
+
 export async function updateBalance() {
     if (Address == undefined) {
         return
@@ -73,7 +142,6 @@ export async function updateBalance() {
 
     of(await WEB3.eth.getBalance(Address))
         .subscribe(value => {
-            // console.log('Address', Address);
             if (value > 0) {
                 if (parseFloat(value / CONSTANTS.BASE_NTY) % 1 == 0) {
                     balance = parseFloat(value / CONSTANTS.BASE_NTY).toLocaleString()

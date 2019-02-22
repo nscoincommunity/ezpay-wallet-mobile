@@ -23,7 +23,7 @@ import Language from "./pages/languages/language";
 import ChangePIN from './pages/changePIN/changePIN';
 import TempPage from './Drawer';
 import ListToken from './pages/list-token/token';
-
+import SelectNetwork from './pages/network/network'
 /* screen drawer*/
 import Setting from './pages/setting/setting';
 import history from './pages/history/history';
@@ -136,6 +136,7 @@ export default class Router extends Component {
                 Language: { screen: Language },
                 ChangePIN: { screen: ChangePIN },
                 Setting: { screen: Setting },
+                SelectNetwork: { screen: SelectNetwork }
             },
             {
                 initialRouteName: "Unlogin",

@@ -30,9 +30,10 @@ export default {
     /* const */
     PASSWORD_PATTERN: /^.{6,}$/,
     /*API data COINMARKETCAP */
-    COINMARKETCAP: 'https://graphs2.coinmarketcap.com/currencies/nexty/',
+    COINMARKETCAP: 'https://graphs2.coinmarketcap.com/currencies',
     WEEK: 653600000,
     DAY: 86400000,
     MONTH: 2678400000,
     GETUSD: 'https://api.coinmarketcap.com/v2/ticker/2714/',
+    GETUSD_ETH: 'https://api.coinmarketcap.com/v2/ticker/1027/'
 }

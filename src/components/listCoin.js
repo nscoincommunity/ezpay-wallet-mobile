@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, FlatList, Dimensions, ImageBackground, Image, Platform } from 'react-native';
 import GLOBALS from '../helper/variables'
 import { Item } from 'native-base'
-import { updateBalance, balance, updateBalanceTK } from '../services/wallet.service';
+import { updateBalance, balance, updateBalanceTK, updateBalanceETH } from '../services/wallet.service';
 import { Utils } from '../helper/utils';
 import CONSTANTS from '../helper/constants';
 import { getData } from '../services/data.service'
@@ -34,7 +34,7 @@ export default class listCoin extends Component {
             balanceNTY: '',
             ListToken: [],
             slider1ActiveSlide: 0,
-            NTY: []
+            NTY: [],
         };
         this.loadListToken()
     };
@@ -62,11 +62,23 @@ export default class listCoin extends Component {
                     }}
                 >
                     <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image
-                            source={require('../images/wallet.png')}
-                            resizeMode="cover"
-                            style={{ width: GLOBALS.wp('16%'), height: GLOBALS.wp('16%') }}
-                        />
+                        {
+                            item.symbol == "ETH" ?
+                                <Image
+                                    source={{ uri: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png' }}
+                                    resizeMode="cover"
+                                    style={{ width: GLOBALS.wp('16%'), height: GLOBALS.wp('16%') }}
+                                />
+                                :
+                                <Image
+                                    source={require('../images/wallet.png')}
+                                    resizeMode="cover"
+                                    style={{ width: GLOBALS.wp('16%'), height: GLOBALS.wp('16%') }}
+                                />
+                        }
+
+
+
                     </View>
                     <View style={{ flex: 7, justifyContent: 'center' }}>
                         <Text style={{
@@ -94,13 +106,30 @@ export default class listCoin extends Component {
 
     loadListToken() {
         if (this.mounted) {
-            getData('ListToken').then(data => {
-                if (data != null) {
-                    this.setState({ ListToken: JSON.parse(data) })
-                } else {
-                    console.log('list token null')
+            getData('Network').then(net => {
+                switch (net) {
+                    case "Ethereum":
+                        getData('ListTokenETH').then(data => {
+                            if (data != null) {
+                                this.setState({ ListToken: JSON.parse(data) })
+                            } else {
+                                console.log('list token null')
+                            }
+                        })
+                        break;
+
+                    default:
+                        getData('ListToken').then(data => {
+                            if (data != null) {
+                                this.setState({ ListToken: JSON.parse(data) })
+                            } else {
+                                console.log('list token null')
+                            }
+                        })
+                        break;
                 }
             })
+
         }
     }
 
@@ -117,18 +146,36 @@ export default class listCoin extends Component {
 
     async updateBalTK() {
         try {
-            updateBalanceTK().then(async data => {
-                if (data == 1) {
-                    interval = setTimeout(() => {
-                        this.loadListToken();
-                        if (this.mounted) {
-                            this.updateBalTK();
+            getData('Network').then(net => {
+                if (net == "Ethereum") {
+                    updateBalanceETH().then(async data => {
+                        if (data == 1) {
+                            interval = setTimeout(() => {
+                                this.loadListToken();
+                                if (this.mounted) {
+                                    this.updateBalTK();
+                                }
+                            }, 2000);
                         }
-                    }, 2000);
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                } else {
+                    updateBalanceTK().then(async data => {
+                        if (data == 1) {
+                            interval = setTimeout(() => {
+                                this.loadListToken();
+                                if (this.mounted) {
+                                    this.updateBalTK();
+                                }
+                            }, 2000);
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
                 }
-            }).catch(err => {
-                console.log(err)
             })
+
         } catch (error) {
             console.log(error)
         }

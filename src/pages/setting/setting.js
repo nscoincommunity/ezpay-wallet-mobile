@@ -107,6 +107,11 @@ export default class Setting extends Component {
     render() {
         const datas = [
             {
+                route: "SelectNetwork",
+                text: "Change network",
+                status: true
+            },
+            {
                 route: "Backup",
                 text: Language.t('Settings.Backup'),
                 status: true

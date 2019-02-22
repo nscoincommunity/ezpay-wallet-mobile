@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { initAuth, isAuth, Address, cachePwd } from '../../services/auth.service'
-import { getExchangeRate } from '../../services/rate.service'
+import { getExchangeRate, getExchangeRateETH } from '../../services/rate.service'
 import { Spinner } from 'native-base';
 import Lang from '../../i18n/i18n';
 import Gradient from "react-native-linear-gradient"
@@ -35,6 +35,7 @@ export default class unlogin extends Component {
             .then(async data => {
                 if (isAuth) {
                     await this.setState({ isAuth: isAuth });
+                    await getExchangeRateETH();
                     await getExchangeRate()
                         .catch(err => {
                             this.setState({ isAuth: false, err: true })

@@ -22,8 +22,6 @@ export default class dashboard extends Component {
     };
 
     componentDidMount() {
-        console.log('didMount')
-
         Keyboard.dismiss();
         if (this.mounted) {
             getData('isBackup').then(data => {
@@ -35,7 +33,6 @@ export default class dashboard extends Component {
             })
             getData('activeTouchID')
                 .then(data => {
-                    console.log('check data', data)
                     TouchID.isSupported().then(() => {
                         if (data == 0) {
                             Alert.alert(

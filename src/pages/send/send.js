@@ -20,7 +20,7 @@ import {
 import GLOBALS from '../../helper/variables';
 import { Form, Item, Input, Label } from 'native-base'
 import Icon from "react-native-vector-icons/Ionicons";
-import { exchangeRate } from '../../services/rate.service';
+import { exchangeRate, exchangeRateETH } from '../../services/rate.service';
 import { Utils } from '../../helper/utils'
 import Dialog from "react-native-dialog";
 import { SendService, SendToken } from "../../services/wallet.service";
@@ -185,10 +185,21 @@ export default class FormSend extends Component {
         if (val < 0 || value.length < 1) {
             await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '' })
         } else {
-            if (this.state.viewSymbol == "NTY") {
-                var usd = await Utils.round(val * exchangeRate, 5);
-            } else {
-                var usd = 0;
+            // if (this.state.viewSymbol == "NTY") {
+
+            // } else {
+            //     var usd = 0;
+            // }
+            switch (this.state.viewSymbol) {
+                case "NTY":
+                    var usd = await Utils.round(val * exchangeRate, 5);
+                    break;
+                case "ETH":
+                    var usd = await Utils.round(val * exchangeRateETH, 5);
+                    break
+                default:
+                    var usd = 0;
+                    break;
             }
             await this.setState({ errorNTY: false, USD: usd.toString(), NTY: value });
         }
@@ -207,12 +218,27 @@ export default class FormSend extends Component {
         if (val < 0 || value.length < 1) {
             await this.setState({ USD: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, NTY: '' })
         } else {
-            if (this.state.viewSymbol == "NTY") {
-                var nty = await Utils.round(val / exchangeRate);
-                await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
-            } else {
-                var nty = 0;
-                await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+            // if (this.state.viewSymbol == "NTY") {
+            //     var nty = await Utils.round(val / exchangeRate);
+            //     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+            // } else {
+            //     var nty = 0;
+            //     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+            // }
+            switch (this.state.viewSymbol) {
+                case "NTY":
+                    var nty = await Utils.round(val / exchangeRate);
+                    await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+                    break;
+                case "ETH":
+                    var nty = await Utils.round(val / exchangeRateETH);
+                    await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+                    break
+                default:
+                    var nty = 0;
+                    await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
+
+                    break;
             }
         }
         if (this.state.errorNTY == true || this.state.errorAddress == true || this.state.addresswallet == '' || this.state.NTY == '') {
@@ -301,20 +327,42 @@ export default class FormSend extends Component {
             }).catch(() => {
                 this.setState({ showTouchID: false })
             })
-
-            getData('ListToken')
-                .then(data => {
-                    if (data != null) {
-                        var tempArray = []
-                        JSON.parse(data).forEach(element => {
-                            tempArray.push({
-                                value: JSON.stringify(element),
-                                label: element.symbol
+            getData('Network').then(net => {
+                switch (net) {
+                    case 'Ethereum':
+                        getData('ListTokenETH')
+                            .then(data => {
+                                if (data != null) {
+                                    var tempArray = []
+                                    JSON.parse(data).forEach(element => {
+                                        tempArray.push({
+                                            value: JSON.stringify(element),
+                                            label: element.symbol
+                                        })
+                                    });
+                                }
+                                this.setState({ ListToken: tempArray, viewSymbol: 'ETH', selected: 'ETH' })
                             })
-                        });
-                    }
-                    this.setState({ ListToken: tempArray })
-                })
+                        break;
+
+                    default:
+                        getData('ListToken')
+                            .then(data => {
+                                if (data != null) {
+                                    var tempArray = []
+                                    JSON.parse(data).forEach(element => {
+                                        tempArray.push({
+                                            value: JSON.stringify(element),
+                                            label: element.symbol
+                                        })
+                                    });
+                                }
+                                this.setState({ ListToken: tempArray })
+                            })
+                        break;
+                }
+            })
+
         }
     }
 
@@ -353,6 +401,15 @@ export default class FormSend extends Component {
                 this.setState({ viewSymbol: JSON.parse(token).symbol })
             }
         } else {
+            if (JSON.parse(token).symbol == "ETH") {
+                if (parseFloat(this.state.NTY) > 0) {
+                    var usd = Utils.round(parseFloat(this.state.NTY) * exchangeRateETH, 5);
+                    console.log("usd", usd)
+                    this.setState({ viewSymbol: JSON.parse(token).symbol, USD: usd.toString() })
+                } else {
+                    this.setState({ viewSymbol: JSON.parse(token).symbol })
+                }
+            }
             this.state.tokenSelected = JSON.parse(token)
             if (parseFloat(this.state.NTY) > 0) {
                 this.setState({ viewSymbol: this.state.tokenSelected.symbol, USD: "0" })

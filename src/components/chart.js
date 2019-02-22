@@ -6,10 +6,12 @@ import Constants from '../helper/constants'
 import { VictoryArea, VictoryStack, VictoryChart, VictoryAxis } from "victory-native";
 import Language from '../i18n/i18n'
 import { Defs, Stop, LinearGradient } from 'react-native-svg'
+import { getData } from '../services/data.service';
 
 
 export default class Chart extends Component {
-    mounted: boolean = true
+    mounted: boolean = true;
+    currencies: string = 'nexty';
     constructor(props) {
         super(props)
 
@@ -17,6 +19,9 @@ export default class Chart extends Component {
             DataChart: [],
             selected: 'D'
         };
+        getData('Network').then(net => {
+            this.currencies = net.toLowerCase()
+        })
     };
 
     componentDidMount() {
@@ -35,19 +40,19 @@ export default class Chart extends Component {
         var url = '';
         switch (type) {
             case 'D': {
-                url = Constants.COINMARKETCAP + (time.getTime() - Constants.DAY) + '/' + time.getTime() + '/'
+                url = Constants.COINMARKETCAP + '/' + this.currencies + '/' + (time.getTime() - Constants.DAY) + '/' + time.getTime() + '/'
             }
                 break;
             case 'W': {
-                url = Constants.COINMARKETCAP + (time.getTime() - Constants.WEEK) + '/' + time.getTime() + '/'
+                url = Constants.COINMARKETCAP + '/' + this.currencies + '/' + (time.getTime() - Constants.WEEK) + '/' + time.getTime() + '/'
             }
                 break;
             case 'M': {
-                url = Constants.COINMARKETCAP + (time.getTime() - Constants.MONTH) + '/' + time.getTime() + '/'
+                url = Constants.COINMARKETCAP + '/' + this.currencies + '/' + (time.getTime() - Constants.MONTH) + '/' + time.getTime() + '/'
             }
                 break;
             default: {
-                url = Constants.COINMARKETCAP
+                url = Constants.COINMARKETCAP + '/' + this.currencies + '/'
             }
                 break;
         }

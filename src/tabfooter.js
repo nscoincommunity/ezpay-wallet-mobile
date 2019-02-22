@@ -22,9 +22,11 @@ import Send from './pages/send/send';
 import GLOBALS from './helper/variables'
 import Iccon from "react-native-vector-icons/FontAwesome";
 import { Container, Header, Left, Body, Title, Right, Button, Icon, Input, Item } from 'native-base'
-import { exchangeRate } from '../src/services/rate.service';
+import { exchangeRate, exchangeRateETH } from '../src/services/rate.service';
 import Language from './i18n/i18n';
 import IconFeather from "react-native-vector-icons/Feather"
+import { setProvider } from './services/wallet.service';
+import { getData } from './services/data.service';
 
 const IconSend = require('./images/iconTabBar/send.png');
 const IconHome = require('./images/iconTabBar/home.png');
@@ -59,9 +61,25 @@ class SendSceen extends React.Component {
 }
 
 class DashboardScreen extends React.Component {
+    state = {
+        exchange: 0,
+        net: ''
+    }
+    componentWillMount() {
+        getData('Network').then(net => {
+            switch (net) {
+                case "Ethereum":
+                    this.setState({ net: net, exchange: exchangeRateETH.toFixed(6) })
+                    break;
+
+                default:
+                    this.setState({ net: net, exchange: exchangeRate.toFixed(6) })
+                    break;
+            }
+        })
+    }
 
     render() {
-        var exchange = exchangeRate.toFixed(6);
         return (
             <ImageBackground
                 source={require('./images/background.png')}
@@ -83,7 +101,12 @@ class DashboardScreen extends React.Component {
                             </Button>
                         </Left>
                         <Body style={{ flex: 10, alignItems: 'center', backgroundColor: 'transparent' }}>
-                            <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>1 NTY = {exchange} USD</Title>
+                            {
+                                this.state.net == "Nexty" ?
+                                    <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>1 NTY = {this.state.exchange} USD</Title>
+                                    :
+                                    <Title style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBALS.font.Poppins, fontWeight: '400' }}>1 ETH = {this.state.exchange} USD</Title>
+                            }
                         </Body>
                         <Right />
                     </Header>
@@ -206,6 +229,7 @@ export default class TabFooder extends React.Component {
         }).catch(err => {
             console.log(err)
         })
+        setProvider()
     }
     render() {
         const MyApp = createTabNavigator(
@@ -251,8 +275,6 @@ export default class TabFooder extends React.Component {
                 }
 
             });
-
-        console.log('render dasboard')
         return (
             <MyApp />
         )
