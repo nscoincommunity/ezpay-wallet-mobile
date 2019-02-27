@@ -65,7 +65,7 @@
         "AlerError": {
             "Error": "Error",
             "Content": "Invalid local passcode",
-            "NotEnoughNTY": "You do not have enough NTY for this transaction",
+            "NotEnoughNTY": "You do not have enough amount for this transaction",
             "NotEnoughToken": "You do not have enough token for this transaction",
             "TransactionFail": "Transaction failed"
         },

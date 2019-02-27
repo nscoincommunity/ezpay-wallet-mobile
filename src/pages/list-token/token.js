@@ -24,6 +24,8 @@ export default class ListToken extends Component {
         swipeEnabled: false,
     });
     mounted: boolean = true;
+
+    network: string = "Nexty";
     constructor(props) {
         super(props);
         this.state = {
@@ -33,15 +35,22 @@ export default class ListToken extends Component {
 
     componentWillMount() {
         if (this.mounted) {
-            this.LoadData()
+            getData('Network').then(net => {
+                this.network = net;
+                if (net == 'Nexty') {
+                    this.LoadData('ListToken')
+                } else {
+                    this.LoadData('ListTokenETH')
+                }
+            })
         }
     }
     componentWillUnmount() {
         this.mounted = false;
     }
 
-    LoadData = () => {
-        getData('ListToken').then(data => {
+    LoadData = (nameStorage) => {
+        getData(nameStorage).then(data => {
             console.log(data)
             if (data != null) {
                 this.setState({ ArrayToken: JSON.parse(data) })
@@ -63,20 +72,38 @@ export default class ListToken extends Component {
     }
 
     Delete = (symbol) => {
-        getData('ListToken').then(data => {
-            if (data != null) {
-                var TempArray = JSON.parse(data);
-                var index = TempArray.findIndex(x => x['symbol'] == symbol);
-                if (index > -1) {
-                    TempArray.splice(index, 1);
-                    console.log(TempArray, index)
-                    setData('ListToken', JSON.stringify(TempArray))
-                        .then(() => {
-                            this.LoadData()
-                        })
+        if (this.network == 'Nexty') {
+            getData('ListToken').then(data => {
+                if (data != null) {
+                    var TempArray = JSON.parse(data);
+                    var index = TempArray.findIndex(x => x['symbol'] == symbol);
+                    if (index > -1) {
+                        TempArray.splice(index, 1);
+                        console.log(TempArray, index)
+                        setData('ListToken', JSON.stringify(TempArray))
+                            .then(() => {
+                                this.LoadData('ListToken')
+                            })
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            getData('ListTokenETH').then(data => {
+                if (data != null) {
+                    var TempArray = JSON.parse(data);
+                    var index = TempArray.findIndex(x => x['symbol'] == symbol);
+                    if (index > -1) {
+                        TempArray.splice(index, 1);
+                        console.log(TempArray, index)
+                        setData('ListTokenETH', JSON.stringify(TempArray))
+                            .then(() => {
+                                this.LoadData('ListTokenETH')
+                            })
+                    }
+                }
+            })
+        }
+
     }
 
     render() {
@@ -91,7 +118,7 @@ export default class ListToken extends Component {
                             data={this.state.ArrayToken}
                             extraData={this.state}
                             renderItem={({ item }) => {
-                                if (item['symbol'] == "NTY" || item['symbol'] == "NTF") {
+                                if (item['symbol'] == "NTY" || item['symbol'] == "NTF" || item['symbol'] == 'ETH') {
                                     item.disable = true
                                 } else {
                                     item.disable = false

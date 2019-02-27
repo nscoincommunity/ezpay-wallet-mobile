@@ -65,7 +65,7 @@
         "AlerError": {
             "Error": "Lỗi",
             "Content": "Mật khẩu sai",
-            "NotEnoughNTY": "Bạn không đủ NTY cho giao dịch này",
+            "NotEnoughNTY": "Số dư không đủ cho giao dịch này",
             "NotEnoughToken": "Bạn không đủ token cho giao dịch này",
             "TransactionFail": "Giao dịch thất bại"
         },

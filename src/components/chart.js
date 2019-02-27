@@ -19,14 +19,16 @@ export default class Chart extends Component {
             DataChart: [],
             selected: 'D'
         };
-        getData('Network').then(net => {
-            this.currencies = net.toLowerCase()
-        })
+
     };
 
     componentDidMount() {
         if (this.mounted) {
-            this.changeChart('D')
+            getData('Network')
+                .then(net => {
+                    this.currencies = net.toLowerCase();
+                    this.changeChart('D')
+                })
         }
     }
     componentWillUnmount() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, FlatList, Dimensions, ImageBackground, Image, Platform } from 'react-native';
+import { StyleSheet, View, Text, FlatList, Dimensions, ImageBackground, Image, Platform, TouchableOpacity } from 'react-native';
 import GLOBALS from '../helper/variables'
 import { Item } from 'native-base'
 import { updateBalance, balance, updateBalanceTK, updateBalanceETH } from '../services/wallet.service';
@@ -81,12 +81,30 @@ export default class listCoin extends Component {
 
                     </View>
                     <View style={{ flex: 7, justifyContent: 'center' }}>
-                        <Text style={{
-                            color: '#fff',
-                            fontWeight: '400',
-                            fontFamily: GLOBALS.font.Poppins,
-                            fontSize: GLOBALS.wp('4%')
-                        }}>{Language.t('Dashboard.YourBalance')}: {item.symbol}</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flex: 5, justifyContent: 'center' }}>
+                                <Text style={{
+                                    color: '#fff',
+                                    fontWeight: '400',
+                                    fontFamily: GLOBALS.font.Poppins,
+                                    fontSize: GLOBALS.wp('4%'),
+                                }}>{Language.t('Dashboard.YourBalance')}: {item.symbol}</Text>
+                            </View>
+                            {
+                                item.symbol == "ETH" &&
+                                <View style={{ flex: 5, paddingHorizontal: GLOBALS.wp('2%') }}>
+                                    <TouchableOpacity
+                                        style={{
+                                            backgroundColor: GLOBALS.Color.secondary,
+                                            borderRadius: 10,
+                                            padding: GLOBALS.wp('1%')
+                                        }}
+                                    >
+                                        <Text style={{ color: '#fff', textAlign: 'center', fontWeight: 'bold' }}>DApps</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            }
+                        </View>
                         <Text
                             style={{
                                 color: '#fff',

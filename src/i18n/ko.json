@@ -65,7 +65,7 @@
         "AlerError": {
             "Error": "오류",
             "Content": "로컬 패스 코드가 잘못되었습니다.",
-            "NotEnoughNTY": "이 거래에 충분한 NTY가 없습니다.",
+            "NotEnoughNTY": "이 거래에 충분한 양가 없습니다.",
             "NotEnoughToken": "이 거래에 충분한 토큰 없습니다.",
             "TransactionFail": "거래 실패"
         },

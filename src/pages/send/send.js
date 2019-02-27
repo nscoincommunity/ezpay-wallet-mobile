@@ -262,7 +262,7 @@ export default class FormSend extends Component {
                     console.log('chay vao day')
                     return;
                 }
-                if (this.state.viewSymbol == 'NTY') {
+                if (this.state.viewSymbol == 'NTY' || this.state.viewSymbol == 'ETH') {
                     SendService(this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
                         .then(data => {
                             this.setState(this.resetState)
@@ -620,7 +620,7 @@ export default class FormSend extends Component {
                         </Dialog.Description>
                         <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
-                        <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.spamPress == true ? null : this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
+                        <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.spamPress == true ? console.log('spam') : this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
                     </Dialog.Container>
                     <AlerModal ref="PopupDialog" />
                     {

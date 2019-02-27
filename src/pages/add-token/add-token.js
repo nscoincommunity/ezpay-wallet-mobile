@@ -72,6 +72,7 @@ export default class Addtoken extends Component {
 
 class FormAddToken extends Component {
     ListToken = [];
+    network: string = "Nexty"
     initState = {
         addressTK: '',
         txtErr: '',
@@ -80,13 +81,19 @@ class FormAddToken extends Component {
         typeButton: true,
         ValidToken: false,
         ExistToken: false,
-        balance: ''
+        balance: '',
     }
     constructor(props) {
         super(props)
-
-        this.state = this.initState
+        this.state = this.initState;
     };
+    componentWillMount() {
+        console.log('aaa')
+        getData('Network').then(net => {
+            console.log('aaa', net)
+            this.network = net;
+        })
+    }
 
     componentWillUnmount() {
         this.ListToken = []
@@ -96,15 +103,15 @@ class FormAddToken extends Component {
         if (val.length > 0) {
             GetInfoToken(val).then(async data => {
                 if (data.symbol != null) {
-                    if (val == "0x73c99a8a9f82a4df0c6b5819f68ecc732d7bdc3d") {
-                        await this.setState({ symbol: "NTF OLD", decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
-                            this.disableButton()
-                        })
-                    } else {
-                        await this.setState({ symbol: data.symbol, decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
-                            this.disableButton()
-                        })
-                    }
+                    // if (val == "0x73c99a8a9f82a4df0c6b5819f68ecc732d7bdc3d") {
+                    //     await this.setState({ symbol: "NTF OLD", decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
+                    //         this.disableButton()
+                    //     })
+                    // } else {
+                    await this.setState({ symbol: data.symbol, decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
+                        this.disableButton()
+                    })
+                    // }
 
                 }
                 else {
@@ -130,7 +137,15 @@ class FormAddToken extends Component {
     }
 
     addToken = () => {
-        getData('ListToken').then(async data => {
+        if (this.network == "Nexty") {
+            this.funcAdd('ListToken');
+        } else {
+            this.funcAdd('ListTokenETH');
+        }
+    }
+
+    funcAdd = (nameStorage) => {
+        getData(nameStorage).then(async data => {
             if (data != null) {
                 this.ListToken = JSON.parse(data);
                 if (this.ListToken.findIndex(x => x['tokenAddress'] == this.state.addressTK) > -1 || this.ListToken.findIndex(x => x['symbol'] == this.state.symbol) > -1) {
@@ -151,7 +166,7 @@ class FormAddToken extends Component {
                             "ABI": ''
                         })
                         console.log(this.ListToken)
-                        setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
+                        setData(nameStorage, JSON.stringify(this.ListToken)).then(data => {
                             Alert.alert(
                                 Language.t('AddToken.AlerSuccess.Title'),
                                 Language.t('AddToken.AlerSuccess.Content'),
@@ -175,7 +190,7 @@ class FormAddToken extends Component {
                         'decimals': this.state.decimals,
                         'ABI': ''
                     })
-                    setData('ListToken', JSON.stringify(this.ListToken)).then(data => {
+                    setData(nameStorage, JSON.stringify(this.ListToken)).then(data => {
                         Alert.alert(
                             Language.t('AddToken.AlerSuccess.Title'),
                             Language.t('AddToken.AlerSuccess.Content'),

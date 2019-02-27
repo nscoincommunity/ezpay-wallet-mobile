@@ -65,7 +65,7 @@
         "AlerError": {
             "Error": "错误",
             "Content": "本地密码无效",
-            "NotEnoughNTY": "您没有足够NTY进行此笔交易",
+            "NotEnoughNTY": "您没有足够量进行此笔交易",
             "NotEnoughToken": "您没有足够代币进行此笔交易",
             "TransactionFail": "交易失败"
         },

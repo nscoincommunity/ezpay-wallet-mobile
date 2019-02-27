@@ -65,7 +65,7 @@
         "AlerError": {
             "Error": "Erro",
             "Content": "Senha invalida ",
-            "NotEnoughNTY": "Você não tem NTY suficiente para esta transação ",
+            "NotEnoughNTY": "Você não tem montante suficiente para esta transação ",
             "NotEnoughToken": "Você não tem token suficiente para essa transação ",
             "TransactionFail": "Falha na transação"
         },

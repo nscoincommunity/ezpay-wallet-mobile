@@ -65,7 +65,7 @@
             "AlerError": {
                 "Error": "Error",
                 "Content": "Contraseña invalida",
-                "NotEnoughNTY": "Usted no tiene suficiente NTY para esta transacción",
+                "NotEnoughNTY": "Usted no tiene suficiente cantidad para esta transacción",
                 "NotEnoughToken": "No tiene suficiente token para esta transacción",
                 "TransactionFail": "Transacción fallida"
             },
