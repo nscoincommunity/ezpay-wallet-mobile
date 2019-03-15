@@ -65,34 +65,6 @@ export default class SelectNetwork extends Component {
     render() {
         return (
             <View style={styles.container}>
-                {/* <FlatList
-                    horizontal={true}
-                    data={ListNetwork}
-                    keyExtractor={(item, index) => index.toString()}
-                    extraData={this.state}
-                    renderItem={data => {
-                        return (
-                            <TouchableOpacity
-                                style={buttonNetwork(this.state.selected == data.item.name ? true : false).button}
-                                onPress={() => this.selectNetwork(data.item.name)}
-                            >
-                                <Image
-                                    resizeMode="contain"
-                                    style={{ flex: 6 }}
-                                    source={{ uri: `https://s2.coinmarketcap.com/static/img/coins/64x64/${data.item.uri}.png` }}
-                                    style={{ height: 90, width: 90 }}
-                                />
-                                <Text style={{
-                                    fontSize: px * 20,
-                                    flex: 2, textAlign: 'center',
-                                    color: this.state.selected == data.item.name ? "#000" : "#000"
-                                }}>{data.item.name}</Text>
-                            </TouchableOpacity>
-                        )
-                    }
-
-                    }
-                /> */}
                 {
                     <FlatList
                         data={ListNetwork}

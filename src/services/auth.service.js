@@ -4,24 +4,23 @@ import PropTypes from 'prop-types';
 const keythereum = require("keythereum");
 import RNFS from 'react-native-fs';
 import moment from 'moment';
-import { getData, setData, addAddress, checkAuth, setAuth } from './data.service';
+import { getData, setData, addAddress } from './data.service';
 import '../../global';
 import '../../shim.js';
 import crypto from 'crypto'
 import CryptoJS from 'crypto-js';
 import { forkJoin, of, interval, throwError, fromEvent } from 'rxjs';
 import { ADDRCONFIG } from 'dns';
+import { InsertNewWallet, SelectAllWallet } from '../../realm/walletSchema'
 
-export async function Register(password: string) {
+export async function Register(password: string, network: string, name: string) {
     let key = await keythereum.create();
     let privateKeyBuffer = await key['privateKey'];
     let address = keythereum.privateKeyToAddress(privateKeyBuffer);
     let privateKey = await privateKeyBuffer.toString('hex');
-    // await createKeystore(key, password, address)
     Address = await address;
-    await restore(address, privateKey, password)
+    await restore(address, privateKey, password, name, network)
     setData('isBackup', '0');
-    setAuth(true)
 }
 
 export async function encryptPassword(password: string): string {
@@ -29,26 +28,27 @@ export async function encryptPassword(password: string): string {
     return EnctypPW
 }
 
-export async function restore(address: string, privateKey: string, password: string) {
-    await getData('TouchID').then(async (touch) => {
-        if (touch != null) {
-            var passcodeEncrypt = CryptoJS.AES.encrypt(password, await encryptPassword(password)).toString()
-            setData('TouchID', passcodeEncrypt)
-        }
-    })
-    var cacheAddress;
-    var cachePrivatekey;
+export async function restore(address: string, privateKey: string, password: string, name: string, network: string) {
     privateKey = await CryptoJS.AES.encrypt(privateKey, password).toString();
     password = await encryptPassword(password);
-    await addAddress(address, password, privateKey);
-    await setData('current', address);
-    cacheAddress = await address;
-    cachePrivatekey = await privateKey;
+    // await registered(true)
     cachePwd = await password;
-    Address = await address;
-    await setAuth(true)
-    initAuth()
-
+    var wallet = {
+        id: Math.floor(Date.now() / 1000),
+        name: name,
+        address: address,
+        pk_en: privateKey,
+        create: new Date(),
+        V3JSON: '',
+        network: {
+            id: Math.floor(Date.now() / 1000),
+            name: network
+        },
+        typeBackup: false,
+        balance: 0,
+    }
+    InsertNewWallet(wallet);
+    setData('PwApp', password);
 }
 
 export async function createKeystore(keyObject, password: string, address) {
@@ -128,30 +128,10 @@ export let Address: string;
 export let privateKey: string;
 export let cachePwd: string;
 
-export async function initAuth() {
-
-    return forkJoin(
-        of(await checkAuth()),
-        of(await getData('current'))
-    ).subscribe(val => {
-        isAuth = val[0];
-        Address = val[1];
-        // console.log(isAuth, Address)
-        if (isAuth) {
-            getData(Address).then(async pwd => {
-                cachePwd = await pwd;
-                await getData('pk_' + Address).then(async pk => {
-                    privateKey = await pk
-                })
-            })
-        } else {
-            return of(0)
-        }
-    })
-}
 
 export async function validatePassword(password): boolean {
     var passEncrypt = await encryptPassword(password);
+    console.log('now', passEncrypt, 'old', cachePwd)
     return (cachePwd == passEncrypt)
 }
 
@@ -171,24 +151,29 @@ export async function EnableTouchID(passcode) {
     })
 }
 
-export async function Login(address: string, password: string) {
-    // console.log(address, password)
-    password = await encryptPassword(password);
-    return getData(address).then(pwd => {
-        if (password != pwd) {
-            throw ('error')
-        } else {
-            return getData('pk_' + address).then(pk => {
-                // console.log(pk)
-                privateKey = pk;
-                Address = address;
+export function Check_registered() {
+    return new Promise((resolve, reject) => {
+        SelectAllWallet().then(ListWallet => {
+            if (ListWallet.length > 0) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+        }).catch(e => reject(false))
+    })
+}
+
+export function Login2(password: string) {
+    return new Promise(async (resolve, reject) => {
+        password = await encryptPassword(password);
+        getData('PwApp').then(pwd => {
+            if (password != pwd) {
+                reject('error')
+            } else {
                 cachePwd = password;
-                return forkJoin(
-                    fromEvent(setData('current', address)),
-                    fromEvent(setAuth(true))
-                )
-            })
-        }
+                resolve('login success')
+            }
+        }).catch(e => reject(e))
     })
 }
 
@@ -227,28 +212,9 @@ export async function changePasscode(passwordOld: string, passwordNew: string) {
 }
 
 
-export async function AutoLogin(address: string, password: string) {
-    return getData(address).then(pwd => {
-        if (password != pwd) {
-            throw ('error')
-        } else {
-            return getData('pk_' + address).then(pk => {
-                privateKey = pk;
-                cachePwd = password;
-                return forkJoin(
-                    fromEvent(setData('current', address)),
-                    fromEvent(setAuth(true))
-                )
-            })
-        }
-    })
-}
-
-export async function logout() {
-    return forkJoin(fromEvent(setAuth(false)))
-}
-
 export async function getPrivateKey(password: string) {
     let PK = CryptoJS.AES.decrypt(privateKey, password).toString(CryptoJS.enc.Utf8);
     return PK;
 }
+
+

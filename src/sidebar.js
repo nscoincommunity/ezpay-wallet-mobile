@@ -96,7 +96,7 @@ export default class sidebar extends Component {
         const datas = [
             {
                 name: 'Nexty wallet',
-                route: 'TabNavigator',
+                route: 'Dashboard',
                 icon: require('./images/iconMenu/home.png')
             },
             {

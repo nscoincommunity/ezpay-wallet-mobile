@@ -5,13 +5,13 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
 		00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
+		00D5BD3CBC1A43E1A79A43FB /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 35FE8D86359647CBBA84A443 /* libc++.tbd */; };
 		00E356F31AD99517003FC87E /* NextyWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NextyWalletTests.m */; };
 		0122F56E1A1F452DBD7814B1 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B26D38EF0C414B7A96AC3749 /* Foundation.ttf */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
@@ -25,6 +25,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1F46178CBADC453983D2D6BB /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BEB8FFF58405477A9F26FFE9 /* SimpleLineIcons.ttf */; };
 		21217525256F43E2B81C9404 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A970AC309684FAE94A1327A /* Feather.ttf */; };
+		21DDD42C794442ACA3EC27FE /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DA8B4D720CE4B7CA8551EC5 /* libRealmReact.a */; };
 		239BF466307844E3B190212B /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26743483037C4D9291DE505F /* Roboto.ttf */; };
 		29C6081352E54F2086D67C13 /* libRNRandomBytes-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0B276B2DDA1475EBFB3453E /* libRNRandomBytes-tvOS.a */; };
 		2A8756362A378CA81880C62B /* libPods-NextyWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B925D7CE350CE884CF1B86C7 /* libPods-NextyWalletTests.a */; };
@@ -48,7 +49,6 @@
 		2EF631712191668200F16474 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2EF631702191668200F16474 /* Images.xcassets */; };
 		3247920F6A9546548A1D0D1E /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F14846E1DD648E39817E0B7 /* libRNI18n.a */; };
 		35D3A977CD1F4BFC88E6F7C3 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C0C1DFAD0AD471FB33E8DBE /* libSplashScreen.a */; };
-		404BF854BCBD4A3993B516EC /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F571F682B774442935D607A /* libRNSVG.a */; };
 		42C4C96013C5486998B04BE0 /* libTcpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E3F7E93FFD864518B8B064DF /* libTcpSockets.a */; };
 		4472ADEBDF524661997187A1 /* libRNViewOverflow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C28DEA8603647A0A9E18E20 /* libRNViewOverflow.a */; };
 		4624E663F6364A3CB7C71223 /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F9ED75B26945CFA83CDBD9 /* libRNRandomBytes.a */; };
@@ -84,7 +84,6 @@
 		AA0170A60E524A73954D5098 /* libRNVersionNumber-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AFB725CA6374ED1BD5201AD /* libRNVersionNumber-tvOS.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		AFBFEF8443FF44CFBBB1B55C /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 728136D5CA0D48E4801B9B24 /* Poppins-Bold.ttf */; };
-		AFC99B817AD449C0BEE4E4DA /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C7693F05E64464B9E98BB3 /* libRNSVG-tvOS.a */; };
 		B84ACC0E8472449F976A07D0 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77236E804E3C4F3FB7695546 /* Entypo.ttf */; };
 		BA3EC02D64534EC19D7F66D8 /* libRNDeviceInfo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A17BDA2BE0F44868D956059 /* libRNDeviceInfo-tvOS.a */; };
 		BAA8BA1815D54958B774271A /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17E5950B466B4BEEAC427F43 /* Octicons.ttf */; };
@@ -92,6 +91,7 @@
 		C1943658680F4B4A8A6D414C /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA1388E219483F9F9051C2 /* FontAwesome5_Brands.ttf */; };
 		C37B3BD1C94C4433BC08D684 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C3B210EBF7714EFB97F67FF3 /* MaterialCommunityIcons.ttf */; };
 		E1707D31A4DA41B1B816BB4E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C38B78D99F44DEAB56CC781 /* FontAwesome.ttf */; };
+		F0752C92F4E5406EA2F85571 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDF7062AED64D848AD45763 /* libz.tbd */; };
 		FADCCF7AD84D481F8CC5A015 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 574C909134F948869361AD89 /* Entypo.ttf */; };
 		FE7ACDFAC8D449DEB72A47FB /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81F0FF025D9541AEB950586B /* SimpleLineIcons.ttf */; };
 		FF08145C57934332BCEC81BB /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7D2D83B7B0F4FA9BA1946CF /* EvilIcons.ttf */; };
@@ -343,20 +343,6 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNFirebase;
 		};
-		2E9966F82158E12600FF63DC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8B09BE654A1644D581A96232 /* RNSVG.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
-			remoteInfo = RNSVG;
-		};
-		2E9966FA2158E12600FF63DC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8B09BE654A1644D581A96232 /* RNSVG.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2E9966C22158E12600FF63DC;
-			remoteInfo = "RNSVG-tvOS";
-		};
 		2EB8A523218C409800589FF1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B4925CC77C2F42E8B76256E7 /* BVLinearGradient.xcodeproj */;
@@ -377,6 +363,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNViewOverflow;
+		};
+		2EBFDA08222A392800879217 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3ECAE9F4C054F1086B9EDB8 /* RNVectorIcons.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
+			remoteInfo = "RNVectorIcons-tvOS";
+		};
+		2EBFDA13222A392800879217 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 90212A37EBB24E159EA520C3 /* RealmReact.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F60690131CA2766F0003FB26;
+			remoteInfo = RealmReact;
 		};
 		2ECB12D5212AB86E009E2F37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -559,7 +559,6 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NextyWallet/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NextyWallet/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		14C7693F05E64464B9E98BB3 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; };
 		1584626B067545AF885025FA /* libRNI18n-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNI18n-tvOS.a"; sourceTree = "<group>"; };
 		15BD011DD2E148508A12B3FF /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		17E5950B466B4BEEAC427F43 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
@@ -580,6 +579,7 @@
 		2EC11B5A88A14277A9C9F661 /* RNDocumentPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDocumentPicker.xcodeproj; path = "../node_modules/react-native-document-picker/ios/RNDocumentPicker.xcodeproj"; sourceTree = "<group>"; };
 		2EF631702191668200F16474 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NextyWallet/Images.xcassets; sourceTree = "<group>"; };
 		343F3C8C0C8E402A990C843A /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
+		35FE8D86359647CBBA84A443 /* libc++.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		37535C87BDC64200A59C60BD /* libRNDocumentPicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDocumentPicker.a; sourceTree = "<group>"; };
 		37DA29E91E1F4C37A1AF33E6 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		3A245345436E4961B4B3DA68 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
@@ -587,6 +587,7 @@
 		3C0C1DFAD0AD471FB33E8DBE /* libSplashScreen.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSplashScreen.a; sourceTree = "<group>"; };
 		42F4A43F43BF47BE91142C45 /* libRNVersionNumber.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVersionNumber.a; sourceTree = "<group>"; };
 		4A206F315A5D4F969EBDBDE5 /* UdpSockets.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = UdpSockets.xcodeproj; path = "../node_modules/react-native-udp/ios/UdpSockets.xcodeproj"; sourceTree = "<group>"; };
+		4CDF7062AED64D848AD45763 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		50427610A04041B087B10255 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		5349BC9654FF4F5AAC663AAE /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		56F1CD999F4A494FB369324E /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
@@ -608,10 +609,10 @@
 		81F0FF025D9541AEB950586B /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		842914DED5DD5E07767D5644 /* Pods-NextyWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NextyWallet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NextyWallet/Pods-NextyWallet.debug.xcconfig"; sourceTree = "<group>"; };
-		8B09BE654A1644D581A96232 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
+		8DA8B4D720CE4B7CA8551EC5 /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		8DBA1388E219483F9F9051C2 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		8E9317E0E8534594B2D1A5A3 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		8F571F682B774442935D607A /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
+		90212A37EBB24E159EA520C3 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		99EA87E54785409580B40507 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		9A17BDA2BE0F44868D956059 /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
 		9C28DEA8603647A0A9E18E20 /* libRNViewOverflow.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNViewOverflow.a; sourceTree = "<group>"; };
@@ -685,13 +686,15 @@
 				42C4C96013C5486998B04BE0 /* libTcpSockets.a in Frameworks */,
 				BDB5124FF0204598B40A4A40 /* libUdpSockets.a in Frameworks */,
 				9E62CA8861AF41D38A181717 /* libRNDocumentPicker.a in Frameworks */,
-				404BF854BCBD4A3993B516EC /* libRNSVG.a in Frameworks */,
 				35D3A977CD1F4BFC88E6F7C3 /* libSplashScreen.a in Frameworks */,
 				3247920F6A9546548A1D0D1E /* libRNI18n.a in Frameworks */,
 				4472ADEBDF524661997187A1 /* libRNViewOverflow.a in Frameworks */,
 				9D0E6C2B09AF491BBDB4F4FC /* libBVLinearGradient.a in Frameworks */,
 				991B1A8649614ECDB64BBD9D /* libRNFirebase.a in Frameworks */,
 				8B63E9E0EF16A7329E71F97E /* libPods-NextyWallet.a in Frameworks */,
+				21DDD42C794442ACA3EC27FE /* libRealmReact.a in Frameworks */,
+				00D5BD3CBC1A43E1A79A43FB /* libc++.tbd in Frameworks */,
+				F0752C92F4E5406EA2F85571 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -856,6 +859,8 @@
 				1D64B09A095349CDA73755E5 /* libPods-NextyWallet-tvOS.a */,
 				E10B9D2AF19B767B3A2E9BEB /* libPods-NextyWallet-tvOSTests.a */,
 				B925D7CE350CE884CF1B86C7 /* libPods-NextyWalletTests.a */,
+				35FE8D86359647CBBA84A443 /* libc++.tbd */,
+				4CDF7062AED64D848AD45763 /* libz.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -927,6 +932,7 @@
 				9C28DEA8603647A0A9E18E20 /* libRNViewOverflow.a */,
 				A59D57A9769C44FAAF897535 /* libBVLinearGradient.a */,
 				0332E1CD7B2E4FFAB0F13139 /* libRNFirebase.a */,
+				8DA8B4D720CE4B7CA8551EC5 /* libRealmReact.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -935,6 +941,7 @@
 			isa = PBXGroup;
 			children = (
 				2E2F0181211C255B008A2259 /* libRNVectorIcons.a */,
+				2EBFDA09222A392800879217 /* libRNVectorIcons-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -979,15 +986,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2E9966F42158E12600FF63DC /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2E9966F92158E12600FF63DC /* libRNSVG.a */,
-				2E9966FB2158E12600FF63DC /* libRNSVG-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2EB8A51D218C409800589FF1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1001,6 +999,14 @@
 			isa = PBXGroup;
 			children = (
 				2EB8A529218C409800589FF1 /* libRNViewOverflow.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2EBFDA10222A392800879217 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2EBFDA14222A392800879217 /* libRealmReact.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1081,12 +1087,12 @@
 				8154286F52D2484A919E7526 /* TcpSockets.xcodeproj */,
 				4A206F315A5D4F969EBDBDE5 /* UdpSockets.xcodeproj */,
 				2EC11B5A88A14277A9C9F661 /* RNDocumentPicker.xcodeproj */,
-				8B09BE654A1644D581A96232 /* RNSVG.xcodeproj */,
 				E29D7F11BEC14BC189878726 /* SplashScreen.xcodeproj */,
 				7522B68CA97A43BD95E96F49 /* RNI18n.xcodeproj */,
 				69E55338F1014C078F50C94E /* RNViewOverflow.xcodeproj */,
 				B4925CC77C2F42E8B76256E7 /* BVLinearGradient.xcodeproj */,
 				100EB96E78524344BCC2725F /* RNFirebase.xcodeproj */,
+				90212A37EBB24E159EA520C3 /* RealmReact.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1272,7 +1278,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = T3UGY87QM5;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 930;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1371,6 +1377,10 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
+					ProductGroup = 2EBFDA10222A392800879217 /* Products */;
+					ProjectRef = 90212A37EBB24E159EA520C3 /* RealmReact.xcodeproj */;
+				},
+				{
 					ProductGroup = 2E64098B212280C6009CA5C3 /* Products */;
 					ProjectRef = 17F0FF2EAFC045B6B8618623 /* RNCamera.xcodeproj */;
 				},
@@ -1397,10 +1407,6 @@
 				{
 					ProductGroup = 2E1D45C221355DB1000B6ECC /* Products */;
 					ProjectRef = A9C050D9F03146828E3D04D8 /* RNRandomBytes.xcodeproj */;
-				},
-				{
-					ProductGroup = 2E9966F42158E12600FF63DC /* Products */;
-					ProjectRef = 8B09BE654A1644D581A96232 /* RNSVG.xcodeproj */;
 				},
 				{
 					ProductGroup = 2E2F017D211C255B008A2259 /* Products */;
@@ -1662,13 +1668,6 @@
 			remoteRef = 2E8A433A21A5388600ABA5AC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2E9966F92158E12600FF63DC /* libRNSVG.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNSVG.a;
-			remoteRef = 2E9966F82158E12600FF63DC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		2E9966FB2158E12600FF63DC /* libRNSVG-tvOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1695,6 +1694,20 @@
 			fileType = archive.ar;
 			path = libRNViewOverflow.a;
 			remoteRef = 2EB8A528218C409800589FF1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2EBFDA09222A392800879217 /* libRNVectorIcons-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNVectorIcons-tvOS.a";
+			remoteRef = 2EBFDA08222A392800879217 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2EBFDA14222A392800879217 /* libRealmReact.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRealmReact.a;
+			remoteRef = 2EBFDA13222A392800879217 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2ECB12D6212AB86E009E2F37 /* libRNFS.a */ = {
@@ -2114,19 +2127,18 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = NextyWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2158,19 +2170,18 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = NextyWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2207,13 +2218,13 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native/Libraries",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = NextyWallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2257,13 +2268,13 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native/Libraries",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = NextyWallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2309,18 +2320,17 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2362,18 +2372,17 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2414,18 +2423,17 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2466,18 +2474,17 @@
 					"$(SRCROOT)/../node_modules/react-native-toast-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-document-picker/ios/RNDocumentPicker",
-					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-overflow/ios",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

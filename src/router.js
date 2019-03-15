@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { createStackNavigator, createDrawerNavigator, createSwitchNavigator, DrawerActions } from 'react-navigation'
+import { createStackNavigator, createDrawerNavigator, createSwitchNavigator, DrawerActions, createAppContainer } from 'react-navigation'
 import { StyleSheet, View, Text, TouchableOpacity, Linking } from 'react-native';
 import { Icon } from 'native-base';
 import '../global';
 import '../shim.js';
 import crypto from 'crypto';
 import Lang, { DeviceLanguage, selectLang } from './i18n/i18n';
-import { getData } from './services/data.service'
+import { getData } from './services/data.service';
+import { Check_registered } from './services/auth.service';
 import SplashScreen from 'react-native-splash-screen';
-
+import { initAuth } from './services/auth.service'
+import { CHECK_REGISTER } from '../redux/actions/initWallet';
+import { ONSNAPWALLET } from '../redux/actions/slideWalletAction';
+import { connect } from "react-redux";
+import { DeleteAllWallet, deleteDB } from '../realm/walletSchema';
 /* screen stack */
 import Sidebar from "./sidebar";
 import GLOBALS from './helper/variables';
@@ -23,7 +28,7 @@ import Language from "./pages/languages/language";
 import ChangePIN from './pages/changePIN/changePIN';
 import TempPage from './Drawer';
 import ListToken from './pages/list-token/token';
-import SelectNetwork from './pages/network/network'
+// import SelectNetwork from './pages/network/network'
 /* screen drawer*/
 import Setting from './pages/setting/setting';
 import history from './pages/history/history';
@@ -35,6 +40,13 @@ import Prk from './pages/private-key/private-key';
 import request from './pages/request/request';
 import send from './pages/send/send';
 import dashboard from './pages/dashboard/dashboard';
+
+
+// Screen add new wallet
+import TypeAddWallet from './pages/addNewWallet/typeAdd';
+import NameWallet from './pages/addNewWallet/nameWallet';
+import SelectNetwork from './pages/addNewWallet/selectNetwork';
+import InforWallet from './pages/inforWallet';
 
 // Lang.locale = 'vi'
 /* customize header */
@@ -56,15 +68,16 @@ function setHeader(title) {
 
 const Drawer = createDrawerNavigator(
     {
-        TabNavigator: { screen: TabNavigator },
+        // TabNavigator: { screen: TabNavigator },
+        Dashboard: { screen: dashboard },
         Privatekey: { screen: Prk },
-        Addtoken: { screen: Addtoken },
+        // Addtoken: { screen: Addtoken },
         Setting: { screen: Setting },
         History: { screen: history },
         About: { screen: About },
         Redeem: { screen: redeem },
     }, {
-        initialRouteName: "TabNavigator",
+        initialRouteName: "Dashboard",
         drawerBackgroundColor: 'transparent',
         style: {
             backgroundColor: 'transparent'
@@ -77,11 +90,28 @@ const Drawer = createDrawerNavigator(
 )
 
 
-export default class Router extends Component {
+class Router extends Component {
+    constructor(props) {
+        super(props)
+        try {
+            Check_registered().then(registered => {
+                console.log('type register', registered)
+                if (registered) {
+                    this.props.dispatch(CHECK_REGISTER());
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
     state = { InitLanguage: false }
 
     componentWillMount() {
         SplashScreen.hide();
+        // DeleteAllWallet()
+        // deleteDB()
         try {
             getData('languages').then(lang => {
                 console.log('languages router', lang)
@@ -108,12 +138,6 @@ export default class Router extends Component {
     render() {
         const Screen = createStackNavigator(
             {
-                Unlogin: {
-                    screen: unlogin,
-                    navigationOptions: {
-                        header: () => null,
-                    }
-                },
                 Drawer: {
                     screen: Drawer,
                     navigationOptions: {
@@ -122,9 +146,6 @@ export default class Router extends Component {
                 },
                 login: {
                     screen: login,
-                    // navigationOptions: {
-                    //     header: () => null,
-                    // }
                 },
                 TempPage: { screen: TempPage },
                 ListToken: { screen: ListToken },
@@ -136,12 +157,44 @@ export default class Router extends Component {
                 Language: { screen: Language },
                 ChangePIN: { screen: ChangePIN },
                 Setting: { screen: Setting },
-                SelectNetwork: { screen: SelectNetwork }
+                SelectNetwork: { screen: SelectNetwork },
+                AddNewWallet: {
+                    screen: TypeAddWallet,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
+                NameWallet: {
+                    screen: NameWallet,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
+                SelectNetwork: {
+                    screen: SelectNetwork,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
+                InforWallet: {
+                    screen: InforWallet,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
+                Addtoken: {
+                    screen: Addtoken,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
             },
             {
-                initialRouteName: "Unlogin",
+                initialRouteName: this.props.register ? 'login' : 'register',
             },
         )
+
+
         if (this.state.InitLanguage) {
             return (
                 <Screen />
@@ -155,5 +208,11 @@ export default class Router extends Component {
         }
     }
 }
+
+function mapStateToProp(state) {
+    return { register: state.Register.registered }
+}
+
+export default connect(mapStateToProp)(Router);
 
 

@@ -1,48 +1,33 @@
 import React, { Component } from "react";
-import App from "./src/router";
+import ROUTER from "./src/router";
 import './global';
 import { exChange } from './src/tabfooter'
-import { getExchangeRate, getExchangeRateETH } from './src/services/rate.service';
 import { DeviceLanguage, selectLang } from './src/i18n/i18n';
-import { getData, setData } from './src/services/data.service'
+import { getData, setData } from './src/services/data.service';
+import { getExchangeRate } from './src/services/rate.service';
 import firebase from 'react-native-firebase';
 import { Alert, Platform } from 'react-native'
-import { POSTAPI } from './src/helper/utils'
-export default class Setup extends Component {
-  async componentDidMount() {
-    getData('ListToken').then((data) => {
-      if (data == null) {
-        var initialData = [{
-          "tokenAddress": '',
-          "balance": '0',
-          "symbol": 'NTY',
-          "decimals": '',
-          "ABI": ''
-        },
-        {
-          "tokenAddress": '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
-          "balance": '0',
-          "symbol": 'NTF',
-          "decimals": '',
-          "ABI": ''
-        }
-        ]
-        setData('ListToken', JSON.stringify(initialData))
-      }
-    })
+import { POSTAPI } from './src/helper/utils';
+import devToolsEnhancer from 'remote-redux-devtools';
+// redux
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import THUNK from 'redux-thunk';
+import REDUCER from './redux/reducers/rootReducer';
 
-    getData('ListTokenETH').then((data) => {
-      if (data == null) {
-        var initialData = [{
-          "tokenAddress": '',
-          "balance": '0',
-          "symbol": 'ETH',
-          "decimals": '',
-          "ABI": ''
-        }]
-        setData('ListTokenETH', JSON.stringify(initialData))
-      }
-    })
+const store = createStore(REDUCER, compose(
+  applyMiddleware(THUNK),
+  devToolsEnhancer()
+))
+
+
+export default class Setup extends Component {
+  constructor(props) {
+    super(props)
+    getExchangeRate()
+  }
+
+  async componentDidMount() {
 
     this.checkPermission();
     this.createNotificationListeners();
@@ -109,19 +94,6 @@ export default class Setup extends Component {
           deviceID: fcmToken,
           platform: Platform.OS
         }
-        // try {
-        //   POSTAPI('https://servernexty.herokuapp.com/setDeviceID', body)
-        //     .then(response => response.json())
-        //     .then(response => {
-        //       console.log(response)
-        //     })
-        //     .catch(err => {
-        //       console.log(err)
-        //     })
-        // } catch (error) {
-        //   console.log(error)
-        // }
-
       }
     } else {
       this.requestPermission();
@@ -143,10 +115,10 @@ export default class Setup extends Component {
   }
 
   render() {
-    getExchangeRate();
-    getExchangeRateETH()
     return (
-      <App />
+      <Provider store={store}>
+        <ROUTER />
+      </Provider>
     );
   }
 }

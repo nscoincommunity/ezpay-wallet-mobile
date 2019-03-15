@@ -21,27 +21,6 @@ export default class CameraScreen extends React.Component<any, any> {
         headerTintColor: 'white',
     });
 
-    // static navigationOptions = ({ navigation }) => {
-    //     const { params = {} } = navigation.state;
-    //     return {
-    //         headerLeft:
-    //             <Button
-    //                 style={{ paddingLeft: 10, paddingRight: 10 }}
-    //                 transparent
-    //                 onPress={() => {
-    //                     navigation.goBack();
-    //                     navigation.state.params.onSelect({ result: 'cancelScan' });
-    //                 }} >
-    //                 <Icon name="angle-left" color='#fff' size={30} style={{ marginTop: Platform.OS == 'android' ? Dimensions.get('window').height / 50 : 0 }}></Icon>
-    //                 <Text
-    //                     style={{ color: '#fff', fontSize: 15, marginTop: Platform.OS == 'android' ? Dimensions.get('window').height / 50 : 0, marginRight: Platform.OS == 'android' ? Dimensions.get('window').width / 10 : 0 }}
-    //                 >
-    //                     Cancel
-    //                     </Text>
-    //             </Button>
-    //     };
-    // };
-
     constructor(props) {
         super(props);
         this.camera = null;
@@ -61,15 +40,6 @@ export default class CameraScreen extends React.Component<any, any> {
     }
     componentDidMount() {
         this.AnimatedMargin()
-        // Animated.loop(
-        //     Animated.timing(
-        //         this.state.MargintopLine,
-        //         {
-        //             toValue: 265,
-        //             duration: 3000
-        //         }
-        //     )
-        // ).start()
         BackHandler.addEventListener('BackHandler', () => {
             this.props.navigation.state.params.onSelect({ result: 'cancelScan' })
         })

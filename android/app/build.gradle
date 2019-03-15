@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    implementation project(':realm')
     implementation project(':react-native-touch-id')
     implementation project(':react-native-firebase')
     implementation project(':react-native-linear-gradient')

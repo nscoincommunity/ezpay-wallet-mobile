@@ -35,15 +35,15 @@ export async function getPKEn(address) {
     })
 }
 
-export async function setAuth(auth: boolean) {
+export async function registered(auth: boolean) {
     if (auth) {
-        return await AsyncStorage.setItem('auth', "1")
+        return await AsyncStorage.setItem('registered', "1")
     } else {
-        return await AsyncStorage.removeItem('auth')
+        return await AsyncStorage.removeItem('registered')
     }
 }
-export async function checkAuth() {
-    return await AsyncStorage.getItem('auth').then(value => {
+export async function check_Registered() {
+    return await AsyncStorage.getItem('registered').then(value => {
         return (value == "1");
     })
 }

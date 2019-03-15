@@ -19,6 +19,8 @@ import { setData, getData, rmData } from '../../services/data.service'
 import Language from '../../i18n/i18n';
 import IconFeather from "react-native-vector-icons/Feather"
 import Gradient from 'react-native-linear-gradient'
+import { CheckExistToken, InsertNewToken } from '../../../realm/walletSchema'
+
 
 import {
     Container,
@@ -42,9 +44,9 @@ export default class Addtoken extends Component {
                     <Left>
                         <Button
                             transparent
-                            onPress={() => { this.props.navigation.openDrawer(); Keyboard.dismiss() }}
+                            onPress={() => { this.props.navigation.goBack(); Keyboard.dismiss() }}
                         >
-                            <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
+                            <IconFeather name="arrow-left" color={GLOBALS.Color.primary} size={25} />
                         </Button>
                     </Left>
                     <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
@@ -53,7 +55,7 @@ export default class Addtoken extends Component {
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.navigate('ListToken')}
+                            onPress={() => this.props.navigation.navigate('ListToken', { payload: { network: this.props.navigation.getParam('payload').network } })}
                         >
                             <Icon name="list-alt" color={GLOBALS.Color.primary} size={25} />
                         </Button>
@@ -62,7 +64,7 @@ export default class Addtoken extends Component {
 
                 <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
                     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={Platform.OS == "ios" ? 0 : GLOBALS.hp('-30%')} enabled style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
-                        <FormAddToken />
+                        <FormAddToken {...this.props} />
                     </KeyboardAvoidingView>
                 </ScrollView>
             </Container>
@@ -98,21 +100,14 @@ class FormAddToken extends Component {
     componentWillUnmount() {
         this.ListToken = []
     }
-    async setValue(val: string) {
+    async setValue(val: string, network) {
         this.setState({ addressTK: val });
         if (val.length > 0) {
-            GetInfoToken(val).then(async data => {
+            GetInfoToken(val, network).then(async data => {
                 if (data.symbol != null) {
-                    // if (val == "0x73c99a8a9f82a4df0c6b5819f68ecc732d7bdc3d") {
-                    //     await this.setState({ symbol: "NTF OLD", decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
-                    //         this.disableButton()
-                    //     })
-                    // } else {
                     await this.setState({ symbol: data.symbol, decimals: data.decimals, balance: data.balance, ValidToken: false, txtErr: '' }, () => {
                         this.disableButton()
                     })
-                    // }
-
                 }
                 else {
                     await this.setState({ ValidToken: true, txtErr: Language.t('AddToken.ValidToken'), symbol: '' }, () => {
@@ -137,78 +132,106 @@ class FormAddToken extends Component {
     }
 
     addToken = () => {
-        if (this.network == "Nexty") {
-            this.funcAdd('ListToken');
-        } else {
-            this.funcAdd('ListTokenETH');
-        }
+        const { network } = this.props.navigation.getParam('payload')
+        CheckExistToken(this.state.symbol, network).then(exist => {
+            if (exist) {
+                Alert.alert(
+                    Language.t('AddToken.AlerError.Title'),
+                    Language.t('AddToken.AlerError.Content'),
+                    [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
+                )
+            } else {
+                var token = {
+                    id: Math.floor(Date.now() / 1000) + 1,
+                    walletId: Math.floor(Date.now() / 1000),
+                    name: this.state.symbol,
+                    addressToken: this.state.addressTK,
+                    balance: parseFloat(this.state.balance),
+                    network: network,
+                    avatar: '',
+                    exchagerate: '',
+                    change: ''
+                }
+                console.log('token want add', token)
+                InsertNewToken(token).then(ss => {
+                    Alert.alert(
+                        Language.t('AddToken.AlerSuccess.Title'),
+                        Language.t('AddToken.AlerSuccess.Content'),
+                        [{ text: Language.t('AddToken.AlerSuccess.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
+                    )
+                }).catch(e => console.log(e))
+            }
+        }).catch(er => console.log(er))
     }
 
-    funcAdd = (nameStorage) => {
-        getData(nameStorage).then(async data => {
-            if (data != null) {
-                this.ListToken = JSON.parse(data);
-                if (this.ListToken.findIndex(x => x['tokenAddress'] == this.state.addressTK) > -1 || this.ListToken.findIndex(x => x['symbol'] == this.state.symbol) > -1) {
-                    this.setState({ ExistToken: true });
-                    Alert.alert(
-                        Language.t('AddToken.AlerError.Title'),
-                        Language.t('AddToken.AlerError.Content'),
-                        [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
-                    )
-                } else {
-                    try {
-                        console.log(this.ListToken)
-                        await this.ListToken.push({
-                            "tokenAddress": this.state.addressTK,
-                            "balance": this.state.balance,
-                            "symbol": this.state.symbol,
-                            "decimals": this.state.decimals,
-                            "ABI": ''
-                        })
-                        console.log(this.ListToken)
-                        setData(nameStorage, JSON.stringify(this.ListToken)).then(data => {
-                            Alert.alert(
-                                Language.t('AddToken.AlerSuccess.Title'),
-                                Language.t('AddToken.AlerSuccess.Content'),
-                                [{ text: Language.t('AddToken.AlerSuccess.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
-                            )
-                        })
-                    } catch (error) {
-                        Alert.alert(
-                            Language.t('AddToken.AlerError.Title'),
-                            error,
-                            [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
-                        )
-                    }
-                }
-            } else {
-                try {
-                    await this.ListToken.push({
-                        'tokenAddress': this.state.addressTK,
-                        'balance': this.state.balance,
-                        'symbol': this.state.symbol,
-                        'decimals': this.state.decimals,
-                        'ABI': ''
-                    })
-                    setData(nameStorage, JSON.stringify(this.ListToken)).then(data => {
-                        Alert.alert(
-                            Language.t('AddToken.AlerSuccess.Title'),
-                            Language.t('AddToken.AlerSuccess.Content'),
-                            [{ text: Language.t('AddToken.AlerSuccess.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
-                        )
-                    })
-                } catch (error) {
-                    Alert.alert(
-                        Language.t('AddToken.AlerError.Title'),
-                        error,
-                        [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
-                    )
-                }
-            }
-        })
-    }
+
+
+    // funcAdd = (nameStorage) => {
+    //     getData(nameStorage).then(async data => {
+    //         if (data != null) {
+    //             this.ListToken = JSON.parse(data);
+    //             if (this.ListToken.findIndex(x => x['tokenAddress'] == this.state.addressTK) > -1 || this.ListToken.findIndex(x => x['symbol'] == this.state.symbol) > -1) {
+    //                 this.setState({ ExistToken: true });
+    //                 Alert.alert(
+    //                     Language.t('AddToken.AlerError.Title'),
+    //                     Language.t('AddToken.AlerError.Content'),
+    //                     [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
+    //                 )
+    //             } else {
+    //                 try {
+    //                     console.log(this.ListToken)
+    //                     await this.ListToken.push({
+    //                         "tokenAddress": this.state.addressTK,
+    //                         "balance": this.state.balance,
+    //                         "symbol": this.state.symbol,
+    //                         "decimals": this.state.decimals,
+    //                         "ABI": ''
+    //                     })
+    //                     console.log(this.ListToken)
+    //                     setData(nameStorage, JSON.stringify(this.ListToken)).then(data => {
+    //                         Alert.alert(
+    //                             Language.t('AddToken.AlerSuccess.Title'),
+    //                             Language.t('AddToken.AlerSuccess.Content'),
+    //                             [{ text: Language.t('AddToken.AlerSuccess.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
+    //                         )
+    //                     })
+    //                 } catch (error) {
+    //                     Alert.alert(
+    //                         Language.t('AddToken.AlerError.Title'),
+    //                         error,
+    //                         [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
+    //                     )
+    //                 }
+    //             }
+    //         } else {
+    //             try {
+    //                 await this.ListToken.push({
+    //                     'tokenAddress': this.state.addressTK,
+    //                     'balance': this.state.balance,
+    //                     'symbol': this.state.symbol,
+    //                     'decimals': this.state.decimals,
+    //                     'ABI': ''
+    //                 })
+    //                 setData(nameStorage, JSON.stringify(this.ListToken)).then(data => {
+    //                     Alert.alert(
+    //                         Language.t('AddToken.AlerSuccess.Title'),
+    //                         Language.t('AddToken.AlerSuccess.Content'),
+    //                         [{ text: Language.t('AddToken.AlerSuccess.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
+    //                     )
+    //                 })
+    //             } catch (error) {
+    //                 Alert.alert(
+    //                     Language.t('AddToken.AlerError.Title'),
+    //                     error,
+    //                     [{ text: Language.t('AddToken.AlerError.TitleButton'), onPress: () => this.setState(this.initState), style: 'cancel' }]
+    //                 )
+    //             }
+    //         }
+    //     })
+    // }
 
     render() {
+        const { network } = this.props.navigation.getParam('payload');
         return (
             <View style={styles.container}>
                 <View style={styles.MainForm}>
@@ -229,7 +252,7 @@ class FormAddToken extends Component {
                         <TextInput
                             placeholder={Language.t("AddToken.FormAdd.PlaceholderToken")}
                             value={this.state.addressTK}
-                            onChangeText={(value) => { this.setValue(value) }}
+                            onChangeText={(value) => { this.setValue(value, network) }}
                             style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%') }}
                             underlineColorAndroid="transparent"
                         />

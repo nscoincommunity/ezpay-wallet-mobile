@@ -20,6 +20,7 @@ import Lang from '../../i18n/i18n'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
 import FbAnalytics from '../../services/fcm.service'
+import { InsertNewToken, } from '../../../realm/walletSchema'
 
 class ScreenRegister extends Component {
     constructor(props) {
@@ -42,38 +43,32 @@ class ScreenRegister extends Component {
     async register() {
         FbAnalytics.setUserProperty('action', 'create_wallet')
         FbAnalytics.logEvent('view_action', { 'create_wallet': 'create_wallet' })
-        await this.setState({ loading: true })
-        Register(this.state.password).then(() => {
-            rmData('ListToken').then(() => {
-                var initialData = [{
-                    "tokenAddress": '',
-                    "balance": '0',
-                    "symbol": 'NTY',
-                    "decimals": '',
-                    "ABI": ''
-                },
-                {
-                    "tokenAddress": '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
-                    "balance": '0',
-                    "symbol": 'NTF',
-                    "decimals": '',
-                    "ABI": ''
+        await this.setState({ loading: true });
+
+        Register(this.state.password, 'nexty', 'Default wallet')
+            .then(() => {
+                const Token = {
+                    id: Math.floor(Date.now() / 1000) + 1,
+                    walletId: Math.floor(Date.now() / 1000),
+                    name: 'NTF',
+                    addressToken: '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
+                    balance: 0,
+                    network: 'nexty',
+                    avatar: '',
+                    exchagerate: '',
+                    change: ''
+
                 }
-                ]
-                setTimeout(() => {
-                    setData('ListToken', JSON.stringify(initialData)).then(() => {
-                        this.setState({ loading: false })
-                        setData('activeTouchID', '0');
-                        setData('isBackup', '0');
-                        const { navigate } = this.props.data.navigation;
-                        navigate('TabNavigator');
-                    })
-                }, 500);
+                InsertNewToken(Token).then(() => {
+                    this.setState({ loading: false });
+                    const { navigate } = this.props.data.navigation;
+                    navigate('Dashboard');
+                }).catch(e => this.setState({ loading: false }))
 
-            })
+            }).catch(e => this.setState({ loading: false }))
 
-        })
     }
+
 
     async validatePass(value) {
         this.setState({ password: value })

@@ -13,6 +13,11 @@ export default {
     /* Main net */
     WEB3_API: 'http://13.228.68.50:8545',
 
+    /* Main net ethereum */
+    WEB3_ETH: 'https://mainnet.infura.io/v3/b174a1cc2f7441eb94ed9ea18c384730',
+
+    /* Main net TRON */
+    WEB3_TRX: 'https://api.trongrid.io/',
 
     EXPLORER_API: 'https://explorer.nexty.io',
     WALLET_API: 'https://dev-wallet.nexty.io',
@@ -35,5 +40,6 @@ export default {
     DAY: 86400000,
     MONTH: 2678400000,
     GETUSD: 'https://api.coinmarketcap.com/v2/ticker/2714/',
-    GETUSD_ETH: 'https://api.coinmarketcap.com/v2/ticker/1027/'
+    GETUSD_ETH: 'https://api.coinmarketcap.com/v2/ticker/1027/',
+    GETUSD_TRX: 'https://api.coinmarketcap.com/v2/ticker/1958/'
 }

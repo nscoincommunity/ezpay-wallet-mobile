@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, FlatList, ActivityIndicator, Alert, TouchableOpacity, Platform } from 'react-native'
-import { getData, rmData, setData } from '../../services/data.service'
 import Language from '../../i18n/i18n';
 import GLOBALS from '../../helper/variables';
 import Swipeout, { SwipeoutButtonProperties } from 'react-native-swipeout';
 import IconMtr from 'react-native-vector-icons/MaterialIcons'
+import { GetTokenOfNetwork, DeleteToken } from '../../../realm/walletSchema'
 
 export default class ListToken extends Component {
     static navigationOptions = () => ({
@@ -35,28 +35,21 @@ export default class ListToken extends Component {
 
     componentWillMount() {
         if (this.mounted) {
-            getData('Network').then(net => {
-                this.network = net;
-                if (net == 'Nexty') {
-                    this.LoadData('ListToken')
-                } else {
-                    this.LoadData('ListTokenETH')
-                }
-            })
+            this.LoadData(this.props.navigation.getParam('payload').network)
         }
     }
     componentWillUnmount() {
         this.mounted = false;
     }
 
-    LoadData = (nameStorage) => {
-        getData(nameStorage).then(data => {
-            console.log(data)
-            if (data != null) {
-                this.setState({ ArrayToken: JSON.parse(data) })
-            } else {
-                this.setState({ ArrayToken: [] })
-            }
+    LoadData = (network) => {
+        // GetAllToken().then(data => {
+        //     console.log('list', data)
+        //     this.setState({ ArrayToken: data })
+        // })
+        GetTokenOfNetwork(network).then(list => {
+            console.log('ssss', list)
+            this.setState({ ArrayToken: list })
         })
     }
 
@@ -65,45 +58,16 @@ export default class ListToken extends Component {
             Language.t('Token.AlertDelete.Title'),
             Language.t('Token.AlertDelete.Content'),
             [
-                { text: Language.t('Token.AlertDelete.ButtonAgree'), onPress: () => { this.Delete(rowData['symbol']) } },
+                { text: Language.t('Token.AlertDelete.ButtonAgree'), onPress: () => { this.Delete(rowData['id']) } },
                 { text: Language.t('Token.AlertDelete.ButtonCancel'), style: 'cancel' }
             ]
         )
     }
 
-    Delete = (symbol) => {
-        if (this.network == 'Nexty') {
-            getData('ListToken').then(data => {
-                if (data != null) {
-                    var TempArray = JSON.parse(data);
-                    var index = TempArray.findIndex(x => x['symbol'] == symbol);
-                    if (index > -1) {
-                        TempArray.splice(index, 1);
-                        console.log(TempArray, index)
-                        setData('ListToken', JSON.stringify(TempArray))
-                            .then(() => {
-                                this.LoadData('ListToken')
-                            })
-                    }
-                }
-            })
-        } else {
-            getData('ListTokenETH').then(data => {
-                if (data != null) {
-                    var TempArray = JSON.parse(data);
-                    var index = TempArray.findIndex(x => x['symbol'] == symbol);
-                    if (index > -1) {
-                        TempArray.splice(index, 1);
-                        console.log(TempArray, index)
-                        setData('ListTokenETH', JSON.stringify(TempArray))
-                            .then(() => {
-                                this.LoadData('ListTokenETH')
-                            })
-                    }
-                }
-            })
-        }
-
+    Delete = (id) => {
+        DeleteToken(id).then(ss => {
+            this.LoadData(this.props.navigation.getParam('payload').network)
+        }).catch(e => console.log(e))
     }
 
     render() {
@@ -118,28 +82,14 @@ export default class ListToken extends Component {
                             data={this.state.ArrayToken}
                             extraData={this.state}
                             renderItem={({ item }) => {
-                                if (item['symbol'] == "NTY" || item['symbol'] == "NTF" || item['symbol'] == 'ETH') {
+                                if (item['name'] == "NTF") {
                                     item.disable = true
                                 } else {
                                     item.disable = false
                                 }
-
-                                // let swipeBtns = [{
-                                //     text: Language.t('Token.TitleButton'),
-                                //     backgroundColor: 'red',
-                                //     onPress: () => { this.deleteNote(item) },
-                                //     type: 'delete'
-                                // }];
-
                                 return (
-                                    // <Swipeout
-                                    //     right={swipeBtns}
-                                    //     autoClose
-                                    //     backgroundColor='transparent'
-                                    //     disabled={item['disable']}
-                                    // >
                                     <View style={styles.Item}>
-                                        <Text style={{ flex: 3, fontFamily: GLOBALS.font.Poppins, fontWeight: 'bold' }}>{item["symbol"]}</Text>
+                                        <Text style={{ flex: 3, fontFamily: GLOBALS.font.Poppins, fontWeight: 'bold' }}>{item["name"]}</Text>
                                         <Text
                                             style={{ flex: 6, paddingHorizontal: GLOBALS.wp('1%'), fontFamily: GLOBALS.font.Poppins }}
                                             ellipsizeMode="tail"
@@ -157,7 +107,6 @@ export default class ListToken extends Component {
                                         }
 
                                     </View>
-                                    // </Swipeout>
                                 )
                             }}
                             keyExtractor={(item, index) => index.toString()}

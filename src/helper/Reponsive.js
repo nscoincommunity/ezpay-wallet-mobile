@@ -8,6 +8,16 @@ let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 
 /**
+ * Responsive fonsize with px screen
+ * @param {number} f number font size
+ */
+
+export const responsiveFontSize = (f) => {
+    const tempHeight = (16 / 9) * screenWidth;
+    return Math.sqrt(Math.pow(tempHeight, 2) + Math.pow(screenWidth, 2)) * (f / 100);
+};
+
+/**
  * Converts provided width percentage to independent pixel (dp).
  * @param  {string} widthPercent The percentage of screen's width that UI element should cover
  *                               along with the percentage symbol (%).

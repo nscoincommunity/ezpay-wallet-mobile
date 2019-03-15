@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from './Reponsive';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as fontsize } from './Reponsive';
 import Language from '../i18n/i18n'
 export default {
     WIDTH: Dimensions.get('window').width,
@@ -19,5 +19,15 @@ export default {
     },
     wp,
     hp,
-
+    fontsize,
+    darkmode: {
+        backgroundColor: '#f2f2f2',
+        textColor: '#328FFC',
+        colorTextListCoin: '#0000'
+    },
+    lightmode: {
+        backgroundColor: '#1B2049',
+        textColor: '#fff',
+        colorTextListCoin: '#fff'
+    }
 }

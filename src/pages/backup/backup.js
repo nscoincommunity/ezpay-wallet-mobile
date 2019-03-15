@@ -14,6 +14,7 @@ import {
     ActivityIndicator,
     PermissionsAndroid,
     ToastAndroid,
+    StatusBar
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
@@ -177,6 +178,11 @@ export default class backup extends Component {
         console.log(this.state.backupcode)
         return (
             <ScrollView contentContainerStyle={{ flex: 1 }} style={{ backgroundColor: '#fafafa' }}>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
                 <View style={style.container} pointerEvents="box-none">
                     {
                         this.state.getsuccess ?

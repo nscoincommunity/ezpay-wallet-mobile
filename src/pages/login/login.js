@@ -17,8 +17,8 @@ import {
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
-import { initAuth, Address, isAuth, Login, LoginTouchID } from '../../services/auth.service'
-import { getData, checkAuth, setAuth } from '../../services/data.service'
+import { initAuth, Address, isAuth, Login, LoginTouchID, Login2 } from '../../services/auth.service'
+import { getData, check_Registered, registered } from '../../services/data.service'
 import Lang from '../../i18n/i18n';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
@@ -42,10 +42,6 @@ class ScreenLogin extends Component {
             ErrorPwd: false,
             typeButton: true
         };
-        initAuth().then(data => {
-            this.setState({ Address: Address })
-        })
-
     };
 
     static navigationOptions = {
@@ -53,13 +49,27 @@ class ScreenLogin extends Component {
     };
 
 
+    componentDidMount() {
+        Login2('123456')
+            .then(status => {
+                this.setState({ loading: false })
+                console.log(status)
+                const { navigate } = this.props.navigation;
+                navigate('Dashboard');
+            }).catch(err => {
+                console.log(err)
+                this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
+            })
+    }
+
     LoginNTY() {
         this.setState({ loading: true })
-        Login(this.state.Address, this.state.Password)
-            .then(data => {
+        Login2(this.state.Password)
+            .then(status => {
                 this.setState({ loading: false })
+                console.log(status)
                 const { navigate } = this.props.navigation;
-                navigate('Drawer');
+                navigate('Dashboard');
             }).catch(err => {
                 console.log(err)
                 this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
@@ -75,20 +85,20 @@ class ScreenLogin extends Component {
         }
     }
 
-    async checkAddress(val) {
-        await this.setState({ TextError: '' });
-        if (val.length < 1) {
-            await this.setState({ Address: '', ErrorAddress: true, TextErrorAddress: Lang.t('Login.InvalidAddress'), typeButton: true });
-        } else {
-            await this.setState({ Address: val, ErrorAddress: false, TextErrorAddress: '', typeButton: false })
-        }
-        if (this.state.Password == '' || this.state.ErrorPwd == true) {
-            await this.setState({ typeButton: true });
-        } else {
-            await this.setState({ typeButton: true });
-        }
+    // async checkAddress(val) {
+    //     await this.setState({ TextError: '' });
+    //     if (val.length < 1) {
+    //         await this.setState({ Address: '', ErrorAddress: true, TextErrorAddress: Lang.t('Login.InvalidAddress'), typeButton: true });
+    //     } else {
+    //         await this.setState({ Address: val, ErrorAddress: false, TextErrorAddress: '', typeButton: false })
+    //     }
+    //     if (this.state.Password == '' || this.state.ErrorPwd == true) {
+    //         await this.setState({ typeButton: true });
+    //     } else {
+    //         await this.setState({ typeButton: true });
+    //     }
 
-    }
+    // }
     handleKeyDown(e) {
         console.log(e.nativeEvent)
         if (e.nativeEvent.key == "Enter") {
@@ -115,9 +125,9 @@ class ScreenLogin extends Component {
                         }
                         var reason = Lang.t("TouchID.Options.reason")
                         TouchID.authenticate(reason, options).then(success => {
-                            setAuth(true)
+                            registered(true)
                             const { navigate } = this.props.navigation;
-                            navigate('TabNavigator');
+                            navigate('Dashboard');
                         })
                     } else {
                         Alert.alert(
@@ -143,7 +153,7 @@ class ScreenLogin extends Component {
             <View style={{ flex: 1 }} >
                 <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('7%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Login.Title")}</Text>
                 {/* <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text> */}
-                <View style={{
+                {/* <View style={{
                     justifyContent: 'center',
                     flexDirection: 'row',
                     flexWrap: 'wrap',
@@ -163,7 +173,7 @@ class ScreenLogin extends Component {
                         underlineColorAndroid="transparent"
                     />
                     <Image source={require('../../images/icon/wallet.png')} style={{ flex: 1 }} resizeMode="contain" />
-                </View>
+                </View> */}
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
                 <View style={{
                     justifyContent: 'center',
@@ -172,6 +182,7 @@ class ScreenLogin extends Component {
                     borderBottomWidth: 1,
                     borderBottomColor: '#AAAAAA',
                     paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+                    marginTop: hp('25%')
                 }}>
                     <TextInput
                         placeholder={Lang.t('Login.PHLocalPasscode')}
@@ -205,7 +216,7 @@ class ScreenLogin extends Component {
                         </Gradient>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -227,7 +238,7 @@ class ScreenLogin extends Component {
                             fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'),
                             textAlign: 'center',
                         }}>{Lang.t('TouchID.Login')}</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 {
                     this.state.loading ?
