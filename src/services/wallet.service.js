@@ -19,132 +19,6 @@ import ABI from '../../ABI'
 const WEB3 = new Web3();
 export var balance: number = 0
 
-// export function setProvider() {
-//     getData('Network').then(net => {
-//         switch (net) {
-//             case 'Ethereum':
-//                 WEB3.setProvider(new WEB3.providers.HttpProvider('https://mainnet.infura.io/v3/b174a1cc2f7441eb94ed9ea18c384730'));
-//                 break;
-//             default:
-//                 WEB3.setProvider(new WEB3.providers.HttpProvider(CONSTANTS.WEB3_API));
-//                 break;
-//         }
-//     })
-// }
-
-// export async function updateBalanceTK(params) {
-//     return new Promise(resolve => {
-//         var ListToken: Array = [];
-//         getData('ListToken').then(async data => {
-//             if (data != null) {
-//                 ListToken = JSON.parse(data);
-//                 for (let i = 0; i < ListToken.length; i++) {
-//                     if (ListToken[i].symbol == 'NTY') {
-//                         updateBalance().then(() => {
-//                             ListToken[i].balance = balance;
-//                             if (i == (ListToken.length - 1)) {
-//                                 setData('ListToken', JSON.stringify(ListToken))
-//                                 resolve('1')
-//                             }
-//                         })
-//                     } else {
-//                         var contract = await new WEB3.eth.Contract(ABI, ListToken[i].tokenAddress)
-//                         await contract.methods.balanceOf(Address).call().then(bal => {
-//                             if (bal > 0) {
-//                                 contract.methods.decimals().call().then(decimal => {
-//                                     if (parseFloat(bal / Math.pow(10, decimal)) % 1 == 0) {
-//                                         balance = parseFloat(bal / Math.pow(10, decimal)).toLocaleString()
-//                                         ListToken[i].balance = balance;
-//                                     } else {
-//                                         balance = parseFloat(bal / Math.pow(10, decimal)).toFixed(2).toLocaleString()
-//                                         ListToken[i].balance = balance;
-//                                     }
-//                                 })
-//                             } else {
-//                                 ListToken[i].balance = 0;
-//                             }
-//                             setTimeout(() => {
-//                                 if (i == (ListToken.length - 1)) {
-//                                     setData('ListToken', JSON.stringify(ListToken))
-//                                     resolve('1')
-//                                 }
-//                             }, 500)
-//                         })
-//                     }
-//                 }
-//             }
-//         })
-//     })
-
-// }
-
-// export async function updateBalanceETH(params) {
-//     return new Promise(resolve => {
-//         var ListToken: Array = [];
-//         getData('ListTokenETH').then(async data => {
-//             if (data != null) {
-//                 ListToken = JSON.parse(data);
-//                 for (let i = 0; i < ListToken.length; i++) {
-//                     if (ListToken[i].symbol == 'ETH') {
-//                         updateBalance().then(() => {
-//                             ListToken[i].balance = balance;
-//                             if (i == (ListToken.length - 1)) {
-//                                 setData('ListTokenETH', JSON.stringify(ListToken))
-//                                 resolve('1')
-//                             }
-//                         })
-//                     } else {
-//                         var contract = await new WEB3.eth.Contract(ABI, ListToken[i].tokenAddress)
-//                         await contract.methods.balanceOf(Address).call().then(bal => {
-//                             if (bal > 0) {
-//                                 contract.methods.decimals().call().then(decimal => {
-//                                     if (parseFloat(bal / Math.pow(10, decimal)) % 1 == 0) {
-//                                         balance = parseFloat(bal / Math.pow(10, decimal)).toLocaleString()
-//                                         ListToken[i].balance = balance;
-//                                     } else {
-//                                         balance = parseFloat(bal / Math.pow(10, decimal)).toFixed(2).toLocaleString()
-//                                         ListToken[i].balance = balance;
-//                                     }
-//                                 })
-//                             } else {
-//                                 ListToken[i].balance = 0;
-//                             }
-//                             setTimeout(() => {
-//                                 if (i == (ListToken.length - 1)) {
-//                                     setData('ListTokenETH', JSON.stringify(ListToken))
-//                                     resolve('1')
-//                                 }
-//                             }, 500)
-//                         })
-//                     }
-//                 }
-//             }
-//         })
-//     })
-
-// }
-
-// export async function updateBalance() {
-//     if (Address == undefined) {
-//         return
-//     }
-
-//     of(await WEB3.eth.getBalance(Address))
-//         .subscribe(value => {
-//             if (value > 0) {
-//                 if (parseFloat(value / CONSTANTS.BASE_NTY) % 1 == 0) {
-//                     balance = parseFloat(value / CONSTANTS.BASE_NTY).toLocaleString()
-//                 } else {
-//                     balance = parseFloat(value / CONSTANTS.BASE_NTY).toFixed(2).toLocaleString()
-//                 }
-//             } else {
-//                 balance = 0
-//             }
-//         }), err => {
-//             console.log(err)
-//             balance = 0
-//         }
-// }
 
 export function updateBalance(address, network) {
     return new Promise((resolve, reject) => {
@@ -216,66 +90,63 @@ interface Tx {
     gasPrice?: string | number
 
 }
-
-export async function SendService(network, address: string, nty: number, password: string, exData?: string) {
+/**
+ * Function send coin default of network
+ * @param {string} network network want send
+ * @param {string} address_receive address wallet receive coin
+ * @param {string} address_send address wallet send
+ * @param {number} value number coin want send
+ * @param {string} password local passcode 
+ * @param {string} exData extra data want send, stringify json
+ * @param {string} pk private key encrypt
+ */
+export async function SendService(network: string, address_receive: string, address_send: string, value: number, password: string, pk: string, exData?: string) {
     if (! await validatePassword(password)) {
         throw (Language.t('Send.AlerError.Content'))
     }
     // check address
-    if (! await WEB3.utils.isAddress(address)) {
+    if (! await WEB3.utils.isAddress(address_receive)) {
         throw (Language.t('Send.ValidAddress'));
     }
-    await WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
-    let sendValue = CONSTANTS.BASE_NTY2.valueOf() * nty;
+    console.log(address_receive, address_send)
+    let sendValue = CONSTANTS.BASE_NTY2.valueOf() * value;
     let hexValue = '0x' + bigInt(sendValue).toString(16);
     let txData: Tx;
     if (exData || exData != null || exData != '') {
         txData = {
-            from: Address,
-            to: address,
+            from: address_send,
+            to: address_receive,
             value: hexValue,
             data: exData
         };
     } else {
         txData = {
-            from: Address,
-            to: address,
+            from: address_send,
+            to: address_send,
             value: hexValue
         }
     }
     return new Promise((resolve, reject) => {
-        WEB3.eth.getTransactionCount(Address)
+        WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
+        WEB3.eth.getTransactionCount(address_send)
             .then(async (nonce) => {
-                console.log('getTransactionCount')
                 txData.nonce = nonce;
-
                 await estimateGas(txData).then(async (gas) => {
-                    console.log("gas first: " + gas)
-                    console.log('estimateGas')
                     txData.gas = gas;
                     let rawTx;
                     try {
-                        rawTx = '0x' + await signTransaction(txData, await getPrivateKey(password))
+                        rawTx = '0x' + await signTransaction(txData, await getPrivateKey(password, pk))
                     } catch (ex) {
                         console.log(ex);
                         reject('cannot sign transaction')
                         return;
                     }
 
-                    console.log('gas: ' + txData.gas)
-
                     WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
-                        console.log('sendSignedTransactionCount')
                         if (error) {
                             reject(error.message);
-                            console.log('error' + error.message)
                         } else {
-                            // update balance
-                            console.log('send success')
-                            updateBalance().then(() => {
-                                console.log('update balance')
-                                resolve(hash)
-                            });
+                            resolve(hash)
                         }
                     })
                 })
@@ -341,16 +212,27 @@ export async function Redeem(AddressSend: string, nty: number, privateKey: strin
     })
 
 }
-export async function SendToken(network, toAddress: string, tokenAddress, token: number, password: string, exData?: string) {
+/**
+ * function send token
+ * @param {string} network network want send
+ * @param {string} tokenAddress address of smart contract (address token)
+ * @param {string} address_receive address wallet receive token
+ * @param {string} address_send address wallet send token
+ * @param {number} token amount token want send
+ * @param {string} password local passcode
+ * @param {string} pk private of wallet send
+ * @param {string} exData extra data want send (stringify json hex)
+ */
+export async function SendToken(network: string, tokenAddress: string, address_receive: string, address_send: string, token: number, password: string, pk: string, exData?: string) {
     if (! await validatePassword(password)) {
         throw (Language.t('Send.AlerError.Content'))
     }
     // check address
-    if (! await WEB3.utils.isAddress(toAddress)) {
+    if (! await WEB3.utils.isAddress(address_receive)) {
         throw (Language.t('Send.ValidAddress'));
     }
     await WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
-    var Contract = new WEB3.eth.Contract(ABI, tokenAddress, { from: Address });
+    var Contract = new WEB3.eth.Contract(ABI, tokenAddress, { from: address_send });
     let txData: Tx;
 
     await Contract.methods.decimals().call().then(decimal => {
@@ -359,17 +241,17 @@ export async function SendToken(network, toAddress: string, tokenAddress, token:
         var hexValueToken = '0x' + valueToken;
         console.log(hexValueToken, parseFloat(valueToken))
         txData = {
-            from: Address,
+            from: address_send,
             to: tokenAddress,
             value: '0x0',
-            data: Contract.methods.transfer(toAddress, hexValueToken).encodeABI(),
+            data: Contract.methods.transfer(address_receive, hexValueToken).encodeABI(),
             chainId: 66666,
             gasPrice: 0
         }
     })
 
     return new Promise((resolve, reject) => {
-        WEB3.eth.getTransactionCount(Address)
+        WEB3.eth.getTransactionCount(address_send)
             .then(async (nonce) => {
                 console.log('getTransactionCount')
                 txData.nonce = nonce;
@@ -380,7 +262,7 @@ export async function SendToken(network, toAddress: string, tokenAddress, token:
                     txData.gas = gas;
                     let rawTx;
                     try {
-                        rawTx = '0x' + await signTransaction(txData, await getPrivateKey(password))
+                        rawTx = '0x' + await signTransaction(txData, await getPrivateKey(password, pk))
                     } catch (ex) {
                         console.log(ex);
                         reject('cannot sign transaction')
@@ -396,11 +278,12 @@ export async function SendToken(network, toAddress: string, tokenAddress, token:
                             console.log('error' + error.message)
                         } else {
                             // update balance
-                            console.log('send success')
-                            updateBalance().then(() => {
-                                console.log('update balance')
-                                resolve(hash)
-                            });
+                            resolve(hash)
+                            // console.log('send success')
+                            // updateBalance().then(() => {
+                            //     console.log('update balance')
+                            //     resolve(hash)
+                            // });
                         }
                     })
                 })

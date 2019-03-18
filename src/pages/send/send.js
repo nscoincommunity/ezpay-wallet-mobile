@@ -235,29 +235,45 @@ class FormSend extends Component {
                     return;
                 }
                 if (this.state.viewSymbol == this.props.network) {
-                    SendService(this.props.DataToken.network, this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
-                        .then(data => {
-                            this.setState(this.resetState)
-                            console.log('send success: ' + data)
-                            this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
-                            this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
-                        }).catch(async error => {
-                            // await this.setState({ dialogSend: false })
-                            console.log('send error: ' + error)
-                            console.log(error.slice(0, 34))
-                            if (error.slice(0, 34) == "Returned error: known transaction:") {
-                                this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
-                                return;
-                            }
-                            if (error == 'Returned error: insufficient funds for gas * price + value') {
-                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
-                            } else {
-                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
-                            }
-                            await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
-                        })
+                    SendService(
+                        this.props.DataToken.network,
+                        this.state.addresswallet,
+                        this.props.DataToken.addressWL,
+                        parseFloat(this.state.NTY),
+                        this.state.Password,
+                        this.props.DataToken.PK_WL,
+                        this.state.extraData,
+                    ).then(data => {
+                        this.setState(this.resetState)
+                        console.log('send success: ' + data)
+                        this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
+                        this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
+                    }).catch(async error => {
+                        // await this.setState({ dialogSend: false })
+                        console.log('send error: ' + error)
+                        console.log(error.slice(0, 34))
+                        if (error.slice(0, 34) == "Returned error: known transaction:") {
+                            this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
+                            return;
+                        }
+                        if (error == 'Returned error: insufficient funds for gas * price + value') {
+                            await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
+                        } else {
+                            await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
+                        }
+                        await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
+                    })
                 } else {
-                    SendToken(this.props.DataToken.network, this.state.addresswallet, this.state.tokenSelected.addressToken, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
+                    SendToken(
+                        this.props.DataToken.network,
+                        this.state.tokenSelected.addressToken,
+                        this.state.addresswallet,
+                        this.props.DataToken.addressWL,
+                        parseFloat(this.state.NTY),
+                        this.state.Password,
+                        this.props.DataToken.PK_WL,
+                        this.state.extraData
+                    )
                         .then(async data => {
                             await this.setState(this.resetState)
                             console.log('send success: ' + data)
@@ -496,14 +512,15 @@ class FormSend extends Component {
                                 <Text style={{ color: GLOBALS.Color.danger, height: this.state.TextErrorAddress != '' ? 'auto' : 0 }}>{this.state.TextErrorNTY}</Text>
 
                                 <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.ButtonSend(); Keyboard.dismiss() }}>
-                                    <Gradient
+                                    {/* <Gradient
                                         colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
                                         style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
                                         start={{ x: 0.7, y: 0.0 }}
                                         end={{ x: 0.0, y: 0.0 }}
                                     >
                                         <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
-                                    </Gradient>
+                                    </Gradient> */}
+                                    <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
                                 </TouchableOpacity>
 
                                 {this.state.buttomReset &&

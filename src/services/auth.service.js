@@ -131,7 +131,6 @@ export let cachePwd: string;
 
 export async function validatePassword(password): boolean {
     var passEncrypt = await encryptPassword(password);
-    console.log('now', passEncrypt, 'old', cachePwd)
     return (cachePwd == passEncrypt)
 }
 
@@ -212,8 +211,8 @@ export async function changePasscode(passwordOld: string, passwordNew: string) {
 }
 
 
-export async function getPrivateKey(password: string) {
-    let PK = CryptoJS.AES.decrypt(privateKey, password).toString(CryptoJS.enc.Utf8);
+export async function getPrivateKey(password: string, privatekey: string) {
+    let PK = CryptoJS.AES.decrypt(privatekey, password).toString(CryptoJS.enc.Utf8);
     return PK;
 }
 

@@ -120,23 +120,24 @@ export const EventGetBalance = (address, network, id) => dispatch => {
  * @param {string} network network need get token
  */
 
-const getListToken = (ListToken, network, addressWL, nameWL) => {
+const getListToken = (ListToken, network, addressWL, nameWL, PK_WL) => {
     return {
         type: 'GET_TOKEN',
         payload: {
             ListToken,
             network,
             addressWL,
-            nameWL
+            nameWL,
+            PK_WL
         }
     }
 }
-export const GetListToken = (network, addressWL, nameWL) => dispatch => {
+export const GetListToken = (network, addressWL, nameWL, PK_WL) => dispatch => {
     if (network == '') {
         return dispatch(getListToken([]))
     } else {
         return GetTokenOfNetwork(network).then(List => {
-            return dispatch(getListToken(List, network, addressWL, nameWL))
+            return dispatch(getListToken(List, network, addressWL, nameWL, PK_WL))
         }).catch(e => console.log(e))
     }
 

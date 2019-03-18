@@ -46,12 +46,7 @@ export function updateBalance(state = { balance: NaN }, actions) {
 export function getListToken(state = { ListToken: [] }, actions) {
     switch (actions.type) {
         case 'GET_TOKEN':
-            return {
-                ListToken: actions.payload.ListToken,
-                network: actions.payload.network,
-                addressWL: actions.payload.addressWL,
-                nameWL: actions.payload.nameWL
-            }
+            return actions.payload
         default:
             return state
     }
