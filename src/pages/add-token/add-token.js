@@ -90,9 +90,7 @@ class FormAddToken extends Component {
         this.state = this.initState;
     };
     componentWillMount() {
-        console.log('aaa')
         getData('Network').then(net => {
-            console.log('aaa', net)
             this.network = net;
         })
     }

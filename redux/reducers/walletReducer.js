@@ -49,7 +49,8 @@ export function getListToken(state = { ListToken: [] }, actions) {
             return {
                 ListToken: actions.payload.ListToken,
                 network: actions.payload.network,
-                addressWL: actions.payload.addressWL
+                addressWL: actions.payload.addressWL,
+                nameWL: actions.payload.nameWL
             }
         default:
             return state

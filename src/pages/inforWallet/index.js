@@ -8,7 +8,6 @@ import Gradient from 'react-native-linear-gradient';
 export default class InforWallet extends Component {
     render() {
         const item = this.props.navigation.getParam('payload');
-        console.log(item)
         return (
             <Gradient
                 colors={['#F0F3F5', '#E8E8E8']}

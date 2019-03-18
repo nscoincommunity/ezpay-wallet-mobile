@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, FlatList, StyleSheet, Image } from 'react-native'
+import { Text, View, TouchableOpacity, FlatList, StyleSheet, Image, Platform } from 'react-native'
 import Header from '../../../components/header';
 import GLOBAL from '../../../helper/variables';
 import { bindActionCreators } from 'redux';
@@ -75,6 +75,7 @@ class TypeAddWallet extends Component {
                 />
 
                 <FlatList
+                    contentContainerStyle={Platform.OS == 'android' ? { paddingHorizontal: GLOBAL.wp('2%') } : {}}
                     data={arrayType}
                     keyExtractor={(item, index) => index.toString()}
                     style={{ padding: GLOBAL.wp('2%') }}

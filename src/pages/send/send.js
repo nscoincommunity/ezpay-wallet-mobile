@@ -36,28 +36,18 @@ import TouchID from "react-native-touch-id"
 import CryptoJS from 'crypto-js';
 import { cachePwd } from '../../services/auth.service'
 import AlerModal from '../../components/Modal';
+import { connect } from 'react-redux';
+import Header from '../../components/header';
+import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper'
+
 
 
 const scaleAnimation = new ScaleAnimation();
 const pt = PixelRatio.get()
 
-export default class FormSend extends Component {
+class FormSend extends Component {
     mouted: boolean = true;
     spamPress: boolean = false;
-
-    static navigationOptions = {
-        title: Language.t('Send.Title'),
-        headerStyle: {
-            backgroundColor: GLOBALS.Color.primary,
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerBackTitleStyle: {
-            color: 'white',
-        },
-        headerTintColor: 'white',
-    };
 
     InitState = {
         addresswallet: '',
@@ -73,9 +63,9 @@ export default class FormSend extends Component {
         titleDialog: '',
         contentDialog: '',
         ListToken: [],
-        viewSymbol: 'NTY',
+        viewSymbol: this.props.network,
         tokenSelected: {},
-        selected: 'NTY',
+        selected: this.props.network,
         extraData: '',
         editAddress: true,
         editNTY: true,
@@ -108,7 +98,6 @@ export default class FormSend extends Component {
     constructor(props) {
         super(props)
         this.state = this.InitState;
-        this.state
     };
 
     onSelect = data => {
@@ -185,18 +174,11 @@ export default class FormSend extends Component {
         if (val < 0 || value.length < 1) {
             await this.setState({ NTY: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, USD: '' })
         } else {
-            // if (this.state.viewSymbol == "NTY") {
 
-            // } else {
-            //     var usd = 0;
-            // }
             switch (this.state.viewSymbol) {
-                case "NTY":
-                    var usd = await Utils.round(val * exchangeRate, 5);
+                case this.props.network:
+                    var usd = await Utils.round(val * this.props.rate, 5);
                     break;
-                case "ETH":
-                    var usd = await Utils.round(val * exchangeRateETH, 5);
-                    break
                 default:
                     var usd = 0;
                     break;
@@ -218,22 +200,12 @@ export default class FormSend extends Component {
         if (val < 0 || value.length < 1) {
             await this.setState({ USD: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, NTY: '' })
         } else {
-            // if (this.state.viewSymbol == "NTY") {
-            //     var nty = await Utils.round(val / exchangeRate);
-            //     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
-            // } else {
-            //     var nty = 0;
-            //     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
-            // }
             switch (this.state.viewSymbol) {
-                case "NTY":
-                    var nty = await Utils.round(val / exchangeRate);
+                case this.props.network:
+                    var nty = await Utils.round(val / this.props.rate);
                     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
                     break;
-                case "ETH":
-                    var nty = await Utils.round(val / exchangeRateETH);
-                    await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
-                    break
+
                 default:
                     var nty = 0;
                     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
@@ -262,8 +234,8 @@ export default class FormSend extends Component {
                     console.log('chay vao day')
                     return;
                 }
-                if (this.state.viewSymbol == 'NTY' || this.state.viewSymbol == 'ETH') {
-                    SendService(this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
+                if (this.state.viewSymbol == this.props.network) {
+                    SendService(this.props.DataToken.network, this.state.addresswallet, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
                         .then(data => {
                             this.setState(this.resetState)
                             console.log('send success: ' + data)
@@ -285,7 +257,7 @@ export default class FormSend extends Component {
                             await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
                         })
                 } else {
-                    SendToken(this.state.addresswallet, this.state.tokenSelected.tokenAddress, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
+                    SendToken(this.props.DataToken.network, this.state.addresswallet, this.state.tokenSelected.addressToken, parseFloat(this.state.NTY), this.state.Password, this.state.extraData)
                         .then(async data => {
                             await this.setState(this.resetState)
                             console.log('send success: ' + data)
@@ -327,42 +299,6 @@ export default class FormSend extends Component {
             }).catch(() => {
                 this.setState({ showTouchID: false })
             })
-            getData('Network').then(net => {
-                switch (net) {
-                    case 'Ethereum':
-                        getData('ListTokenETH')
-                            .then(data => {
-                                if (data != null) {
-                                    var tempArray = []
-                                    JSON.parse(data).forEach(element => {
-                                        tempArray.push({
-                                            value: JSON.stringify(element),
-                                            label: element.symbol
-                                        })
-                                    });
-                                }
-                                this.setState({ ListToken: tempArray, viewSymbol: 'ETH', selected: 'ETH' })
-                            })
-                        break;
-
-                    default:
-                        getData('ListToken')
-                            .then(data => {
-                                if (data != null) {
-                                    var tempArray = []
-                                    JSON.parse(data).forEach(element => {
-                                        tempArray.push({
-                                            value: JSON.stringify(element),
-                                            label: element.symbol
-                                        })
-                                    });
-                                }
-                                this.setState({ ListToken: tempArray })
-                            })
-                        break;
-                }
-            })
-
         }
     }
 
@@ -392,34 +328,28 @@ export default class FormSend extends Component {
     inputs = {};
 
     selectToken = (token) => {
-        if (JSON.parse(token).symbol == 'NTY') {
-            if (parseFloat(this.state.NTY) > 0) {
-                var usd = Utils.round(parseFloat(this.state.NTY) * exchangeRate, 5);
-                console.log("usd", usd)
-                this.setState({ viewSymbol: JSON.parse(token).symbol, USD: usd.toString() })
-            } else {
-                this.setState({ viewSymbol: JSON.parse(token).symbol })
-            }
-        } else {
-            if (JSON.parse(token).symbol == "ETH") {
+        switch (token) {
+            case this.props.network:
                 if (parseFloat(this.state.NTY) > 0) {
-                    var usd = Utils.round(parseFloat(this.state.NTY) * exchangeRateETH, 5);
-                    console.log("usd", usd)
-                    this.setState({ viewSymbol: JSON.parse(token).symbol, USD: usd.toString() })
+                    let usd = Utils.round(parseFloat(this.state.NTY) * this.props.rate, 5);
+                    this.setState({ viewSymbol: token.name, USD: usd.toString() })
                 } else {
-                    this.setState({ viewSymbol: JSON.parse(token).symbol })
+                    this.setState({ viewSymbol: token.name })
                 }
-            }
-            this.state.tokenSelected = JSON.parse(token)
-            if (parseFloat(this.state.NTY) > 0) {
-                this.setState({ viewSymbol: this.state.tokenSelected.symbol, USD: "0" })
-            } else {
-                this.setState({ viewSymbol: this.state.tokenSelected.symbol, USD: "" })
-            }
+                break;
+
+            default:
+                this.state.tokenSelected = token;
+                if (parseFloat(this.state.NTY) > 0) {
+                    this.setState({ viewSymbol: token.name, USD: "0" })
+                } else {
+                    this.setState({ viewSymbol: token.name, USD: "" })
+                }
+                break;
         }
     }
     Selected(item) {
-        this.setState({ selected: item.label }, () => this.selectToken(item.value))
+        this.setState({ selected: item.name }, () => this.selectToken(item))
     }
 
     ButtonSend = () => {
@@ -466,177 +396,168 @@ export default class FormSend extends Component {
     }
 
     render() {
+        const { ListToken } = this.props.DataToken;
+        if (ListToken[0].name != this.props.network) {
+            var ArrayToken = [{ name: this.props.network }].concat(ListToken)
+        }
+
         return (
-            <ScrollView style={{ backgroundColor: '#fafafa' }}>
-                <KeyboardAvoidingView
-                    style={{ flex: 1 }}
-                    behavior={'position'}
-                    enabled
-                    keyboardVerticalOffset={GLOBALS.hp('-10%')}
-                >
-                    <View style={Styles.container}>
-                        {
-                            this.state.ListToken.length > 0 &&
-                            <FlatList
-                                style={{ paddingVertical: GLOBALS.hp('1%') }}
-                                horizontal={true}
-                                data={this.state.ListToken}
-                                renderItem={({ item, index }) => {
-                                    return (
-                                        <TouchableOpacity
-                                            onPress={() => this.Selected(item)}
-                                            style={
-                                                selectedBtn(this.state.selected === item.label).selected
-                                            }
-                                        >
-                                            <Text style={[selectedBtn(this.state.selected === item.label).text]}>{item.label}</Text>
-                                        </TouchableOpacity>
-                                    )
-                                }}
-                                keyExtractor={(item, index) => item.value}
-                            />
-                        }
-                        <View style={[Styles.Form, { height: GLOBALS.hp('11%') }]}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <TextInput
-                                    value={this.state.addresswallet}
-                                    editable={this.state.editAddress}
-                                    style={Styles.InputToAddress}
-                                    placeholder={Language.t('Send.SendForm.To')}
-                                    onChangeText={(val) => this.CheckAddress(val)}
-                                    returnKeyType={"next"}
-                                    blurOnSubmit={false}
-                                    onSubmitEditing={() => { this.focusTheField('field2'); }}
-                                    underlineColorAndroid="transparent"
+            <View style={Styles.container}>
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="times"
+                    title="Send"
+                    style={{ paddingTop: getStatusBarHeight() }}
+                    pressIconLeft={() => { this.props.navigation.goBack(); }}
+                />
+                <ScrollView style={{ backgroundColor: '#fafafa' }}>
+                    <KeyboardAvoidingView
+                        style={{ flex: 1 }}
+                        behavior={'position'}
+                        enabled
+                        keyboardVerticalOffset={GLOBALS.hp('-10%')}
+                    >
+                        <View style={[Styles.container, { padding: GLOBALS.hp('2%') }]}>
+                            {
+                                ArrayToken.length > 0 &&
+                                <FlatList
+                                    style={{ paddingVertical: GLOBALS.hp('1%') }}
+                                    horizontal={true}
+                                    data={ArrayToken}
+                                    renderItem={({ item, index }) => {
+                                        return (
+                                            <TouchableOpacity
+                                                onPress={() => this.Selected(item)}
+                                                style={
+                                                    selectedBtn(this.state.selected === item.name).selected
+                                                }
+                                            >
+                                                <Text style={[selectedBtn(this.state.selected === item.name).text]}>{item.name}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }}
+                                    keyExtractor={(item, index) => item.name}
                                 />
-                                <TouchableOpacity
-                                    onPress={() => this.navigateToScan()}
-                                    style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}
-                                >
-                                    <Image source={require('../../images/icon/qr-code.png')} />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={{
-                                color: GLOBALS.Color.danger,
-                                height: this.state.TextErrorAddress != '' ? 'auto' : 0
-                            }}>{this.state.TextErrorAddress}</Text>
-                        </View>
-
-                        <View style={[Styles.Form, { height: GLOBALS.hp('50%') },]}>
-                            <View style={{ flexDirection: 'row', borderBottomWidth: 0.5 }}>
-                                <TextInput
-                                    editable={this.state.editNTY}
-                                    placeholder={this.state.viewSymbol}
-                                    keyboardType="numeric"
-                                    value={this.state.NTY}
-                                    style={Styles.InputBalance}
-                                    onChangeText={(val) => this.CheckNTY(val)}
-                                    ref={input => { this.inputs['field2'] = input }}
-                                    underlineColorAndroid="transparent"
-                                />
-                            </View>
-                            <View style={{ flexDirection: 'row', borderBottomWidth: 0.5 }}>
-                                <TextInput
-                                    editable={this.state.editUSD}
-                                    placeholder="USD"
-                                    keyboardType="numeric"
-                                    value={this.state.USD}
-                                    style={Styles.InputBalance}
-                                    onChangeText={(val) => this.CheckUSD(val)}
-                                    underlineColorAndroid="transparent"
-                                />
-                                <Image source={require('../../images/icon/dollar.png')} />
-                            </View>
-
-                            <Text style={{ color: GLOBALS.Color.danger, height: this.state.TextErrorAddress != '' ? 'auto' : 0 }}>{this.state.TextErrorNTY}</Text>
-
-                            <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.ButtonSend(); Keyboard.dismiss() }}>
-                                <Gradient
-                                    colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
-                                    style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
-                                    start={{ x: 0.7, y: 0.0 }}
-                                    end={{ x: 0.0, y: 0.0 }}
-                                >
-                                    <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
-                                </Gradient>
-                            </TouchableOpacity>
-
-                            {this.state.buttomReset &&
-                                <TouchableOpacity style={{
-                                    backgroundColor: '#fff',
-                                    marginVertical: GLOBALS.hp('1%'),
-                                    borderRadius: 5,
-                                    flexDirection: 'row-reverse',
-                                    justifyContent: 'center',
-                                    paddingVertical: GLOBALS.hp('1%'),
-                                    borderWidth: 2,
-                                    borderColor: GLOBALS.Color.primary,
-                                }}
-                                    onPress={() => this.setState(this.resetState)}>
-                                    <Text style={{
-                                        color: GLOBALS.Color.primary,
-                                        textAlign: 'center',
-                                        fontSize: 17,
-                                        flex: 1,
-                                        fontFamily: GLOBALS.font.Poppins
-                                    }}>Reset</Text>
-                                </TouchableOpacity>
                             }
-                            {/* {
-                                this.state.showTouchID && !this.state.VisibaleButton ?
+                            <View style={[Styles.Form, { height: GLOBALS.hp('11%') }]}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <TextInput
+                                        value={this.state.addresswallet}
+                                        editable={this.state.editAddress}
+                                        style={Styles.InputToAddress}
+                                        placeholder={Language.t('Send.SendForm.To')}
+                                        onChangeText={(val) => this.CheckAddress(val)}
+                                        returnKeyType={"next"}
+                                        blurOnSubmit={false}
+                                        onSubmitEditing={() => { this.focusTheField('field2'); }}
+                                        underlineColorAndroid="transparent"
+                                    />
                                     <TouchableOpacity
-                                        style={{
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                        }}
-                                        onPress={() => this.ButtonSend()}
+                                        onPress={() => this.navigateToScan()}
+                                        style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}
                                     >
-                                        <View style={{ flex: 1.5, alignItems: 'flex-end' }}>
-                                            <Image
-                                                source={require('../../images/icon/touch-icon.png')}
-                                                resizeMode='contain'
-                                            />
-                                        </View>
-                                        <Text
-                                            style={{
-                                                flex: 8.5,
-                                                fontFamily: GLOBALS.font.Poppins,
-                                                fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'),
-                                                textAlign: 'center',
-                                            }}>{Language.t('TouchID.Send')}</Text>
+                                        <Image source={require('../../images/icon/qr-code.png')} />
                                     </TouchableOpacity>
-                                    : null
-                            } */}
-
-                        </View>
-                        <View style={{ flex: 1 }} />
-                    </View>
-
-                    <Dialog.Container visible={this.state.dialogSend} >
-                        <Dialog.Title>{Language.t('Send.ConfirmSend.Title')}</Dialog.Title>
-                        <Dialog.Description>
-                            {Language.t('Send.ConfirmSend.Content')}
-                        </Dialog.Description>
-                        <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
-                        <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
-                        <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.spamPress == true ? console.log('spam') : this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
-                    </Dialog.Container>
-                    <AlerModal ref="PopupDialog" />
-                    {
-                        this.state.loading ?
-                            <Modal
-                                animationType='fade'
-                                transparent={true}
-                                visible={true}>
-                                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
-                                    <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
                                 </View>
-                            </Modal>
-                            : null
-                    }
-                </KeyboardAvoidingView>
-            </ScrollView >
+                                <Text style={{
+                                    color: GLOBALS.Color.danger,
+                                    height: this.state.TextErrorAddress != '' ? 'auto' : 0
+                                }}>{this.state.TextErrorAddress}</Text>
+                            </View>
+
+                            <View style={[Styles.Form, { height: GLOBALS.hp('50%') },]}>
+                                <View style={{ flexDirection: 'row', borderBottomWidth: 0.5 }}>
+                                    <TextInput
+                                        editable={this.state.editNTY}
+                                        placeholder={this.state.viewSymbol}
+                                        keyboardType="numeric"
+                                        value={this.state.NTY}
+                                        style={Styles.InputBalance}
+                                        onChangeText={(val) => this.CheckNTY(val)}
+                                        ref={input => { this.inputs['field2'] = input }}
+                                        underlineColorAndroid="transparent"
+                                    />
+                                </View>
+                                <View style={{ flexDirection: 'row', borderBottomWidth: 0.5 }}>
+                                    <TextInput
+                                        editable={this.state.editUSD}
+                                        placeholder="USD"
+                                        keyboardType="numeric"
+                                        value={this.state.USD}
+                                        style={Styles.InputBalance}
+                                        onChangeText={(val) => this.CheckUSD(val)}
+                                        underlineColorAndroid="transparent"
+                                    />
+                                    <Image source={require('../../images/icon/dollar.png')} />
+                                </View>
+
+                                <Text style={{ color: GLOBALS.Color.danger, height: this.state.TextErrorAddress != '' ? 'auto' : 0 }}>{this.state.TextErrorNTY}</Text>
+
+                                <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.ButtonSend(); Keyboard.dismiss() }}>
+                                    <Gradient
+                                        colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                                        style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
+                                        start={{ x: 0.7, y: 0.0 }}
+                                        end={{ x: 0.0, y: 0.0 }}
+                                    >
+                                        <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
+                                    </Gradient>
+                                </TouchableOpacity>
+
+                                {this.state.buttomReset &&
+                                    <TouchableOpacity style={{
+                                        backgroundColor: '#fff',
+                                        marginVertical: GLOBALS.hp('1%'),
+                                        borderRadius: 5,
+                                        flexDirection: 'row-reverse',
+                                        justifyContent: 'center',
+                                        paddingVertical: GLOBALS.hp('1%'),
+                                        borderWidth: 2,
+                                        borderColor: GLOBALS.Color.primary,
+                                    }}
+                                        onPress={() => this.setState(this.resetState)}>
+                                        <Text style={{
+                                            color: GLOBALS.Color.primary,
+                                            textAlign: 'center',
+                                            fontSize: 17,
+                                            flex: 1,
+                                            fontFamily: GLOBALS.font.Poppins
+                                        }}>Reset</Text>
+                                    </TouchableOpacity>
+                                }
+
+
+                            </View>
+                            <View style={{ flex: 1 }} />
+                        </View>
+
+                        <Dialog.Container visible={this.state.dialogSend} >
+                            <Dialog.Title>{Language.t('Send.ConfirmSend.Title')}</Dialog.Title>
+                            <Dialog.Description>
+                                {Language.t('Send.ConfirmSend.Content')}
+                            </Dialog.Description>
+                            <Dialog.Input placeholder={Language.t('Send.ConfirmSend.Placeholder')} onChangeText={(val) => this.setState({ Password: val })} secureTextEntry={true} autoFocus={true}></Dialog.Input>
+                            <Dialog.Button label={Language.t('Send.ConfirmSend.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
+                            <Dialog.Button label={Language.t('Send.SendForm.TitleButton')} onPress={this.spamPress == true ? console.log('spam') : this.doSend.bind(this)} disabled={this.state.disabledButtomSend} />
+                        </Dialog.Container>
+                        <AlerModal ref="PopupDialog" />
+                        {
+                            this.state.loading ?
+                                <Modal
+                                    animationType='fade'
+                                    transparent={true}
+                                    visible={true}>
+                                    <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
+                                        <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
+                                    </View>
+                                </Modal>
+                                : null
+                        }
+                    </KeyboardAvoidingView>
+                </ScrollView >
+            </View>
         )
     }
 }
@@ -645,7 +566,6 @@ export default class FormSend extends Component {
 const Styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: GLOBALS.hp('2%'),
         backgroundColor: '#fafafa',
         // flexDirection: 'column'
     },
@@ -735,3 +655,23 @@ const selectedBtn = (type) => StyleSheet.create({
         fontFamily: GLOBALS.font.Poppins
     }
 })
+const mapStateToProps = state => {
+    let network = ''
+    switch (state.getListToken.network) {
+        case 'nexty':
+            network = 'NTY'
+            break;
+        case 'ethereum':
+            network = 'ETH'
+            break;
+        default:
+            network = 'TRX'
+            break;
+    }
+    return {
+        network: network,
+        DataToken: state.getListToken,
+        rate: state.snapToWallet.rate
+    }
+}
+export default connect(mapStateToProps, null)(FormSend)

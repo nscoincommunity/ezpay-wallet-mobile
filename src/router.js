@@ -38,7 +38,7 @@ import redeem from './pages/redeem/redeem';
 import TabNavigator from './tabfooter';
 import Prk from './pages/private-key/private-key';
 import request from './pages/request/request';
-import send from './pages/send/send';
+import Send from './pages/send/send';
 import dashboard from './pages/dashboard/dashboard';
 
 
@@ -184,6 +184,12 @@ class Router extends Component {
                 },
                 Addtoken: {
                     screen: Addtoken,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
+                SendScreen: {
+                    screen: Send,
                     navigationOptions: {
                         header: () => null
                     }

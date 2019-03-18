@@ -14,13 +14,14 @@ import { updateBalance, SV_UpdateBalanceTk } from '../../src/services/wallet.ser
  * @param {string} network network wallet when snap
  * @param {number} walletID walletID of wallet when snap
  */
-export function ONSNAPWALLET(network, walletID, rate) {
+export function ONSNAPWALLET(network, walletID, exchange, rate) {
     return {
         type: 'ON_SNAP_WALLET',
         payload: {
             network: network,
             walletID: walletID,
-            rate: rate
+            rate: rate,
+            exchange: exchange
         }
     }
 }
@@ -29,15 +30,15 @@ export const fetchRate = (network, walletID) => dispatch => {
     switch (network) {
         case 'nexty':
             return getExchangeRate().then(rate => {
-                return dispatch(ONSNAPWALLET(network, walletID, `1 NTY = ${rate.toFixed(6)} USD`))
+                return dispatch(ONSNAPWALLET(network, walletID, `1 NTY = ${rate.toFixed(6)} USD`, rate.toFixed(6)))
             }).catch(e => console.log(e))
         case 'ethereum':
             return getExchangeRateETH().then(rate => {
-                return dispatch(ONSNAPWALLET(network, walletID, `1 ETH = ${rate.toFixed(6)} USD`))
+                return dispatch(ONSNAPWALLET(network, walletID, `1 ETH = ${rate.toFixed(6)} USD`, rate.toFixed(6)))
             })
         case 'tron':
             return getExchangeRateTRX().then(rate => {
-                return dispatch(ONSNAPWALLET(network, walletID, `1 TRX = ${rate.toFixed(6)} USD`))
+                return dispatch(ONSNAPWALLET(network, walletID, `1 TRX = ${rate.toFixed(6)} USD`, rate.toFixed(6)))
             })
         default:
             return dispatch(ONSNAPWALLET('', '', ''))
@@ -119,22 +120,23 @@ export const EventGetBalance = (address, network, id) => dispatch => {
  * @param {string} network network need get token
  */
 
-const getListToken = (ListToken, network, addressWL) => {
+const getListToken = (ListToken, network, addressWL, nameWL) => {
     return {
         type: 'GET_TOKEN',
         payload: {
             ListToken,
             network,
-            addressWL
+            addressWL,
+            nameWL
         }
     }
 }
-export const GetListToken = (network, addressWL) => dispatch => {
+export const GetListToken = (network, addressWL, nameWL) => dispatch => {
     if (network == '') {
         return dispatch(getListToken([]))
     } else {
         return GetTokenOfNetwork(network).then(List => {
-            return dispatch(getListToken(List, network, addressWL))
+            return dispatch(getListToken(List, network, addressWL, nameWL))
         }).catch(e => console.log(e))
     }
 

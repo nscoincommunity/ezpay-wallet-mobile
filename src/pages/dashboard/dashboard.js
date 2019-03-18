@@ -35,7 +35,7 @@ class Dashboard extends Component {
 
 
     render() {
-        const { rate } = this.props.snapToWallet;
+        const { exchange } = this.props.snapToWallet;
         const { data } = this.props.ActionDB;
         const { DataToken, status } = this.props
         return (
@@ -50,7 +50,7 @@ class Dashboard extends Component {
                     colorIconLeft="#328FFC"
                     colorTitle="#328FFC"
                     nameIconLeft="align-left"
-                    title={rate}
+                    title={exchange}
                     style={{ marginTop: 23 }}
                     pressIconLeft={() => { this.props.navigation.openDrawer(); }}
                 />
@@ -59,13 +59,13 @@ class Dashboard extends Component {
                         <View style={{ flex: 1 }}>
                             <ListCoin Data={data} navigation={this.props.navigation} />
                             {
-                                rate != '' &&
+                                exchange != '' &&
                                 <View style={{ paddingHorizontal: GLOBALS.wp('20%'), paddingVertical: GLOBALS.hp('3%') }}>
-                                    <Segment navigation={this.props.navigation} />
+                                    <Segment navigation={this.props.navigation} Data={DataToken} />
                                 </View>
                             }
                             {
-                                rate != '' &&
+                                exchange != '' &&
                                 <View style={{
                                     flexDirection: 'row', marginVertical: GLOBALS.hp('1%'),
                                     paddingHorizontal: GLOBALS.wp('3%')

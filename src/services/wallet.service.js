@@ -217,7 +217,7 @@ interface Tx {
 
 }
 
-export async function SendService(address: string, nty: number, password: string, exData?: string) {
+export async function SendService(network, address: string, nty: number, password: string, exData?: string) {
     if (! await validatePassword(password)) {
         throw (Language.t('Send.AlerError.Content'))
     }
@@ -225,7 +225,7 @@ export async function SendService(address: string, nty: number, password: string
     if (! await WEB3.utils.isAddress(address)) {
         throw (Language.t('Send.ValidAddress'));
     }
-
+    await WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
     let sendValue = CONSTANTS.BASE_NTY2.valueOf() * nty;
     let hexValue = '0x' + bigInt(sendValue).toString(16);
     let txData: Tx;
@@ -341,9 +341,7 @@ export async function Redeem(AddressSend: string, nty: number, privateKey: strin
     })
 
 }
-
-
-export async function SendToken(toAddress: string, tokenAddress, token: number, password: string, exData?: string) {
+export async function SendToken(network, toAddress: string, tokenAddress, token: number, password: string, exData?: string) {
     if (! await validatePassword(password)) {
         throw (Language.t('Send.AlerError.Content'))
     }
@@ -351,7 +349,7 @@ export async function SendToken(toAddress: string, tokenAddress, token: number, 
     if (! await WEB3.utils.isAddress(toAddress)) {
         throw (Language.t('Send.ValidAddress'));
     }
-
+    await WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
     var Contract = new WEB3.eth.Contract(ABI, tokenAddress, { from: Address });
     let txData: Tx;
 
@@ -414,7 +412,6 @@ export async function SendToken(toAddress: string, tokenAddress, token: number, 
     })
 
 }
-
 export async function signTransaction(txData: Tx, privateKey: string) {
     let { rawTx } = sign(txData, privateKey);
     return rawTx
@@ -433,7 +430,6 @@ export async function getAddressFromPK(privateKey) {
         resolve(account.address)
     })
 }
-
 export function GetInfoToken(TokenAddress, network) {
     return new Promise(async (resolve, reject) => {
         try {

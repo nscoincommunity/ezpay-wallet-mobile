@@ -37,7 +37,7 @@ class ListWallet extends Component {
         } else {
             this.props.fetchRate(Item.network.name, Item.id);
             this.funcUpdateBalance(Item)
-            this.props.GetListToken(Item.network.name, Item.address)
+            this.props.GetListToken(Item.network.name, Item.address, Item.name)
         }
     }
 
@@ -70,7 +70,7 @@ class ListWallet extends Component {
     componentDidMount() {
         if (this.InitInterval) {
             this.funcUpdateBalance(this.props.Data[0]);
-            this.props.GetListToken(this.props.Data[0].network.name, this.props.Data[0].address)
+            this.props.GetListToken(this.props.Data[0].network.name, this.props.Data[0].address, this.props.Data[0].name)
         }
     }
 
@@ -98,8 +98,8 @@ class ListWallet extends Component {
                     // hasParallaxImages={true}
                     loop={true}
                     // onScroll={(pan) => { console.log('aaaa', pan) }}
-                    onScrollBeginDrag={() => this._startSnap()}
-                    onScrollEndDrag={() => this._endSnap()}
+                    // onScrollBeginDrag={() => this._startSnap()}
+                    // onScrollEndDrag={() => this._endSnap()}
                     slideStyle={{ paddingVertical: 8, }}
                     onResponderMove={this.onMove.bind(this)}
                 />
