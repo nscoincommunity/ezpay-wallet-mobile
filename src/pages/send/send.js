@@ -512,15 +512,14 @@ class FormSend extends Component {
                                 <Text style={{ color: GLOBALS.Color.danger, height: this.state.TextErrorAddress != '' ? 'auto' : 0 }}>{this.state.TextErrorNTY}</Text>
 
                                 <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.ButtonSend(); Keyboard.dismiss() }}>
-                                    {/* <Gradient
+                                    <Gradient
                                         colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
                                         style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
                                         start={{ x: 0.7, y: 0.0 }}
                                         end={{ x: 0.0, y: 0.0 }}
                                     >
                                         <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
-                                    </Gradient> */}
-                                    <Text style={Styles.TextButton}>{Language.t('Send.SendForm.TitleButton')}</Text>
+                                    </Gradient>
                                 </TouchableOpacity>
 
                                 {this.state.buttomReset &&

@@ -64,6 +64,7 @@ export const SV_UpdateBalanceTk = (addressTK, network, addressWL) => new Promise
             }
         })
     } catch (error) {
+        console.log(error)
         reject(error)
     }
 })
@@ -113,19 +114,11 @@ export async function SendService(network: string, address_receive: string, addr
     let hexValue = '0x' + bigInt(sendValue).toString(16);
     let txData: Tx;
     if (exData || exData != null || exData != '') {
-        txData = {
-            from: address_send,
-            to: address_receive,
-            value: hexValue,
-            data: exData
-        };
+        txData = await getTxData(network, address_send, address_receive, hexValue, exData)
     } else {
-        txData = {
-            from: address_send,
-            to: address_send,
-            value: hexValue
-        }
+        txData = await getTxData(network, address_send, address_receive, hexValue, '')
     }
+    console.log('xx', txData)
     return new Promise((resolve, reject) => {
         WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
         WEB3.eth.getTransactionCount(address_send)
@@ -157,6 +150,35 @@ export async function SendService(network: string, address_receive: string, addr
 
     })
 
+}
+
+async function getTxData(network, from, to, value, data, ): Tx {
+    switch (network) {
+        case 'ethereum':
+            return {
+                from: from,
+                to: to,
+                value: value,
+                data: data,
+                gasPrice: await getGasPrice()
+            }
+        case 'nexty':
+            return {
+                from: from,
+                to: to,
+                value: value,
+                data: data,
+            }
+        default:
+            return {
+                from: from,
+                to: to,
+                value: value,
+                data: data,
+                gasPrice: 0.000000008
+            }
+            break;
+    }
 }
 
 export async function Redeem(AddressSend: string, nty: number, privateKey: string) {
@@ -303,6 +325,11 @@ export async function estimateGas(transaction: Tx): number {
     let gas = WEB3.eth.estimateGas(transaction);
     return gas;
 }
+function getGasPrice(): string {
+    let gasPrice = WEB3.eth.getGasPrice()
+    return gasPrice
+}
+
 export async function getAddressFromPK(privateKey) {
     try {
         var account = WEB3.eth.accounts.privateKeyToAccount('0x' + privateKey);
