@@ -150,7 +150,12 @@ class Router extends Component {
                 TempPage: { screen: TempPage },
                 ListToken: { screen: ListToken },
                 register: { screen: register },
-                restore: { screen: restore },
+                restore: {
+                    screen: restore,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
                 Backup: { screen: Backup },
                 DetailsHis: { screen: DetailHis },
                 QRscan: { screen: QRscan },

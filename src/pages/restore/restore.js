@@ -26,6 +26,8 @@ import { setData, rmData, getData } from '../../services/data.service'
 import Lang from '../../i18n/i18n';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
+import Header from '../../components/header'
+
 
 class ScreenRestore extends Component {
     constructor() {
@@ -51,34 +53,23 @@ class ScreenRestore extends Component {
     }
 
     render() {
-        const SwitchSeg = [{ type: Lang.t('Restore.BackUpCode'), value: 0 }, { type: Lang.t('Restore.Privatekey'), value: 1 }]
         return (
             <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'column' }}>
-                <Text style={{ flex: 1, fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t('Restore.Title')}</Text>
-
-                <FlatList
-                    style={{ flex: 2, padding: GLOBALS.hp('1%'), width: GLOBALS.wp('100%') - GLOBALS.hp('4%') }}
-                    data={SwitchSeg}
-                    horizontal={true}
-                    scrollEnabled={false}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity
-                                onPress={() => this.selectItem(item)}
-                                style={
-                                    selectedBtn(this.state.index === item.value).selected
-                                }
-                            >
-                                <Text numberOfLines={3} style={[selectedBtn(this.state.index === item.value).text]}>{item.type}</Text>
-                            </TouchableOpacity>
-                        )
-                    }}
-                    keyExtractor={(item) => item.type}
-                    extraData={this.state}
-                />
-
-                {this.state.index === 0 && <FormBackupcode navigator={this.props.navigator} showLoading={this.showLoading.bind(this)} />}
-                {this.state.index === 1 && <FormPrivateKey navigator={this.props.navigator} showLoading={this.showLoading.bind(this)} />}
+                <View style={{ paddingHorizontal: GLOBALS.wp('15%'), flex: 1 }}>
+                    <SegmentControl
+                        values={[Lang.t('Restore.BackUpCode'), Lang.t('Restore.Privatekey')]}
+                        selectedIndex={this.state.index}
+                        onTabPress={this.handlePress}
+                        borderRadius={5}
+                        activeTabStyle={{ backgroundColor: '#ACAEBF' }}
+                        tabStyle={{ borderColor: '#ACAEBF', paddingVertical: GLOBALS.hp('1.5%') }}
+                        activeTabTextStyle={{ fontWeight: 'bold' }}
+                        tabTextStyle={{ color: '#393B51' }}
+                    />
+                </View>
+                <View style={{ flex: 2 }} />
+                {this.state.index === 0 && <FormBackupcode navigation={this.props.navigation} showLoading={this.showLoading.bind(this)} />}
+                {this.state.index === 1 && <FormPrivateKey navigation={this.props.navigation} showLoading={this.showLoading.bind(this)} />}
 
                 {
                     this.state.loading ?
@@ -100,32 +91,6 @@ class ScreenRestore extends Component {
 
 }
 
-const selectedBtn = (type) => StyleSheet.create({
-    selected: {
-        backgroundColor: type ? GLOBALS.Color.secondary : 'transparent',
-        borderRadius: 20,
-        padding: wp('1%'),
-        // margin: hp('0.5%'),
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: type ? 0.34 : 0,
-        shadowRadius: 2.27,
-        elevation: type ? 5 : 0,
-        // alignItems: 'center',
-        width: GLOBALS.wp('50%') - GLOBALS.hp('3%'),
-        justifyContent: 'center'
-    },
-    text: {
-        fontWeight: type ? 'bold' : 'normal',
-        color: type ? '#FFFFFF' : "#000",
-        fontFamily: GLOBALS.font.Poppins,
-        textAlign: 'center',
-    }
-})
-
 class FormBackupcode extends Component {
     InitState = {
         backupCode: '',
@@ -140,103 +105,30 @@ class FormBackupcode extends Component {
         typeButton: true
     }
     constructor(props) {
-
         super(props)
-
         this.state = this.InitState
     };
 
-    async validateBuCode(value) {
+    async validateBackUpCode(value) {
         this.setState({ txtErrBUcode: '' })
         if (value.length < 1) {
             await this.setState({ backupCode: '', errBUcode: true, txtErrBUcode: Lang.t('Restore.InvalidRestoreCode'), typeButton: true });
         } else {
             await this.setState({ backupCode: value, errBUcode: false, txtErrBUcode: '', typeButton: false })
         }
-
-        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errBUcode == true) {
-            await this.setState({ typeButton: true })
-        } else {
-            await this.setState({ typeButton: false })
-        }
-    }
-
-    async validatePwd(value) {
-        this.setState({ password: value })
-        if (value.length > 5) {
-            await this.setState({ txtErrPwd: '', errPwd: false, typeButton: false });
-        } else {
-            await this.setState({ txtErrPwd: Lang.t("Restore.ErrorLocalPasscode"), errPwd: true, typeButton: true })
-        }
-
-        if (this.state.confirmPwd == '' || this.state.confirmPwd == value) {
-            await this.setState({ txtCfPwd: '', errCfPwd: false });
-        } else {
-            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true })
-        }
-        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errBUcode == true) {
-            await this.setState({ typeButton: true })
-        } else {
-            await this.setState({ typeButton: false })
-        }
-
-    }
-
-    async validateCfPwd(value) {
-        this.setState({ confirmPwd: value })
-        if (this.state.password && this.state.password == value) {
-            await this.setState({ txtCfPwd: '', errCfPwd: false, typeButton: false });
-        } else {
-            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true, typeButton: true })
-        }
-
-        if (this.state.errPwd == true || this.state.errBUcode == true || this.state.errCfPwd == true) {
-            await this.setState({ typeButton: true })
-        } else {
-            await this.setState({ typeButton: false })
-        }
     }
     restoreByBackupCode() {
         this.props.showLoading(true);
         restoreByBackup(this.state.backupCode, this.state.password)
-            .then(rCode => {
+            .then(data => {
                 this.props.showLoading(false);
-                if (rCode == 0) {
-                    rmData('ListToken').then(() => {
-                        var initialData = [{
-                            "tokenAddress": '',
-                            "balance": '0',
-                            "symbol": 'NTY',
-                            "decimals": '',
-                            "ABI": ''
-                        },
-                        {
-                            "tokenAddress": '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
-                            "balance": '0',
-                            "symbol": 'NTF',
-                            "decimals": '',
-                            "ABI": ''
-                        }
-                        ]
-                        setData('ListToken', JSON.stringify(initialData)).then((data) => {
-                            console.log(data)
-                            // setData('isBackup', '0');
-                            setData('activeTouchID', '0');
-                            const { navigate } = this.props.navigator;
-                            navigate('TabNavigator');
-                        })
-                    })
-                } else {
-                    console.log('else:', rCode)
-                    setTimeout(() => {
-                        Alert.alert(
-                            Lang.t("Restore.Error"),
-                            Lang.t("Restore.InvalidRestoreCode"),
-                            [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
-                        )
-                    }, 350);
-
-                }
+                this.props.navigation.navigate('NameWallet', {
+                    payload: {
+                        type: this.props.navigation.getParam('payload').type,
+                        network: this.props.navigation.getParam('payload').network,
+                        data: data
+                    }
+                })
             }).catch(err => {
                 console.log('catch: ', err)
                 this.props.showLoading(false);
@@ -250,6 +142,7 @@ class FormBackupcode extends Component {
 
             })
     }
+
     SelectFile() {
         // iPhone/Android
         DocumentPicker.show({
@@ -291,88 +184,38 @@ class FormBackupcode extends Component {
     render() {
         return (
             <View style={{ flex: 5, paddingTop: Platform.OS == "ios" ? GLOBALS.hp('10%') : GLOBALS.hp('15%') }}>
-                <View style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                }}>
+                <View style={style.styleTextInput}>
                     <TextInput
                         placeholder={Lang.t('Restore.BackUpCode') + '/' + Lang.t('Restore.ChooserFile')}
-                        onChangeText={(val) => this.validateBuCode(val)}
+                        onChangeText={(val) => this.validateBackUpCode(val)}
                         value={this.state.backupCode}
                         returnKeyType={"next"}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 8, fontSize: hp('2.5%') }}
+                        style={style.TextInput}
                         underlineColorAndroid="transparent"
                         numberOfLines={1}
                     />
                     <TouchableOpacity style={style.buttonFolder} onPress={() => this.SelectFile()}>
-                        <Icon name="folder-open" color={GLOBALS.Color.secondary} size={35} />
+                        <Image source={require('../../images/iconRestore/icon_folder.png')} />
                     </TouchableOpacity>
                 </View>
-                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrBUcode}</Text>
-                <View style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                }}>
-                    <TextInput
-                        placeholder={Lang.t('Restore.LocalPasscode')}
-                        value={this.state.password}
-                        secureTextEntry={true}
-                        onChangeText={(val) => this.validatePwd(val)}
-                        ref={input => { this.inputs['field2'] = input }}
-                        returnKeyType={'next'}
-                        blurOnSubmit={false}
-                        onSubmitEditing={() => { this.focusTheField('field3'); }}
-                        style={{ flex: 10, fontSize: hp('2.5%') }}
-                        underlineColorAndroid="transparent"
-                    />
+                <Item style={{ borderBottomWidth: 0 }}>
+                    <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrBUcode}</Text>
+                </Item>
+                <View style={{ alignItems: 'center', paddingVertical: GLOBALS.hp('2%') }}>
+                    <TouchableOpacity onPress={() => this.restoreByBackupCode()} disabled={this.state.typeButton}>
+                        <Gradient
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#328FFC', '#08AEEA']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styleButton(this.state.typeButton).button}
+                        >
+                            <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
+                        </Gradient>
+                    </TouchableOpacity>
                 </View>
-
-                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
-                <View style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                }}
-                >
-                    <TextInput
-                        placeholder={Lang.t('Restore.ComfirmLocalPasscode')}
-                        value={this.state.confirmPwd}
-                        secureTextEntry={true}
-                        onChangeText={(val) => this.validateCfPwd(val)}
-                        ref={input => { this.inputs['field3'] = input }}
-                        returnKeyType={'done'}
-                        onSubmitEditing={() => {
-                            if (this.state.typeButton == false) {
-                                this.restoreByBackupCode()
-                            }
-                        }}
-                        style={{ flex: 10, fontSize: hp('2.5%') }}
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
-
-                <TouchableOpacity style={style.button} onPress={() => this.restoreByBackupCode()} disabled={this.state.typeButton}>
-                    <Gradient
-                        colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
-                        start={{ x: 1, y: 0.7 }}
-                        end={{ x: 0, y: 3 }}
-                        style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
-                    >
-                        <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
-                    </Gradient>
-                </TouchableOpacity>
-            </View>
+            </View >
         )
     }
 }
@@ -407,88 +250,20 @@ class FormPrivateKey extends Component {
         } else {
             await this.setState({ privateKey: value, errPKcode: false, txtErrPKcode: '', typeButton: false })
         }
-
-        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errPKcode == true) {
-            await this.setState({ typeButton: true })
-        } else {
-            await this.setState({ typeButton: false })
-        }
-    }
-
-    async validatePwd(value) {
-        this.setState({ password: value })
-        if (value.length > 5) {
-            await this.setState({ txtErrPwd: '', errPwd: false, typeButton: false });
-        } else {
-            await this.setState({ txtErrPwd: Lang.t("Restore.ErrorLocalPasscode"), errPwd: true, typeButton: true })
-        }
-
-        if (this.state.confirmPwd == '' || this.state.confirmPwd == value) {
-            await this.setState({ txtCfPwd: '', errCfPwd: false });
-        } else {
-            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true })
-        }
-        if (this.state.password == '' || this.state.confirmPwd == '' || this.state.errCfPwd == true || this.state.errPwd == true || this.state.errPKcode == true) {
-            await this.setState({ typeButton: true })
-        } else {
-            await this.setState({ typeButton: false })
-        }
-
-    }
-
-    async validateCfPwd(value) {
-        this.setState({ confirmPwd: value })
-        if (this.state.password && this.state.password == value) {
-            await this.setState({ txtCfPwd: '', errCfPwd: false, typeButton: false });
-        } else {
-            await this.setState({ txtCfPwd: Lang.t("Restore.ErrorNotMatch"), errCfPwd: true, typeButton: true })
-        }
-        if (this.state.errPwd == true || this.state.errPKcode == true || this.state.errCfPwd) {
-            await this.setState({ typeButton: true })
-        } else {
-            await this.setState({ typeButton: false })
-        }
     }
 
     restoreByPK() {
         this.props.showLoading(true);
         restoreByPk(this.state.privateKey, this.state.password)
-            .then(rCode => {
+            .then(data => {
                 this.props.showLoading(false);
-                if (rCode == 0) {
-                    rmData('ListToken').then(() => {
-                        var initialData = [{
-                            "tokenAddress": '',
-                            "balance": '0',
-                            "symbol": 'NTY',
-                            "decimals": '',
-                            "ABI": ''
-                        },
-                        {
-                            "tokenAddress": '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
-                            "balance": '0',
-                            "symbol": 'NTF',
-                            "decimals": '',
-                            "ABI": ''
-                        }
-                        ]
-                        setData('ListToken', JSON.stringify(initialData)).then((data) => {
-                            console.log(data)
-                            // setData('isBackup', '0');
-                            setData('activeTouchID', '0');
-                            const { navigate } = this.props.navigator;
-                            navigate('TabNavigator');
-                        })
-                    })
-                } else {
-                    setTimeout(() => {
-                        Alert.alert(
-                            Lang.t("Restore.Error"),
-                            Lang.t("Restore.AlertInvalidPK"),
-                            [{ text: Lang.t("Restore.Ok"), onPress: () => this.setState(this.InitState) }]
-                        )
-                    }, 350);
-                }
+                this.props.navigation.navigate('NameWallet', {
+                    payload: {
+                        type: this.props.navigation.getParam('payload').type,
+                        network: this.props.navigation.getParam('payload').network,
+                        data: data
+                    }
+                })
             }).catch(err => {
                 this.props.showLoading(false);
                 console.log('cache', err)
@@ -510,14 +285,7 @@ class FormPrivateKey extends Component {
     render() {
         return (
             <View style={{ flex: 5, paddingTop: Platform.OS == "ios" ? GLOBALS.hp('10%') : GLOBALS.hp('15%') }}>
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                }}>
+                <View style={style.styleTextInput}>
                     <TextInput
                         placeholder={Lang.t("Restore.Privatekey")}
                         value={this.state.privateKey}
@@ -525,68 +293,24 @@ class FormPrivateKey extends Component {
                         returnKeyType={"next"}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 10, fontSize: hp('2.5%') }}
+                        style={style.TextInput}
                         underlineColorAndroid="transparent"
                     />
                 </View>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPKcode}</Text>
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                }}>
-                    <TextInput
-                        placeholder={Lang.t("Restore.LocalPasscode")}
-                        value={this.state.password}
-                        secureTextEntry={true}
-                        onChangeText={(val) => this.validatePwd(val)}
-                        ref={input => { this.inputs['field2'] = input }}
-                        returnKeyType={'next'}
-                        blurOnSubmit={false}
-                        onSubmitEditing={() => { this.focusTheField('field3'); }}
-                        style={{ flex: 10, fontSize: hp('2.5%') }}
-                        underlineColorAndroid="transparent"
-                    />
+                <View style={{ alignItems: 'center', paddingVertical: GLOBALS.hp('2%') }}>
+
+                    <TouchableOpacity onPress={() => this.restoreByPK()} disabled={this.state.typeButton}>
+                        <Gradient
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#328FFC', '#08AEEA']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styleButton(this.state.typeButton).button}
+                        >
+                            <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
+                        </Gradient>
+                    </TouchableOpacity>
                 </View>
-                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtErrPwd}</Text>
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                }}>
-                    <TextInput
-                        placeholder={Lang.t("Restore.ComfirmLocalPasscode")}
-                        value={this.state.confirmPwd}
-                        secureTextEntry={true}
-                        onChangeText={(val) => this.validateCfPwd(val)}
-                        ref={input => { this.inputs['field3'] = input }}
-                        returnKeyType={'done'}
-                        onSubmitEditing={() => {
-                            if (this.state.typeButton == false) {
-                                this.restoreByPK()
-                            }
-                        }}
-                        style={{ flex: 10, fontSize: hp('2.5%') }}
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-                <Text style={{ color: GLOBALS.Color.danger }}>{this.state.txtCfPwd}</Text>
-                <TouchableOpacity style={style.button} onPress={() => this.restoreByPK()} disabled={this.state.typeButton}>
-                    <Gradient
-                        colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
-                        start={{ x: 1, y: 0.7 }}
-                        end={{ x: 0, y: 3 }}
-                        style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
-                    >
-                        <Text style={style.TextButton}>{Lang.t('Restore.TitleButton')}</Text>
-                    </Gradient>
-                </TouchableOpacity>
             </View>
         )
     }
@@ -611,67 +335,82 @@ export default class restore extends Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff' }} contentContainerStyle={{ flex: 1 }}>
-                <KeyboardAvoidingView
-                    style={style.container}
-                    keyboardVerticalOffset={Platform.OS == 'ios' ? hp('10%') : hp('0')}
-                    behavior="position"
-                    contentContainerStyle={{ flex: 1 }}
-                    enabled>
-                    <ScreenRestore navigator={this.props.navigation} />
-                </KeyboardAvoidingView>
-            </ScrollView>
+            <Gradient
+                style={{ flex: 1 }}
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+            >
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title="Import Wallet"
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => this.props.navigation.goBack()}
+                />
+
+                <ScrollView contentContainerStyle={{ flex: 1 }}>
+                    <KeyboardAvoidingView
+                        style={style.container}
+                        keyboardVerticalOffset={Platform.OS == 'ios' ? hp('10%') : hp('0')}
+                        behavior="position"
+                        contentContainerStyle={{ flex: 1 }}
+                        enabled>
+                        <ScreenRestore {...this.props} />
+                    </KeyboardAvoidingView>
+                </ScrollView>
+            </Gradient>
         )
     }
 }
 
 /* style button */
-var styleButton = (color, type) => StyleSheet.create({
+var styleButton = (type) => StyleSheet.create({
     button: {
-        backgroundColor: type == true ? '#cccccc' : color,
-        marginBottom: GLOBALS.HEIGHT / 40,
-        height: GLOBALS.HEIGHT / 17,
         justifyContent: 'center',
-        width: GLOBALS.WIDTH / 1.6,
         shadowOffset: {
             width: 3,
             height: 3,
         },
         shadowColor: '#000',
-        shadowOpacity: 0.2,
-        borderRadius: 2
+        shadowOpacity: type ? 0.2 : 0,
+        borderRadius: 5,
+        paddingHorizontal: GLOBALS.wp('20%'),
+        paddingVertical: GLOBALS.hp('2%'),
     }
 })
 
 const style = StyleSheet.create({
-    button: {
-        justifyContent: 'center',
+    styleTextInput: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        backgroundColor: '#E9E9E9',
+        paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.64,
-        shadowRadius: 2.27,
-        elevation: 7,
-        marginTop: hp('2%'),
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    TextInput: {
+        flex: 8,
+        fontSize: GLOBALS.fontsize(2.5),
+        paddingLeft: GLOBALS.wp('5%')
     },
     container: {
         flex: 1,
         padding: hp('2%')
     },
-    logo: {
-        height: GLOBALS.HEIGHT / 3,
-        width: GLOBALS.WIDTH / 1.6,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
     TextButton: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 15
+        fontSize: GLOBALS.fontsize(2)
     },
     buttonFolder: {
         alignItems: 'center',

@@ -18,7 +18,12 @@ export function restoreByBackup(code: string, password: string) {
                 if (addr) {
                     let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
                     let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
-                    await restore(addr, privateKey, password).then(() => resolve(0));
+                    resolve({
+                        addressWL: addr,
+                        privateKey: privateKey
+                    })
+                    // await restore(addr, privateKey, password).then(() =>
+                    //     resolve(0));
                 } else {
                     await reject(1)
                 }
@@ -33,7 +38,11 @@ export function restoreByPk(privateKey: string, password: string) {
             console.log('address: ', res);
             let addr = res.toString();
             if (addr) {
-                await restore(addr, privateKey, password).then(() => resolve(0));
+                resolve({
+                    addressWL: addr,
+                    privateKey: privateKey
+                })
+                // await restore(addr, privateKey, password).then(() => resolve(0));
             } else {
                 reject(1)
             }

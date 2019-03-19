@@ -51,7 +51,11 @@ class TypeAddWallet extends Component {
                 })
                 break
             default:
-                navigate('Import')
+                navigate('SelectNetwork', {
+                    payload: {
+                        type: 'restore'
+                    }
+                })
                 break;
         }
     }

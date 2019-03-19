@@ -84,6 +84,12 @@ class SelectNetwork extends Component {
                 this.setState({ dialogVisible: true, NetworkSL: network })
                 break
             default:
+                navigate('restore', {
+                    payload: {
+                        type: type,
+                        network: network
+                    }
+                })
                 break;
         }
 

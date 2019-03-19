@@ -1,4 +1,4 @@
-import { validatePassword, Register, cachePwd } from '../../services/auth.service';
+import { validatePassword, Register, cachePwd, restore } from '../../services/auth.service';
 import { InsertNewWallet, SelectAllWallet } from '../../../realm/walletSchema'
 
 
@@ -36,6 +36,18 @@ export function AddNetwork(passcode, name, privateKey, network, address, typeBac
             }
             InsertNewWallet(wallet);
             resolve('Add network success')
+        } else {
+            alert('error passcode');
+            reject('error passcode');
+        }
+    })
+}
+
+export function importWallet(address, privateKey, passcode, name, network) {
+    return new Promise(async (resolve, reject) => {
+        if (await validatePassword(passcode)) {
+            restore(address, privateKey, passcode, name, network)
+            resolve('restore success')
         } else {
             alert('error passcode');
             reject('error passcode');

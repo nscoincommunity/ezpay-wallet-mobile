@@ -6,9 +6,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchAllWallet } from '../../../../redux/actions/slideWalletAction'
 import Dialog from "react-native-dialog";
-import { CreateNewWallet } from '../insertWallet'
+import { CreateNewWallet, importWallet } from '../insertWallet'
 import { StackActions, NavigationActions } from 'react-navigation'
 import Gradient from 'react-native-linear-gradient';
+import { CheckExistNameWallet } from '../../../../realm/walletSchema'
 
 class NameWallet extends Component {
     constructor(props) {
@@ -26,8 +27,30 @@ class NameWallet extends Component {
     }
 
     async handleGet() {
-        CreateNewWallet(this.state.passcode, this.state.InputName, this.props.navigation.getParam('payload').network)
-            .then(async (ss) => {
+        const payload = this.props.navigation.getParam('payload');
+        if (payload.type == 'New') {
+            CreateNewWallet(this.state.passcode, this.state.InputName, this.props.navigation.getParam('payload').network)
+                .then(async (ss) => {
+                    await this.props.fetchAllWallet();
+                    await this.props.navigation.dispatch(StackActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate({
+                                routeName: 'Drawer',
+                            }),
+                        ],
+                    }))
+                }
+                )
+                .catch(e => alert(e))
+        } else {
+            importWallet(
+                payload.data.addressWL,
+                payload.data.privateKey,
+                this.state.passcode,
+                this.state.InputName,
+                payload.network
+            ).then(async (ss) => {
                 await this.props.fetchAllWallet();
                 await this.props.navigation.dispatch(StackActions.reset({
                     index: 0,
@@ -37,12 +60,12 @@ class NameWallet extends Component {
                         }),
                     ],
                 }))
-            }
-            )
-            .catch(e => alert(e))
+            })
+        }
+
     }
 
-    _createWallet() {
+    TouchButton() {
         if (this.state.InputName.length > 0) {
             this.setState({ dialogVisible: true })
         }
@@ -70,26 +93,26 @@ class NameWallet extends Component {
                     colorIconLeft="#328FFC"
                     colorTitle="#328FFC"
                     nameIconLeft="arrow-left"
-                    title={payload.type == 'New' ? "Name wallet" : "Select wallet"}
+                    title={payload.type != 'changeNetwork' ? "Name wallet" : "Select wallet"}
                     style={{ marginTop: 23 }}
                     pressIconLeft={() => { this.props.navigation.goBack(); }}
                 />
                 <View style={{ flex: 1 }}>
                     {
-                        payload.type == 'New' ?
+                        payload.type != 'changeNetwork' ?
                             <FormInput setName={this.setName.bind(this)} />
                             :
                             <SelectWallet {...this.props} />
                     }
-                    {payload.type == 'New' &&
+                    {payload.type != 'changeNetwork' &&
                         <View style={{ paddingHorizontal: GLOBAL.hp('10%'), marginVertical: GLOBAL.hp('4%') }}>
                             <TouchableOpacity
                                 style={styles.buttonSubmit}
-                                onPress={() => { this._createWallet() }}
+                                onPress={() => { this.TouchButton(payload) }}
                             >
                                 <Gradient
                                     style={{ paddingVertical: 15, borderRadius: 5 }}
-                                    colors={['#08AEEA', '#328FFC']}
+                                    colors={['#328FFC', '#08AEEA']}
                                     start={{ x: 0, y: 0 }}
                                     end={{ x: 1, y: 0 }}
                                 >
@@ -190,8 +213,15 @@ class FormInput extends Component {
     }
     async Validate(val) {
         if (val.length >= 1) {
-            await this.setState({ err: false, textError: '' });
-            this.props.setName(val);
+            CheckExistNameWallet(val).then(async exist => {
+                console.log(exist)
+                if (!exist) {
+                    await this.setState({ err: false, textError: '' });
+                    this.props.setName(val);
+                } else {
+                    await this.setState({ err: true, textError: 'Name wallet has already existed', })
+                }
+            })
         } else {
             await this.setState({ err: true, textError: 'Name wallet needs at least 1 characters', })
         }
