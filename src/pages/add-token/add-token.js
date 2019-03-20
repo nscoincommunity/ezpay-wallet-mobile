@@ -20,11 +20,10 @@ import Language from '../../i18n/i18n';
 import IconFeather from "react-native-vector-icons/Feather"
 import Gradient from 'react-native-linear-gradient'
 import { CheckExistToken, InsertNewToken } from '../../../realm/walletSchema'
+import Header from '../../components/header';
 
 
 import {
-    Container,
-    Header,
     Title,
     Content,
     Button,
@@ -39,8 +38,8 @@ export default class Addtoken extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: "#fafafa" }}>
-                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0, borderBottomColor: '#fff' }}>
+            <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
+                {/* <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0, borderBottomColor: '#fff' }}>
                     <Left>
                         <Button
                             transparent
@@ -60,14 +59,26 @@ export default class Addtoken extends Component {
                             <Icon name="list-alt" color={GLOBALS.Color.primary} size={25} />
                         </Button>
                     </Right>
-                </Header>
+                </Header> */}
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title={Language.t('AddToken.Title')}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => this.props.navigation.goBack()}
+                    nameIconRight="list"
+                    colorIconRight="#328FFC"
+                    pressIconRight={() => this.props.navigation.navigate('ListToken', { payload: { network: this.props.navigation.getParam('payload').network } })}
+                />
 
                 <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
                     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={Platform.OS == "ios" ? 0 : GLOBALS.hp('-30%')} enabled style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
                         <FormAddToken {...this.props} />
                     </KeyboardAvoidingView>
                 </ScrollView>
-            </Container>
+            </View>
         )
     }
 }

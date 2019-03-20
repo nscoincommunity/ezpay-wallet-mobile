@@ -7,13 +7,13 @@ import Language from '../../i18n/i18n'
 
 export let code: string;
 
-export async function getBackupCode(password: string) {
+export async function getBackupCode(password: string, pk_en: string) {
     if (! await validatePassword(password)) {
         throw (Language.t('Send.AlerError.Content'))
     }
 
     code = Utils.generateRandom(32)
-    let pk = await getPrivateKey(password)
+    let pk = await getPrivateKey(password, pk_en)
 
     let body = {
         md5Hash: CryptoJS.MD5(code).toString(CryptoJS.enc.Hex),

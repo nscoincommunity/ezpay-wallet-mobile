@@ -13,7 +13,7 @@ export function ActionDB(state = initState, action) {
             InsertNewWallet(action.payload.wallet)
             return state;
         case 'UPDATE_WALLET':
-            UpdateWallet(action.payload.wallet)
+            // UpdateWallet(action.payload.wallet)
             return state
         case 'DELETE_WALLET':
             DeleteWallet(action.payload.wallet.id)

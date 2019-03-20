@@ -70,10 +70,10 @@ const Drawer = createDrawerNavigator(
     {
         // TabNavigator: { screen: TabNavigator },
         Dashboard: { screen: dashboard },
-        Privatekey: { screen: Prk },
+        // Privatekey: { screen: Prk },
         // Addtoken: { screen: Addtoken },
         Setting: { screen: Setting },
-        History: { screen: history },
+        // History: { screen: history },
         About: { screen: About },
         Redeem: { screen: redeem },
     }, {
@@ -148,7 +148,12 @@ class Router extends Component {
                     screen: login,
                 },
                 TempPage: { screen: TempPage },
-                ListToken: { screen: ListToken },
+                ListToken: {
+                    screen: ListToken,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
                 register: { screen: register },
                 restore: {
                     screen: restore,
@@ -156,7 +161,12 @@ class Router extends Component {
                         header: () => null
                     }
                 },
-                Backup: { screen: Backup },
+                Backup: {
+                    screen: Backup,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
                 DetailsHis: { screen: DetailHis },
                 QRscan: { screen: QRscan },
                 Language: { screen: Language },
@@ -195,6 +205,18 @@ class Router extends Component {
                 },
                 SendScreen: {
                     screen: Send,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
+                Privatekey: {
+                    screen: Prk,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
+                History: {
+                    screen: history,
                     navigationOptions: {
                         header: () => null
                     }

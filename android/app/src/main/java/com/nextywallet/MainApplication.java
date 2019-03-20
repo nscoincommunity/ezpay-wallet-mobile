@@ -3,6 +3,7 @@ package com.nextywallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import io.realm.react.RealmReactPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -20,7 +21,6 @@ import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.rnfs.RNFSPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import org.reactnative.camera.RNCameraPackage;
-import com.horcrux.svg.SvgPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;

@@ -54,56 +54,65 @@ class Dashboard extends Component {
                     style={{ marginTop: 23 }}
                     pressIconLeft={() => { this.props.navigation.openDrawer(); }}
                 />
-                {
-                    data.length > 0 ?
-                        <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, flexDirection: 'column' }}>
+                    {
+                        data.length > 0 ?
                             <ListCoin Data={data} navigation={this.props.navigation} />
-                            {
-                                exchange != '' &&
-                                <View style={{ paddingHorizontal: GLOBALS.wp('20%'), paddingVertical: GLOBALS.hp('3%') }}>
-                                    <Segment navigation={this.props.navigation} Data={DataToken} />
-                                </View>
-                            }
-                            {
-                                exchange != '' &&
-                                <View style={{
-                                    flexDirection: 'row', marginVertical: GLOBALS.hp('1%'),
-                                    paddingHorizontal: GLOBALS.wp('3%')
-                                }}>
-                                    <Text style={{
-                                        color: "#328FFC",
-                                        fontSize: GLOBALS.fontsize(3),
-                                        flex: 8
-                                    }}>Tokens</Text>
-                                    <Avatar
-                                        icon={{
-                                            name: 'plus',
-                                            type: 'font-awesome',
-                                            color: '#328FFC'
-                                        }}
-                                        overlayContainerStyle={{
-                                            backgroundColor: 'transparent',
-                                            borderWidth: 1,
-                                            borderColor: '#328FFC',
-                                            flex: 2
-                                        }}
-                                        onPress={() => this.props.navigation.navigate('Addtoken', {
-                                            payload: {
-                                                network: this.props.snapToWallet.network,
-                                            }
-                                        })}
-                                        rounded
-                                    />
-                                </View>
-                            }
-                            {
-                                DataToken.ListToken.length > 0 &&
-                                <ComponentToken InforToken={DataToken} status={status} />
-                            }
+                            :
+                            null
+                    }
+                    <View style={{ flex: 0.7, justifyContent: 'center', paddingHorizontal: GLOBALS.wp('20%') }}>
+                        {
+                            exchange != '' &&
+                            <Segment navigation={this.props.navigation} Data={DataToken} />
+                        }
+                    </View>
 
-                        </View>
-                        : null
-                }
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        {
+                            exchange != '' &&
+                            <View style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                marginVertical: GLOBALS.hp('1%'),
+                                paddingHorizontal: GLOBALS.wp('3%'),
+                            }}>
+                                <Text style={{
+                                    color: "#328FFC",
+                                    fontSize: GLOBALS.fontsize(3),
+                                    flex: 8
+                                }}>Tokens</Text>
+                                <Avatar
+                                    icon={{
+                                        name: 'plus',
+                                        type: 'font-awesome',
+                                        color: '#328FFC'
+                                    }}
+                                    overlayContainerStyle={{
+                                        backgroundColor: 'transparent',
+                                        borderWidth: 1,
+                                        borderColor: '#328FFC',
+                                        flex: 2
+                                    }}
+                                    onPress={() => this.props.navigation.navigate('Addtoken', {
+                                        payload: {
+                                            network: this.props.snapToWallet.network,
+                                        }
+                                    })}
+                                    rounded
+                                />
+                            </View>
+                        }
+                    </View>
+                    <View style={{ flex: 5 }}>
+                        {
+                            DataToken.ListToken.length > 0 &&
+                            <ComponentToken InforToken={DataToken} status={status} />
+                        }
+                    </View>
+
+                </View>
+
             </View>
         )
     }

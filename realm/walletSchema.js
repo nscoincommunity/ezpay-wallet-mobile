@@ -186,14 +186,31 @@ export const CountNetworkofWallet = (address) => new Promise((resolve, reject) =
  * Update infor wallet
  * @param {object} wallet infor wallet want update vd: change name..
  */
-export const UpdateWallet = (wallet) => new Promise((resolve, reject) => {
+export const UpdateTypeBackupWallet = (wallet) => new Promise((resolve, reject) => {
     try {
         REALM.open(databaseOption).then(realm => {
-            realm.write(() => {
-                let walletUpdate = realm.objectForPrimaryKey(LISTWALLET, wallet.id);
-                walletUpdate.name = wallet.name;
-                resolve()
+            let ListWallet = realm.objects(LISTWALLET).filtered('address="' + wallet.address + '"');
+            Array.from(ListWallet).forEach((item, index) => {
+                setTimeout(() => {
+                    console.log('id', item.id)
+                    realm.write(() => {
+                        let walletUpdate = realm.objectForPrimaryKey(LISTWALLET, item.id);
+                        walletUpdate.typeBackup = true;
+                        if (index == ListWallet.length - 1) {
+                            resolve(Array.from(realm.objects(LISTWALLET).filtered('address="' + wallet.address + '"')));
+                        }
+                    })
+                }, 500)
+
             })
+            // realm.write(() => {
+            //     let walletUpdate = realm.objects(LISTWALLET).filtered('address="' + wallet.address + '"');
+            //     walletUpdate.forEach(item => {
+            //         item.typeBackup = true
+            //     })
+            //     // walletUpdate.name = wallet.name;
+            //     resolve()
+            // })
         }).catch(e => reject(e))
     } catch (error) {
         reject(error)

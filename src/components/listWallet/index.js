@@ -91,7 +91,7 @@ class ListWallet extends Component {
             var TempData = Data.concat({ wallet: 'addNew' })
         }
         return (
-            <View>
+            <View style={{ flex: 3.3 }}>
                 <Carousel
                     ref={(c) => { this._carousel = c }}
                     data={TempData}
@@ -105,7 +105,7 @@ class ListWallet extends Component {
                     // onScroll={(pan) => { console.log('aaaa', pan) }}
                     // onScrollBeginDrag={() => this._startSnap()}
                     // onScrollEndDrag={() => this._endSnap()}
-                    slideStyle={{ paddingVertical: 8, }}
+                    slideStyle={{ paddingVertical: 8, flex: 1, }}
                     onResponderMove={this.onMove.bind(this)}
                 />
             </View>

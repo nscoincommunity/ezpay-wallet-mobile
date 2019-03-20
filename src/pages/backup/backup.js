@@ -26,9 +26,15 @@ import { setData } from '../../services/data.service'
 import Language from '../../i18n/i18n'
 import CustomToast from '../../components/toast';
 import Gradient from 'react-native-linear-gradient';
+import { UpdateTypeBackupWallet } from '../../../realm/walletSchema';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchAllWallet } from '../../../redux/actions/slideWalletAction'
+import Header from '../../components/header';
+
 
 var datetime = new Date();
-export default class backup extends Component {
+class backup extends Component {
 
     Default_Toast_Bottom = (message) => {
 
@@ -36,22 +42,22 @@ export default class backup extends Component {
 
     }
 
-    static navigationOptions = () => ({
-        title: Language.t('Backup.Title'),
-        headerStyle: {
-            backgroundColor: '#fafafa',
-            borderBottomWidth: 0,
-            elevation: 0
-        },
-        headerTitleStyle: {
-            color: '#0C449A',
-            width: Platform.OS == "ios" ? GLOBALS.wp('70%') : 'auto'
-        },
-        headerBackTitleStyle: {
-            color: '#0C449A'
-        },
-        headerTintColor: '#0C449A',
-    });
+    // static navigationOptions = () => ({
+    //     title: Language.t('Backup.Title'),
+    //     headerStyle: {
+    //         backgroundColor: '#fafafa',
+    //         borderBottomWidth: 0,
+    //         elevation: 0
+    //     },
+    //     headerTitleStyle: {
+    //         color: '#0C449A',
+    //         width: Platform.OS == "ios" ? GLOBALS.wp('70%') : 'auto'
+    //     },
+    //     headerBackTitleStyle: {
+    //         color: '#0C449A'
+    //     },
+    //     headerTintColor: '#0C449A',
+    // });
 
     constructor(props) {
         super(props)
@@ -67,10 +73,7 @@ export default class backup extends Component {
     };
 
     componentWillUnmount() {
-        if (this.props.navigation.state.params) {
-            const { params } = this.props.navigation.state;
-            params.callDasboard()
-        }
+        this.props.fetchAllWallet();
     }
 
     showDialog() {
@@ -79,10 +82,11 @@ export default class backup extends Component {
 
     async handleGet() {
         this.setState({ loading: true })
-        getBackupCode(this.state.passcode)
+        getBackupCode(this.state.passcode, this.props.navigation.getParam('payload').wallet.pk_en)
             .then(bc => {
                 this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false, loading: false },
                     () => {
+                        UpdateTypeBackupWallet(this.props.navigation.getParam('payload').wallet).then(ss => console.log(ss))
                         var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.txt'
                         var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
                         RNFS.writeFile(path, bc)
@@ -168,20 +172,27 @@ export default class backup extends Component {
         this.Default_Toast_Bottom(Language.t('Backup.Toast'));
         setData('isBackup', '1');
         this.setState({ isCopy: true })
-
     }
 
     handleCancel() {
         this.setState({ dialogVisible: false, passcode: '' })
     }
     render() {
-        console.log(this.state.backupcode)
         return (
-            <ScrollView contentContainerStyle={{ flex: 1 }} style={{ backgroundColor: '#fafafa' }}>
+            <View style={{ flex: 1, backgroundColor: '#fafafa' }}>
                 <StatusBar
                     backgroundColor={'transparent'}
                     translucent
                     barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title={Language.t('Backup.Title')}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => this.props.navigation.goBack()}
                 />
                 <View style={style.container} pointerEvents="box-none">
                     {
@@ -251,18 +262,6 @@ export default class backup extends Component {
                         <Dialog.Input placeholder={Language.t('Backup.DialogConfirm.Placeholder')} style={{ fontFamily: GLOBALS.font.Poppins }} onChangeText={(val) => this.setState({ passcode: val })} secureTextEntry={true} value={this.state.passcode} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonCancel')} onPress={this.handleCancel.bind(this)} />
                         <Dialog.Button label={Language.t('Backup.DialogConfirm.TitleButtonGet')} onPress={this.handleGet.bind(this)} />
-                        {/* {
-                            this.state.loading ?
-                                <Modal
-                                    animationType='fade'
-                                    transparent={true}
-                                    visible={true}>
-                                    <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.2)' }}>
-                                        <ActivityIndicator size='large' color="#30C7D3" style={{ flex: 1 }} />
-                                    </View>
-                                </Modal>
-                                : null
-                        } */}
                     </Dialog.Container>
                     <View
                         style={{
@@ -277,7 +276,7 @@ export default class backup extends Component {
                     </View>
                 </View >
 
-            </ScrollView >
+            </View >
         )
     }
 }
@@ -318,3 +317,8 @@ const style = StyleSheet.create({
         shadowOpacity: 0.2,
     },
 })
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ fetchAllWallet }, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(backup)

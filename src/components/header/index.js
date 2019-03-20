@@ -7,16 +7,22 @@ import GLOBAL from '../../helper/variables'
 export default class HeaderComponent extends Component {
 
     render() {
-        const { size, backgroundColor, colorIconLeft, colorTitle, nameIconLeft, title, style, pressIconLeft } = this.props;
+        const { size,
+            backgroundColor,
+            colorIconLeft,
+            colorTitle,
+            nameIconLeft,
+            nameIconRight,
+            title,
+            style,
+            pressIconLeft,
+            pressIconRight,
+            colorIconRight
+        } = this.props;
+        console.log()
         if (Platform.OS == 'ios') {
             return (
-                // <ImageBackground
-                //     source={require('../../images/header.png')}
-                //     style={{
-                //         width: GLOBAL.wp('100%')
-                //     }}
-                //     resizeMode="cover"
-                // >
+
                 <View style={[styles.menubar, style, { backgroundColor: backgroundColor }]}>
                     <TouchableOpacity
                         onPress={pressIconLeft}
@@ -30,27 +36,36 @@ export default class HeaderComponent extends Component {
                         justifyContent: 'center',
                         color: colorTitle,
                         alignItems: 'center',
-                        fontSize: 20
+                        fontSize: GLOBAL.fontsize(2.5)
                     }}> {title} </Text>
-                    <View style={{ flex: 1 }} />
+                    {
+                        nameIconRight != undefined ?
+                            <TouchableOpacity
+                                onPress={pressIconRight}
+                                style={{ flex: 1 }}
+                            >
+                                <Icon name={nameIconRight} size={25} color={colorIconRight} />
+                            </TouchableOpacity>
+                            :
+                            <View style={{ flex: 1 }} />
+                    }
+
                 </View>
-                // </ImageBackground>
             )
         } else {
             return (
                 <Header
-                    // backgroundImage={require('../../images/header.png')}
-                    placement="left"
+                    placement="center"
                     leftComponent={<Icon name={nameIconLeft} size={30} color={colorIconLeft} onPress={pressIconLeft} />}
                     centerComponent={{
                         text: `${title}`, style: {
                             color: `${colorTitle}`,
                             fontWeight: 'bold',
-                            fontSize: 20,
+                            fontSize: GLOBAL.fontsize(2.5),
                             textAlign: 'center'
                         }
                     }}
-                    // rightComponent={{ icon: 'home', color: '#fff' }}
+                    rightComponent={nameIconRight != undefined ? <Icon name={nameIconRight} size={30} color={colorIconRight} onPress={pressIconRight} /> : null}
                     backgroundColor="transparent"
                     containerStyle={{ borderBottomColor: 0 }}
                 />

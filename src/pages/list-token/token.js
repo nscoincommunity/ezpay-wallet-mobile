@@ -1,28 +1,39 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, FlatList, ActivityIndicator, Alert, TouchableOpacity, Platform } from 'react-native'
+import {
+    Text,
+    View,
+    StyleSheet,
+    FlatList,
+    ActivityIndicator,
+    Alert,
+    TouchableOpacity,
+    Platform,
+    StatusBar
+} from 'react-native'
 import Language from '../../i18n/i18n';
 import GLOBALS from '../../helper/variables';
 import Swipeout, { SwipeoutButtonProperties } from 'react-native-swipeout';
 import IconMtr from 'react-native-vector-icons/MaterialIcons'
 import { GetTokenOfNetwork, DeleteToken } from '../../../realm/walletSchema'
+import Header from '../../components/header';
 
 export default class ListToken extends Component {
-    static navigationOptions = () => ({
-        title: Language.t('Token.Title'),
-        headerStyle: {
-            backgroundColor: '#fafafa',
-            borderBottomWidth: 0,
-            elevation: 0
-        },
-        headerTitleStyle: {
-            color: '#0C449A',
-        },
-        headerBackTitleStyle: {
-            color: '#0C449A'
-        },
-        headerTintColor: '#0C449A',
-        swipeEnabled: false,
-    });
+    // static navigationOptions = () => ({
+    //     title: Language.t('Token.Title'),
+    //     headerStyle: {
+    //         backgroundColor: '#fafafa',
+    //         borderBottomWidth: 0,
+    //         elevation: 0
+    //     },
+    //     headerTitleStyle: {
+    //         color: '#0C449A',
+    //     },
+    //     headerBackTitleStyle: {
+    //         color: '#0C449A'
+    //     },
+    //     headerTintColor: '#0C449A',
+    //     swipeEnabled: false,
+    // });
     mounted: boolean = true;
 
     network: string = "Nexty";
@@ -74,6 +85,20 @@ export default class ListToken extends Component {
 
         return (
             <View style={styles.container}>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title={Language.t('Token.Title')}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => this.props.navigation.goBack()}
+                />
                 {
                     this.state.ArrayToken.length > 0 ?
 

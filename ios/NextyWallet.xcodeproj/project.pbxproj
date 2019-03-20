@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -43,6 +44,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* NextyWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NextyWalletTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2E1973BE2124060800E63A27 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E197394212405E300E63A27 /* libART.a */; };
+		2E34CB62224221BB0081EF88 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E34CB58224221A50081EF88 /* libRNSVG.a */; };
 		2E487CC621BE1C1C00FE31BF /* RNCloseApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E487CC521BE1C1C00FE31BF /* RNCloseApp.m */; };
 		2E55BEA621AF9E3000647B6F /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E55BEA421AF9E0D00647B6F /* libTouchID.a */; };
 		2E8A439321A538F500ABA5AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */; };
@@ -300,6 +302,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
 			remoteInfo = RNVectorIcons;
+		};
+		2E34CB57224221A50081EF88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E34CB1F224221A50081EF88 /* RNSVG.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
+			remoteInfo = RNSVG;
+		};
+		2E34CB59224221A50081EF88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E34CB1F224221A50081EF88 /* RNSVG.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 94DDAC5C1F3D024300EED511;
+			remoteInfo = "RNSVG-tvOS";
 		};
 		2E4957CF214F93C700157036 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -571,6 +587,7 @@
 		2D02E4901E0B4A5D006451C7 /* NextyWallet-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NextyWallet-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E19738E212405E300E63A27 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		2E34CB1F224221A50081EF88 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		2E487CC421BE1C1C00FE31BF /* RNCloseApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNCloseApp.h; sourceTree = "<group>"; };
 		2E487CC521BE1C1C00FE31BF /* RNCloseApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCloseApp.m; sourceTree = "<group>"; };
 		2E4957D1214F93CE00157036 /* NextyWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NextyWallet.entitlements; path = NextyWallet/NextyWallet.entitlements; sourceTree = "<group>"; };
@@ -664,6 +681,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E34CB62224221BB0081EF88 /* libRNSVG.a in Frameworks */,
 				2E55BEA621AF9E3000647B6F /* libTouchID.a in Frameworks */,
 				2E1973BE2124060800E63A27 /* libART.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
@@ -713,7 +731,6 @@
 				BA3EC02D64534EC19D7F66D8 /* libRNDeviceInfo-tvOS.a in Frameworks */,
 				AA0170A60E524A73954D5098 /* libRNVersionNumber-tvOS.a in Frameworks */,
 				29C6081352E54F2086D67C13 /* libRNRandomBytes-tvOS.a in Frameworks */,
-				AFC99B817AD449C0BEE4E4DA /* libRNSVG-tvOS.a in Frameworks */,
 				8F5480871CB04D8292137F53 /* libRNI18n-tvOS.a in Frameworks */,
 				9EEB143ACDD365AC654F1619 /* libPods-NextyWallet-tvOS.a in Frameworks */,
 			);
@@ -924,8 +941,6 @@
 				7AF942598BCA419288940A95 /* libRNToastNative.a */,
 				70280B6338A5414AA139427D /* libUdpSockets.a */,
 				37535C87BDC64200A59C60BD /* libRNDocumentPicker.a */,
-				8F571F682B774442935D607A /* libRNSVG.a */,
-				14C7693F05E64464B9E98BB3 /* libRNSVG-tvOS.a */,
 				3C0C1DFAD0AD471FB33E8DBE /* libSplashScreen.a */,
 				0F14846E1DD648E39817E0B7 /* libRNI18n.a */,
 				1584626B067545AF885025FA /* libRNI18n-tvOS.a */,
@@ -942,6 +957,15 @@
 			children = (
 				2E2F0181211C255B008A2259 /* libRNVectorIcons.a */,
 				2EBFDA09222A392800879217 /* libRNVectorIcons-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2E34CB20224221A50081EF88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2E34CB58224221A50081EF88 /* libRNSVG.a */,
+				2E34CB5A224221A50081EF88 /* libRNSVG-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1065,6 +1089,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2E34CB1F224221A50081EF88 /* RNSVG.xcodeproj */,
 				2E55BE6721AF9E0D00647B6F /* TouchID.xcodeproj */,
 				2E19738E212405E300E63A27 /* ART.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
@@ -1409,6 +1434,10 @@
 					ProjectRef = A9C050D9F03146828E3D04D8 /* RNRandomBytes.xcodeproj */;
 				},
 				{
+					ProductGroup = 2E34CB20224221A50081EF88 /* Products */;
+					ProjectRef = 2E34CB1F224221A50081EF88 /* RNSVG.xcodeproj */;
+				},
+				{
 					ProductGroup = 2E2F017D211C255B008A2259 /* Products */;
 					ProjectRef = C3ECAE9F4C054F1086B9EDB8 /* RNVectorIcons.xcodeproj */;
 				},
@@ -1633,6 +1662,20 @@
 			remoteRef = 2E2F0180211C255B008A2259 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		2E34CB58224221A50081EF88 /* libRNSVG.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSVG.a;
+			remoteRef = 2E34CB57224221A50081EF88 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2E34CB5A224221A50081EF88 /* libRNSVG-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNSVG-tvOS.a";
+			remoteRef = 2E34CB59224221A50081EF88 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		2E4957D0214F93C700157036 /* libRNDocumentPicker.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1666,13 +1709,6 @@
 			fileType = archive.ar;
 			path = libRNFirebase.a;
 			remoteRef = 2E8A433A21A5388600ABA5AC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		2E9966FB2158E12600FF63DC /* libRNSVG-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRNSVG-tvOS.a";
-			remoteRef = 2E9966FA2158E12600FF63DC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2EB8A524218C409800589FF1 /* libBVLinearGradient.a */ = {
@@ -2137,9 +2173,7 @@
 				INFOPLIST_FILE = NextyWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2180,9 +2214,7 @@
 				INFOPLIST_FILE = NextyWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2329,9 +2361,7 @@
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2381,9 +2411,7 @@
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2432,9 +2460,7 @@
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2483,9 +2509,7 @@
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

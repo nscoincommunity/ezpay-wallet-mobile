@@ -6,27 +6,31 @@ import {
     Alert,
     Clipboard,
     Platform,
-    Image
+    Image,
+    StatusBar,
+    Text
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
 import { getPrivateKey } from '../../services/auth.service'
-import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Text,
-    Button,
-    Left,
-    Right,
-    Body,
-} from "native-base";
+// import {
+//     Container,
+//     Header,
+//     Title,
+//     Content,
+//     Text,
+//     Button,
+//     Left,
+//     Right,
+//     Body,
+// } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Language from '../../i18n/i18n'
 import CustomToast from '../../components/toast';
 import Gradient from 'react-native-linear-gradient';
 import IconFeather from "react-native-vector-icons/Feather"
+import Header from '../../components/header';
+
 
 export default class privateKey extends Component {
 
@@ -112,25 +116,22 @@ export default class privateKey extends Component {
     }
 
     render() {
-        console.log(this.state.privatekey)
         return (
-            <Container style={{ backgroundColor: "#fafafa" }}>
-                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => {
-                                this.props.navigation.openDrawer();
-                            }}
-                        >
-                            <IconFeather type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
-                        </Button>
-                    </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('PrivateKey.Title')}</Title>
-                    </Body>
-                    <Right />
-                </Header>
+            <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title={Language.t('PrivateKey.Title')}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => this.props.navigation.goBack()}
+                />
 
                 <View style={style.container}>
                     {
@@ -226,9 +227,8 @@ export default class privateKey extends Component {
                     >
                         <CustomToast ref="defaultToastBottom" position="bottom" />
                     </View>
-                    {/* <CustomToast ref="defaultToastBottom" position="bottom" /> */}
                 </View>
-            </Container >
+            </View >
         )
     }
 }

@@ -1,6 +1,5 @@
 import {
     InsertNewWallet,
-    UpdateWallet,
     DeleteWallet,
     SelectAllWallet,
     UpdateBalanceWallet,

@@ -10,6 +10,8 @@ target 'NextyWallet' do
   pod 'Firebase/Core','~> 5.11.0'
   pod 'Firebase/Messaging'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'NextyWalletTests' do
     inherit! :search_paths
     # Pods for testing
