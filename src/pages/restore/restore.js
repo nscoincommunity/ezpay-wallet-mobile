@@ -119,7 +119,7 @@ class FormBackupcode extends Component {
     }
     restoreByBackupCode() {
         this.props.showLoading(true);
-        restoreByBackup(this.state.backupCode, this.state.password)
+        restoreByBackup(this.state.backupCode)
             .then(data => {
                 this.props.showLoading(false);
                 this.props.navigation.navigate('NameWallet', {
@@ -135,7 +135,7 @@ class FormBackupcode extends Component {
                 setTimeout(() => {
                     Alert.alert(
                         Lang.t("Restore.Error"),
-                        Lang.t("Restore.InvalidRestoreCode"),
+                        err,
                         [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
                     )
                 }, 350);
@@ -160,7 +160,7 @@ class FormBackupcode extends Component {
                 if ((res.fileName).substring((res.fileName).lastIndexOf('.') + 1, (res.fileName).length) == 'txt' && (res.fileName).indexOf('nexty') > -1) {
                     RNFS.readFile(res.uri).then(data => {
                         console.log(data)
-                        this.setState({ backupCode: data })
+                        this.setState({ backupCode: data, errBUcode: false, txtErrBUcode: '', typeButton: false })
                     }).catch(err => {
                         console.log(err)
                     })
@@ -270,7 +270,7 @@ class FormPrivateKey extends Component {
                 setTimeout(() => {
                     Alert.alert(
                         Lang.t("Restore.Error"),
-                        Lang.t("Restore.AlertInvalidPK"),
+                        err,
                         [{ text: Lang.t("Restore.Ok"), onPress: () => { this.setState(this.InitState) } }]
                     )
                 }, 350);

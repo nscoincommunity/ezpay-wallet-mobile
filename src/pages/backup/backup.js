@@ -20,7 +20,6 @@ import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
 import { getBackupCode } from './backup.service'
 import moment from 'moment';
-import { Address } from '../../services/auth.service'
 import RNFS from 'react-native-fs';
 import { setData } from '../../services/data.service'
 import Language from '../../i18n/i18n'
@@ -82,12 +81,14 @@ class backup extends Component {
 
     async handleGet() {
         this.setState({ loading: true })
-        getBackupCode(this.state.passcode, this.props.navigation.getParam('payload').wallet.pk_en)
+        const { address, pk_en } = this.props.navigation.getParam('payload').wallet;
+        getBackupCode(this.state.passcode, pk_en, address)
             .then(bc => {
+                console.log(bc)
                 this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false, loading: false },
                     () => {
                         UpdateTypeBackupWallet(this.props.navigation.getParam('payload').wallet).then(ss => console.log(ss))
-                        var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + Address + '.txt'
+                        var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + this.props.navigation.getParam('payload').wallet.address + '.txt'
                         var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
                         RNFS.writeFile(path, bc)
                             .then(async success => {

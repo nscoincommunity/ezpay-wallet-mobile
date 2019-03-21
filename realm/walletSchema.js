@@ -131,6 +131,24 @@ export const CheckExistNameWallet = (name) => new Promise((resolve, reject) => {
     }
 })
 /**
+ * Check exist address
+ * @param {string} address address wallet want check
+ */
+export const CheckExistAddressWallet = address => new Promise((resolve, reject) => {
+    try {
+        REALM.open(databaseOption).then(realm => {
+            let ListAddressWallet = realm.objects(LISTWALLET).filtered('address="' + address + '"')
+            if (ListAddressWallet.length > 0) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+        }).catch(e => reject(e))
+    } catch (error) {
+        reject(error)
+    }
+})
+/**
  * Delete wallet
  * @param {number} walletID Id of wallet want delete
  */
@@ -203,14 +221,6 @@ export const UpdateTypeBackupWallet = (wallet) => new Promise((resolve, reject) 
                 }, 500)
 
             })
-            // realm.write(() => {
-            //     let walletUpdate = realm.objects(LISTWALLET).filtered('address="' + wallet.address + '"');
-            //     walletUpdate.forEach(item => {
-            //         item.typeBackup = true
-            //     })
-            //     // walletUpdate.name = wallet.name;
-            //     resolve()
-            // })
         }).catch(e => reject(e))
     } catch (error) {
         reject(error)

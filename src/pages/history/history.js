@@ -1,27 +1,37 @@
 import React, { Component } from 'react'
-import { View, FlatList, RefreshControl, StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import {
+    View,
+    FlatList,
+    RefreshControl,
+    StyleSheet,
+    Platform,
+    TouchableOpacity,
+    Text,
+    StatusBar
+} from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import CONSTANTS from '../../helper/constants';
 import { POSTAPI } from '../../helper/utils'
-import { Address } from '../../services/auth.service'
 import { getDataHis, HistoryModel, historyData } from './history.service'
 import Language from '../../i18n/i18n'
 import IconFeather from "react-native-vector-icons/Feather"
+import Header from '../../components/header';
 
-import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Text,
-    Button,
-    Left,
-    Right,
-    Body,
-    ListItem,
-    Spinner,
-} from "native-base";
+
+// import {
+//     Container,
+//     Header,
+//     Title,
+//     Content,
+//     Text,
+//     Button,
+//     Left,
+//     Right,
+//     Body,
+//     ListItem,
+//     Spinner,
+// } from "native-base";
 
 
 export class Transaction {
@@ -49,8 +59,9 @@ export default class History extends Component {
     };
 
     getData() {
+        const { address, network } = this.props.navigation.getParam('payload')
         this.setState({ isRefreshing: true, transactions: [], isLoading: true })
-        getDataHis().then(async data => {
+        getDataHis(0, 15, address, network).then(async data => {
             transactions = await this.getFullTransaction();
             await this.setState({
                 transactions: transactions,
@@ -66,13 +77,12 @@ export default class History extends Component {
         ])
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getData();
     }
 
     getFullTransaction(): Transaction[] {
         let transactions = [];
-        // var AddressTest = '0xCf9D1938F80861D0B512a8E322F190a293eEC87e';
         for (let entry of historyData) {
             let type = 'arrow-up';
             if (entry.to.toLowerCase() == Address.toLowerCase()) {
@@ -91,9 +101,10 @@ export default class History extends Component {
 
     onEndReached() {
         this.setState({ loadbottom: true })
+        const { address, network } = this.props.navigation.getParam('payload')
         setTimeout(() => {
             try {
-                getDataHis(this.state.index, length)
+                getDataHis(this.state.index, length, address, network)
                     .then(async data => {
                         await this.getFullTransaction().forEach(element => {
                             transactions.push(element)
@@ -116,123 +127,95 @@ export default class History extends Component {
 
 
     render() {
-        if (this.state.isLoading) {
-            return (
-                <Container style={{ backgroundColor: '#fafafa' }}>
-                    <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0, borderBottomColor: '#fafafa' }}>
-                        <Left>
-                            <Button
-                                transparent
-                                onPress={() => this.props.navigation.openDrawer()}
-                            >
-                                <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
-                            </Button>
-                        </Left>
-                        <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                            <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('History.Title')}</Title>
-                        </Body>
-                        <Right />
-                    </Header>
-                    <Content padder contentContainerStyle={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', height: GLOBALS.HEIGHT - 20 }}>
-                        <Spinner color={GLOBALS.Color.primary} />
-                        <Text>{Language.t('History.Loading')}</Text>
-                    </Content>
-                </Container>
-            )
-        } else {
-            return (
-                <Container style={{ backgroundColor: "#fafafa" }}>
-                    <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0, borderBottomColor: '#fafafa' }}>
-                        <Left>
-                            <Button
-                                transparent
-                                onPress={() => this.props.navigation.openDrawer()}
-                            >
-                                <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('History.Title')}</Title>
-                        </Body>
-                        <Right />
-                    </Header>
+        return (
+            <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title={Language.t('History.Title')}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => this.props.navigation.goBack()}
+                />
+                {
+                    this.state.isLoading ?
+                        null
+                        :
+                        <View style={styles.container}>
+                            <View style={{
+                                backgroundColor: '#fff',
+                                flex: 1,
+                                shadowColor: "#000",
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 0,
+                                },
+                                shadowOpacity: 0.14,
+                                shadowRadius: 2.27,
+                                elevation: 2,
+                                borderRadius: 10,
+                            }}>
+                                {
+                                    this.state.transactions.length > 0
+                                        ?
+                                        <FlatList
+                                            style={{ padding: GLOBALS.hp('2%') }}
+                                            data={this.state.transactions}
+                                            extraData={this.state}
+                                            renderItem={({ item }) => {
+                                                return (
+                                                    <TouchableOpacity
+                                                        onPress={() => this.props.navigation.navigate("DetailsHis", { data: item })}
+                                                        style={styles.row}>
+                                                        <Icon
+                                                            active
+                                                            name={item.type}
+                                                            style={{ color: item.type == "arrow-down" ? "green" : 'red', flex: 1 }}
+                                                            size={GLOBALS.wp('6%')}
+                                                        />
+                                                        <Text style={{
+                                                            flex: 7,
+                                                            fontFamily: GLOBALS.font.Poppins,
+                                                            fontSize: GLOBALS.wp('4%')
+                                                        }}>{item.datetime}</Text>
+                                                        <Icon
+                                                            name="angle-right"
+                                                            style={{ flex: 1, textAlign: 'right' }}
+                                                            size={GLOBALS.wp('6%')}
+                                                            color="#AAA"
+                                                        />
+                                                    </TouchableOpacity>
+                                                );
+                                            }}
+                                            onEndReached={() => this.onEndReached()}
+                                            onEndReachedThreshold={0.001}
+                                            keyExtractor={(item, index) => index.toString()}
+                                            refreshControl={
+                                                <RefreshControl  //Component cho chức năng Pull to Refresh
+                                                    refreshing={this.state.isRefreshing}  // check xem có hành động Pull trên màn hình của user hay không
+                                                    onRefresh={() => this.getData()} // mỗi lần pull thì sẽ thực hiện hàm getData để load dữ liệu về
+                                                ></RefreshControl>
+                                            }
 
-                    {
-                        this.state.transactions ?
-                            <View style={styles.container}>
-                                <View style={{
-                                    backgroundColor: '#fff',
-                                    flex: 1,
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 0,
-                                    },
-                                    shadowOpacity: 0.14,
-                                    shadowRadius: 2.27,
-                                    elevation: 2,
-                                    borderRadius: 10,
-                                }}>
-                                    {
-                                        this.state.transactions.length > 0
-                                            ?
-                                            <FlatList
-                                                style={{ padding: GLOBALS.hp('2%') }}
-                                                data={this.state.transactions}
-                                                extraData={this.state}
-                                                renderItem={({ item }) => {
-                                                    return (
-                                                        <TouchableOpacity
-                                                            onPress={() => this.props.navigation.navigate("DetailsHis", { data: item })}
-                                                            style={styles.row}>
-                                                            <Icon
-                                                                active
-                                                                name={item.type}
-                                                                style={{ color: item.type == "arrow-down" ? "green" : 'red', flex: 1 }}
-                                                                size={GLOBALS.wp('6%')}
-                                                            />
-                                                            <Text style={{
-                                                                flex: 7,
-                                                                fontFamily: GLOBALS.font.Poppins,
-                                                                fontSize: GLOBALS.wp('4%')
-                                                            }}>{item.datetime}</Text>
-                                                            <Icon
-                                                                name="angle-right"
-                                                                style={{ flex: 1, textAlign: 'right' }}
-                                                                size={GLOBALS.wp('6%')}
-                                                                color="#AAA"
-                                                            />
-                                                        </TouchableOpacity>
-                                                    );
-                                                }}
-                                                onEndReached={() => this.onEndReached()}
-                                                onEndReachedThreshold={0.001}
-                                                keyExtractor={(item, index) => index.toString()}
-                                                refreshControl={
-                                                    <RefreshControl  //Component cho chức năng Pull to Refresh
-                                                        refreshing={this.state.isRefreshing}  // check xem có hành động Pull trên màn hình của user hay không
-                                                        onRefresh={() => this.getData()} // mỗi lần pull thì sẽ thực hiện hàm getData để load dữ liệu về
-                                                    ></RefreshControl>
-                                                }
+                                        />
+                                        :
+                                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Icon name="exclamation-circle" color="#d1d1d1" size={GLOBALS.hp('20%')} />
+                                            <Text style={{ fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.hp('2.5%') }}>{Language.t('History.NoTransaction')}</Text>
+                                        </View>
+                                }
 
-                                            />
-                                            :
-                                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                                <Icon name="exclamation-circle" color="#d1d1d1" size={GLOBALS.hp('20%')} />
-                                                <Text style={{ fontFamily: GLOBALS.font.Poppins, fontSize: GLOBALS.hp('2.5%') }}>{Language.t('History.NoTransaction')}</Text>
-                                            </View>
-                                    }
-
-                                </View>
                             </View>
-                            :
-                            null
-                    }
-
-                    {/* </Content> */}
-                </Container >
-            )
-        }
+                        </View>
+                }
+            </View>
+        )
     }
 }
 class BottomList extends Component {

@@ -1,13 +1,13 @@
 import { POSTAPI } from '../../helper/utils'
 import CONSTANTS from '../../helper/constants';
 import { Utils } from '../../helper/utils'
-import { validatePassword, getPrivateKey, Address } from '../../services/auth.service';
+import { validatePassword, getPrivateKey, } from '../../services/auth.service';
 import CryptoJS from 'crypto-js';
 import Language from '../../i18n/i18n'
 
 export let code: string;
 
-export async function getBackupCode(password: string, pk_en: string) {
+export async function getBackupCode(password: string, pk_en: string, addressWL) {
     if (! await validatePassword(password)) {
         throw (Language.t('Send.AlerError.Content'))
     }
@@ -17,7 +17,7 @@ export async function getBackupCode(password: string, pk_en: string) {
 
     let body = {
         md5Hash: CryptoJS.MD5(code).toString(CryptoJS.enc.Hex),
-        walletAddress: Address,
+        walletAddress: addressWL,
         privateKeyEncrypted: CryptoJS.AES.encrypt(pk, code).toString()
     }
 

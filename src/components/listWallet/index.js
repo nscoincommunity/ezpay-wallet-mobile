@@ -81,7 +81,7 @@ class ListWallet extends Component {
 
     onMove(evt) {
         const { locationX, locationY } = evt.nativeEvent;
-        console.log('move', evt.nativeEvent)
+        clearInterval(this.Interval)
     }
 
     render() {
@@ -113,11 +113,11 @@ class ListWallet extends Component {
     }
 }
 
-function mapStateToProp(state) {
-    return state
-}
+// function mapStateToProp(state) {
+//     return state
+// }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({ fetchRate, EventSnap, EventGetBalance, GetListToken }, dispatch)
 }
 
-export default connect(mapStateToProp, mapDispatchToProps)(ListWallet)
+export default connect(null, mapDispatchToProps)(ListWallet)

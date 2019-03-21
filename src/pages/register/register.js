@@ -14,7 +14,7 @@ import {
     ActivityIndicator
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
-import { checkIOS, Register, Address } from '../../services/auth.service';
+import { checkIOS, Register, } from '../../services/auth.service';
 import { setData, rmData } from '../../services/data.service'
 import Lang from '../../i18n/i18n'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';

@@ -4,8 +4,10 @@ import { POSTAPI } from '../../helper/utils';
 import CONSTANTS from '../../helper/constants';
 import { restore } from '../../services/auth.service'
 import { getAddressFromPK } from '../../services/wallet.service'
+import { CheckExistAddressWallet } from '../../../realm/walletSchema'
+import Lang from '../../i18n/i18n';
 
-export function restoreByBackup(code: string, password: string) {
+export function restoreByBackup(code: string) {
     let data = {
         md5Hash: CryptoJS.MD5(code).toString(CryptoJS.enc.Hex)
     }
@@ -16,19 +18,26 @@ export function restoreByBackup(code: string, password: string) {
                 var JSONres = JSON.parse(res);
                 let addr = JSONres['walletAddress'];
                 if (addr) {
-                    let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
-                    let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
-                    resolve({
-                        addressWL: addr,
-                        privateKey: privateKey
-                    })
-                    // await restore(addr, privateKey, password).then(() =>
-                    //     resolve(0));
+                    CheckExistAddressWallet(addr).then(async type => {
+                        if (type) {
+                            console.log('c')
+                            reject('Exist address, please use Change network if you want use other network for this address')
+                        } else {
+                            let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                            let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                            resolve({
+                                addressWL: addr,
+                                privateKey: privateKey
+                            })
+                        }
+                    }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
                 } else {
-                    await reject(1)
+                    console.log('a')
+                    reject(Lang.t("Restore.InvalidRestoreCode"))
                 }
             }).catch(err => {
-                reject(1)
+                console.log('b', err)
+                reject(Lang.t("Restore.InvalidRestoreCode"))
             })
     })
 }
@@ -38,16 +47,22 @@ export function restoreByPk(privateKey: string, password: string) {
             console.log('address: ', res);
             let addr = res.toString();
             if (addr) {
-                resolve({
-                    addressWL: addr,
-                    privateKey: privateKey
+                CheckExistAddressWallet(addr).then(async type => {
+                    if (type) {
+                        reject('Exist address, please use Change network if you want use other network for this address')
+                    } else {
+                        resolve({
+                            addressWL: addr,
+                            privateKey: privateKey
+                        })
+                    }
                 })
                 // await restore(addr, privateKey, password).then(() => resolve(0));
             } else {
-                reject(1)
+                reject(Lang.t("Restore.AlertInvalidPK"))
             }
         }).catch(err => {
-            reject(1)
+            reject(Lang.t("Restore.AlertInvalidPK"))
         })
     })
 

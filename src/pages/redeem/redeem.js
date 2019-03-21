@@ -24,7 +24,6 @@ import {
     Spinner,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { Address } from '../../services/auth.service';
 import Language from '../../i18n/i18n'
 import IconFeather from "react-native-vector-icons/Feather"
 import { HandleCoupon } from './redeem.service';

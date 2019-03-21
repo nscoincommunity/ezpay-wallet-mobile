@@ -20,6 +20,7 @@ export default {
     WEB3_TRX: 'https://api.trongrid.io/',
 
     EXPLORER_API: 'https://explorer.nexty.io',
+    EXPLORER_API_ETH: 'http://api.ethplorer.io',
     WALLET_API: 'https://dev-wallet.nexty.io',
     BASE_PNTY: Math.pow(10, 22),
     BASE_NTY: Math.pow(10, 18),

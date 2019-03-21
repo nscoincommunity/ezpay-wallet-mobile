@@ -69,7 +69,7 @@ export default class privateKey extends Component {
             )
             return
         }
-        await getPrivateKey(this.state.passcode)
+        await getPrivateKey(this.state.passcode, this.props.navigation.getParam('payload').pk_en)
             .then(pk => {
                 if (pk.length > 0) {
                     this.setState({ privatekey: pk, dialogVisible: false, getsuccess: true })

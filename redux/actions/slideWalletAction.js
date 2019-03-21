@@ -107,6 +107,7 @@ export const getBalance = (bal) => {
 }
 
 export const EventGetBalance = (address, network, id) => dispatch => {
+    // console.log('action', address, network, id)
     return updateBalance(address, network).then(bal => {
         return UpdateBalanceWallet(id, bal).then(() => {
             return dispatch(getBalance(bal))
