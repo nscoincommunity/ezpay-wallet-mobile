@@ -67,7 +67,7 @@ class ScreenRestore extends Component {
                         tabTextStyle={{ color: '#393B51' }}
                     />
                 </View>
-                <View style={{ flex: 2 }} />
+                <View style={{ flex: 3.5 }} />
                 {this.state.index === 0 && <FormBackupcode navigation={this.props.navigation} showLoading={this.showLoading.bind(this)} />}
                 {this.state.index === 1 && <FormPrivateKey navigation={this.props.navigation} showLoading={this.showLoading.bind(this)} />}
 
@@ -354,7 +354,7 @@ export default class restore extends Component {
                 <ScrollView contentContainerStyle={{ flex: 1 }}>
                     <KeyboardAvoidingView
                         style={style.container}
-                        keyboardVerticalOffset={Platform.OS == 'ios' ? hp('10%') : hp('0')}
+                        keyboardVerticalOffset={Platform.OS == 'ios' ? hp('10%') : hp('-10%')}
                         behavior="position"
                         contentContainerStyle={{ flex: 1 }}
                         enabled>

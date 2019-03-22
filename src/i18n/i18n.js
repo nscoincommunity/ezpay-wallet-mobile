@@ -37,30 +37,23 @@ export const ListLanguage = [
     { View: 'Español', type: 'es' }
 ]
 export function DeviceLanguage() {
-    getLanguages().then(lang => {
-        var languages = lang[0].substr(0, 2);
-        var indexLanguages = ListLanguage.findIndex(x => x.type == languages);
-        if (indexLanguages > -1) {
-            I18n.locale = languages;
-            setData('languages', languages)
-        }
-        else {
-            I18n.locale = 'en';
-            setData('languages', 'en');
-        }
-        // ListLanguage.forEach(data => {
-        //     if (data.type == languages) {
-        //         I18n.locale = languages;
-        //         setData('languages', languages)
-        //         return;
-        //     } else {
-        //         I18n.locale = 'en';
-        //         setData('languages', 'en');
-        //         return;
-        //     }
-        // })
-    }).catch(err => {
-        console.log(err)
+    return new Promise((resolve, reject) => {
+        getLanguages().then(lang => {
+            var languages = lang[0].substr(0, 2);
+            var indexLanguages = ListLanguage.findIndex(x => x.type == languages);
+            if (indexLanguages > -1) {
+                I18n.locale = languages;
+                setData('languages', languages)
+                resolve(languages)
+            }
+            else {
+                I18n.locale = 'en';
+                setData('languages', 'en');
+            }
+
+        }).catch(err => {
+            console.log(err)
+        })
     })
 }
 export function selectLang() {

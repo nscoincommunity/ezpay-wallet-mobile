@@ -59,3 +59,13 @@ export function BalanceToken(state = { balance: NaN }, actions) {
             return state
     }
 }
+
+var language = 'en'
+export function Language(state = { language }, actions) {
+    switch (actions.type) {
+        case 'CHANGE_LANGUAGE':
+            return actions.payload
+        default:
+            return state
+    }
+}

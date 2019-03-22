@@ -1,32 +1,60 @@
 import React, { Component } from 'react'
-import { View, FlatList, TouchableOpacity, Text, StyleSheet, ToastAndroid, Platform, Alert } from 'react-native';
+import {
+    View,
+    FlatList,
+    TouchableOpacity,
+    Text,
+    StyleSheet,
+    ToastAndroid,
+    Platform,
+    Alert,
+    StatusBar
+} from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { setData } from '../../services/data.service'
-import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Button,
-    Left,
-    Right,
-    Body,
-} from "native-base";
+import Language from '../../i18n/i18n'
 import Icon from "react-native-vector-icons/FontAwesome";
 import CustomToast from '../../components/toast';
-import Language from '../../i18n/i18n';
 import IconFeather from "react-native-vector-icons/Feather";
 import Dialog from "react-native-dialog";
-import { EnableTouchID } from "../../services/auth.service"
-import AlertModal from "../../components/Modal"
-import TouchID from "react-native-touch-id"
-export default class Setting extends Component {
+import { EnableTouchID } from "../../services/auth.service";
+import AlertModal from "../../components/Modal";
+import TouchID from "react-native-touch-id";
+import Gradient from 'react-native-linear-gradient';
+import Header from '../../components/header';
+import { connect } from 'react-redux';
+
+
+class Setting extends Component {
+    initState = {
+        dialogVisible: false,
+        passcode: '',
+        datas: [
+            {
+                route: 'Language',
+                text: Language.t('Settings.Languages'),
+                status: true
+            },
+            {
+                route: "ChangePIN",
+                text: Language.t('ChangePIN.Title'),
+                status: true
+            },
+            {
+                route: "TouchID",
+                text: Language.t('Settings.TouchID'),
+                status: false
+            }
+        ],
+        title: Language.t('Settings.Title'),
+        titleAlert: Language.t('Settings.EnableTouchID'),
+        contentAlert: Language.t('PrivateKey.DialogConfirm.Content'),
+        PH_alert: Language.t('PrivateKey.DialogConfirm.Placeholder'),
+        titleButtonAlert: Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')
+    }
     constructor(props) {
         super(props);
-        this.state = {
-            dialogVisible: false,
-            passcode: ''
-        }
+        this.state = this.initState
     }
 
 
@@ -101,60 +129,83 @@ export default class Setting extends Component {
             return;
         }
         if (Status == true) {
-            this.props.navigation.navigate(Router)
+            this.props.navigation.navigate(Router, { changeLang: this.changeLang })
         }
     }
+
+    changeLang = lang => {
+        Language.locale = lang;
+        this.setState({
+            datas: [
+                {
+                    route: 'Language',
+                    text: Language.t('Settings.Languages'),
+                    status: true
+                },
+                {
+                    route: "ChangePIN",
+                    text: Language.t('ChangePIN.Title'),
+                    status: true
+                },
+                {
+                    route: "TouchID",
+                    text: Language.t('Settings.TouchID'),
+                    status: false
+                }
+            ],
+            title: Language.t('Settings.Title'),
+            titleAlert: Language.t('Settings.EnableTouchID'),
+            contentAlert: Language.t('PrivateKey.DialogConfirm.Content'),
+            PH_alert: Language.t('PrivateKey.DialogConfirm.Placeholder'),
+            titleButtonAlert: Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')
+
+        })
+    }
+
     render() {
-        const datas = [
-            {
-                route: "SelectNetwork",
-                text: "Change network",
-                status: true
-            },
-            {
-                route: "Backup",
-                text: Language.t('Settings.Backup'),
-                status: true
-            },
-            {
-                route: 'Language',
-                text: Language.t('Settings.Languages'),
-                status: true
-            },
-            {
-                route: "ChangePIN",
-                text: Language.t('ChangePIN.Title'),
-                status: true
-            },
-            {
-                route: "TouchID",
-                text: Language.t('Settings.TouchID'),
-                status: false
-            }
-        ];
+        // let datas = [
+        //     {
+        //         route: 'Language',
+        //         text: Language.t('Settings.Languages'),
+        //         status: true
+        //     },
+        //     {
+        //         route: "ChangePIN",
+        //         text: Language.t('ChangePIN.Title'),
+        //         status: true
+        //     },
+        //     {
+        //         route: "TouchID",
+        //         text: Language.t('Settings.TouchID'),
+        //         status: false
+        //     }
+        // ];
         return (
-            <Container style={{ backgroundColor: "#fafafa" }}>
-                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => {
-                                this.props.navigation.openDrawer();
-                            }}
-                        >
-                            <IconFeather type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
-                        </Button>
-                    </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('Settings.Title')}</Title>
-                    </Body>
-                    <Right />
-                </Header>
+            <Gradient
+                style={{ flex: 1 }}
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+            >
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="align-left"
+                    title={this.state.title}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => { this.props.navigation.openDrawer(); }}
+                />
 
                 <View style={styles.container}>
                     <FlatList
                         style={{ padding: GLOBALS.hp('2%') }}
-                        data={datas}
+                        data={this.state.datas}
                         extraData={this.state}
                         renderItem={({ item }) => {
                             return (
@@ -183,19 +234,19 @@ export default class Setting extends Component {
                         <Dialog.Title
                             style={{ fontFamily: GLOBALS.font.Poppins }}
                         >
-                            {Language.t('Settings.EnableTouchID')}
+                            {this.state.titleAlert}
                         </Dialog.Title>
                         <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
-                            {Language.t('PrivateKey.DialogConfirm.Content')}
+                            {this.state.contentAlert}
                         </Dialog.Description>
                         <Dialog.Input
-                            placeholder={Language.t('PrivateKey.DialogConfirm.Placeholder')}
+                            placeholder={this.state.PH_alert}
                             onChangeText={(val) => this.setState({ passcode: val })}
                             secureTextEntry={true} value={this.state.passcode}
                             autoFocus={true}
                         />
                         <Dialog.Button
-                            label={Language.t('PrivateKey.DialogConfirm.TitleButtonCancel')}
+                            label={this.state.titleButtonAlert}
                             onPress={this.handleCancel.bind(this)}
                         />
                         <Dialog.Button
@@ -204,7 +255,7 @@ export default class Setting extends Component {
                         />
                     </Dialog.Container>
                 </View>
-            </Container >
+            </Gradient >
         )
     }
 }
@@ -233,3 +284,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     }
 })
+const mapStateToProps = state => {
+    return {
+        language: state.Language.language
+    }
+}
+
+export default connect()(Setting)

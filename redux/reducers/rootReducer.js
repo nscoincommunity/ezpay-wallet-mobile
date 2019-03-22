@@ -5,7 +5,8 @@ import {
     eventSnap,
     updateBalance,
     getListToken,
-    BalanceToken
+    BalanceToken,
+    Language
 } from './walletReducer';
 import { ActionDB } from './queryDB'
 export default combineReducers({
@@ -15,5 +16,6 @@ export default combineReducers({
     eventSnap,
     updateBalance,
     getListToken,
-    BalanceToken
+    BalanceToken,
+    Language
 })

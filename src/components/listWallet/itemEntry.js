@@ -77,7 +77,7 @@ class EntryComponent extends Component {
                 </View>
                 <View style={{ flex: 2, justifyContent: 'center', paddingRight: GLOBAL.wp('5%') }}>
                     {
-                        item.typeBackup &&
+                        !item.typeBackup &&
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Backup', {
                                 payload: {

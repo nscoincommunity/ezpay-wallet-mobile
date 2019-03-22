@@ -166,3 +166,16 @@ export const getBalanceToken = (id, addressTK, addressWL, network) => dispatch =
         })
     })
 }
+
+/**
+ * Change language
+ * @param {string} language 
+ */
+export const ChangeLanguage = (language) => {
+    return {
+        type: 'CHANGE_LANGUAGE',
+        payload: {
+            language
+        }
+    }
+}

@@ -47,6 +47,8 @@ import TypeAddWallet from './pages/addNewWallet/typeAdd';
 import NameWallet from './pages/addNewWallet/nameWallet';
 import SelectNetwork from './pages/addNewWallet/selectNetwork';
 import InforWallet from './pages/inforWallet';
+import { ChangeLanguage } from '../redux/actions/slideWalletAction'
+
 
 // Lang.locale = 'vi'
 /* customize header */
@@ -116,12 +118,16 @@ class Router extends Component {
             getData('languages').then(lang => {
                 console.log('languages router', lang)
                 if (lang == null) {
-                    DeviceLanguage()
+                    DeviceLanguage().then(language => {
+                        Lang.locale = language
+                        this.props.dispatch(ChangeLanguage(language))
+                    })
                     this.setState({ InitLanguage: true })
                 } else {
                     getData('languages').then(data => {
                         Lang.locale = data;
                         this.setState({ InitLanguage: true })
+                        this.props.dispatch(ChangeLanguage(data))
                     }).catch(err => {
                         this.setState({ InitLanguage: true })
                         console.log(err)
@@ -169,9 +175,19 @@ class Router extends Component {
                 },
                 DetailsHis: { screen: DetailHis },
                 QRscan: { screen: QRscan },
-                Language: { screen: Language },
+                Language: {
+                    screen: Language,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
                 ChangePIN: { screen: ChangePIN },
-                Setting: { screen: Setting },
+                Setting: {
+                    screen: Setting,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
                 SelectNetwork: { screen: SelectNetwork },
                 AddNewWallet: {
                     screen: TypeAddWallet,

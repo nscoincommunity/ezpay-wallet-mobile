@@ -138,15 +138,21 @@ export async function EnableTouchID(passcode) {
     var passcodeEn = await encryptPassword(passcode);
     console.log(passcodeEn)
     return new Promise((resolve, rejects) => {
-        getData(Address).then(async pwd => {
-            if (passcodeEn != pwd) {
-                rejects('invalid passcode');
-                return;
-            } else {
-                var passcodeEncrypt = CryptoJS.AES.encrypt(passcode, passcodeEn).toString()
-                resolve(passcodeEncrypt)
-            }
-        })
+        // getData(Address).then(async pwd => {
+        //     if (passcodeEn != pwd) {
+        //         rejects('invalid passcode');
+        //         return;
+        //     } else {
+        //         var passcodeEncrypt = CryptoJS.AES.encrypt(passcode, passcodeEn).toString()
+        //         resolve(passcodeEncrypt)
+        //     }
+        // })
+        if (cachePwd != passcodeEn) {
+            rejects('invalid passcode');
+        } else {
+            var passcodeEncrypt = CryptoJS.AES.encrypt(passcode, passcodeEn).toString()
+            resolve(passcodeEncrypt)
+        }
     })
 }
 
