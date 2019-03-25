@@ -20,10 +20,10 @@ import {
 import GLOBALS from '../../helper/variables';
 import { Form, Item, Input, Label } from 'native-base'
 import Icon from "react-native-vector-icons/Ionicons";
-import { exchangeRate, exchangeRateETH } from '../../services/rate.service';
+import { exchangeRate, exchangeRateETH, } from '../../services/rate.service';
 import { Utils } from '../../helper/utils'
 import Dialog from "react-native-dialog";
-import { SendService, SendToken } from "../../services/wallet.service";
+import { SendService, SendToken, updateBalance, SV_UpdateBalanceTk } from "../../services/wallet.service";
 import { ScaleDialog } from "../../services/loading.service";
 import { getData } from '../../services/data.service';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -63,9 +63,9 @@ class FormSend extends Component {
         titleDialog: '',
         contentDialog: '',
         ListToken: [],
-        viewSymbol: this.props.network,
+        viewSymbol: this.props.MainCoin,
         tokenSelected: {},
-        selected: this.props.network,
+        selected: this.props.MainCoin,
         extraData: '',
         editAddress: true,
         editNTY: true,
@@ -176,7 +176,7 @@ class FormSend extends Component {
         } else {
 
             switch (this.state.viewSymbol) {
-                case this.props.network:
+                case this.props.MainCoin:
                     var usd = await Utils.round(val * this.props.rate, 5);
                     break;
                 default:
@@ -201,7 +201,7 @@ class FormSend extends Component {
             await this.setState({ USD: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, NTY: '' })
         } else {
             switch (this.state.viewSymbol) {
-                case this.props.network:
+                case this.props.MainCoin:
                     var nty = await Utils.round(val / this.props.rate);
                     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
                     break;
@@ -234,9 +234,9 @@ class FormSend extends Component {
                     console.log('chay vao day')
                     return;
                 }
-                if (this.state.viewSymbol == this.props.network) {
+                if (this.state.viewSymbol == this.props.MainCoin) {
                     SendService(
-                        this.props.DataToken.network,
+                        this.props.DataToken.MainCoin,
                         this.state.addresswallet,
                         this.props.DataToken.addressWL,
                         parseFloat(this.state.NTY),
@@ -265,7 +265,7 @@ class FormSend extends Component {
                     })
                 } else {
                     SendToken(
-                        this.props.DataToken.network,
+                        this.props.DataToken.MainCoin,
                         this.state.tokenSelected.addressToken,
                         this.state.addresswallet,
                         this.props.DataToken.addressWL,
@@ -344,9 +344,11 @@ class FormSend extends Component {
     inputs = {};
 
     selectToken = (token) => {
-        switch (token) {
-            case this.props.network:
+        console.log(token, this.props.MainCoin)
+        switch (token.name) {
+            case this.props.MainCoin:
                 if (parseFloat(this.state.NTY) > 0) {
+                    console.log('aaa')
                     let usd = Utils.round(parseFloat(this.state.NTY) * this.props.rate, 5);
                     this.setState({ viewSymbol: token.name, USD: usd.toString() })
                 } else {
@@ -411,10 +413,26 @@ class FormSend extends Component {
 
     }
 
+    getBalance = () => {
+        console.log('aa')
+        if (this.state.viewSymbol == this.props.MainCoin) {
+            console.log(this.props.DataToken.addressWL, this.props.network)
+            updateBalance(this.props.DataToken.addressWL, this.props.network).then(balance => {
+                console.log(balance)
+                let usd = Utils.round(parseFloat(balance) * this.props.rate, 5);
+                this.setState({ NTY: balance, USD: usd.toString() })
+            }).catch(e => console.log(e))
+        } else {
+            SV_UpdateBalanceTk(this.state.tokenSelected.addressToken, this.props.network, this.props.DataToken.addressWL).then(balance => {
+                this.setState({ NTY: balance, USD: '0' })
+            })
+        }
+    }
+
     render() {
         const { ListToken } = this.props.DataToken;
-        if (ListToken[0].name != this.props.network) {
-            var ArrayToken = [{ name: this.props.network }].concat(ListToken)
+        if (ListToken[0].name != this.props.MainCoin) {
+            var ArrayToken = [{ name: this.props.MainCoin }].concat(ListToken)
         }
 
         return (
@@ -495,6 +513,11 @@ class FormSend extends Component {
                                         ref={input => { this.inputs['field2'] = input }}
                                         underlineColorAndroid="transparent"
                                     />
+                                    <TouchableOpacity
+                                        onPress={() => this.getBalance()}
+                                    >
+                                        <Text style={{ color: GLOBALS.Color.primary }}>Max</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row', borderBottomWidth: 0.5 }}>
                                     <TextInput
@@ -685,9 +708,10 @@ const mapStateToProps = state => {
             break;
     }
     return {
-        network: network,
+        MainCoin: network,
         DataToken: state.getListToken,
-        rate: state.snapToWallet.rate
+        rate: state.snapToWallet.rate,
+        network: state.getListToken.network
     }
 }
 export default connect(mapStateToProps, null)(FormSend)

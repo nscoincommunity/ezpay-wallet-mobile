@@ -163,23 +163,6 @@ class Setting extends Component {
     }
 
     render() {
-        // let datas = [
-        //     {
-        //         route: 'Language',
-        //         text: Language.t('Settings.Languages'),
-        //         status: true
-        //     },
-        //     {
-        //         route: "ChangePIN",
-        //         text: Language.t('ChangePIN.Title'),
-        //         status: true
-        //     },
-        //     {
-        //         route: "TouchID",
-        //         text: Language.t('Settings.TouchID'),
-        //         status: false
-        //     }
-        // ];
         return (
             <Gradient
                 style={{ flex: 1 }}

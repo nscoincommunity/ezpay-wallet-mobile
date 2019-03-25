@@ -55,7 +55,7 @@ export default class HeaderComponent extends Component {
         } else {
             return (
                 <Header
-                    placement="center"
+                    placement="left"
                     leftComponent={<Icon name={nameIconLeft} size={30} color={colorIconLeft} onPress={pressIconLeft} />}
                     centerComponent={{
                         text: `${title}`, style: {

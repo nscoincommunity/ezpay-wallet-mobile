@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ImageBackground, StatusBar, TouchableOpacity } from 'react-native'
+import { Text, View, ImageBackground, StatusBar, TouchableOpacity, BackHandler, Alert } from 'react-native'
 import { SelectAllWallet } from '../../../realm/walletSchema';
 import ListCoin from '../../components/listWallet';
 import Header from '../../components/header';
@@ -10,8 +10,11 @@ import { ONSNAPWALLET } from '../../../redux/actions/slideWalletAction';
 import { bindActionCreators } from 'redux';
 import { fetchRate, fetchAllWallet } from '../../../redux/actions/slideWalletAction'
 import SegmentControl from 'react-native-segment-controller';
-import Segment from './segmentComponent'
-import { Avatar } from 'react-native-elements'
+import Segment from './segmentComponent';
+import { Avatar } from 'react-native-elements';
+import Language from '../../i18n/i18n';
+import { NavigationActions } from 'react-navigation'
+
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -19,14 +22,48 @@ class Dashboard extends Component {
             ListWallet: [],
             index: 0
         }
+        this.backButtonClick = this.backButtonClick.bind(this)
     }
 
     componentWillMount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backButtonClick);
         this.props.fetchRate('nexty', 0);
         this.fetchListWallet()
         SelectAllWallet().then(ListWallet => {
             this.setState({ ListWallet })
         })
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.backButtonClick);
+    }
+
+    backButtonClick() {
+        const { dispatch } = this.props.navigation;
+        const parent = this.props.navigation.dangerouslyGetParent();
+        const isDrawerOpen = parent && parent.state && parent.state.isDrawerOpen;
+        if (this.props.navigation.isFocused() == true) {
+            this.props.navigation.closeDrawer();
+            if (isDrawerOpen == true) {
+                this.props.navigation.closeDrawer();
+                return true;
+            } else {
+                Alert.alert(
+                    Language.t('ConfirmLogout.Title'),
+                    Language.t('ConfirmLogout.exitapp'),
+                    [
+                        { text: Language.t('ConfirmLogout.ButtonCancel'), style: 'cancel', onPress: () => { return true } },
+                        { text: Language.t('ConfirmLogout.ButtonAgree'), onPress: () => { BackHandler.exitApp(); return false } }
+                    ]
+                )
+                return true
+            }
+        }
+        else {
+            dispatch(NavigationActions.back());
+            this.props.navigation.goBack()
+            return true;
+        }
     }
 
     fetchListWallet = () => {
@@ -106,8 +143,8 @@ class Dashboard extends Component {
                     </View>
                     <View style={{ flex: 5 }}>
                         {
-                            DataToken.ListToken.length > 0 &&
-                            <ComponentToken InforToken={DataToken} status={status} />
+                            DataToken.ListToken.length > 0 && !status &&
+                            <ComponentToken InforToken={DataToken.ListToken} addressWL={DataToken.addressWL} network={DataToken.network} status={status} />
                         }
                     </View>
 

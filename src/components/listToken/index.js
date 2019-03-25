@@ -10,19 +10,33 @@ import { getBalanceToken } from '../../../redux/actions/slideWalletAction'
 class ListToken extends Component {
     Interval: any;
     intervaled: boolean = true;
+    componentWillUpdate() {
+        clearInterval(this.Interval)
+    }
+    componentDidUpdate() {
+        this.funcUpdateBalanceTK(this.props.InforToken, this.props.addressWL, this.props.network)
+    }
 
-    componentDidMount() {
-        const { InforToken } = this.props
+    componentWillMount() {
+        const { InforToken, addressWL, network } = this.props;
+        this.funcUpdateBalanceTK(InforToken, addressWL, network)
+    }
+
+    funcUpdateBalanceTK(ListToken: Array, addressWL, network) {
         this.Interval = setInterval(() => {
-            this.updateBalanceTK(InforToken.ListToken, InforToken.network, InforToken.addressWL)
+            ListToken.forEach(async (Token, i) => {
+                await this.props.getBalanceToken(Token.id, Token.addressToken, addressWL, network)
+            })
         }, 5000)
     }
 
-    async updateBalanceTK(ListToken: Array, network, addressWL) {
-        ListToken.forEach(async (Token, i) => {
-            await this.props.getBalanceToken(Token.id, Token.addressToken, addressWL, network)
-        })
-    }
+
+
+    // async updateBalanceTK(ListToken: Array, network, addressWL) {
+    //     ListToken.forEach(async (Token, i) => {
+    //         await this.props.getBalanceToken(Token.id, Token.addressToken, addressWL, network)
+    //     })
+    // }
 
     componentWillUnmount() {
         clearInterval(this.Interval)
@@ -33,7 +47,7 @@ class ListToken extends Component {
         if (!status) {
             return (
                 <FlatList
-                    data={InforToken.ListToken}
+                    data={InforToken}
                     keyExtractor={(item, index) => index.toString()}
                     style={{ paddingHorizontal: GLOBAL.wp('2%') }}
                     renderItem={({ item }) => {
@@ -95,6 +109,13 @@ const styles = StyleSheet.create({
         flex: 4
     }
 })
+
+// const mapStateToProps = state => {
+//     return {
+//         addressWL: state.getListToken.addressWL,
+//         network: state.getListToken.network
+//     }
+// }
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({ getBalanceToken }, dispatch)

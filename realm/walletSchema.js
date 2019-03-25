@@ -15,7 +15,7 @@ const ListWallet: object = {
         V3JSON: 'string',
         network: NETWORK,
         typeBackup: 'bool',
-        balance: 'int',
+        balance: 'double?',
     }
 }
 
@@ -36,7 +36,7 @@ const Token: object = {
         walletId: 'int',
         name: 'string',
         addressToken: 'string',
-        balance: 'int',
+        balance: 'double?',
         network: 'string',
         avatar: 'string',
         exchagerate: 'string',
@@ -48,7 +48,24 @@ const Token: object = {
 const databaseOption = {
     path: 'Nexty.realm',
     schema: [ListWallet, NetWork, Token],
-    schemaVersion: 1 // version of database
+    schemaVersion: 1, // version of database
+    migration: (oldRealm, newRealm) => {
+        if (oldRealm.schemaVersion < 1) {
+            const oldObject = oldRealm.objects(LISTWALLET);
+            const newObject = newRealm.objects(LISTWALLET);
+            for (let i = 0; i < array.length; i++) {
+                newObject[i].id = oldObject[i].id;
+                newObject[i].name = oldObject[i].name;
+                newObject[i].address = oldObject[i].address;
+                newObject[i].pk_en = oldObject[i].pk_en;
+                newObject[i].create = oldObject[i].create;
+                newObject[i].V3JSON = oldObject[i].V3JSON;
+                newObject[i].network = oldObject[i].network;
+                newObject[i].typeBackup = oldObject[i].typeBackup;
+                newObject[i].balance = oldObject[i].balance;
+            }
+        }
+    }
 }
 
 export const deleteDB = () => new Promise((resolve, reject) => {
@@ -59,6 +76,10 @@ export const deleteDB = () => new Promise((resolve, reject) => {
         reject(error)
     }
 })
+
+
+
+
 
 
 

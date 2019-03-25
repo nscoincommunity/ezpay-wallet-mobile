@@ -3,7 +3,7 @@ import { Text, View, Dimensions, StyleSheet, TouchableOpacity } from 'react-nati
 import Carousel, { ParallaxImage } from 'react-native-snap-carousel';
 import ItemEntry from './itemEntry';
 import { connect, } from 'react-redux';
-import { fetchRate, EventSnap, EventGetBalance, GetListToken } from '../../../redux/actions/slideWalletAction'
+import { fetchRate, EventSnap, EventGetBalance, GetListToken, getBalanceToken } from '../../../redux/actions/slideWalletAction'
 import { bindActionCreators } from 'redux'
 
 
@@ -54,7 +54,8 @@ class ListWallet extends Component {
     }
     _startSnap() {
         this.props.EventSnap(true);
-        clearInterval(this.Interval)
+        clearInterval(this.Interval);
+        clearInterval(this.IntervalTK);
     }
     _endSnap() {
         this.props.EventSnap(false)
@@ -103,8 +104,8 @@ class ListWallet extends Component {
                     // hasParallaxImages={true}
                     loop={true}
                     // onScroll={(pan) => { console.log('aaaa', pan) }}
-                    // onScrollBeginDrag={() => this._startSnap()}
-                    // onScrollEndDrag={() => this._endSnap()}
+                    onScrollBeginDrag={() => this._startSnap()}
+                    onScrollEndDrag={() => this._endSnap()}
                     slideStyle={{ paddingVertical: 8, flex: 1, }}
                     onResponderMove={this.onMove.bind(this)}
                 />
@@ -117,7 +118,7 @@ class ListWallet extends Component {
 //     return state
 // }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ fetchRate, EventSnap, EventGetBalance, GetListToken }, dispatch)
+    return bindActionCreators({ fetchRate, EventSnap, EventGetBalance, GetListToken, getBalanceToken }, dispatch)
 }
 
 export default connect(null, mapDispatchToProps)(ListWallet)

@@ -67,7 +67,7 @@ class EntryComponent extends Component {
                         paddingTop: GLOBAL.hp('2%')
                     }}>
                         <View >
-                            <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(4), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance : item.balance}</Text>
+                            <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(4), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance}</Text>
                             <Text style={[styles.textItem, { opacity: 0.7, marginBottom: GLOBAL.wp('12%') }]} >Total value</Text>
                         </View>
                         <View>
@@ -152,25 +152,6 @@ class EntryComponent extends Component {
                     style={[styles.ItemCarousel, Platform.OS == 'ios' ? onShadow.shadow : {}]}
                 >
                     {this._renderContent(StyleItem, item)}
-                    {/* <ImageBackground
-                        source={bg_Entry}
-                        style={{ flex: 1 }}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 5 }}
-                    >
-                        <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(5), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance : item.balance}</Text>
-                        <Text style={[styles.textItem, { opacity: 0.7, marginBottom: GLOBAL.wp('12%') }]} >Total value</Text>
-                        <Text style={[styles.textItem, { fontWeight: 'bold' }]}>{item.name}</Text>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('Backup', {
-                                payload: {
-                                    wallet: item
-                                }
-                            })}
-                        >
-                            <Text style={{ textAlign: 'right', color: colorBackup }}>{Language.t('Dashboard.CheckBackup')}</Text>
-                        </TouchableOpacity>
-                    </ImageBackground> */}
                 </TouchableOpacity >
             )
         }

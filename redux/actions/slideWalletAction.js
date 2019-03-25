@@ -161,9 +161,10 @@ const ActionUpdateBalanceTK = (bal) => {
  */
 export const getBalanceToken = (id, addressTK, addressWL, network) => dispatch => {
     return SV_UpdateBalanceTk(addressTK, network, addressWL).then(bal => {
-        return DB_UpdateBalanceTk(id, parseFloat(bal)).then(ss => {
-            return dispatch(ActionUpdateBalanceTK(bal))
-        })
+        return DB_UpdateBalanceTk(id, parseFloat(bal))
+            .then(ss => {
+                return dispatch(ActionUpdateBalanceTK(bal))
+            })
     })
 }
 
