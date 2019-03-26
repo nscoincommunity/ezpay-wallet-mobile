@@ -53,7 +53,7 @@ class TypeAddWallet extends Component {
             default:
                 navigate('SelectNetwork', {
                     payload: {
-                        type: 'restore'
+                        type: 'importWL'
                     }
                 })
                 break;
@@ -77,37 +77,39 @@ class TypeAddWallet extends Component {
                     style={{ marginTop: 23 }}
                     pressIconLeft={() => this.props.navigation.goBack()}
                 />
-
-                <FlatList
-                    contentContainerStyle={Platform.OS == 'android' ? { paddingHorizontal: GLOBAL.wp('2%') } : {}}
-                    data={arrayType}
-                    keyExtractor={(item, index) => index.toString()}
-                    style={{ padding: GLOBAL.wp('2%') }}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity
-                                style={styleBtn(item.highlight).buttonType}
-                                onPress={() => this.toScreen(item.type)}
-                            >
-                                <View style={{ flex: 6 }}>
-                                    <Text style={{
-                                        color: '#535353',
-                                        fontSize: GLOBAL.fontsize(4)
-                                    }}>{item.title}</Text>
-                                    <Text
-                                        style={{
-                                            color: '#979797',
-                                            fontSize: GLOBAL.fontsize(2)
-                                        }}
-                                    >{item.description}</Text>
-                                </View>
-                                <Image
-                                    source={item.icon}
-                                />
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
+                <View style={{ flex: 1, padding: GLOBAL.hp('2%') }}>
+                    <FlatList
+                        // contentContainerStyle={Platform.OS == 'android' ? { paddingHorizontal: GLOBAL.wp('0%') } : {}}
+                        data={arrayType}
+                        keyExtractor={(item, index) => index.toString()}
+                        // style={{ padding: GLOBAL.wp('2%') }}
+                        numColumns={1}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <TouchableOpacity
+                                    style={styleBtn(item.highlight).buttonType}
+                                    onPress={() => this.toScreen(item.type)}
+                                >
+                                    <View style={{ flex: 6 }}>
+                                        <Text style={{
+                                            color: '#535353',
+                                            fontSize: GLOBAL.fontsize(4)
+                                        }}>{item.title}</Text>
+                                        <Text
+                                            style={{
+                                                color: '#979797',
+                                                fontSize: GLOBAL.fontsize(2)
+                                            }}
+                                        >{item.description}</Text>
+                                    </View>
+                                    <Image
+                                        source={item.icon}
+                                    />
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                </View>
             </Gradient>
         )
     }

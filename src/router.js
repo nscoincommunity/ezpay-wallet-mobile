@@ -18,8 +18,9 @@ import { DeleteAllWallet, deleteDB } from '../realm/walletSchema';
 import Sidebar from "./sidebar";
 import GLOBALS from './helper/variables';
 import login from './pages/login/login';
-import unlogin from './pages/unlogin/unlogin';
+// import unlogin from './pages/unlogin/unlogin';
 import register from './pages/register/register';
+import importWL from './pages/restore/import';
 import restore from './pages/restore/restore';
 import Backup from './pages/backup/backup';
 import DetailHis from './pages/detail/detail';
@@ -35,7 +36,7 @@ import history from './pages/history/history';
 import About from './pages/about/about';
 import Addtoken from './pages/add-token/add-token';
 import redeem from './pages/redeem/redeem';
-import TabNavigator from './tabfooter';
+// import TabNavigator from './tabfooter';
 import Prk from './pages/private-key/private-key';
 import request from './pages/request/request';
 import Send from './pages/send/send';
@@ -161,6 +162,12 @@ class Router extends Component {
                     }
                 },
                 register: { screen: register },
+                importWL: {
+                    screen: importWL,
+                    navigationOptions: {
+                        header: () => null
+                    }
+                },
                 restore: {
                     screen: restore,
                     navigationOptions: {
@@ -240,6 +247,7 @@ class Router extends Component {
             },
             {
                 initialRouteName: this.props.register ? 'login' : 'register',
+                // headerMode: "none",
             },
         )
 

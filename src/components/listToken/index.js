@@ -14,12 +14,20 @@ class ListToken extends Component {
         clearInterval(this.Interval)
     }
     componentDidUpdate() {
+        this.UpdateBalanceTKFirst(this.props.InforToken, this.props.addressWL, this.props.network)
         this.funcUpdateBalanceTK(this.props.InforToken, this.props.addressWL, this.props.network)
     }
 
     componentWillMount() {
         const { InforToken, addressWL, network } = this.props;
+        this.UpdateBalanceTKFirst(InforToken, addressWL, network)
         this.funcUpdateBalanceTK(InforToken, addressWL, network)
+    }
+
+    UpdateBalanceTKFirst(ListToken: Array, addressWL, network) {
+        ListToken.forEach(async (Token, i) => {
+            await this.props.getBalanceToken(Token.id, Token.addressToken, addressWL, network)
+        })
     }
 
     funcUpdateBalanceTK(ListToken: Array, addressWL, network) {
@@ -27,16 +35,8 @@ class ListToken extends Component {
             ListToken.forEach(async (Token, i) => {
                 await this.props.getBalanceToken(Token.id, Token.addressToken, addressWL, network)
             })
-        }, 5000)
+        }, 7000)
     }
-
-
-
-    // async updateBalanceTK(ListToken: Array, network, addressWL) {
-    //     ListToken.forEach(async (Token, i) => {
-    //         await this.props.getBalanceToken(Token.id, Token.addressToken, addressWL, network)
-    //     })
-    // }
 
     componentWillUnmount() {
         clearInterval(this.Interval)
@@ -110,12 +110,6 @@ const styles = StyleSheet.create({
     }
 })
 
-// const mapStateToProps = state => {
-//     return {
-//         addressWL: state.getListToken.addressWL,
-//         network: state.getListToken.network
-//     }
-// }
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({ getBalanceToken }, dispatch)

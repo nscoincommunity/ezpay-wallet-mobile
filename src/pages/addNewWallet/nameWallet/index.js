@@ -32,6 +32,7 @@ class NameWallet extends Component {
             CreateNewWallet(this.state.passcode, this.state.InputName, this.props.navigation.getParam('payload').network)
                 .then(async (ss) => {
                     await this.props.fetchAllWallet();
+                    await this.props.fetchAllWallet();
                     await this.props.navigation.dispatch(StackActions.reset({
                         index: 0,
                         actions: [
@@ -51,6 +52,7 @@ class NameWallet extends Component {
                 this.state.InputName,
                 payload.network
             ).then(async (ss) => {
+                await this.props.fetchAllWallet();
                 await this.props.fetchAllWallet();
                 await this.props.navigation.dispatch(StackActions.reset({
                     index: 0,

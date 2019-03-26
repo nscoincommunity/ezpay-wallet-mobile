@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ROUTER from "./src/router";
 import './global';
-import { exChange } from './src/tabfooter'
+// import { exChange } from './src/tabfooter'
 import { DeviceLanguage, selectLang } from './src/i18n/i18n';
 import { getData, setData } from './src/services/data.service';
 import { getExchangeRate } from './src/services/rate.service';

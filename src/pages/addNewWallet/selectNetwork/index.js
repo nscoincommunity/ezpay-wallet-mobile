@@ -82,9 +82,17 @@ class SelectNetwork extends Component {
                 break;
             case 'changeNetwork':
                 this.setState({ dialogVisible: true, NetworkSL: network })
-                break
-            default:
+                break;
+            case 'restore':
                 navigate('restore', {
+                    payload: {
+                        type: type,
+                        network: network
+                    }
+                })
+                break;
+            default:
+                navigate('importWL', {
                     payload: {
                         type: type,
                         network: network

@@ -15,7 +15,12 @@ export class ItemToken extends Component {
                     <Avatar
                         size="medium"
                         rounded
-                        title={item.name}
+                        // title={item.name}
+                        overlayContainerStyle={{
+                            backgroundColor: 'transparent',
+                            borderWidth: 1,
+                            borderColor: '#979797',
+                        }}
                     />
                 </View>
                 <View style={styles.info_coi}>

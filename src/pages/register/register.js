@@ -55,13 +55,13 @@ class ScreenRegister extends Component {
                     balance: 0,
                     network: 'nexty',
                     avatar: '',
-                    exchagerate: '',
-                    change: ''
+                    exchagerate: '0',
+                    change: '0'
 
                 }
                 InsertNewToken(Token).then(() => {
                     this.setState({ loading: false });
-                    const { navigate } = this.props.data.navigation;
+                    const { navigate } = this.props.navigation;
                     navigate('Dashboard');
                 }).catch(e => this.setState({ loading: false }))
 
@@ -161,7 +161,8 @@ class ScreenRegister extends Component {
                 </View>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorCPw}</Text>
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={this.register.bind(this)} disabled={this.state.typeButton}>
+                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button}
+                        onPress={this.register.bind(this)} disabled={this.state.typeButton}>
                         <Gradient
                             colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
                             start={{ x: 1, y: 0.7 }}
@@ -170,6 +171,18 @@ class ScreenRegister extends Component {
                         >
                             <Text style={style.TextButton}>{Lang.t("Register.TitleButton")}</Text>
                         </Gradient>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('SelectNetwork', {
+                            payload: {
+                                type: 'restore'
+                            }
+                        })}
+                        style={{ marginVertical: GLOBALS.hp('4%') }}
+                    >
+                        <Text style={{ fontFamily: GLOBALS.font.Poppins, textAlign: 'center' }}>Or <Text style={{ color: GLOBALS.Color.primary, fontWeight: 'bold' }}>import exist wallet</Text></Text>
                     </TouchableOpacity>
                 </View>
                 {
@@ -211,7 +224,7 @@ export default class register extends Component {
         return (
             <ScrollView style={{ backgroundColor: '#fff' }}>
                 <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={hp('14%')} enabled>
-                    <ScreenRegister data={this.props}></ScreenRegister>
+                    <ScreenRegister {...this.props}></ScreenRegister>
                 </KeyboardAvoidingView>
             </ScrollView>
         );
@@ -229,8 +242,8 @@ var styleButton = (color, type) => StyleSheet.create({
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.64,
-        shadowRadius: 2.27,
+        shadowOpacity: 0.24,
+        shadowRadius: 0.77,
         elevation: 7,
     }
 })
