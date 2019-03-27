@@ -38,28 +38,12 @@ export default class Addtoken extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
-                {/* <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0, borderBottomColor: '#fff' }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => { this.props.navigation.goBack(); Keyboard.dismiss() }}
-                        >
-                            <IconFeather name="arrow-left" color={GLOBALS.Color.primary} size={25} />
-                        </Button>
-                    </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('AddToken.Title')}</Title>
-                    </Body>
-                    <Right>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.navigate('ListToken', { payload: { network: this.props.navigation.getParam('payload').network } })}
-                        >
-                            <Icon name="list-alt" color={GLOBALS.Color.primary} size={25} />
-                        </Button>
-                    </Right>
-                </Header> */}
+            <Gradient
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ flex: 1 }}
+            >
                 <Header
                     backgroundColor="transparent"
                     colorIconLeft="#328FFC"
@@ -73,12 +57,12 @@ export default class Addtoken extends Component {
                     pressIconRight={() => this.props.navigation.navigate('ListToken', { payload: { network: this.props.navigation.getParam('payload').network } })}
                 />
 
-                <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
+                <ScrollView style={{ flex: 1, backgroundColor: 'transparent' }} contentContainerStyle={{ flex: 1 }}>
                     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={Platform.OS == "ios" ? 0 : GLOBALS.hp('-30%')} enabled style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
                         <FormAddToken {...this.props} />
                     </KeyboardAvoidingView>
                 </ScrollView>
-            </View>
+            </Gradient>
         )
     }
 }
@@ -239,10 +223,8 @@ class FormAddToken extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // padding: GLOBALS.hp('4%'),
-        // paddingTop: GLOBALS.hp('10%'),
         padding: GLOBALS.hp('2%'),
-        backgroundColor: '#fafafa',
+        backgroundColor: 'transparent',
     },
     MainForm: {
         flex: 1,

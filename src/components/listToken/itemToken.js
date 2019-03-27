@@ -42,12 +42,12 @@ export class ItemToken extends Component {
                         color: '#979797',
                         textAlign: 'center',
                         fontWeight: 'bold'
-                    }}>{this.props.balance == NaN ? this.props.balance : item.balance}</Text>
+                    }}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance}</Text>
                     <Text style={{
                         flex: 6,
                         color: '#7ED321',
                         textAlign: 'center'
-                    }}>{item.change}</Text>
+                    }}>{item.change}%</Text>
                 </View>
             </View>
         )

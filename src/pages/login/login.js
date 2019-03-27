@@ -17,8 +17,9 @@ import {
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { StackNavigator } from 'react-navigation';
-import { initAuth, Address, isAuth, Login, LoginTouchID, Login2 } from '../../services/auth.service'
-import { getData, check_Registered, registered } from '../../services/data.service'
+import { initAuth, Address, isAuth, Login, LoginTouchID, Login2 } from '../../services/auth.service';
+import { getData, check_Registered, registered } from '../../services/data.service';
+import { LoginWithFinger } from '../../services/auth.service'
 import Lang from '../../i18n/i18n';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
@@ -50,16 +51,17 @@ class ScreenLogin extends Component {
 
 
     componentDidMount() {
-        Login2('123456')
-            .then(status => {
-                this.setState({ loading: false })
-                console.log(status)
-                const { navigate } = this.props.navigation;
-                navigate('Dashboard');
-            }).catch(err => {
-                console.log(err)
-                this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
-            })
+        // Login2('123456')
+        //     .then(status => {
+        //         this.setState({ loading: false })
+        //         console.log(status)
+        //         const { navigate } = this.props.navigation;
+        //         navigate('Dashboard');
+        //     }).catch(err => {
+        //         console.log(err)
+        //         this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
+        //     })
+        this.LoginwithFingerprint()
     }
 
     LoginNTY() {
@@ -85,20 +87,6 @@ class ScreenLogin extends Component {
         }
     }
 
-    // async checkAddress(val) {
-    //     await this.setState({ TextError: '' });
-    //     if (val.length < 1) {
-    //         await this.setState({ Address: '', ErrorAddress: true, TextErrorAddress: Lang.t('Login.InvalidAddress'), typeButton: true });
-    //     } else {
-    //         await this.setState({ Address: val, ErrorAddress: false, TextErrorAddress: '', typeButton: false })
-    //     }
-    //     if (this.state.Password == '' || this.state.ErrorPwd == true) {
-    //         await this.setState({ typeButton: true });
-    //     } else {
-    //         await this.setState({ typeButton: true });
-    //     }
-
-    // }
     handleKeyDown(e) {
         console.log(e.nativeEvent)
         if (e.nativeEvent.key == "Enter") {
@@ -112,37 +100,22 @@ class ScreenLogin extends Component {
     inputs = {};
 
     LoginwithFingerprint() {
-        initAuth().then(() => {
-            if (Address) {
-                getData('TouchID').then(check => {
-                    if (check != null) {
-                        let options = {
-                            title: "Nexty wallet", // Android
-                            sensorDescription: Lang.t("TouchID.Options.sensorDescription"), // Android
-                            sensorErrorDescription: Lang.t("TouchID.Options.sensorErrorDescription"), // Android
-                            cancelText: Lang.t("TouchID.Options.cancelText"), // Android
-                            fallbackLabel: "", // iOS (if empty, then label is hidden)
-                        }
-                        var reason = Lang.t("TouchID.Options.reason")
-                        TouchID.authenticate(reason, options).then(success => {
-                            registered(true)
-                            const { navigate } = this.props.navigation;
-                            navigate('Dashboard');
-                        })
-                    } else {
-                        Alert.alert(
-                            Lang.t('Restore.Error'),
-                            Lang.t('Login.Error.AccessTouchID'),
-                            [{ text: 'Ok', style: 'cancel' }]
-                        )
-                    }
+        getData('TouchID').then(check => {
+            if (check != null) {
+                let options = {
+                    title: "Nexty wallet", // Android
+                    sensorDescription: Lang.t("TouchID.Options.sensorDescription"), // Android
+                    sensorErrorDescription: Lang.t("TouchID.Options.sensorErrorDescription"), // Android
+                    cancelText: Lang.t("TouchID.Options.cancelText"), // Android
+                    fallbackLabel: "", // iOS (if empty, then label is hidden)
+                }
+                var reason = Lang.t("TouchID.Options.reason")
+                TouchID.authenticate(reason, options).then(success => {
+                    // registered(true)
+                    LoginWithFinger(check);
+                    const { navigate } = this.props.navigation;
+                    navigate('Dashboard');
                 })
-            } else {
-                Alert.alert(
-                    Lang.t('Restore.Error'),
-                    Lang.t('Login.Error.CreateWallet'),
-                    [{ text: 'Ok', style: 'cancel' }]
-                )
             }
         })
     }
@@ -152,28 +125,6 @@ class ScreenLogin extends Component {
         return (
             <View style={{ flex: 1 }} >
                 <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('7%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Login.Title")}</Text>
-                {/* <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text> */}
-                {/* <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                    marginTop: hp('25%')
-                }}>
-                    <TextInput
-                        placeholder={Lang.t('Login.PHAddress')}
-                        onChangeText={(val) => this.checkAddress(val)}
-                        value={this.state.Address}
-                        returnKeyType={"next"}
-                        blurOnSubmit={false}
-                        onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 9, fontSize: hp('2.5%') }}
-                        underlineColorAndroid="transparent"
-                    />
-                    <Image source={require('../../images/icon/wallet.png')} style={{ flex: 1 }} resizeMode="contain" />
-                </View> */}
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
                 <View style={{
                     justifyContent: 'center',
@@ -216,30 +167,6 @@ class ScreenLogin extends Component {
                         </Gradient>
                     </TouchableOpacity>
                 </View>
-                {/* <TouchableOpacity
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginVertical: GLOBALS.hp('3%')
-                    }}
-                    onPress={() => this.LoginwithFingerprint()}
-                >
-                    <View style={{ flex: 1.5, alignItems: 'flex-end' }}>
-                        <Image
-                            source={require('../../images/icon/touch-icon.png')}
-                            resizeMode={'contain'}
-                        />
-                    </View>
-                    <Text
-                        style={{
-                            flex: 8.5,
-                            fontFamily: GLOBALS.font.Poppins,
-                            fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'),
-                            textAlign: 'center',
-                        }}>{Lang.t('TouchID.Login')}</Text>
-                </TouchableOpacity> */}
-
                 {
                     this.state.loading ?
                         <Modal
@@ -260,22 +187,6 @@ class ScreenLogin extends Component {
 }
 
 export default class login extends Component {
-    static navigationOptions = () => ({
-        // title: Lang.t('Login.Title'),
-        headerStyle: {
-            backgroundColor: '#fff',
-            borderBottomWidth: 0,
-            elevation: 0
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerBackTitleStyle: {
-            color: '#0C449A'
-        },
-        headerTintColor: '#0C449A',
-    });
-
     render() {
         return (
             <ScrollView style={{ backgroundColor: '#fff' }}>

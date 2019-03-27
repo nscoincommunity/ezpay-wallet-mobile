@@ -9,26 +9,17 @@ import {
     Text,
     Image,
     Modal,
-    ActivityIndicator
+    ActivityIndicator,
+    StatusBar
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { POSTAPI } from '../../helper/utils'
-import {
-    Container,
-    Header,
-    Title,
-    Button,
-    Left,
-    Right,
-    Body,
-    Spinner,
-} from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Language from '../../i18n/i18n'
 import IconFeather from "react-native-vector-icons/Feather"
 import { HandleCoupon } from './redeem.service';
 import Gradient from 'react-native-linear-gradient';
-
+import Header from '../../components/header';
 
 export default class Redeem extends Component {
 
@@ -104,33 +95,31 @@ export default class Redeem extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: "#fafafa" }}>
-                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.openDrawer()}
-                        >
-                            <IconFeather type="FontAwesome" name="align-left" style={{ color: GLOBALS.Color.primary, fontSize: 25 }} />
-                        </Button>
-                    </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('Redeem.Title')}</Title>
-                    </Body>
-                    <Right />
-                </Header>
+            <Gradient
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.container}>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="align-left"
+                    title={Language.t('Redeem.Title')}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => { this.props.navigation.goBack(); }}
+                />
 
-                <View style={styles.container}>
+                <View style={[styles.container, { flexDirection: 'row', padding: GLOBALS.hp('2%'), }]}>
                     <View style={styles.boxRedeem}>
                         <View style={styles.firstView} />
                         {
                             this.state.loadding &&
-                            // <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(155, 155, 155, 0.63)', height: GLOBALS.HEIGHT, width: GLOBALS.WIDTH }} >
-                            //     <View style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 7 }}>
-                            //         <Spinner color={GLOBALS.Color.primary} />
-                            //         <Text>{Language.t('Redeem.OpenCam')}</Text>
-                            //     </View>
-                            // </View>
                             <Modal
                                 animationType='fade'
                                 transparent={true}
@@ -205,7 +194,7 @@ export default class Redeem extends Component {
                         }
                     </View>
                 </View>
-            </Container >
+            </Gradient >
         )
     }
 }
@@ -213,8 +202,6 @@ export default class Redeem extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: GLOBALS.hp('2%'),
-        flexDirection: 'row',
     },
     boxRedeem: {
         flex: 1,

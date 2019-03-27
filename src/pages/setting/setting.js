@@ -247,8 +247,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     row: {
-        borderLeftWidth: Platform.OS == 'ios' ? 0 : 0.2,
-        borderRightWidth: Platform.OS == 'ios' ? 0 : 0.2,
+        // borderLeftWidth: Platform.OS == 'ios' ? 0 : 0.2,
+        // borderRightWidth: Platform.OS == 'ios' ? 0 : 0.2,
         borderColor: '#c1bfbf',
         paddingVertical: GLOBALS.hp('3%'),
         paddingHorizontal: GLOBALS.hp('4%'),
@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
         shadowRadius: 2.27,
         elevation: 2,
         borderRadius: 10,
+        margin: Platform.OS == 'android' ? GLOBALS.wp('1%') : 'auto',
     }
 })
 const mapStateToProps = state => {

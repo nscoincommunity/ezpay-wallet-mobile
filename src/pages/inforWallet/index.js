@@ -85,11 +85,11 @@ export default class InforWallet extends Component {
                     style={{ paddingTop: getStatusBarHeight() }}
                     pressIconLeft={() => { this.props.navigation.goBack(); }}
                 />
-                <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column', paddingVertical: GLOBAL.hp('2%'), alignItems: 'center' }}>
+                <View style={styles.body}>
                     <View style={{ flex: 1 }}>
                         <Text style={{ textAlign: 'center' }} numberOfLines={1} ellipsizeMode="middle" >{item.address}</Text>
                     </View>
-                    <View style={{ flex: 6 }}>
+                    <View style={{ flex: 5, }}>
                         <TouchableOpacity
                             style={{
                                 justifyContent: 'center',
@@ -102,6 +102,7 @@ export default class InforWallet extends Component {
                                 style={{ padding: GLOBAL.wp('6%') }}
                                 resizeMode="contain"
                             >
+                                {/* <BarcodeFinder width={GLOBAL.wp('70%')} height={GLOBAL.wp('70%')} borderColor="#328FFC" borderWidth={3} /> */}
                                 {
                                     Platform.OS == 'android' ?
                                         <QRCodeAndroid
@@ -118,14 +119,14 @@ export default class InforWallet extends Component {
                                             backgroundColor='transparent'
                                             logo={logo_net}
                                             logoSize={GLOBAL.wp('20%')}
+                                            size={GLOBAL.wp('60%')}
                                         />
                                 }
-
                             </ImageBackground>
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{ flex: 3 }}>
+                    <View style={{ flex: 4, }}>
                         <TouchableOpacity
                             style={styles.buttonShare}
                             onPress={() => this._getPrivatekey(item.pk_en)}
@@ -165,6 +166,19 @@ export default class InforWallet extends Component {
                                 <Text style={{ textAlign: 'center', color: '#fff' }}>Share</Text>
                             </Gradient>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.buttonShare}
+                            onPress={() => Share.share({ message: item.address })}
+                        >
+                            <Gradient
+                                style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5 }}
+                                colors={['#F34C4C', '#C80000']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 0 }}
+                            >
+                                <Text style={{ textAlign: 'center', color: '#fff' }}>Remove wallet</Text>
+                            </Gradient>
+                        </TouchableOpacity>
                     </View>
                     <CustomToast ref="toastBottom" position="bottom" />
                 </View>
@@ -176,6 +190,13 @@ export default class InforWallet extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    body: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        flexDirection: 'column',
+        paddingVertical: GLOBAL.hp('2%'),
+        alignItems: 'center'
     },
     buttonShare: {
         shadowColor: "#000",
@@ -189,3 +210,110 @@ const styles = StyleSheet.create({
         marginVertical: GLOBAL.hp('1%'),
     }
 })
+
+export class BarcodeFinder extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    getSizeStyles() {
+        return {
+            width: this.props.width,
+            height: this.props.height
+        };
+    }
+
+    render() {
+        return (
+            <View style={[stylesQR.container]}>
+                <View style={[stylesQR.finder, this.getSizeStyles()]}>
+                    <View
+                        style={[
+                            { borderColor: this.props.borderColor },
+                            stylesQR.topLeftEdge,
+                            {
+                                borderLeftWidth: this.props.borderWidth,
+                                borderTopWidth: this.props.borderWidth
+                            }
+                        ]}
+                    />
+                    <View
+                        style={[
+                            { borderColor: this.props.borderColor },
+                            stylesQR.topRightEdge,
+                            {
+                                borderRightWidth: this.props.borderWidth,
+                                borderTopWidth: this.props.borderWidth
+                            }
+                        ]}
+                    />
+                    <View
+                        style={[
+                            { borderColor: this.props.borderColor },
+                            stylesQR.bottomLeftEdge,
+                            {
+                                borderLeftWidth: this.props.borderWidth,
+                                borderBottomWidth: this.props.borderWidth
+                            }
+                        ]}
+                    />
+                    <View
+                        style={[
+                            { borderColor: this.props.borderColor },
+                            stylesQR.bottomRightEdge,
+                            {
+                                borderRightWidth: this.props.borderWidth,
+                                borderBottomWidth: this.props.borderWidth
+                            }
+                        ]}
+                    />
+                </View>
+            </View>
+        );
+    }
+}
+var stylesQR = StyleSheet.create({
+    container: {
+        alignItems: "center",
+        justifyContent: "center",
+        position: "absolute",
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        backgroundColor: 'transparent'
+    },
+    finder: {
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: 'transparent'
+    },
+    topLeftEdge: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: 40,
+        height: 40
+    },
+    topRightEdge: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        width: 40,
+        height: 40
+    },
+    bottomLeftEdge: {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        width: 40,
+        height: 40
+    },
+    bottomRightEdge: {
+        position: "absolute",
+        bottom: 0,
+        right: 0,
+        width: 40,
+        height: 40
+    }
+});

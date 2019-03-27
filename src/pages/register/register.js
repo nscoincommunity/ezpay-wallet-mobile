@@ -204,26 +204,10 @@ class ScreenRegister extends Component {
 
 }
 export default class register extends Component {
-    static navigationOptions = () => ({
-        // title: Lang.t('Login.Title'),
-        headerStyle: {
-            backgroundColor: '#fff',
-            borderBottomWidth: 0,
-            elevation: 0
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerBackTitleStyle: {
-            color: '#0C449A'
-        },
-        headerTintColor: '#0C449A',
-    });
-
     render() {
         return (
             <ScrollView style={{ backgroundColor: '#fff' }}>
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={hp('14%')} enabled>
+                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={hp('10%')} enabled>
                     <ScreenRegister {...this.props}></ScreenRegister>
                 </KeyboardAvoidingView>
             </ScrollView>

@@ -79,11 +79,12 @@ class TypeAddWallet extends Component {
                 />
                 <View style={{ flex: 1, padding: GLOBAL.hp('2%') }}>
                     <FlatList
-                        // contentContainerStyle={Platform.OS == 'android' ? { paddingHorizontal: GLOBAL.wp('0%') } : {}}
+                        // contentContainerStyle={Platform.OS == 'android' ? { paddingHorizontal: GLOBAL.wp('5%') } : {}}
+
                         data={arrayType}
                         keyExtractor={(item, index) => index.toString()}
                         // style={{ padding: GLOBAL.wp('2%') }}
-                        numColumns={1}
+                        // numColumns={}
                         renderItem={({ item, index }) => {
                             return (
                                 <TouchableOpacity
@@ -136,6 +137,7 @@ const styleBtn = (type) => StyleSheet.create({
         shadowRadius: 1.27,
         elevation: 3,
         flexDirection: 'row',
+        margin: Platform.OS == 'android' ? GLOBAL.wp('1%') : 'auto',
         paddingVertical: GLOBAL.wp('7%'),
     }
 })

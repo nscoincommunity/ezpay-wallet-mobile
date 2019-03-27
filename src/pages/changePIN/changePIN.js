@@ -7,13 +7,16 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     StyleSheet,
-    Platform
+    Platform,
+    StatusBar
 } from 'react-native';
 import Language from '../../i18n/i18n';
 import Gradient from 'react-native-linear-gradient';
 import GLOBAL from '../../helper/variables';
 import { changePasscode } from '../../services/auth.service'
 import DiaLog from "../../components/Modal"
+import Header from '../../components/header';
+import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper'
 
 export default class ChangePIN extends Component {
     initState = {
@@ -32,21 +35,21 @@ export default class ChangePIN extends Component {
         super(props)
         this.state = this.initState
     }
-    static navigationOptions = () => ({
-        // title: Language.t('Settings.ChangePIN'),
-        headerStyle: {
-            backgroundColor: '#fff',
-            borderBottomWidth: 0,
-            elevation: 0
-        },
-        headerTitleStyle: {
-            color: '#0C449A',
-        },
-        headerBackTitleStyle: {
-            color: '#0C449A'
-        },
-        headerTintColor: '#0C449A',
-    });
+    // static navigationOptions = () => ({
+    //     // title: Language.t('Settings.ChangePIN'),
+    //     headerStyle: {
+    //         backgroundColor: '#fff',
+    //         borderBottomWidth: 0,
+    //         elevation: 0
+    //     },
+    //     headerTitleStyle: {
+    //         color: '#0C449A',
+    //     },
+    //     headerBackTitleStyle: {
+    //         color: '#0C449A'
+    //     },
+    //     headerTintColor: '#0C449A',
+    // });
     focusTheField = (id) => {
         this.inputs[id].focus();
     }
@@ -115,99 +118,116 @@ export default class ChangePIN extends Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff' }} contentContainerStyle={{ flexGrow: 1 }}>
-                <KeyboardAvoidingView style={{ flex: 1, padding: GLOBAL.hp('2%'), paddingVertical: GLOBAL.hp('5%') }} behavior="position" enabled contentContainerStyle={{ flexGrow: 1 }} >
-                    <View style={Styles.container} >
+            <Gradient
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ flex: 1 }}>
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title=''
+                    style={{ paddingTop: getStatusBarHeight() }}
+                    pressIconLeft={() => { this.props.navigation.goBack(); }}
+                />
+                <ScrollView style={{ backgroundColor: 'transparent' }} contentContainerStyle={{ flexGrow: 1 }}>
+                    <KeyboardAvoidingView style={{ flex: 1, padding: GLOBAL.hp('2%'), paddingVertical: GLOBAL.hp('5%') }} behavior="position" enabled contentContainerStyle={{ flexGrow: 1 }} >
+                        <View style={Styles.container} >
 
-                        <Text style={{
-                            fontSize: GLOBAL.hp('4%'),
-                            fontWeight: '400',
-                            color: '#444444',
-                            fontFamily: GLOBAL.font.Poppins
-                        }}>{Language.t('ChangePIN.Title')}</Text>
-                        <View style={{
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderBottomWidth: 1,
-                            borderBottomColor: '#AAAAAA',
-                            paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
-                            marginTop: GLOBAL.hp('20%')
-                        }}>
-                            <TextInput
-                                placeholder={Language.t("ChangePIN.PlaceholderOld")}
-                                secureTextEntry={true}
-                                onChangeText={(value) => { this.validateOldPass(value) }}
-                                returnKeyType={"next"}
-                                blurOnSubmit={false}
-                                onSubmitEditing={() => { this.focusTheField('field2'); }}
-                                style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
-                                underlineColorAndroid="transparent"
-                                value={this.state.passcodeOld}
-                            />
+                            <Text style={{
+                                fontSize: GLOBAL.hp('4%'),
+                                fontWeight: '400',
+                                color: '#444444',
+                                fontFamily: GLOBAL.font.Poppins
+                            }}>{Language.t('ChangePIN.Title')}</Text>
+                            <View style={{
+                                justifyContent: 'center',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#AAAAAA',
+                                paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
+                                marginTop: GLOBAL.hp('20%')
+                            }}>
+                                <TextInput
+                                    placeholder={Language.t("ChangePIN.PlaceholderOld")}
+                                    secureTextEntry={true}
+                                    onChangeText={(value) => { this.validateOldPass(value) }}
+                                    returnKeyType={"next"}
+                                    blurOnSubmit={false}
+                                    onSubmitEditing={() => { this.focusTheField('field2'); }}
+                                    style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
+                                    underlineColorAndroid="transparent"
+                                    value={this.state.passcodeOld}
+                                />
+                            </View>
+                            <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcOld}</Text>
+                            <View style={{
+                                justifyContent: 'center',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#AAAAAA',
+                                paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
+                            }}>
+                                <TextInput
+                                    placeholder={Language.t("ChangePIN.PlaceholderNewPasscode")}
+                                    secureTextEntry={true}
+                                    onChangeText={(value) => { this.validateNewPass(value) }}
+                                    returnKeyType={"next"}
+                                    blurOnSubmit={false}
+                                    ref={input => { this.inputs['field2'] = input }}
+                                    onSubmitEditing={() => { this.focusTheField('field3'); }}
+                                    style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
+                                    underlineColorAndroid="transparent"
+                                    value={this.state.passcodeNew}
+                                />
+                            </View>
+                            <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcNew}</Text>
+                            <View style={{
+                                justifyContent: 'center',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#AAAAAA',
+                                paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
+                            }}>
+                                <TextInput
+                                    placeholder={Language.t("ChangePIN.PlaceholderConfirmNew")}
+                                    secureTextEntry={true}
+                                    onChangeText={(value) => { this.validateConfirmPass(value) }}
+                                    ref={input => { this.inputs['field3'] = input }}
+                                    returnKeyType={'done'}
+                                    onSubmitEditing={() => {
+                                        if (this.state.typeButton == false) {
+                                            this.changePasscode()
+                                        }
+                                    }}
+                                    style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
+                                    underlineColorAndroid="transparent"
+                                    value={this.state.passcodeNewConfirm}
+                                />
+                            </View>
+                            <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcnewConfirm}</Text>
+                            <View style={{ paddingHorizontal: GLOBAL.wp('10%') }}>
+                                <TouchableOpacity onPress={() => { this.changePasscode() }} style={Styles.button} disabled={this.state.typeButton}>
+                                    <Gradient
+                                        colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#08AEEA', '#328FFC']}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 0 }}
+                                        style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5 }}
+                                    >
+                                        <Text style={Styles.TextButton}>{Language.t("Restore.TitleButton")}</Text>
+                                    </Gradient>
+                                </TouchableOpacity>
+                            </View>
+                            <DiaLog ref="ShowDialog" />
                         </View>
-                        <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcOld}</Text>
-                        <View style={{
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderBottomWidth: 1,
-                            borderBottomColor: '#AAAAAA',
-                            paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
-                        }}>
-                            <TextInput
-                                placeholder={Language.t("ChangePIN.PlaceholderNewPasscode")}
-                                secureTextEntry={true}
-                                onChangeText={(value) => { this.validateNewPass(value) }}
-                                returnKeyType={"next"}
-                                blurOnSubmit={false}
-                                ref={input => { this.inputs['field2'] = input }}
-                                onSubmitEditing={() => { this.focusTheField('field3'); }}
-                                style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
-                                underlineColorAndroid="transparent"
-                                value={this.state.passcodeNew}
-                            />
-                        </View>
-                        <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcNew}</Text>
-                        <View style={{
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderBottomWidth: 1,
-                            borderBottomColor: '#AAAAAA',
-                            paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
-                        }}>
-                            <TextInput
-                                placeholder={Language.t("ChangePIN.PlaceholderConfirmNew")}
-                                secureTextEntry={true}
-                                onChangeText={(value) => { this.validateConfirmPass(value) }}
-                                ref={input => { this.inputs['field3'] = input }}
-                                returnKeyType={'done'}
-                                onSubmitEditing={() => {
-                                    if (this.state.typeButton == false) {
-                                        this.changePasscode()
-                                    }
-                                }}
-                                style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
-                                underlineColorAndroid="transparent"
-                                value={this.state.passcodeNewConfirm}
-                            />
-                        </View>
-                        <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcnewConfirm}</Text>
-                        <TouchableOpacity onPress={() => { this.changePasscode() }} style={Styles.button} disabled={this.state.typeButton}>
-                            <Gradient
-                                colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
-                                start={{ x: 1, y: 0.7 }}
-                                end={{ x: 0, y: 3 }}
-                                style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5 }}
-                            >
-                                <Text style={Styles.TextButton}>{Language.t("Restore.TitleButton")}</Text>
-                            </Gradient>
-                        </TouchableOpacity>
-                        <DiaLog ref="ShowDialog" />
-                    </View>
-                </KeyboardAvoidingView>
-            </ScrollView>
+                    </KeyboardAvoidingView>
+                </ScrollView>
+            </Gradient>
         )
     }
 }
@@ -236,8 +256,8 @@ const Styles = StyleSheet.create({
             height: 0,
         },
         shadowOpacity: 0.64,
-        shadowRadius: 2.27,
-        elevation: 7,
+        shadowRadius: 0.47,
+        elevation: 3,
         marginVertical: GLOBAL.hp('2%'),
     },
     TextButton: {

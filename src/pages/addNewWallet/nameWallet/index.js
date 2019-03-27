@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, StatusBar, TextInput, TouchableOpacity, FlatList, ScrollView, KeyboardAvoidingView } from 'react-native';
+import {
+    Text,
+    View,
+    StyleSheet,
+    StatusBar,
+    TextInput,
+    TouchableOpacity,
+    FlatList,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform
+} from 'react-native';
 import Header from '../../../components/header';
 import GLOBAL from '../../../helper/variables';
 import { connect } from 'react-redux';
@@ -273,7 +284,8 @@ const styles = StyleSheet.create({
         shadowRadius: 2.27,
         elevation: 2,
         marginVertical: 10,
-        padding: GLOBAL.wp('5%')
+        padding: GLOBAL.wp('5%'),
+        margin: Platform.OS == 'android' ? GLOBAL.wp('1%') : 'auto',
     }
 })
 

@@ -63,9 +63,9 @@ class FormSend extends Component {
         titleDialog: '',
         contentDialog: '',
         ListToken: [],
-        viewSymbol: this.props.MainCoin,
+        viewSymbol: this.props.Symbol,
         tokenSelected: {},
-        selected: this.props.MainCoin,
+        selected: this.props.Symbol,
         extraData: '',
         editAddress: true,
         editNTY: true,
@@ -176,7 +176,7 @@ class FormSend extends Component {
         } else {
 
             switch (this.state.viewSymbol) {
-                case this.props.MainCoin:
+                case this.props.Symbol:
                     var usd = await Utils.round(val * this.props.rate, 5);
                     break;
                 default:
@@ -201,7 +201,7 @@ class FormSend extends Component {
             await this.setState({ USD: '', errorNTY: true, TextErrorNTY: Language.t('Send.ValidAmount'), VisibaleButton: true, NTY: '' })
         } else {
             switch (this.state.viewSymbol) {
-                case this.props.MainCoin:
+                case this.props.Symbol:
                     var nty = await Utils.round(val / this.props.rate);
                     await this.setState({ errorNTY: false, NTY: nty.toString(), USD: value })
                     break;
@@ -234,9 +234,9 @@ class FormSend extends Component {
                     console.log('chay vao day')
                     return;
                 }
-                if (this.state.viewSymbol == this.props.MainCoin) {
+                if (this.state.viewSymbol == this.props.Symbol) {
                     SendService(
-                        this.props.DataToken.MainCoin,
+                        this.props.DataToken.network,
                         this.state.addresswallet,
                         this.props.DataToken.addressWL,
                         parseFloat(this.state.NTY),
@@ -265,7 +265,7 @@ class FormSend extends Component {
                     })
                 } else {
                     SendToken(
-                        this.props.DataToken.MainCoin,
+                        this.props.DataToken.network,
                         this.state.tokenSelected.addressToken,
                         this.state.addresswallet,
                         this.props.DataToken.addressWL,
@@ -344,9 +344,9 @@ class FormSend extends Component {
     inputs = {};
 
     selectToken = (token) => {
-        console.log(token, this.props.MainCoin)
+        console.log(token, this.props.Symbol)
         switch (token.name) {
-            case this.props.MainCoin:
+            case this.props.Symbol:
                 if (parseFloat(this.state.NTY) > 0) {
                     console.log('aaa')
                     let usd = Utils.round(parseFloat(this.state.NTY) * this.props.rate, 5);
@@ -415,7 +415,7 @@ class FormSend extends Component {
 
     getBalance = () => {
         console.log('aa')
-        if (this.state.viewSymbol == this.props.MainCoin) {
+        if (this.state.viewSymbol == this.props.Symbol) {
             console.log(this.props.DataToken.addressWL, this.props.network)
             updateBalance(this.props.DataToken.addressWL, this.props.network).then(balance => {
                 console.log(balance)
@@ -431,8 +431,8 @@ class FormSend extends Component {
 
     render() {
         const { ListToken } = this.props.DataToken;
-        if (ListToken[0].name != this.props.MainCoin) {
-            var ArrayToken = [{ name: this.props.MainCoin }].concat(ListToken)
+        if (ListToken[0].name != this.props.Symbol) {
+            var ArrayToken = [{ name: this.props.Symbol }].concat(ListToken)
         }
 
         return (
@@ -708,7 +708,7 @@ const mapStateToProps = state => {
             break;
     }
     return {
-        MainCoin: network,
+        Symbol: network,
         DataToken: state.getListToken,
         rate: state.snapToWallet.rate,
         network: state.getListToken.network

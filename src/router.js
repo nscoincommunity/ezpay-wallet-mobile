@@ -145,109 +145,32 @@ class Router extends Component {
     render() {
         const Screen = createStackNavigator(
             {
-                Drawer: {
-                    screen: Drawer,
-                    navigationOptions: {
-                        header: () => null,
-                    }
-                },
-                login: {
-                    screen: login,
-                },
+                Drawer: { screen: Drawer },
+                login: { screen: login },
                 TempPage: { screen: TempPage },
-                ListToken: {
-                    screen: ListToken,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
+                ListToken: { screen: ListToken },
                 register: { screen: register },
-                importWL: {
-                    screen: importWL,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                restore: {
-                    screen: restore,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                Backup: {
-                    screen: Backup,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
+                importWL: { screen: importWL },
+                restore: { screen: restore },
+                Backup: { screen: Backup },
                 DetailsHis: { screen: DetailHis },
                 QRscan: { screen: QRscan },
-                Language: {
-                    screen: Language,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
+                Language: { screen: Language },
                 ChangePIN: { screen: ChangePIN },
-                Setting: {
-                    screen: Setting,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
+                Setting: { screen: Setting },
                 SelectNetwork: { screen: SelectNetwork },
-                AddNewWallet: {
-                    screen: TypeAddWallet,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                NameWallet: {
-                    screen: NameWallet,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                SelectNetwork: {
-                    screen: SelectNetwork,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                InforWallet: {
-                    screen: InforWallet,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                Addtoken: {
-                    screen: Addtoken,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                SendScreen: {
-                    screen: Send,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                Privatekey: {
-                    screen: Prk,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
-                History: {
-                    screen: history,
-                    navigationOptions: {
-                        header: () => null
-                    }
-                },
+                AddNewWallet: { screen: TypeAddWallet },
+                NameWallet: { screen: NameWallet },
+                SelectNetwork: { screen: SelectNetwork },
+                InforWallet: { screen: InforWallet },
+                Addtoken: { screen: Addtoken },
+                SendScreen: { screen: Send },
+                Privatekey: { screen: Prk },
+                History: { screen: history },
             },
             {
                 initialRouteName: this.props.register ? 'login' : 'register',
-                // headerMode: "none",
+                headerMode: "none",
             },
         )
 

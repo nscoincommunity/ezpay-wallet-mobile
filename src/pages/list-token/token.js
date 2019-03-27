@@ -16,24 +16,9 @@ import Swipeout, { SwipeoutButtonProperties } from 'react-native-swipeout';
 import IconMtr from 'react-native-vector-icons/MaterialIcons'
 import { GetTokenOfNetwork, DeleteToken } from '../../../realm/walletSchema'
 import Header from '../../components/header';
+import Gradient from 'react-native-linear-gradient';
 
 export default class ListToken extends Component {
-    // static navigationOptions = () => ({
-    //     title: Language.t('Token.Title'),
-    //     headerStyle: {
-    //         backgroundColor: '#fafafa',
-    //         borderBottomWidth: 0,
-    //         elevation: 0
-    //     },
-    //     headerTitleStyle: {
-    //         color: '#0C449A',
-    //     },
-    //     headerBackTitleStyle: {
-    //         color: '#0C449A'
-    //     },
-    //     headerTintColor: '#0C449A',
-    //     swipeEnabled: false,
-    // });
     mounted: boolean = true;
 
     network: string = "Nexty";
@@ -84,7 +69,11 @@ export default class ListToken extends Component {
     render() {
 
         return (
-            <View style={styles.container}>
+            <Gradient
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.container}>
                 <StatusBar
                     backgroundColor={'transparent'}
                     translucent
@@ -142,7 +131,7 @@ export default class ListToken extends Component {
                         </View>
                 }
 
-            </View>
+            </Gradient>
         )
     }
 }
@@ -150,7 +139,6 @@ export default class ListToken extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fafafa',
     },
     MainForm: {
         flex: 1,

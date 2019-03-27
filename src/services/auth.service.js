@@ -173,6 +173,12 @@ export function Login2(password: string) {
     })
 }
 
+export function LoginWithFinger(pwdEncrypt) {
+    getData('PwApp').then(pwd => {
+        cachePwd = pwd
+    })
+}
+
 export async function changePasscode(passwordOld: string, passwordNew: string) {
     var EnpasswordOld = await encryptPassword(passwordOld);
     var EnpasswordNew = await encryptPassword(passwordNew);

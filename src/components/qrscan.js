@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Platform, Animated, BackHandler } from 'react-native';
+import { StyleSheet, Dimensions, View, Text, Platform, Animated, BackHandler, StatusBar } from 'react-native';
 import Camera from 'react-native-camera'
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button } from 'native-base'
 import Language from '../i18n/i18n';
 import GLOBALS from '../helper/variables'
+import Gradient from 'react-native-linear-gradient';
+import Header from '../components/header';
 
 export default class CameraScreen extends React.Component<any, any> {
-    static navigationOptions = () => ({
-        title: Language.t('QRScan.Title'),
-        headerStyle: {
-            backgroundColor: GLOBALS.Color.primary,
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerBackTitleStyle: {
-            color: 'white',
-        },
-        headerTintColor: 'white',
-    });
+    // static navigationOptions = () => ({
+    //     title: Language.t('QRScan.Title'),
+    //     headerStyle: {
+    //         backgroundColor: GLOBALS.Color.primary,
+    //     },
+    //     headerTitleStyle: {
+    //         color: 'white',
+    //     },
+    //     headerBackTitleStyle: {
+    //         color: 'white',
+    //     },
+    //     headerTintColor: 'white',
+    // });
 
     constructor(props) {
         super(props);
@@ -157,7 +159,26 @@ export default class CameraScreen extends React.Component<any, any> {
         const maskColWidth = (width - 300) / 2;
 
         return (
-            <View style={styles.container}>
+            // <View style={styles.container}>
+            <Gradient
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.container}>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="arrow-left"
+                    title={Language.t('QRScan.Title')}
+                    style={{ marginTop: 23 }}
+                    pressIconLeft={() => { this.props.navigation.goBack(); }}
+                />
                 <Camera
                     ref={cam => {
                         this.camera = cam;
@@ -189,7 +210,7 @@ export default class CameraScreen extends React.Component<any, any> {
                         <Text style={styles.scanScreenMessage}>sao no meo doi</Text>
                     </View> */}
                 </Camera>
-            </View >
+            </Gradient >
         );
     }
 }

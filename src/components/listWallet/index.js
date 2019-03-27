@@ -104,8 +104,8 @@ class ListWallet extends Component {
                     // hasParallaxImages={true}
                     loop={true}
                     // onScroll={(pan) => { console.log('aaaa', pan) }}
-                    onScrollBeginDrag={() => this._startSnap()}
-                    onScrollEndDrag={() => this._endSnap()}
+                    // onScrollBeginDrag={() => this._startSnap()}
+                    // onScrollEndDrag={() => this._endSnap()}
                     slideStyle={{ paddingVertical: 8, flex: 1, }}
                     onResponderMove={this.onMove.bind(this)}
                 />

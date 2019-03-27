@@ -120,6 +120,7 @@ export async function SendService(network: string, address_receive: string, addr
     }
     console.log('xx', txData)
     return new Promise((resolve, reject) => {
+        console.log(network)
         WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
         WEB3.eth.getTransactionCount(address_send)
             .then(async (nonce) => {
