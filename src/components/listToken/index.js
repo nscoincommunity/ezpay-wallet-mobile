@@ -74,13 +74,15 @@ class ListToken extends Component {
                                     fontWeight: 'bold',
                                     fontSize: 15,
                                     color: '#328FFC',
-                                    opacity: 0.5
+                                    opacity: 0.5,
+                                    fontFamily: GLOBAL.font.Poppins
                                 }}>{item.name}</Text>
                                 <Text style={{
                                     flex: 6,
                                     color: '#328FFC',
                                     textAlign: 'center',
-                                    opacity: 0.5
+                                    opacity: 0.5,
+                                    fontFamily: GLOBAL.font.Poppins
                                 }}>{item.balance}</Text>
                             </View>
                         )

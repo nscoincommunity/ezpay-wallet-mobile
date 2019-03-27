@@ -11,7 +11,7 @@ import crypto from 'crypto'
 import CryptoJS from 'crypto-js';
 import { forkJoin, of, interval, throwError, fromEvent } from 'rxjs';
 import { ADDRCONFIG } from 'dns';
-import { InsertNewWallet, SelectAllWallet } from '../../realm/walletSchema'
+import { InsertNewWallet, SelectAllWallet, UpdatePkWallet } from '../../realm/walletSchema'
 
 export async function Register(password: string, network: string, name: string) {
     let key = await keythereum.create();
@@ -122,8 +122,6 @@ export async function createKeystore(keyObject, password: string, address) {
 }
 
 export var checkIOS = 0;
-
-export let isAuth: boolean;
 export let Address: string;
 export let privateKey: string;
 export let cachePwd: string;
@@ -179,37 +177,44 @@ export function LoginWithFinger(pwdEncrypt) {
     })
 }
 
-export async function changePasscode(passwordOld: string, passwordNew: string) {
-    var EnpasswordOld = await encryptPassword(passwordOld);
-    var EnpasswordNew = await encryptPassword(passwordNew);
-    return new Promise((resolve, rejects) => {
-        getData(Address).then(async pwd => {
-            if (EnpasswordOld != pwd) {
-                rejects('invalid passcode');
-                return;
-            } else {
-                let oldPk = CryptoJS.AES.decrypt(privateKey, passwordOld).toString(CryptoJS.enc.Utf8);
-                console.log('old', oldPk, passwordOld)
-                let newPk = CryptoJS.AES.encrypt(oldPk, passwordNew).toString();
-                console.log('new', passwordNew, newPk)
-                try {
-                    await addAddress(Address, EnpasswordNew, newPk);
-                    privateKey = newPk;
-                    cachePwd = EnpasswordNew;
-                    getData('TouchID').then((touch) => {
-                        if (touch != null) {
-                            var passcodeEncrypt = CryptoJS.AES.encrypt(passwordNew, EnpasswordNew).toString()
-                            setData('TouchID', passcodeEncrypt)
-                        }
-                    })
-                } catch (error) {
-                    console.log(error)
-                    rejects(error);
-                    return;
-                }
-                resolve('change success')
-            }
-        })
+export function changePasscode(passwordOld: string, passwordNew: string) {
+    return new Promise(async (resolve, rejects) => {
+        if (! await validatePassword(passwordOld)) {
+            rejects('invalid passcode');
+            return;
+        } else {
+            var EnpasswordNew = await encryptPassword(passwordNew);
+            UpdatePkWallet(passwordOld, passwordNew).then(ss => {
+                cachePwd = EnpasswordNew;
+                getData('TouchID').then((touch) => {
+                    if (touch != null) {
+                        var passcodeEncrypt = CryptoJS.AES.encrypt(passwordNew, EnpasswordNew).toString()
+                        setData('TouchID', passcodeEncrypt)
+                        setData('PwApp', EnpasswordNew);
+                        resolve()
+                    }
+                })
+            }).catch(e => rejects(e))
+            // let oldPk = CryptoJS.AES.decrypt(privateKey, passwordOld).toString(CryptoJS.enc.Utf8);
+            // console.log('old', oldPk, passwordOld)
+            // let newPk = CryptoJS.AES.encrypt(oldPk, passwordNew).toString();
+            // console.log('new', passwordNew, newPk)
+            // try {
+            //     await addAddress(Address, EnpasswordNew, newPk);
+            //     privateKey = newPk;
+            //     cachePwd = EnpasswordNew;
+            //     getData('TouchID').then((touch) => {
+            //         if (touch != null) {
+            //             var passcodeEncrypt = CryptoJS.AES.encrypt(passwordNew, EnpasswordNew).toString()
+            //             setData('TouchID', passcodeEncrypt)
+            //         }
+            //     })
+            // } catch (error) {
+            //     console.log(error)
+            //     rejects(error);
+            //     return;
+            // }
+        }
     })
 }
 

@@ -28,12 +28,14 @@ export class ItemToken extends Component {
                         flex: 4,
                         fontWeight: 'bold',
                         fontSize: 15,
-                        color: '#979797'
+                        color: '#979797',
+                        fontFamily: GLOBAL.font.Poppins
                     }}>{item.name}</Text>
                     <Text style={{
                         flex: 4,
                         fontSize: 15,
-                        color: '#979797'
+                        color: '#979797',
+                        fontFamily: GLOBAL.font.Poppins
                     }}>{item.exchagerate}</Text>
                 </View>
                 <View style={styles.balance_coin}>
@@ -41,12 +43,14 @@ export class ItemToken extends Component {
                         flex: 6,
                         color: '#979797',
                         textAlign: 'center',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        fontFamily: GLOBAL.font.Poppins
                     }}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance}</Text>
                     <Text style={{
                         flex: 6,
                         color: '#7ED321',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        fontFamily: GLOBAL.font.Poppins
                     }}>{item.change}%</Text>
                 </View>
             </View>

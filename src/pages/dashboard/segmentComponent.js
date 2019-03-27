@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import GLOBAL from '../../helper/variables';
 export class segmentComponent extends Component {
 
     shouldComponentUpdate() {
@@ -30,13 +30,13 @@ export class segmentComponent extends Component {
                     style={styles.btnLeft}
                     onPress={() => this.goSend()}
                 >
-                    <Text style={{ textAlign: 'center', color: '#fff' }}>Send</Text>
+                    <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Send</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.btnRight}
                     onPress={() => this.goReciver()}
                 >
-                    <Text style={{ textAlign: 'center', color: '#393B51' }}>Reciver</Text>
+                    <Text style={{ textAlign: 'center', color: '#393B51', fontFamily: GLOBAL.font.Poppins }}>Reciver</Text>
                 </TouchableOpacity>
             </View>
         )

@@ -85,7 +85,7 @@ class EntryComponent extends Component {
                                 }
                             })}
                         >
-                            <Text style={{ textAlign: 'right', color: StyleItem.color_text_backup }}>{Language.t('Dashboard.CheckBackup')}</Text>
+                            <Text style={{ textAlign: 'right', color: StyleItem.color_text_backup, fontFamily: GLOBAL.font.Poppins }}>{Language.t('Dashboard.CheckBackup')}</Text>
                         </TouchableOpacity>
                     }
                 </View>
@@ -109,7 +109,7 @@ class EntryComponent extends Component {
                         resizeMode="cover"
                         imageStyle={{ borderRadius: 5 }}
                     >
-                        <Text style={{ textAlign: 'center', color: '#fff', }}>Add new wallet</Text>
+                        <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Add new wallet</Text>
                     </ImageBackground>
                 </TouchableOpacity >
             )
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     textItem: {
         textAlign: 'right',
         color: '#fff',
+        fontFamily: GLOBAL.font.Poppins
     },
     ItemCarousel: {
         borderRadius: 10,

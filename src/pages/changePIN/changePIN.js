@@ -141,16 +141,11 @@ export default class ChangePIN extends Component {
                                 fontWeight: '400',
                                 color: '#444444',
                                 fontFamily: GLOBAL.font.Poppins
-                            }}>{Language.t('ChangePIN.Title')}</Text>
-                            <View style={{
-                                justifyContent: 'center',
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                                borderBottomWidth: 1,
-                                borderBottomColor: '#AAAAAA',
-                                paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
-                                marginTop: GLOBAL.hp('20%')
                             }}>
+                                {Language.t('ChangePIN.Title')}
+                            </Text>
+
+                            <View style={[Styles.styleTextInput, { marginTop: GLOBAL.hp('20%') }]}>
                                 <TextInput
                                     placeholder={Language.t("ChangePIN.PlaceholderOld")}
                                     secureTextEntry={true}
@@ -158,20 +153,13 @@ export default class ChangePIN extends Component {
                                     returnKeyType={"next"}
                                     blurOnSubmit={false}
                                     onSubmitEditing={() => { this.focusTheField('field2'); }}
-                                    style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
+                                    style={Styles.TextInput}
                                     underlineColorAndroid="transparent"
                                     value={this.state.passcodeOld}
                                 />
                             </View>
                             <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcOld}</Text>
-                            <View style={{
-                                justifyContent: 'center',
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                                borderBottomWidth: 1,
-                                borderBottomColor: '#AAAAAA',
-                                paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
-                            }}>
+                            <View style={Styles.styleTextInput}>
                                 <TextInput
                                     placeholder={Language.t("ChangePIN.PlaceholderNewPasscode")}
                                     secureTextEntry={true}
@@ -180,20 +168,13 @@ export default class ChangePIN extends Component {
                                     blurOnSubmit={false}
                                     ref={input => { this.inputs['field2'] = input }}
                                     onSubmitEditing={() => { this.focusTheField('field3'); }}
-                                    style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
+                                    style={Styles.TextInput}
                                     underlineColorAndroid="transparent"
                                     value={this.state.passcodeNew}
                                 />
                             </View>
                             <Text style={{ color: GLOBAL.Color.danger }}>{this.state.textErrPcNew}</Text>
-                            <View style={{
-                                justifyContent: 'center',
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                                borderBottomWidth: 1,
-                                borderBottomColor: '#AAAAAA',
-                                paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
-                            }}>
+                            <View style={Styles.styleTextInput}>
                                 <TextInput
                                     placeholder={Language.t("ChangePIN.PlaceholderConfirmNew")}
                                     secureTextEntry={true}
@@ -205,7 +186,7 @@ export default class ChangePIN extends Component {
                                             this.changePasscode()
                                         }
                                     }}
-                                    style={{ flex: 10, fontSize: GLOBAL.hp('3%') }}
+                                    style={Styles.TextInput}
                                     underlineColorAndroid="transparent"
                                     value={this.state.passcodeNewConfirm}
                                 />
@@ -246,6 +227,25 @@ const Styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: GLOBAL.hp('2%'),
         paddingVertical: GLOBAL.hp('5%')
+    },
+    styleTextInput: {
+        flexWrap: 'wrap',
+        backgroundColor: '#E9E9E9',
+        paddingVertical: Platform.OS === 'ios' ? GLOBAL.hp('1.5%') : 'auto',
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    TextInput: {
+        fontSize: GLOBAL.fontsize(2),
+        paddingLeft: GLOBAL.wp('5%'),
+        fontFamily: GLOBAL.font.Poppins
     },
     button: {
         justifyContent: 'center',

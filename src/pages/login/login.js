@@ -51,7 +51,7 @@ class ScreenLogin extends Component {
 
 
     componentDidMount() {
-        // Login2('123456')
+        // Login2('12345678')
         //     .then(status => {
         //         this.setState({ loading: false })
         //         console.log(status)
@@ -61,7 +61,7 @@ class ScreenLogin extends Component {
         //         console.log(err)
         //         this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
         //     })
-        this.LoginwithFingerprint()
+        // this.LoginwithFingerprint()
     }
 
     LoginNTY() {
@@ -126,15 +126,7 @@ class ScreenLogin extends Component {
             <View style={{ flex: 1 }} >
                 <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('7%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Login.Title")}</Text>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                    marginTop: hp('25%')
-                }}>
+                <View style={[style.styleTextInput, { marginTop: GLOBALS.hp('25%') }]}>
                     <TextInput
                         placeholder={Lang.t('Login.PHLocalPasscode')}
                         onChangeText={(val) => this.checkPassword(val)}
@@ -146,7 +138,7 @@ class ScreenLogin extends Component {
                                 this.LoginNTY()
                             }
                         }}
-                        style={{ flex: 9, fontSize: hp('2.5%') }}
+                        style={style.TextInput}
                         underlineColorAndroid="transparent"
                     />
                     <Image source={require('../../images/icon/Private-key.png')} style={{ flex: 1 }} resizeMode="contain" />
@@ -158,7 +150,7 @@ class ScreenLogin extends Component {
                 <View style={style.FormRouter}>
                     <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={() => this.LoginNTY()} disabled={this.state.typeButton}>
                         <Gradient
-                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#328FFC', '#08AEEA']}
                             start={{ x: 1, y: 0.7 }}
                             end={{ x: 0, y: 3 }}
                             style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
@@ -218,6 +210,11 @@ const style = StyleSheet.create({
         flex: 1,
         padding: hp('2%')
     },
+    TextInput: {
+        flex: 8,
+        fontSize: GLOBALS.fontsize(2),
+        paddingLeft: GLOBALS.wp('5%')
+    },
     TextButton: {
         color: 'white',
         textAlign: 'center',
@@ -227,5 +224,23 @@ const style = StyleSheet.create({
     FormLogin: {
         width: GLOBALS.WIDTH,
         marginBottom: GLOBALS.HEIGHT / 20,
+    },
+    styleTextInput: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        backgroundColor: '#E9E9E9',
+        paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 0.41,
+        elevation: 2,
+    },
+    FormRouter: {
+        paddingHorizontal: GLOBALS.wp('15%')
     }
 })

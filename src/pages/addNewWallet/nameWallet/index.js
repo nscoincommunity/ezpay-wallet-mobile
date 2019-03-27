@@ -129,7 +129,7 @@ class NameWallet extends Component {
                                     start={{ x: 0, y: 0 }}
                                     end={{ x: 1, y: 0 }}
                                 >
-                                    <Text style={{ color: '#fff', textAlign: 'center' }}>Submit</Text>
+                                    <Text style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBAL.font.Poppins }}>Submit</Text>
                                 </Gradient>
                             </TouchableOpacity>
                         </View>
@@ -197,12 +197,14 @@ class SelectWallet extends Component {
                                         <Text style={{
                                             color: '#535353',
                                             fontWeight: 'bold',
-                                            fontSize: GLOBAL.fontsize(2)
+                                            fontSize: GLOBAL.fontsize(2),
+                                            fontFamily: GLOBAL.font.Poppins
                                         }}>{item.name}</Text>
                                         <Text
                                             style={{
                                                 color: '#979797',
-                                                fontSize: GLOBAL.fontsize(1.5)
+                                                fontSize: GLOBAL.fontsize(1.5),
+                                                fontFamily: GLOBAL.font.Poppins
                                             }}
                                         >{item.network.name}</Text>
                                     </TouchableOpacity>
@@ -252,7 +254,7 @@ class FormInput extends Component {
                         underlineColorAndroid="transparent"
                     />
                 </View>
-                <Text style={{ color: 'red' }}>{this.state.textError}</Text>
+                <Text style={{ color: 'red', fontFamily: GLOBAL.font.Poppins }}>{this.state.textError}</Text>
             </View>
         )
     }

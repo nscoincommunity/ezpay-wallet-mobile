@@ -8,7 +8,7 @@ import GLOBALS from '../../helper/variables';
 import { connect } from 'react-redux';
 import { ONSNAPWALLET } from '../../../redux/actions/slideWalletAction';
 import { bindActionCreators } from 'redux';
-import { fetchRate, fetchAllWallet } from '../../../redux/actions/slideWalletAction'
+import { fetchRate, fetchAllWallet, GetListToken } from '../../../redux/actions/slideWalletAction'
 import SegmentControl from 'react-native-segment-controller';
 import Segment from './segmentComponent';
 import { Avatar } from 'react-native-elements';
@@ -70,6 +70,11 @@ class Dashboard extends Component {
         this.props.fetchAllWallet()
     }
 
+    RefreshListToken = () => {
+        const { data } = this.props.ActionDB;
+        this.props.GetListToken(data[0].network.name, data[0].address, data[0].name, data[0].pk_en)
+    }
+
 
     render() {
         const { exchange } = this.props.snapToWallet;
@@ -117,7 +122,8 @@ class Dashboard extends Component {
                                 <Text style={{
                                     color: "#328FFC",
                                     fontSize: GLOBALS.fontsize(3),
-                                    flex: 8
+                                    flex: 8,
+                                    fontFamily: GLOBALS.font.Poppins
                                 }}>Tokens</Text>
                                 <Avatar
                                     icon={{
@@ -134,6 +140,7 @@ class Dashboard extends Component {
                                     onPress={() => this.props.navigation.navigate('Addtoken', {
                                         payload: {
                                             network: this.props.snapToWallet.network,
+                                            refreshListToken: this.RefreshListToken
                                         }
                                     })}
                                     rounded
@@ -144,7 +151,12 @@ class Dashboard extends Component {
                     <View style={{ flex: 5 }}>
                         {
                             DataToken.ListToken.length > 0 && !status &&
-                            <ComponentToken InforToken={DataToken.ListToken} addressWL={DataToken.addressWL} network={DataToken.network} status={status} />
+                            <ComponentToken
+                                InforToken={DataToken.ListToken}
+                                addressWL={DataToken.addressWL}
+                                network={DataToken.network}
+                                status={status}
+                            />
                         }
                     </View>
 
@@ -165,7 +177,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ fetchRate, fetchAllWallet }, dispatch)
+    return bindActionCreators({ fetchRate, fetchAllWallet, GetListToken }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

@@ -11,7 +11,8 @@ import {
     Platform,
     TextInput,
     PixelRatio,
-    Image
+    Image,
+    BackHandler
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { GetInfoToken } from '../../services/wallet.service';
@@ -21,21 +22,19 @@ import IconFeather from "react-native-vector-icons/Feather"
 import Gradient from 'react-native-linear-gradient'
 import { CheckExistToken, InsertNewToken } from '../../../realm/walletSchema'
 import Header from '../../components/header';
-
-
-import {
-    Title,
-    Content,
-    Button,
-    Left,
-    Right,
-    Body,
-} from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 
 export default class Addtoken extends Component {
-
+    componentDidMount() {
+        BackHandler.addEventListener('BackHandler', () => {
+            this.props.navigation.state.params.payload.refreshListToken()
+        })
+    }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('BackHandler');
+        this.props.navigation.state.params.payload.refreshListToken()
+    }
     render() {
         return (
             <Gradient
@@ -142,8 +141,8 @@ class FormAddToken extends Component {
                     balance: parseFloat(this.state.balance),
                     network: network,
                     avatar: '',
-                    exchagerate: '',
-                    change: ''
+                    exchagerate: '0',
+                    change: '0'
                 }
                 console.log('token want add', token)
                 InsertNewToken(token).then(ss => {

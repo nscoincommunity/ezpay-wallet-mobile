@@ -173,6 +173,7 @@ class SelectNetwork extends Component {
                                         fontSize: px * 20,
                                         textAlign: 'center',
                                         color: "#535353",
+                                        fontFamily: GLOBALS.font.Poppins
                                     }}>{network.item.name}</Text>
                                 </TouchableOpacity>
                             )

@@ -36,7 +36,8 @@ export default class HeaderComponent extends Component {
                         justifyContent: 'center',
                         color: colorTitle,
                         alignItems: 'center',
-                        fontSize: GLOBAL.fontsize(2.5)
+                        fontSize: GLOBAL.fontsize(2.5),
+                        fontFamily: GLOBAL.font.Poppins
                     }}> {title} </Text>
                     {
                         nameIconRight != undefined ?

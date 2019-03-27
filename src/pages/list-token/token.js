@@ -39,12 +39,7 @@ export default class ListToken extends Component {
     }
 
     LoadData = (network) => {
-        // GetAllToken().then(data => {
-        //     console.log('list', data)
-        //     this.setState({ ArrayToken: data })
-        // })
         GetTokenOfNetwork(network).then(list => {
-            console.log('ssss', list)
             this.setState({ ArrayToken: list })
         })
     }

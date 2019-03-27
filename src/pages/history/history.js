@@ -19,20 +19,6 @@ import IconFeather from "react-native-vector-icons/Feather"
 import Header from '../../components/header';
 
 
-// import {
-//     Container,
-//     Header,
-//     Title,
-//     Content,
-//     Text,
-//     Button,
-//     Left,
-//     Right,
-//     Body,
-//     ListItem,
-//     Spinner,
-// } from "native-base";
-
 
 export class Transaction {
     tx: string;

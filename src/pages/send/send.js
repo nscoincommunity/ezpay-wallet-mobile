@@ -536,7 +536,7 @@ class FormSend extends Component {
 
                                 <TouchableOpacity style={Styles.button} disabled={this.state.VisibaleButton} onPress={() => { this.ButtonSend(); Keyboard.dismiss() }}>
                                     <Gradient
-                                        colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
+                                        colors={this.state.VisibaleButton ? ['#cccccc', '#cccccc'] : ['#328FFC', '#08AEEA']}
                                         style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
                                         start={{ x: 0.7, y: 0.0 }}
                                         end={{ x: 0.0, y: 0.0 }}

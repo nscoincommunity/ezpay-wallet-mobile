@@ -1,4 +1,6 @@
 import REALM from 'realm';
+import CryptoJS from 'crypto-js';
+
 const LISTWALLET = 'WalletSchema';
 const NETWORK = "networkSchema";
 const TOKEN = "tokenSchema";
@@ -243,6 +245,31 @@ export const UpdateTypeBackupWallet = (wallet) => new Promise((resolve, reject) 
 
             })
         }).catch(e => reject(e))
+    } catch (error) {
+        reject(error)
+    }
+})
+/**
+ * Change new private encrypt all wallet
+ * @param {string} passcodeOld passcode old to decrypt private key encrypt
+ * @param {string} passcodeNew passcode new to encryp private key
+ */
+export const UpdatePkWallet = (passcodeOld, passcodeNew) => new Promise((resolve, reject) => {
+    try {
+        REALM.open(databaseOption).then(realm => {
+            let ListWallet = realm.objects(LISTWALLET);
+            Array.from(ListWallet).forEach((item, index) => {
+                realm.write(() => {
+                    let pk_de = CryptoJS.AES.decrypt(item.pk_en, passcodeOld).toString(CryptoJS.enc.Utf8);
+                    let newPk_en = CryptoJS.AES.encrypt(pk_de, passcodeNew).toString()
+                    let walletUpdate = realm.objectForPrimaryKey(LISTWALLET, item.id);
+                    walletUpdate.pk_en = newPk_en;
+                    if (index == ListWallet.length - 1) {
+                        resolve();
+                    }
+                })
+            })
+        })
     } catch (error) {
         reject(error)
     }

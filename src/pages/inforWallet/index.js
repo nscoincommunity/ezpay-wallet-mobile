@@ -87,7 +87,7 @@ export default class InforWallet extends Component {
                 />
                 <View style={styles.body}>
                     <View style={{ flex: 1 }}>
-                        <Text style={{ textAlign: 'center' }} numberOfLines={1} ellipsizeMode="middle" >{item.address}</Text>
+                        <Text style={{ textAlign: 'center', fontFamily: GLOBAL.font.Poppins }} numberOfLines={1} ellipsizeMode="middle" >{item.address}</Text>
                     </View>
                     <View style={{ flex: 5, }}>
                         <TouchableOpacity
@@ -137,7 +137,7 @@ export default class InforWallet extends Component {
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
                             >
-                                <Text style={{ textAlign: 'center', color: '#fff' }}>Export private key</Text>
+                                <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Export private key</Text>
                             </Gradient>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -150,7 +150,7 @@ export default class InforWallet extends Component {
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
                             >
-                                <Text style={{ textAlign: 'center', color: '#fff' }}>History</Text>
+                                <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>History</Text>
                             </Gradient>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -163,7 +163,7 @@ export default class InforWallet extends Component {
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
                             >
-                                <Text style={{ textAlign: 'center', color: '#fff' }}>Share</Text>
+                                <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Share</Text>
                             </Gradient>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -176,7 +176,7 @@ export default class InforWallet extends Component {
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
                             >
-                                <Text style={{ textAlign: 'center', color: '#fff' }}>Remove wallet</Text>
+                                <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Remove wallet</Text>
                             </Gradient>
                         </TouchableOpacity>
                     </View>

@@ -94,12 +94,14 @@ class TypeAddWallet extends Component {
                                     <View style={{ flex: 6 }}>
                                         <Text style={{
                                             color: '#535353',
-                                            fontSize: GLOBAL.fontsize(4)
+                                            fontSize: GLOBAL.fontsize(4),
+                                            fontFamily: GLOBAL.font.Poppins
                                         }}>{item.title}</Text>
                                         <Text
                                             style={{
                                                 color: '#979797',
-                                                fontSize: GLOBAL.fontsize(2)
+                                                fontSize: GLOBAL.fontsize(2),
+                                                fontFamily: GLOBAL.font.Poppins
                                             }}
                                         >{item.description}</Text>
                                     </View>
