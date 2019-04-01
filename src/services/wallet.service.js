@@ -11,10 +11,10 @@ import { Address, initAuth, validatePassword, getPrivateKey } from '../services/
 import CONSTANTS from '../helper/constants';
 import { sign } from '@warren-bank/ethereumjs-tx-sign';
 import bigInt from "big-integer";
-import { getData, setData } from './data.service'
-import Language from '../i18n/i18n'
-import ABI from '../../ABI'
-
+import { getData, setData } from './data.service';
+import Language from '../i18n/i18n';
+import ABI from '../../ABI';
+import { UpdateBalanceTRON, ConvertFromAddressTron, ConvertToAddressTron } from './tron.service'
 
 const WEB3 = new Web3();
 export var balance: number = 0
@@ -22,21 +22,38 @@ export var balance: number = 0
 
 export function updateBalance(address, network) {
     return new Promise((resolve, reject) => {
-        WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)));
-        WEB3.eth.getBalance(address).then(value => {
-            if (value > 0) {
-                if (parseFloat(value / CONSTANTS.BASE_NTY) % 1 == 0) {
-                    resolve(parseFloat(value / CONSTANTS.BASE_NTY).toLocaleString())
+        if (network != 'tron') {
+            WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)));
+            WEB3.eth.getBalance(address).then(value => {
+                if (value > 0) {
+                    if (parseFloat(value / CONSTANTS.BASE_NTY) % 1 == 0) {
+                        resolve(parseFloat(value / CONSTANTS.BASE_NTY))
+                    } else {
+                        resolve(parseFloat(value / CONSTANTS.BASE_NTY).toFixed(2))
+                    }
                 } else {
-                    resolve(parseFloat(value / CONSTANTS.BASE_NTY).toFixed(2).toLocaleString())
+                    resolve(0)
                 }
-            } else {
-                resolve(0)
-            }
-        }).catch(e => {
-            console.log(e)
-            reject(0)
-        })
+            }).catch(e => {
+                console.log(e)
+                reject(0)
+            })
+        } else {
+            UpdateBalanceTRON(address).then(value => {
+                if (value > 0) {
+                    if (parseFloat(value / CONSTANTS.BASE_TRON) % 1 == 0) {
+                        resolve(parseFloat(value / CONSTANTS.BASE_TRON))
+                    } else {
+                        resolve(parseFloat(value / CONSTANTS.BASE_TRON).toFixed(2))
+                    }
+                } else {
+                    resolve(0)
+                }
+            }).catch(e => {
+                console.log(e)
+                reject(0)
+            })
+        }
     })
 }
 

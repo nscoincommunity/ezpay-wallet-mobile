@@ -50,6 +50,11 @@ export default class sidebar extends Component {
                 icon: require('./images/iconMenu/home.png')
             },
             {
+                name: 'Manage wallet',
+                route: 'DeleteWL',
+                icon: require('./images/iconMenu/home.png')
+            },
+            {
                 name: Language.t('Drawer.Redeem'),
                 route: 'Redeem',
                 icon: require('./images/iconMenu/redeem.png')

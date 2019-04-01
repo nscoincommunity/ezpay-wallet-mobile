@@ -19,7 +19,8 @@ class SelectNetwork extends Component {
         SListNetwork: this.ListNetwork,
         dialogVisible: false,
         passcode: '',
-        NetworkSL: ''
+        NetworkSL: '',
+        old_network: ''
     }
 
     ListNetwork = [
@@ -52,9 +53,16 @@ class SelectNetwork extends Component {
     async handleAdd() {
         const payload = this.props.navigation.getParam('payload').data;
 
-        AddNetwork(this.state.passcode, payload.name, payload.pk_en, this.state.NetworkSL, payload.address, payload.typeBackup)
+        AddNetwork(
+            this.state.passcode,
+            payload.name,
+            payload.pk_en,
+            this.state.NetworkSL,
+            payload.address,
+            payload.typeBackup,
+            this.state.old_network
+        )
             .then(async (ss) => {
-                console.log('add ss', ss)
                 await this.props.fetchAllWallet();
                 await this.props.navigation.dispatch(StackActions.reset({
                     index: 0,
@@ -104,8 +112,8 @@ class SelectNetwork extends Component {
     }
 
 
-    _disableBtn = (wallet) => {
-        CountNetworkofWallet(wallet).then(data => {
+    _disableBtn = (pk_en) => {
+        CountNetworkofWallet(pk_en).then(data => {
             for (let x = 0; x < data.length; x++) {
                 var index_ListNetwork = this.ListNetwork.findIndex(a => a.name == data[x].network.name);
                 this.ListNetwork[index_ListNetwork].type = false;
@@ -118,7 +126,8 @@ class SelectNetwork extends Component {
     componentWillMount() {
         switch (this.props.navigation.getParam('payload').type) {
             case 'changeNetwork':
-                this._disableBtn(this.props.navigation.getParam('payload').data.address)
+                this.setState({ old_network: this.props.navigation.getParam('payload').old_network })
+                this._disableBtn(this.props.navigation.getParam('payload').data.pk_en)
                 break;
             case 'New':
                 this.setState({ SListNetwork: this.ListNetwork })
@@ -131,7 +140,6 @@ class SelectNetwork extends Component {
 
     render() {
         const payload = this.props.navigation.getParam('payload');
-        console.log(payload.data)
         return (
             <Gradient
                 colors={['#F0F3F5', '#E8E8E8']}

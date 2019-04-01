@@ -9,7 +9,8 @@ import {
     Platform,
     Share,
     ToastAndroid,
-    Clipboard
+    Clipboard,
+    Alert
 } from 'react-native';
 import { QRCode } from 'react-native-custom-qr-codes';
 import QRCodeAndroid from 'react-native-qrcode-svg';
@@ -19,7 +20,13 @@ import CustomToast from '../../components/toast';
 import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper'
 import Gradient from 'react-native-linear-gradient';
 import Language from '../../i18n/i18n';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchAllWallet } from '../../../redux/actions/slideWalletAction'
+import { StackActions, NavigationActions } from 'react-navigation'
+import Dialog from "react-native-dialog";
+import { RemoveWallet, } from '../../services/auth.service';
+import { GetInforWallet } from '../../../realm/walletSchema'
 
 export default class InforWallet extends Component {
 
@@ -63,7 +70,6 @@ export default class InforWallet extends Component {
                 logo_net = require('../../images/AddWallet/network/tron.png')
                 break;
         }
-        let base64Logo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAA..';
 
         return (
             <Gradient
@@ -87,7 +93,11 @@ export default class InforWallet extends Component {
                 />
                 <View style={styles.body}>
                     <View style={{ flex: 1 }}>
-                        <Text style={{ textAlign: 'center', fontFamily: GLOBAL.font.Poppins }} numberOfLines={1} ellipsizeMode="middle" >{item.address}</Text>
+                        <Text
+                            style={{ textAlign: 'center', fontFamily: GLOBAL.font.Poppins }}
+                            numberOfLines={1}
+                            ellipsizeMode="middle"
+                        >{item.address}</Text>
                     </View>
                     <View style={{ flex: 5, }}>
                         <TouchableOpacity
@@ -102,7 +112,6 @@ export default class InforWallet extends Component {
                                 style={{ padding: GLOBAL.wp('6%') }}
                                 resizeMode="contain"
                             >
-                                {/* <BarcodeFinder width={GLOBAL.wp('70%')} height={GLOBAL.wp('70%')} borderColor="#328FFC" borderWidth={3} /> */}
                                 {
                                     Platform.OS == 'android' ?
                                         <QRCodeAndroid
@@ -132,7 +141,7 @@ export default class InforWallet extends Component {
                             onPress={() => this._getPrivatekey(item.pk_en)}
                         >
                             <Gradient
-                                style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5, paddingHorizontal: GLOBAL.wp('15%') }}
+                                style={{ paddingVertical: GLOBAL.hp('1.5%'), borderRadius: 5, paddingHorizontal: GLOBAL.wp('15%') }}
                                 colors={['#08AEEA', '#328FFC']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
@@ -145,7 +154,7 @@ export default class InforWallet extends Component {
                             onPress={() => this._goHistory(item.address, item.network.name)}
                         >
                             <Gradient
-                                style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5 }}
+                                style={{ paddingVertical: GLOBAL.hp('1.5%'), borderRadius: 5 }}
                                 colors={['#08AEEA', '#328FFC']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
@@ -158,25 +167,12 @@ export default class InforWallet extends Component {
                             onPress={() => Share.share({ message: item.address })}
                         >
                             <Gradient
-                                style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5 }}
+                                style={{ paddingVertical: GLOBAL.hp('1.5%'), borderRadius: 5 }}
                                 colors={['#08AEEA', '#328FFC']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
                             >
                                 <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Share</Text>
-                            </Gradient>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonShare}
-                            onPress={() => Share.share({ message: item.address })}
-                        >
-                            <Gradient
-                                style={{ paddingVertical: GLOBAL.hp('2%'), borderRadius: 5 }}
-                                colors={['#F34C4C', '#C80000']}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0 }}
-                            >
-                                <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Remove wallet</Text>
                             </Gradient>
                         </TouchableOpacity>
                     </View>
@@ -210,110 +206,3 @@ const styles = StyleSheet.create({
         marginVertical: GLOBAL.hp('1%'),
     }
 })
-
-export class BarcodeFinder extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    getSizeStyles() {
-        return {
-            width: this.props.width,
-            height: this.props.height
-        };
-    }
-
-    render() {
-        return (
-            <View style={[stylesQR.container]}>
-                <View style={[stylesQR.finder, this.getSizeStyles()]}>
-                    <View
-                        style={[
-                            { borderColor: this.props.borderColor },
-                            stylesQR.topLeftEdge,
-                            {
-                                borderLeftWidth: this.props.borderWidth,
-                                borderTopWidth: this.props.borderWidth
-                            }
-                        ]}
-                    />
-                    <View
-                        style={[
-                            { borderColor: this.props.borderColor },
-                            stylesQR.topRightEdge,
-                            {
-                                borderRightWidth: this.props.borderWidth,
-                                borderTopWidth: this.props.borderWidth
-                            }
-                        ]}
-                    />
-                    <View
-                        style={[
-                            { borderColor: this.props.borderColor },
-                            stylesQR.bottomLeftEdge,
-                            {
-                                borderLeftWidth: this.props.borderWidth,
-                                borderBottomWidth: this.props.borderWidth
-                            }
-                        ]}
-                    />
-                    <View
-                        style={[
-                            { borderColor: this.props.borderColor },
-                            stylesQR.bottomRightEdge,
-                            {
-                                borderRightWidth: this.props.borderWidth,
-                                borderBottomWidth: this.props.borderWidth
-                            }
-                        ]}
-                    />
-                </View>
-            </View>
-        );
-    }
-}
-var stylesQR = StyleSheet.create({
-    container: {
-        alignItems: "center",
-        justifyContent: "center",
-        position: "absolute",
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        backgroundColor: 'transparent'
-    },
-    finder: {
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: 'transparent'
-    },
-    topLeftEdge: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: 40,
-        height: 40
-    },
-    topRightEdge: {
-        position: "absolute",
-        top: 0,
-        right: 0,
-        width: 40,
-        height: 40
-    },
-    bottomLeftEdge: {
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        width: 40,
-        height: 40
-    },
-    bottomRightEdge: {
-        position: "absolute",
-        bottom: 0,
-        right: 0,
-        width: 40,
-        height: 40
-    }
-});

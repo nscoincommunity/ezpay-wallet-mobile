@@ -51,23 +51,23 @@ const databaseOption = {
     path: 'Nexty.realm',
     schema: [ListWallet, NetWork, Token],
     schemaVersion: 1, // version of database
-    migration: (oldRealm, newRealm) => {
-        if (oldRealm.schemaVersion < 1) {
-            const oldObject = oldRealm.objects(LISTWALLET);
-            const newObject = newRealm.objects(LISTWALLET);
-            for (let i = 0; i < array.length; i++) {
-                newObject[i].id = oldObject[i].id;
-                newObject[i].name = oldObject[i].name;
-                newObject[i].address = oldObject[i].address;
-                newObject[i].pk_en = oldObject[i].pk_en;
-                newObject[i].create = oldObject[i].create;
-                newObject[i].V3JSON = oldObject[i].V3JSON;
-                newObject[i].network = oldObject[i].network;
-                newObject[i].typeBackup = oldObject[i].typeBackup;
-                newObject[i].balance = oldObject[i].balance;
-            }
-        }
-    }
+    // migration: (oldRealm, newRealm) => {
+    //     if (oldRealm.schemaVersion < 1) {
+    //         const oldObject = oldRealm.objects(LISTWALLET);
+    //         const newObject = newRealm.objects(LISTWALLET);
+    //         for (let i = 0; i < array.length; i++) {
+    //             newObject[i].id = oldObject[i].id;
+    //             newObject[i].name = oldObject[i].name;
+    //             newObject[i].address = oldObject[i].address;
+    //             newObject[i].pk_en = oldObject[i].pk_en;
+    //             newObject[i].create = oldObject[i].create;
+    //             newObject[i].V3JSON = oldObject[i].V3JSON;
+    //             newObject[i].network = oldObject[i].network;
+    //             newObject[i].typeBackup = oldObject[i].typeBackup;
+    //             newObject[i].balance = oldObject[i].balance;
+    //         }
+    //     }
+    // }
 }
 
 export const deleteDB = () => new Promise((resolve, reject) => {
@@ -101,7 +101,6 @@ export const InsertNewWallet = (Wallet) => new Promise((resolve, reject) => {
     try {
         REALM.open(databaseOption)
             .then(realm => {
-                console.log('aaaa', realm)
                 realm.write(() => {
                     try {
                         realm.create(LISTWALLET, Wallet);
@@ -179,15 +178,32 @@ export const DeleteWallet = (walletID) => new Promise((resolve, reject) => {
     try {
         REALM.open(databaseOption).then(realm => {
             realm.write(() => {
-                let Wallet = realm.objectForPrimaryKey(LISTWALLET, walletID);
-                realm.delete(Wallet);
-                resolve()
+                console.log(walletID)
+                var Wallet = realm.objectForPrimaryKey(LISTWALLET, walletID);
+                realm.delete(Wallet)
+                resolve('delete wallet success')
             })
         }).catch(e => reject(e))
     } catch (error) {
+        console.log(error)
         reject(error)
     }
 })
+
+export const GetInforWallet = (walletID) => new Promise((resolve, reject) => {
+    try {
+        REALM.open(databaseOption).then(realm => {
+            realm.write(() => {
+                var Infor = realm.objectForPrimaryKey(LISTWALLET, walletID);
+                resolve(Infor)
+            })
+        }).catch(e => reject(e))
+    } catch (error) {
+        console.log(error);
+        reject(error)
+    }
+})
+
 /**
  * Delete all wallet in WalletSchema
  */
@@ -208,11 +224,11 @@ export const DeleteAllWallet = () => new Promise((resolve, reject) => {
  * Get List wallet have address
  * @param {string} address address want check
  */
-export const CountNetworkofWallet = (address) => new Promise((resolve, reject) => {
+export const CountNetworkofWallet = (pk) => new Promise((resolve, reject) => {
     try {
         REALM.open(databaseOption).then(realm => {
             try {
-                var networkOfWallet = realm.objects(LISTWALLET).filtered('address="' + address + '"');
+                var networkOfWallet = realm.objects(LISTWALLET).filtered('pk_en="' + pk + '"');
                 resolve(Array.from(networkOfWallet))
             } catch (e) {
                 reject(e)

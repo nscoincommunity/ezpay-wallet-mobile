@@ -1,37 +1,42 @@
 import React, { Component } from 'react'
 import { Text, View, ImageBackground, StatusBar, TouchableOpacity, BackHandler, Alert } from 'react-native'
-import { SelectAllWallet } from '../../../realm/walletSchema';
+import { SelectAllWallet, GetInforWallet } from '../../../realm/walletSchema';
 import ListCoin from '../../components/listWallet';
 import Header from '../../components/header';
 import ComponentToken from '../../components/listToken';
 import GLOBALS from '../../helper/variables';
 import { connect } from 'react-redux';
-import { ONSNAPWALLET } from '../../../redux/actions/slideWalletAction';
 import { bindActionCreators } from 'redux';
-import { fetchRate, fetchAllWallet, GetListToken } from '../../../redux/actions/slideWalletAction'
+import { fetchRate, fetchAllWallet, GetListToken, ONSNAPWALLET } from '../../../redux/actions/slideWalletAction'
 import SegmentControl from 'react-native-segment-controller';
 import Segment from './segmentComponent';
 import { Avatar } from 'react-native-elements';
 import Language from '../../i18n/i18n';
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions } from 'react-navigation';
+import { getBottomSpace } from 'react-native-iphone-x-helper'
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             ListWallet: [],
-            index: 0
+            index: 0,
+            showListWL: true
         }
         this.backButtonClick = this.backButtonClick.bind(this)
     }
 
     componentWillMount() {
-        BackHandler.removeEventListener("hardwareBackPress", this.backButtonClick);
-        this.props.fetchRate('nexty', 0);
+        // this.props.fetchRate('nexty', 0);
         this.fetchListWallet()
         SelectAllWallet().then(ListWallet => {
             this.setState({ ListWallet })
         })
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backButtonClick);
+        // this.setState({ showListWL: false })
     }
 
     componentDidMount() {
@@ -72,13 +77,22 @@ class Dashboard extends Component {
 
     RefreshListToken = () => {
         const { data } = this.props.ActionDB;
-        this.props.GetListToken(data[0].network.name, data[0].address, data[0].name, data[0].pk_en)
+        GetInforWallet(this.props.snapToWallet.walletID).then(data => {
+            this.props.GetListToken(data.network.name, data.address, data.name, data.pk_en)
+        })
+        // this.props.GetListToken(this.props.snapToWallet.network, data[0].address, data[0].name, data[0].pk_en)
     }
 
 
     render() {
-        const { exchange } = this.props.snapToWallet;
+        const { exchange, walletID } = this.props.snapToWallet;
         const { data } = this.props.ActionDB;
+        let typeRender = true
+        if (data.findIndex(x => x.id == 'accessing object of type walletschema which has been invalidated or deleted') > -1) {
+            typeRender = false
+        } else {
+            typeRender = true
+        }
         const { DataToken, status } = this.props
         return (
             <View style={{ flex: 1, backgroundColor: '#F2F2F2' }}>
@@ -98,18 +112,14 @@ class Dashboard extends Component {
                 />
                 <View style={{ flex: 1, flexDirection: 'column' }}>
                     {
-                        data.length > 0 ?
-                            <ListCoin Data={data} navigation={this.props.navigation} />
+                        data.length > 0 && typeRender == true ?
+                            <ListCoin
+                                Data={data}
+                                navigation={this.props.navigation}
+                            />
                             :
                             null
                     }
-                    <View style={{ flex: 0.7, justifyContent: 'center', paddingHorizontal: GLOBALS.wp('20%') }}>
-                        {
-                            exchange != '' &&
-                            <Segment navigation={this.props.navigation} Data={DataToken} />
-                        }
-                    </View>
-
                     <View style={{ flex: 1, justifyContent: 'center' }}>
                         {
                             exchange != '' &&
@@ -148,7 +158,7 @@ class Dashboard extends Component {
                             </View>
                         }
                     </View>
-                    <View style={{ flex: 5 }}>
+                    <View style={{ flex: 4.5 }}>
                         {
                             DataToken.ListToken.length > 0 && !status &&
                             <ComponentToken
@@ -156,6 +166,22 @@ class Dashboard extends Component {
                                 addressWL={DataToken.addressWL}
                                 network={DataToken.network}
                                 status={status}
+                            />
+                        }
+                    </View>
+
+                    <View style={{
+                        flex: 0.7,
+                        justifyContent: 'center',
+                        paddingHorizontal: GLOBALS.wp('10%'),
+                        paddingBottom: 10,
+                    }}>
+                        {
+                            exchange != '' &&
+                            <Segment
+                                navigation={this.props.navigation}
+                                Data={DataToken}
+                                walletID={walletID}
                             />
                         }
                     </View>

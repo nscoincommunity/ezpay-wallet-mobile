@@ -75,6 +75,7 @@
     "stream-browserify": "^1.0.0",
     "string_decoder": "~0.10.25",
     "timers-browserify": "^1.0.1",
+    "tronweb": "^2.3.4",
     "url": "~0.10.1",
     "victory-native": "^30.4.0",
     "web3": "^1.0.0-beta.33"

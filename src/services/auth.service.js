@@ -11,7 +11,9 @@ import crypto from 'crypto'
 import CryptoJS from 'crypto-js';
 import { forkJoin, of, interval, throwError, fromEvent } from 'rxjs';
 import { ADDRCONFIG } from 'dns';
-import { InsertNewWallet, SelectAllWallet, UpdatePkWallet } from '../../realm/walletSchema'
+import { InsertNewWallet, SelectAllWallet, UpdatePkWallet, DeleteWallet } from '../../realm/walletSchema'
+import { ConvertToAddressTron } from './tron.service'
+
 
 export async function Register(password: string, network: string, name: string) {
     let key = await keythereum.create();
@@ -33,6 +35,9 @@ export async function restore(address: string, privateKey: string, password: str
     password = await encryptPassword(password);
     // await registered(true)
     cachePwd = await password;
+    if (network == 'tron') {
+        address = ConvertToAddressTron(address);
+    }
     var wallet = {
         id: Math.floor(Date.now() / 1000),
         name: name,
@@ -195,25 +200,6 @@ export function changePasscode(passwordOld: string, passwordNew: string) {
                     }
                 })
             }).catch(e => rejects(e))
-            // let oldPk = CryptoJS.AES.decrypt(privateKey, passwordOld).toString(CryptoJS.enc.Utf8);
-            // console.log('old', oldPk, passwordOld)
-            // let newPk = CryptoJS.AES.encrypt(oldPk, passwordNew).toString();
-            // console.log('new', passwordNew, newPk)
-            // try {
-            //     await addAddress(Address, EnpasswordNew, newPk);
-            //     privateKey = newPk;
-            //     cachePwd = EnpasswordNew;
-            //     getData('TouchID').then((touch) => {
-            //         if (touch != null) {
-            //             var passcodeEncrypt = CryptoJS.AES.encrypt(passwordNew, EnpasswordNew).toString()
-            //             setData('TouchID', passcodeEncrypt)
-            //         }
-            //     })
-            // } catch (error) {
-            //     console.log(error)
-            //     rejects(error);
-            //     return;
-            // }
         }
     })
 }
@@ -222,6 +208,20 @@ export function changePasscode(passwordOld: string, passwordNew: string) {
 export async function getPrivateKey(password: string, privatekey: string) {
     let PK = CryptoJS.AES.decrypt(privatekey, password).toString(CryptoJS.enc.Utf8);
     return PK;
+}
+
+export async function RemoveWallet(id, passcode) {
+    var passcodeEn = await encryptPassword(passcode);
+    return new Promise((resolve, reject) => {
+        if (cachePwd != passcodeEn) {
+            reject('invalid passcode');
+        } else {
+            DeleteWallet(id).then(ss => {
+                console.log(ss)
+                resolve()
+            }).catch(e => reject(e))
+        }
+    })
 }
 
 

@@ -174,7 +174,8 @@ class SelectWallet extends Component {
         this.props.navigation.navigate('SelectNetwork', {
             payload: {
                 type: 'changeNetwork',
-                data: data
+                data: data,
+                old_network: data.network.name
             }
         })
     }

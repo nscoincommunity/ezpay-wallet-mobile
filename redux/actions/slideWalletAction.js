@@ -4,7 +4,7 @@ import {
     SelectAllWallet,
     UpdateBalanceWallet,
     GetTokenOfNetwork,
-    DB_UpdateBalanceTk
+    DB_UpdateBalanceTk,
 } from '../../realm/walletSchema'
 import { getExchangeRate, getExchangeRateETH, getExchangeRateTRX } from '../../src/services/rate.service';
 import { updateBalance, SV_UpdateBalanceTk } from '../../src/services/wallet.service'
@@ -107,7 +107,6 @@ export const getBalance = (bal) => {
 }
 
 export const EventGetBalance = (address, network, id) => dispatch => {
-    // console.log('action', address, network, id)
     return updateBalance(address, network).then(bal => {
         return UpdateBalanceWallet(id, bal).then(() => {
             return dispatch(getBalance(bal))
@@ -179,4 +178,16 @@ export const ChangeLanguage = (language) => {
             language
         }
     }
+}
+
+const actionRemoveWallet = () => {
+    return {
+        type: 'REMOVE_WALLET'
+    }
+}
+
+export const FuncRemoveWL = (walletID) => dispatch => {
+    return DeleteWallet(walletID).then(ss => {
+        return dispatch(actionRemoveWallet())
+    }).catch(e => console.log(e))
 }

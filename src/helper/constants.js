@@ -24,6 +24,7 @@ export default {
     WALLET_API: 'https://dev-wallet.nexty.io',
     BASE_PNTY: Math.pow(10, 22),
     BASE_NTY: Math.pow(10, 18),
+    BASE_TRON: Math.pow(10, 6),
     PNTY_NTY: 10000,
     BASE_NTY2: bigInt(10).pow(18),
 

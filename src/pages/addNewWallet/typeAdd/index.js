@@ -128,7 +128,7 @@ const styleBtn = (type) => StyleSheet.create({
     buttonType: {
         padding: GLOBAL.wp('3%'),
         marginVertical: GLOBAL.hp('1%'),
-        backgroundColor: type ? '#F0F3F5' : '#F8F9F9',
+        backgroundColor: '#F8F9F9',
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {
@@ -139,7 +139,7 @@ const styleBtn = (type) => StyleSheet.create({
         shadowRadius: 1.27,
         elevation: 3,
         flexDirection: 'row',
-        margin: Platform.OS == 'android' ? GLOBAL.wp('1%') : 'auto',
+        margin: Platform.OS == 'android' ? GLOBAL.wp('1%') : 1,
         paddingVertical: GLOBAL.wp('7%'),
     }
 })

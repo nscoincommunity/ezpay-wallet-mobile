@@ -13,7 +13,7 @@ import { initAuth } from './services/auth.service'
 import { CHECK_REGISTER } from '../redux/actions/initWallet';
 import { ONSNAPWALLET } from '../redux/actions/slideWalletAction';
 import { connect } from "react-redux";
-import { DeleteAllWallet, deleteDB } from '../realm/walletSchema';
+import { DeleteAllWallet, deleteDB, DeleteWallet } from '../realm/walletSchema';
 /* screen stack */
 import Sidebar from "./sidebar";
 import GLOBALS from './helper/variables';
@@ -48,7 +48,8 @@ import TypeAddWallet from './pages/addNewWallet/typeAdd';
 import NameWallet from './pages/addNewWallet/nameWallet';
 import SelectNetwork from './pages/addNewWallet/selectNetwork';
 import InforWallet from './pages/inforWallet';
-import { ChangeLanguage } from '../redux/actions/slideWalletAction'
+import { ChangeLanguage } from '../redux/actions/slideWalletAction';
+import DeleteWL from './pages/deleteWL'
 
 
 // Lang.locale = 'vi'
@@ -77,6 +78,7 @@ const Drawer = createDrawerNavigator(
         // Addtoken: { screen: Addtoken },
         Setting: { screen: Setting },
         // History: { screen: history },
+        DeleteWL: { screen: DeleteWL },
         About: { screen: About },
         Redeem: { screen: redeem },
     }, {

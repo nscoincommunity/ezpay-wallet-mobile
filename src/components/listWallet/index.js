@@ -70,6 +70,7 @@ class ListWallet extends Component {
 
     componentDidMount() {
         if (this.InitInterval) {
+            this.props.fetchRate(this.props.Data[0].network.name, this.props.Data[0].id);
             this.funcUpdateBalance(this.props.Data[0]);
             this.props.GetListToken(
                 this.props.Data[0].network.name,

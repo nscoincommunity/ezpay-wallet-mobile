@@ -24,6 +24,7 @@ import { exchangeRate, exchangeRateETH, } from '../../services/rate.service';
 import { Utils } from '../../helper/utils'
 import Dialog from "react-native-dialog";
 import { SendService, SendToken, updateBalance, SV_UpdateBalanceTk } from "../../services/wallet.service";
+import { SendTRON } from '../../services/tron.service'
 import { ScaleDialog } from "../../services/loading.service";
 import { getData } from '../../services/data.service';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -235,34 +236,64 @@ class FormSend extends Component {
                     return;
                 }
                 if (this.state.viewSymbol == this.props.Symbol) {
-                    SendService(
-                        this.props.DataToken.network,
-                        this.state.addresswallet,
-                        this.props.DataToken.addressWL,
-                        parseFloat(this.state.NTY),
-                        this.state.Password,
-                        this.props.DataToken.PK_WL,
-                        this.state.extraData,
-                    ).then(data => {
-                        this.setState(this.resetState)
-                        console.log('send success: ' + data)
-                        this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
-                        this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
-                    }).catch(async error => {
-                        // await this.setState({ dialogSend: false })
-                        console.log('send error: ' + error)
-                        console.log(error.slice(0, 34))
-                        if (error.slice(0, 34) == "Returned error: known transaction:") {
-                            this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
-                            return;
-                        }
-                        if (error == 'Returned error: insufficient funds for gas * price + value') {
-                            await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
-                        } else {
-                            await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
-                        }
-                        await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
-                    })
+                    if (this.props.network != 'tron') {
+                        SendService(
+                            this.props.DataToken.network,
+                            this.state.addresswallet,
+                            this.props.DataToken.addressWL,
+                            parseFloat(this.state.NTY),
+                            this.state.Password,
+                            this.props.DataToken.PK_WL,
+                            this.state.extraData,
+                        ).then(data => {
+                            this.setState(this.resetState)
+                            console.log('send success: ' + data)
+                            this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data })
+                            this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
+                        }).catch(async error => {
+                            // await this.setState({ dialogSend: false })
+                            console.log('send error: ' + error)
+                            console.log(error.slice(0, 34))
+                            if (error.slice(0, 34) == "Returned error: known transaction:") {
+                                this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
+                                return;
+                            }
+                            if (error == 'Returned error: insufficient funds for gas * price + value') {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
+                            } else {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
+                            }
+                            await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
+                        })
+                    } else {
+                        SendTRON(
+                            this.state.addresswallet,
+                            this.props.DataToken.addressWL,
+                            parseFloat(this.state.NTY),
+                            this.state.Password,
+                            this.props.DataToken.PK_WL,
+                            this.state.extraData
+                        ).then(data => {
+                            this.setState(this.resetState)
+                            console.log('send success: ' + JSON.stringify(data))
+                            this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: data.transaction.txID })
+                            this.showScaleAnimationDialog('success', this.state.titleDialog, this.state.contentDialog);
+                        }).catch(async error => {
+                            console.log('send error: ' + error)
+                            console.log(error.slice(0, 34))
+                            if (error.slice(0, 34) == "Returned error: known transaction:") {
+                                this.setState({ titleDialog: Language.t('Send.SendSuccess.Title'), contentDialog: "0x" + error.slice(35, error.length) })
+                                return;
+                            }
+                            if (error == 'Returned error: insufficient funds for gas * price + value') {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: Language.t('Send.AlerError.NotEnoughNTY') })
+                            } else {
+                                await this.setState({ titleDialog: Language.t('Send.AlerError.Error'), contentDialog: error })
+                            }
+                            await this.showScaleAnimationDialog('error', this.state.titleDialog, this.state.contentDialog);
+                        })
+                    }
+
                 } else {
                     SendToken(
                         this.props.DataToken.network,
@@ -414,13 +445,12 @@ class FormSend extends Component {
     }
 
     getBalance = () => {
-        console.log('aa')
         if (this.state.viewSymbol == this.props.Symbol) {
             console.log(this.props.DataToken.addressWL, this.props.network)
             updateBalance(this.props.DataToken.addressWL, this.props.network).then(balance => {
                 console.log(balance)
                 let usd = Utils.round(parseFloat(balance) * this.props.rate, 5);
-                this.setState({ NTY: balance, USD: usd.toString() })
+                this.setState({ NTY: balance.toString(), USD: usd.toString() })
             }).catch(e => console.log(e))
         } else {
             SV_UpdateBalanceTk(this.state.tokenSelected.addressToken, this.props.network, this.props.DataToken.addressWL).then(balance => {
@@ -431,8 +461,12 @@ class FormSend extends Component {
 
     render() {
         const { ListToken } = this.props.DataToken;
-        if (ListToken[0].name != this.props.Symbol) {
-            var ArrayToken = [{ name: this.props.Symbol }].concat(ListToken)
+        if (undefined !== ListToken && ListToken.length > 0) {
+            if (ListToken[0].name != this.props.Symbol) {
+                var ArrayToken = [{ name: this.props.Symbol }].concat(ListToken)
+            }
+        } else {
+            var ArrayToken = [{ name: this.props.Symbol }]
         }
 
         return (

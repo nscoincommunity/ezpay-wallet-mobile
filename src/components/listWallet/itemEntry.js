@@ -33,7 +33,6 @@ interface item {
 class EntryComponent extends Component {
 
     onClickItem = (item) => {
-        console.log('aaa', this.props)
         this.props.navigation.navigate('InforWallet', { payload: item })
     }
 
@@ -67,7 +66,7 @@ class EntryComponent extends Component {
                         paddingTop: GLOBAL.hp('2%')
                     }}>
                         <View >
-                            <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(4), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance}</Text>
+                            <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(4), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance.toLocaleString()}</Text>
                             <Text style={[styles.textItem, { opacity: 0.7, marginBottom: GLOBAL.wp('12%') }]} >Total value</Text>
                         </View>
                         <View>

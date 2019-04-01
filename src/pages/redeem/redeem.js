@@ -112,7 +112,7 @@ export default class Redeem extends Component {
                     nameIconLeft="align-left"
                     title={Language.t('Redeem.Title')}
                     style={{ marginTop: 23 }}
-                    pressIconLeft={() => { this.props.navigation.goBack(); }}
+                    pressIconLeft={() => { this.props.navigation.openDrawer(); }}
                 />
 
                 <View style={[styles.container, { flexDirection: 'row', padding: GLOBALS.hp('2%'), }]}>

@@ -67,7 +67,6 @@ export default class Addtoken extends Component {
 }
 
 class FormAddToken extends Component {
-    ListToken = [];
     network: string = "Nexty"
     initState = {
         addressTK: '',
@@ -89,9 +88,6 @@ class FormAddToken extends Component {
         })
     }
 
-    componentWillUnmount() {
-        this.ListToken = []
-    }
     async setValue(val: string, network) {
         this.setState({ addressTK: val });
         if (val.length > 0) {
@@ -161,69 +157,74 @@ class FormAddToken extends Component {
         const { network } = this.props.navigation.getParam('payload');
         return (
             <View style={styles.container}>
-                <View style={styles.MainForm}>
-                    <View style={{ alignItems: 'center', paddingVertical: GLOBALS.hp('5%') }}>
-                        <Image
-                            source={require('../../images/Add-token.png')}
-                            resizeMode="contain"
-                            style={{ height: GLOBALS.wp('40%'), width: GLOBALS.wp('40%') }} />
-                    </View>
-                    <View style={{
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        borderBottomWidth: 1,
-                        borderBottomColor: '#d8d8d8',
-                        paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
-                    }}>
-                        <TextInput
-                            placeholder={Language.t("AddToken.FormAdd.PlaceholderToken")}
-                            value={this.state.addressTK}
-                            onChangeText={(value) => { this.setValue(value, network) }}
-                            style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%') }}
-                            underlineColorAndroid="transparent"
-                        />
-                    </View>
-                    <Text style={{ color: GLOBALS.Color.danger, textAlign: 'left' }}>{this.state.txtErr}</Text>
+                {/* <View style={styles.MainForm}> */}
+                <View style={{ alignItems: 'center', paddingVertical: GLOBALS.hp('5%') }}>
+                    <Image
+                        source={require('../../images/Add-token.png')}
+                        resizeMode="contain"
+                        style={{ height: GLOBALS.wp('40%'), width: GLOBALS.wp('40%') }} />
+                </View>
+                <View style={styles.styleTextInput}>
+                    <TextInput
+                        placeholder={Language.t("AddToken.FormAdd.PlaceholderToken")}
+                        value={this.state.addressTK}
+                        onChangeText={(value) => { this.setValue(value, network) }}
+                        style={styles.TextInput}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <Text style={{ color: GLOBALS.Color.danger, textAlign: 'left' }}>{this.state.txtErr}</Text>
 
-                    <View style={{
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        borderBottomWidth: 1,
-                        borderBottomColor: '#d8d8d8',
-                        paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
-                    }}>
-                        <TextInput
-                            placeholder={Language.t("AddToken.FormAdd.PlaceholderSymbol")}
-                            editable={false}
-                            value={this.state.symbol}
-                            style={{ flex: 10, fontSize: PixelRatio.getFontScale() > 1 ? GLOBALS.hp('2%') : GLOBALS.hp('2.5%'), }}
-                            underlineColorAndroid="transparent"
-                        />
-                    </View>
-                    <TouchableOpacity style={styles.button} onPress={this.addToken} disabled={this.state.typeButton}>
+                <View style={styles.styleTextInput}>
+                    <TextInput
+                        placeholder={Language.t("AddToken.FormAdd.PlaceholderSymbol")}
+                        editable={false}
+                        value={this.state.symbol}
+                        style={styles.TextInput}
+                        underlineColorAndroid="transparent"
+                    />
+                </View>
+                <View style={{ alignItems: 'center', paddingVertical: GLOBALS.hp('2%') }}>
+                    <TouchableOpacity onPress={this.addToken} disabled={this.state.typeButton}>
                         <Gradient
-                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
-                            start={{ x: 1, y: 0.7 }}
-                            end={{ x: 0, y: 3 }}
-                            style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#328FFC', '#08AEEA']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styleButton(this.state.typeButton).button}
                         >
                             <Text style={styles.TextButton}>{Language.t('AddToken.FormAdd.TitleButton')}</Text>
                         </Gradient>
                     </TouchableOpacity>
                 </View>
+                {/* </View> */}
             </View>
         )
     }
 }
 
+/* style button */
+var styleButton = (type) => StyleSheet.create({
+    button: {
+        justifyContent: 'center',
+        shadowOffset: {
+            width: 3,
+            height: 3,
+        },
+        shadowColor: '#000',
+        shadowOpacity: type ? 0.2 : 0,
+        borderRadius: 5,
+        paddingHorizontal: GLOBALS.wp('20%'),
+        paddingVertical: GLOBALS.hp('2%'),
+    }
+})
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: GLOBALS.hp('2%'),
         backgroundColor: 'transparent',
+        justifyContent: 'center'
+
     },
     MainForm: {
         flex: 1,
@@ -247,18 +248,25 @@ const styles = StyleSheet.create({
         fontFamily: GLOBALS.font.Poppins,
         fontWeight: '400',
     },
-    button: {
-        justifyContent: 'center',
+    styleTextInput: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        backgroundColor: '#E9E9E9',
+        paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.44,
-        shadowRadius: 1.27,
-        elevation: 7,
-        marginTop: GLOBALS.hp('5%'),
-    }
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    TextInput: {
+        flex: 8,
+        fontSize: GLOBALS.fontsize(2.5),
+        paddingLeft: GLOBALS.wp('5%')
+    },
 })
 
