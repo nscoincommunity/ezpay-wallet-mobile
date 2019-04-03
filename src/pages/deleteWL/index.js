@@ -62,8 +62,8 @@ class PageDeleteWL extends Component {
                 this.setState({ dialogVisible: false, passcode: '' }, () => {
                     setTimeout(() => {
                         Alert.alert(
-                            'Success',
-                            'Remove wallet success',
+                            Language.t("ManageWallet.AlertSuccess.title"),
+                            Language.t("ManageWallet.AlertSuccess.content"),
                             [{ text: 'Ok', onPress: () => { this.loadData(); this.props.fetchAllWallet() }, style: 'cancel' }]
                         )
                     }, 350)
@@ -72,7 +72,7 @@ class PageDeleteWL extends Component {
 
             }).catch((e) => {
                 Alert.alert(
-                    'Error',
+                    Language.t("Restore.Error"),
                     e,
                     [{ text: 'Ok', style: 'cancel' }]
                 )
@@ -102,7 +102,7 @@ class PageDeleteWL extends Component {
                     colorIconLeft="#328FFC"
                     colorTitle="#328FFC"
                     nameIconLeft="align-left"
-                    title="Remove wallet"
+                    title={Language.t("ManageWallet.Title")}
                     style={{ paddingTop: getStatusBarHeight() }}
                     pressIconLeft={() => { this.props.navigation.openDrawer() }}
                 />
@@ -175,23 +175,23 @@ class PageDeleteWL extends Component {
                     <Dialog.Title
                         style={{ fontFamily: GLOBAL.font.Poppins }}
                     >
-                        Confirm remove wallet
-                        </Dialog.Title>
+                        {Language.t("ManageWallet.AlertConfirm.Title")}
+                    </Dialog.Title>
                     <Dialog.Description style={{ fontFamily: GLOBAL.font.Poppins }}>
-                        Enter your local passcode to process
-                        </Dialog.Description>
+                        {Language.t("ManageWallet.AlertConfirm.content")}
+                    </Dialog.Description>
                     <Dialog.Input
-                        placeholder='Wallet local passcode'
+                        placeholder={Language.t("ManageWallet.AlertConfirm.placeholderInput")}
                         onChangeText={(val) => this.setState({ passcode: val })}
                         secureTextEntry={true} value={this.state.passcode}
                         autoFocus={true}
                     />
                     <Dialog.Button
-                        label="Cancel"
+                        label={Language.t("ManageWallet.AlertConfirm.cancel")}
                         onPress={this.handleCancel.bind(this)}
                     />
                     <Dialog.Button
-                        label="OK"
+                        label={Language.t("ManageWallet.AlertConfirm.ok")}
                         onPress={this.handleOK.bind(this)}
                     />
                 </Dialog.Container>

@@ -9,19 +9,6 @@ import Gradient from 'react-native-linear-gradient';
 import Header from '../components/header';
 
 export default class CameraScreen extends React.Component<any, any> {
-    // static navigationOptions = () => ({
-    //     title: Language.t('QRScan.Title'),
-    //     headerStyle: {
-    //         backgroundColor: GLOBALS.Color.primary,
-    //     },
-    //     headerTitleStyle: {
-    //         color: 'white',
-    //     },
-    //     headerBackTitleStyle: {
-    //         color: 'white',
-    //     },
-    //     headerTintColor: 'white',
-    // });
 
     constructor(props) {
         super(props);

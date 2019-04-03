@@ -47,7 +47,12 @@
         "All": "所有",
         "YourBalance": "余额",
         "CheckBackup": "钱包尚未备份",
-        "ButtonBackup": "备份"
+        "ButtonBackup": "备份",
+        "total_value": "Total value",
+        "segment": {
+            "send": "提交",
+            "receve": "接收"
+        }
     },
     "Send": {
         "Title": "提交",
@@ -275,5 +280,51 @@
         "BtnCancel": "不是现在",
         "BtnSetting": "使用 Touch ID"
     },
-    "LOGIN_TITLE": "登录"
+    "LOGIN_TITLE": "登录",
+    "Add_new": {
+        "Title": "Add new wallet",
+        "BtnCreate": {
+            "Title": "Create",
+            "content": "Create a new wallet"
+        },
+        "BtnChangeNetwork": {
+            "Title": "Change network",
+            "content": "Select exist wallet but change network"
+        },
+        "BtnImport": {
+            "Title": "Import",
+            "content": "Import wallet form restore code, private key..."
+        }
+    },
+    "SelectNetwork": {
+        "Title": "Select network"
+    },
+    "NameWallet": {
+        "Title1": "Name wallet",
+        "Title2": "Select wallet",
+        "titleButton": "Submit",
+        "AlertConfirm": {
+            "title": "Confirm",
+            "content": "Enter your local passcode to process",
+            "placeholderInput": "Wallet local passcode",
+            "cancel": "Cancel",
+            "ok": "Ok",
+            "walletNameExist": "Name wallet has already existed",
+            "walletNameError": "Name wallet needs at least 1 characters"
+        }
+    },
+    "ManageWallet": {
+        "Title": "Manage wallet",
+        "AletConfirm": {
+            "title": "Confirm remove wallet",
+            "content": "Enter your local passcode to process",
+            "placeholderInput": "Wallet local passcode",
+            "cancel": "Cancel",
+            "ok": "Ok"
+        },
+        "AlertSuccess": {
+            "title": "Success",
+            "content": "Remove wallet success"
+        }
+    }
 }

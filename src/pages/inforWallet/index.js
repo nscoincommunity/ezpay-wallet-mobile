@@ -93,13 +93,9 @@ export default class InforWallet extends Component {
                 />
                 <View style={styles.body}>
                     <View style={{ flex: 1 }}>
-                        <Text
-                            style={{ textAlign: 'center', fontFamily: GLOBAL.font.Poppins }}
-                            numberOfLines={1}
-                            ellipsizeMode="middle"
-                        >{item.address}</Text>
+                        <Text style={{ textAlign: 'center', fontFamily: GLOBAL.font.Poppins }}>{Language.t('Request.TitleCopy')}</Text>
                     </View>
-                    <View style={{ flex: 5, }}>
+                    <View style={{ flex: 6, justifyContent: 'center' }}>
                         <TouchableOpacity
                             style={{
                                 justifyContent: 'center',
@@ -133,15 +129,25 @@ export default class InforWallet extends Component {
                                 }
                             </ImageBackground>
                         </TouchableOpacity>
+                        <Text
+                            style={{
+                                textAlign: 'center',
+                                fontFamily: GLOBAL.font.Poppins,
+                                fontWeight: 'bold',
+                                marginVertical: GLOBAL.hp('2%')
+                            }}
+                            numberOfLines={1}
+                            ellipsizeMode="middle"
+                        >{item.address}</Text>
                     </View>
 
-                    <View style={{ flex: 4, }}>
+                    <View style={{ flex: 3, paddingHorizontal: GLOBAL.wp('20%') }}>
                         <TouchableOpacity
                             style={styles.buttonShare}
                             onPress={() => this._getPrivatekey(item.pk_en)}
                         >
                             <Gradient
-                                style={{ paddingVertical: GLOBAL.hp('1.5%'), borderRadius: 5, paddingHorizontal: GLOBAL.wp('15%') }}
+                                style={{ paddingVertical: GLOBAL.hp('1.5%'), borderRadius: 5, }}
                                 colors={['#08AEEA', '#328FFC']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
@@ -162,6 +168,9 @@ export default class InforWallet extends Component {
                                 <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>History</Text>
                             </Gradient>
                         </TouchableOpacity>
+                        <View style={{ alignItems: 'center', zIndex: 100 }}>
+                            <CustomToast ref="toastBottom" position="bottom" />
+                        </View>
                         <TouchableOpacity
                             style={styles.buttonShare}
                             onPress={() => Share.share({ message: item.address })}
@@ -175,8 +184,8 @@ export default class InforWallet extends Component {
                                 <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Share</Text>
                             </Gradient>
                         </TouchableOpacity>
+
                     </View>
-                    <CustomToast ref="toastBottom" position="bottom" />
                 </View>
             </Gradient>
         )
@@ -192,7 +201,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         flexDirection: 'column',
         paddingVertical: GLOBAL.hp('2%'),
-        alignItems: 'center'
+        // alignItems: 'center'
     },
     buttonShare: {
         shadowColor: "#000",

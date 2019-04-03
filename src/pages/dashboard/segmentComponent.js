@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import GLOBAL from '../../helper/variables';
+import { fromBottom } from '../../components/effectPushScreen'
+
 export class segmentComponent extends Component {
 
     shouldComponentUpdate() {
@@ -17,6 +19,7 @@ export class segmentComponent extends Component {
         }
 
         this.props.navigation.navigate('InforWallet', { payload: Item })
+        // this.props.navigation.navigate({ screen: 'InforWallet', params: { payload: Item }, transitionConfig: fromBottom })
     }
 
     goSend() {
@@ -37,7 +40,7 @@ export class segmentComponent extends Component {
                     style={styles.btnRight}
                     onPress={() => this.goReciver()}
                 >
-                    <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins, fontWeight: 'bold' }}>Reciver</Text>
+                    <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins, fontWeight: 'bold' }}>Recive</Text>
                 </TouchableOpacity>
             </View>
         )

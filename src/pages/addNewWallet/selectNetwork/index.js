@@ -10,6 +10,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import Dialog from "react-native-dialog";
 import { bindActionCreators } from 'redux';
 import Gradient from 'react-native-linear-gradient';
+import Language from '../../../i18n/i18n'
 
 const px = PixelRatio.getFontScale()
 
@@ -192,23 +193,23 @@ class SelectNetwork extends Component {
                     <Dialog.Title
                         style={{ fontFamily: GLOBALS.font.Poppins }}
                     >
-                        Confirm PIN
+                        {Language.t("NameWallet.AlertConfirm.title")}
                     </Dialog.Title>
                     <Dialog.Description style={{ fontFamily: GLOBALS.font.Poppins }}>
-                        Input your local passcode
+                        {Language.t("NameWallet.AlertConfirm.content")}
                     </Dialog.Description>
                     <Dialog.Input
-                        placeholder="local passcode"
+                        placeholder={Language.t("NameWallet.AlertConfirm.placeholderInput")}
                         onChangeText={(val) => this.setState({ passcode: val })}
                         secureTextEntry={true} value={this.state.passcode}
                         autoFocus={true}
                     />
                     <Dialog.Button
-                        label="cancel"
+                        label={Language.t("NameWallet.AlertConfirm.cancel")}
                         onPress={this.handleCancel.bind(this)}
                     />
                     <Dialog.Button
-                        label="OK"
+                        label={Language.t("NameWallet.AlertConfirm.ok")}
                         onPress={this.handleAdd.bind(this)}
                     />
                 </Dialog.Container>
@@ -227,12 +228,12 @@ const StyleBtn = (type) => StyleSheet.create({
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {
-            width: -1,
+            width: type ? -1 : 0,
             height: type ? 3 : 0,
         },
         shadowOpacity: type ? 0.24 : 0,
         shadowRadius: type ? 2.27 : 0,
-        elevation: 2,
+        elevation: type ? 2 : 0,
         margin: GLOBALS.wp('2%'),
         justifyContent: 'center',
         alignItems: 'center',

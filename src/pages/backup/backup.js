@@ -180,7 +180,12 @@ class backup extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1, backgroundColor: '#fafafa' }}>
+            <Gradient
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ flex: 1 }}
+            >
                 <StatusBar
                     backgroundColor={'transparent'}
                     translucent
@@ -277,14 +282,13 @@ class backup extends Component {
                     </View>
                 </View >
 
-            </View >
+            </Gradient >
         )
     }
 }
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fafafa',
         padding: GLOBALS.hp('2%'),
         position: 'relative',
     },

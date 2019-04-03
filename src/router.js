@@ -49,7 +49,8 @@ import NameWallet from './pages/addNewWallet/nameWallet';
 import SelectNetwork from './pages/addNewWallet/selectNetwork';
 import InforWallet from './pages/inforWallet';
 import { ChangeLanguage } from '../redux/actions/slideWalletAction';
-import DeleteWL from './pages/deleteWL'
+import DeleteWL from './pages/deleteWL';
+import { fromBottom, fadeIn, zoomIn, zoomOut } from './components/effectPushScreen'
 
 
 // Lang.locale = 'vi'
@@ -145,9 +146,21 @@ class Router extends Component {
     }
 
     render() {
-        const Screen = createStackNavigator(
+        const DasboardInfor = createStackNavigator(
             {
                 Drawer: { screen: Drawer },
+                InforWallet: { screen: InforWallet },
+            },
+            {
+                initialRouteName: 'Drawer',
+                headerMode: "none",
+                transitionConfig: () => zoomIn(500)
+            }
+        )
+
+        const Screen = createStackNavigator(
+            {
+                Drawer: { screen: DasboardInfor },
                 login: { screen: login },
                 TempPage: { screen: TempPage },
                 ListToken: { screen: ListToken },
@@ -164,7 +177,7 @@ class Router extends Component {
                 AddNewWallet: { screen: TypeAddWallet },
                 NameWallet: { screen: NameWallet },
                 SelectNetwork: { screen: SelectNetwork },
-                InforWallet: { screen: InforWallet },
+                // InforWallet: { screen: InforWallet },
                 Addtoken: { screen: Addtoken },
                 SendScreen: { screen: Send },
                 Privatekey: { screen: Prk },
@@ -173,6 +186,7 @@ class Router extends Component {
             {
                 initialRouteName: this.props.register ? 'login' : 'register',
                 headerMode: "none",
+                // transitionConfig: () => fromBottom(1000)
             },
         )
 

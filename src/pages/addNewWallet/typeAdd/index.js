@@ -79,35 +79,33 @@ class TypeAddWallet extends Component {
                 />
                 <View style={{ flex: 1, padding: GLOBAL.hp('2%') }}>
                     <FlatList
-                        // contentContainerStyle={Platform.OS == 'android' ? { paddingHorizontal: GLOBAL.wp('5%') } : {}}
-
                         data={arrayType}
                         keyExtractor={(item, index) => index.toString()}
-                        // style={{ padding: GLOBAL.wp('2%') }}
-                        // numColumns={}
                         renderItem={({ item, index }) => {
                             return (
                                 <TouchableOpacity
                                     style={styleBtn(item.highlight).buttonType}
                                     onPress={() => this.toScreen(item.type)}
                                 >
-                                    <View style={{ flex: 6 }}>
+                                    <View style={{ flex: 8 }}>
                                         <Text style={{
                                             color: '#535353',
-                                            fontSize: GLOBAL.fontsize(4),
+                                            fontSize: GLOBAL.fontsize(3),
                                             fontFamily: GLOBAL.font.Poppins
                                         }}>{item.title}</Text>
                                         <Text
                                             style={{
                                                 color: '#979797',
-                                                fontSize: GLOBAL.fontsize(2),
+                                                fontSize: GLOBAL.fontsize(1.7),
                                                 fontFamily: GLOBAL.font.Poppins
                                             }}
                                         >{item.description}</Text>
                                     </View>
-                                    <Image
-                                        source={item.icon}
-                                    />
+                                    <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Image
+                                            source={item.icon}
+                                        />
+                                    </View>
                                 </TouchableOpacity>
                             )
                         }}

@@ -115,15 +115,7 @@ class ScreenRegister extends Component {
                     {Lang.t("Register.policy")}
                     <Text style={{ color: GLOBALS.Color.secondary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy/') }}> Term of Service</Text>
                 </Text>
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                    marginTop: hp('20%')
-                }}>
+                <View style={[style.styleTextInput, { marginTop: hp('20%') }]}>
                     <TextInput
                         placeholder={Lang.t("Register.PHWalletLocalPasscode")}
                         secureTextEntry={true}
@@ -131,19 +123,12 @@ class ScreenRegister extends Component {
                         returnKeyType={"next"}
                         blurOnSubmit={false}
                         onSubmitEditing={() => { this.focusTheField('field2'); }}
-                        style={{ flex: 10, fontSize: hp('2.5%') }}
+                        style={style.TextInput}
                         underlineColorAndroid="transparent"
                     />
                 </View>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorPw}</Text>
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#AAAAAA',
-                    paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
-                }}>
+                <View style={style.styleTextInput}>
                     <TextInput
                         placeholder={Lang.t("Register.PHConfirmLocalPasscode")}
                         secureTextEntry={true}
@@ -155,19 +140,21 @@ class ScreenRegister extends Component {
                                 this.register()
                             }
                         }}
-                        style={{ flex: 10, fontSize: hp('2.5%') }}
+                        style={style.TextInput}
                         underlineColorAndroid="transparent"
                     />
                 </View>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TexterrorCPw}</Text>
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button}
-                        onPress={this.register.bind(this)} disabled={this.state.typeButton}>
+                    <TouchableOpacity
+                        onPress={this.register.bind(this)}
+                        disabled={this.state.typeButton}
+                    >
                         <Gradient
-                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#0C449A', '#082B5F']}
-                            start={{ x: 1, y: 0.7 }}
-                            end={{ x: 0, y: 3 }}
-                            style={{ paddingVertical: hp('2%'), borderRadius: 5 }}
+                            colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#328FFC', '#08AEEA']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styleButton(this.state.typeButton).button}
                         >
                             <Text style={style.TextButton}>{Lang.t("Register.TitleButton")}</Text>
                         </Gradient>
@@ -207,7 +194,7 @@ export default class register extends Component {
     render() {
         return (
             <ScrollView style={{ backgroundColor: '#fff' }}>
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={hp('10%')} enabled>
+                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={hp('0%')} enabled>
                     <ScreenRegister {...this.props}></ScreenRegister>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -217,18 +204,19 @@ export default class register extends Component {
 
 
 
-var styleButton = (color, type) => StyleSheet.create({
+/* style button */
+var styleButton = (type) => StyleSheet.create({
     button: {
         justifyContent: 'center',
-        borderRadius: 5,
-        shadowColor: "#000",
         shadowOffset: {
-            width: 0,
-            height: 0,
+            width: 3,
+            height: 3,
         },
-        shadowOpacity: 0.24,
-        shadowRadius: 0.77,
-        elevation: 7,
+        shadowColor: '#000',
+        shadowOpacity: type ? 0.2 : 0,
+        borderRadius: 5,
+        paddingHorizontal: GLOBALS.wp('20%'),
+        paddingVertical: GLOBALS.hp('2%'),
     }
 })
 
@@ -250,5 +238,27 @@ const style = StyleSheet.create({
     },
     FormRouter: {
         marginTop: hp('5%'),
-    }
+        alignItems: 'center',
+        paddingVertical: GLOBALS.hp('2%')
+    },
+    styleTextInput: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        backgroundColor: '#E9E9E9',
+        paddingVertical: Platform.OS === 'ios' ? GLOBALS.hp('1.5%') : 'auto',
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    TextInput: {
+        flex: 8,
+        fontSize: GLOBALS.fontsize(2.5),
+        paddingLeft: GLOBALS.wp('5%')
+    },
 })

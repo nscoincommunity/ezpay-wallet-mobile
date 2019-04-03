@@ -47,7 +47,12 @@
             "All": "Tudo",
             "YourBalance": "Saldo",
             "CheckBackup": "Wallet todavía no ha hecho la copia de seguridad",
-            "ButtonBackup": "Copia de seguridad"
+            "ButtonBackup": "Copia de seguridad",
+            "total_value": "Total value",
+            "segment": {
+                "send": "Enviar",
+                "receve": "Receber"
+            }
         },
         "Send": {
             "Title": "Enviar",
@@ -275,5 +280,51 @@
             "BtnCancel": "Ahora no",
             "BtnSetting": "Usar Touch ID"
         },
-        "LOGIN_TITLE": "Login"
+        "LOGIN_TITLE": "Login",
+        "Add_new": {
+            "Title": "Add new wallet",
+            "BtnCreate": {
+                "Title": "Create",
+                "content": "Create a new wallet"
+            },
+            "BtnChangeNetwork": {
+                "Title": "Change network",
+                "content": "Select exist wallet but change network"
+            },
+            "BtnImport": {
+                "Title": "Import",
+                "content": "Import wallet form restore code, private key..."
+            }
+        },
+        "SelectNetwork": {
+            "Title": "Select network"
+        },
+        "NameWallet": {
+            "Title1": "Name wallet",
+            "Title2": "Select wallet",
+            "titleButton": "Submit",
+            "AlertConfirm": {
+                "title": "Confirm",
+                "content": "Enter your local passcode to process",
+                "placeholderInput": "Wallet local passcode",
+                "cancel": "Cancel",
+                "ok": "Ok",
+                "walletNameExist": "Name wallet has already existed",
+                "walletNameError": "Name wallet needs at least 1 characters"
+            }
+        },
+        "ManageWallet": {
+            "Title": "Manage wallet",
+            "AletConfirm": {
+                "title": "Confirm remove wallet",
+                "content": "Enter your local passcode to process",
+                "placeholderInput": "Wallet local passcode",
+                "cancel": "Cancel",
+                "ok": "Ok"
+            },
+            "AlertSuccess": {
+                "title": "Success",
+                "content": "Remove wallet success"
+            }
+        }
     }

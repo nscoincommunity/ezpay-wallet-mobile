@@ -17,10 +17,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchAllWallet } from '../../../../redux/actions/slideWalletAction'
 import Dialog from "react-native-dialog";
-import { CreateNewWallet, importWallet } from '../insertWallet'
-import { StackActions, NavigationActions } from 'react-navigation'
+import { CreateNewWallet, importWallet } from '../insertWallet';
+import { StackActions, NavigationActions } from 'react-navigation';
 import Gradient from 'react-native-linear-gradient';
-import { CheckExistNameWallet } from '../../../../realm/walletSchema'
+import { CheckExistNameWallet } from '../../../../realm/walletSchema';
+import Language from '../../../i18n/i18n';
 
 class NameWallet extends Component {
     constructor(props) {
@@ -106,7 +107,7 @@ class NameWallet extends Component {
                     colorIconLeft="#328FFC"
                     colorTitle="#328FFC"
                     nameIconLeft="arrow-left"
-                    title={payload.type != 'changeNetwork' ? "Name wallet" : "Select wallet"}
+                    title={payload.type != 'changeNetwork' ? Language.t("NameWallet.Title1") : Language.t("NameWallet.Title2")}
                     style={{ marginTop: 23 }}
                     pressIconLeft={() => { this.props.navigation.goBack(); }}
                 />
@@ -129,7 +130,7 @@ class NameWallet extends Component {
                                     start={{ x: 0, y: 0 }}
                                     end={{ x: 1, y: 0 }}
                                 >
-                                    <Text style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBAL.font.Poppins }}>Submit</Text>
+                                    <Text style={{ color: '#fff', textAlign: 'center', fontFamily: GLOBAL.font.Poppins }}>{Language.t("NameWallet.titleButton")}</Text>
                                 </Gradient>
                             </TouchableOpacity>
                         </View>
@@ -140,23 +141,23 @@ class NameWallet extends Component {
                     <Dialog.Title
                         style={{ fontFamily: GLOBAL.font.Poppins }}
                     >
-                        Confirm PIN
+                        {Language.t("NameWallet.AlertConfirm.title")}
                     </Dialog.Title>
                     <Dialog.Description style={{ fontFamily: GLOBAL.font.Poppins }}>
-                        Input your local passcode
+                        {Language.t("NameWallet.AlertConfirm.content")}
                     </Dialog.Description>
                     <Dialog.Input
-                        placeholder="local passcode"
+                        placeholder={Language.t("NameWallet.AlertConfirm.content")}
                         onChangeText={(val) => this.setState({ passcode: val })}
                         secureTextEntry={true} value={this.state.passcode}
                         autoFocus={true}
                     />
                     <Dialog.Button
-                        label="cancel"
+                        label={Language.t("NameWallet.AlertConfirm.cancel")}
                         onPress={this.handleCancel.bind(this)}
                     />
                     <Dialog.Button
-                        label="OK"
+                        label={Language.t("NameWallet.AlertConfirm.ok")}
                         onPress={this.handleGet}
                     />
                 </Dialog.Container>
@@ -235,11 +236,11 @@ class FormInput extends Component {
                     await this.setState({ err: false, textError: '' });
                     this.props.setName(val);
                 } else {
-                    await this.setState({ err: true, textError: 'Name wallet has already existed', })
+                    await this.setState({ err: true, textError: Language.t("NameWallet.AlertConfirm.walletNameExist"), })
                 }
             })
         } else {
-            await this.setState({ err: true, textError: 'Name wallet needs at least 1 characters', })
+            await this.setState({ err: true, textError: Language.t("NameWallet.AlertConfirm.walletNameError"), })
         }
     }
 
@@ -250,7 +251,7 @@ class FormInput extends Component {
                     <TextInput
                         onChangeText={(val) => this.Validate(val)}
                         style={{ color: '#535353' }}
-                        placeholder="Name wallet"
+                        placeholder={Language.t("NameWallet.Title1")}
                         placeholderTextColor="#979797"
                         underlineColorAndroid="transparent"
                     />

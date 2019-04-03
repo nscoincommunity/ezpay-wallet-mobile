@@ -9,12 +9,15 @@ import {
     ImageBackground,
     PixelRatio,
     Platform
-} from 'react-native'
-import GLOBAL from '../../helper/variables'
+} from 'react-native';
+import GLOBAL from '../../helper/variables';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Language from '../../i18n/i18n';
-import { connect } from 'react-redux'
-import Gradient from 'react-native-linear-gradient'
+import { connect } from 'react-redux';
+import Gradient from 'react-native-linear-gradient';
+import TextTicker from '../../../libs/react-native-text-ticker';
+
+
 const { width, height } = Dimensions.get('window');
 function wp(percentage) {
     const value = (percentage * width) / 100
@@ -66,7 +69,21 @@ class EntryComponent extends Component {
                         paddingTop: GLOBAL.hp('2%')
                     }}>
                         <View >
-                            <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(4), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance.toLocaleString()}</Text>
+                            {
+                                this.props.balance.toString().length > 8 || item.balance.toString().length > 8 ?
+                                    <TextTicker
+                                        style={{ fontSize: 24 }}
+                                        duration={3000}
+                                        loop
+                                        bounce
+                                        repeatSpacer={50}
+                                        marqueeDelay={1000}
+                                    >
+                                        {this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance.toLocaleString()}
+                                    </TextTicker>
+                                    :
+                                    <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(4), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance.toLocaleString()}</Text>
+                            }
                             <Text style={[styles.textItem, { opacity: 0.7, marginBottom: GLOBAL.wp('12%') }]} >Total value</Text>
                         </View>
                         <View>

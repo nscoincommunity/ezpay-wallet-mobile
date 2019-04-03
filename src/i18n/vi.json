@@ -47,7 +47,12 @@
         "All": "Tất cả",
         "YourBalance": "Số dư",
         "CheckBackup": "Ví của bạn chưa được sao lưu",
-        "ButtonBackup": "Sao lưu"
+        "ButtonBackup": "Sao lưu",
+        "total_value": "Total value",
+        "segment": {
+            "send": "Gửi",
+            "receve": "Nhận"
+        }
     },
     "Send": {
         "Title": "Gửi",
@@ -275,5 +280,51 @@
         "BtnCancel": "Để sau",
         "BtnSetting": "Bật vân tay"
     },
-    "LOGIN_TITLE": "Đăng nhập"
+    "LOGIN_TITLE": "Đăng nhập",
+    "Add_new": {
+        "Title": "Add new wallet",
+        "BtnCreate": {
+            "Title": "Create",
+            "content": "Create a new wallet"
+        },
+        "BtnChangeNetwork": {
+            "Title": "Change network",
+            "content": "Select exist wallet but change network"
+        },
+        "BtnImport": {
+            "Title": "Import",
+            "content": "Import wallet form restore code, private key..."
+        }
+    },
+    "SelectNetwork": {
+        "Title": "Select network"
+    },
+    "NameWallet": {
+        "Title1": "Name wallet",
+        "Title2": "Select wallet",
+        "titleButton": "Submit",
+        "AlertConfirm": {
+            "title": "Confirm",
+            "content": "Enter your local passcode to process",
+            "placeholderInput": "Wallet local passcode",
+            "cancel": "Cancel",
+            "ok": "Ok",
+            "walletNameExist": "Name wallet has already existed",
+            "walletNameError": "Name wallet needs at least 1 characters"
+        }
+    },
+    "ManageWallet": {
+        "Title": "Manage wallet",
+        "AletConfirm": {
+            "title": "Confirm remove wallet",
+            "content": "Enter your local passcode to process",
+            "placeholderInput": "Wallet local passcode",
+            "cancel": "Cancel",
+            "ok": "Ok"
+        },
+        "AlertSuccess": {
+            "title": "Success",
+            "content": "Remove wallet success"
+        }
+    }
 }
