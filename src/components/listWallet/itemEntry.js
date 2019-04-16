@@ -17,7 +17,6 @@ import { connect } from 'react-redux';
 import Gradient from 'react-native-linear-gradient';
 import TextTicker from '../../../libs/react-native-text-ticker';
 
-
 const { width, height } = Dimensions.get('window');
 function wp(percentage) {
     const value = (percentage * width) / 100
@@ -84,7 +83,7 @@ class EntryComponent extends Component {
                                     :
                                     <Text style={[styles.textItem, { fontSize: GLOBAL.fontsize(4), fontWeight: 'bold' }]}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance.toLocaleString()}</Text>
                             }
-                            <Text style={[styles.textItem, { opacity: 0.7, marginBottom: GLOBAL.wp('12%') }]} >Total value</Text>
+                            <Text style={[styles.textItem, { opacity: 0.7, marginBottom: GLOBAL.wp('12%') }]} >{Language.t('Dashboard.total_value')}</Text>
                         </View>
                         <View>
                             <Text style={[styles.textItem, { fontWeight: 'bold' }]}>{item.name}</Text>
@@ -125,7 +124,7 @@ class EntryComponent extends Component {
                         resizeMode="cover"
                         imageStyle={{ borderRadius: 5 }}
                     >
-                        <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>Add new wallet</Text>
+                        <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins }}>{Language.t("Add_new.Title")}</Text>
                     </ImageBackground>
                 </TouchableOpacity >
             )

@@ -97,11 +97,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "io.nexty.wallet"
+        applicationId "io.nexty.ezkey"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 101060
-        versionName "1.1.6"
+        versionCode 000010
+        versionName "0.0.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

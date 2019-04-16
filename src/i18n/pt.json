@@ -2,7 +2,7 @@
     "Login": {
         "Title": "Login",
         "PHAddress": "Endereço da Wallet",
-        "PHLocalPasscode": "Senha da Wallet",
+        "PHLocalPasscode": "Senha",
         "TitleButton": "Login",
         "InvalidCredentials": "Credenciais inválidas",
         "InvalidLocalPasscode": "Por favor, insira uma senha válida",
@@ -15,11 +15,11 @@
     "Register": {
         "Title": "Criar wallet",
         "TitleButton": "Criar Wallet",
-        "PHWalletLocalPasscode": "Senha da wallet",
-        "PHConfirmLocalPasscode": "Confirme senha da wallet",
+        "PHWalletLocalPasscode": "Senha",
+        "PHConfirmLocalPasscode": "Confirme senha",
         "policy": "Ao criar uma nova Wallet, você concorda com o Termo de Serviço",
-        "ErrorLocalPasscode": "A senha da wallet precisa de pelo menos 6 caracteres",
-        "ErrorNotMatch": "Senha da wallet não corresponde"
+        "ErrorLocalPasscode": "A senha precisa de pelo menos 6 caracteres",
+        "ErrorNotMatch": "Senha não corresponde"
     },
     "Restore": {
         "Title": "Restaurar wallet",
@@ -28,8 +28,8 @@
         "ChooserFile": "Escolher arquivo",
         "LocalPasscode": "Senha",
         "ComfirmLocalPasscode": "Confirmar senha",
-        "ErrorLocalPasscode": "A senha da wallet precisa de pelo menos 6 caracteres",
-        "ErrorNotMatch": "Senha da wallet não corresponde",
+        "ErrorLocalPasscode": "A senha precisa de pelo menos 6 caracteres",
+        "ErrorNotMatch": "Senha não corresponde",
         "TitleButton": "Prosseguir",
         "Error": "Erro",
         "InvalidRestoreCode": "Código de backup inválido, por favor, tente novamente.",
@@ -48,7 +48,7 @@
         "YourBalance": "Saldo",
         "CheckBackup": "O backup da Wallet ainda não foi realizado",
         "ButtonBackup": "Backup",
-        "total_value": "Total value",
+        "total_value": "Valor total",
         "segment": {
             "send": "Enviar",
             "receve": "Recibir"
@@ -64,7 +64,7 @@
         "ConfirmSend": {
             "Title": "Confirmar Envio ",
             "Content": "Digite sua senha para processar ",
-            "Placeholder": "Senha da Wallet ",
+            "Placeholder": "Senha",
             "TitleButtonCancel": "Cancelar"
         },
         "AlerError": {
@@ -140,7 +140,7 @@
         "DialogConfirm": {
             "Title": "Recuperar sua chave privada",
             "Content": "Digite sua senha para processar",
-            "Placeholder": "Senha da Wallet",
+            "Placeholder": "Senha",
             "TitleButtonGet": "Obter",
             "TitleButtonCancel": "Cancelar"
         },
@@ -210,7 +210,7 @@
         "DialogConfirm": {
             "Title": "Confirmar backup",
             "Content": "Digite sua senha para processar",
-            "Placeholder": "Senha da Wallet",
+            "Placeholder": "Senha",
             "TitleButtonGet": "Backup",
             "TitleButtonCancel": "Cancelar"
         },
@@ -282,49 +282,53 @@
     },
     "LOGIN_TITLE": "Login",
     "Add_new": {
-        "Title": "Add new wallet",
+        "Title": "Adicionar nova wallet",
         "BtnCreate": {
-            "Title": "Create",
-            "content": "Create a new wallet"
+            "Title": "Criar",
+            "content": "Criar nova wallet"
         },
         "BtnChangeNetwork": {
-            "Title": "Change network",
-            "content": "Select exist wallet but change network"
+            "Title": "Alterar rede",
+            "content": "Selecione wallet existente mas mude de rede"
         },
         "BtnImport": {
-            "Title": "Import",
-            "content": "Import wallet form restore code, private key..."
+            "Title": "Importar",
+            "content": "Importar formulário do código de restauração da wallet, chave privada ..."
         }
     },
     "SelectNetwork": {
-        "Title": "Select network"
+        "Title": "Selecionar rede"
     },
     "NameWallet": {
-        "Title1": "Name wallet",
-        "Title2": "Select wallet",
-        "titleButton": "Submit",
+        "Title1": "Nome da wallet",
+        "Title2": "Selecione wallet",
+        "titleButton": "Enviar",
         "AlertConfirm": {
-            "title": "Confirm",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+            "title": "Confirmar",
+            "content": "Digite sua senha para processar",
+            "placeholderInput": "Senha",
+            "cancel": "Cancelar",
             "ok": "Ok",
-            "walletNameExist": "Name wallet has already existed",
-            "walletNameError": "Name wallet needs at least 1 characters"
+            "walletNameExist": "O nome da wallet já existe",
+            "walletNameError": "Os nomes da wallet precisam de pelo menos 1 caracteres"
         }
     },
     "ManageWallet": {
-        "Title": "Manage wallet",
-        "AletConfirm": {
-            "title": "Confirm remove wallet",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+        "Title": "Gerenciar wallet",
+        "AlertConfirm": {
+            "title": "Confirmar remoção da wallet",
+            "content": "Digite sua senha para processar",
+            "placeholderInput": "Senha",
+            "cancel": "Cancelar",
             "ok": "Ok"
         },
         "AlertSuccess": {
-            "title": "Success",
-            "content": "Remove wallet success"
+            "title": "Successo",
+            "content": "Wallet removida com sucesso"
+        },
+        "AlertError": {
+            "title": "Erro",
+            "content": "Você precisa de no mínimo 1 carteira"
         }
     }
 }

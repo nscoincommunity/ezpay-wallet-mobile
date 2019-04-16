@@ -13,10 +13,10 @@ import {
     Modal,
     ActivityIndicator,
     Alert,
-    PixelRatio
+    PixelRatio,
+    StatusBar
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
-import { StackNavigator } from 'react-navigation';
 import { initAuth, Address, isAuth, Login, LoginTouchID, Login2 } from '../../services/auth.service';
 import { getData, check_Registered, registered } from '../../services/data.service';
 import { LoginWithFinger } from '../../services/auth.service'
@@ -25,6 +25,9 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../hel
 import Gradient from 'react-native-linear-gradient'
 import TouchID from 'react-native-touch-id'
 import { lang } from 'moment';
+import { StackActions, NavigationActions } from 'react-navigation'
+
+
 class ScreenLogin extends Component {
 
 
@@ -45,23 +48,23 @@ class ScreenLogin extends Component {
         };
     };
 
-    static navigationOptions = {
-        header: null,
-    };
+    // static navigationOptions = {
+    //     header: null,
+    // };
 
 
     componentDidMount() {
-        Login2('123456')
-            .then(status => {
-                this.setState({ loading: false })
-                console.log(status)
-                const { navigate } = this.props.navigation;
-                navigate('Dashboard');
-            }).catch(err => {
-                console.log(err)
-                this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
-            })
-        // this.LoginwithFingerprint()
+        // Login2('123456')
+        //     .then(status => {
+        //         this.setState({ loading: false })
+        //         console.log(status)
+        //         const { navigate } = this.props.navigation;
+        //         navigate('Dashboard');
+        //     }).catch(err => {
+        //         console.log(err)
+        //         this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
+        //     })
+        this.LoginwithFingerprint()
     }
 
     LoginNTY() {
@@ -70,8 +73,16 @@ class ScreenLogin extends Component {
             .then(status => {
                 this.setState({ loading: false })
                 console.log(status)
-                const { navigate } = this.props.navigation;
-                navigate('Dashboard');
+                // const { navigate } = this.props.navigation;
+                // navigate('Dashboard');
+                this.props.navigation.dispatch(StackActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({
+                            routeName: 'Drawer',
+                        })
+                    ]
+                }))
             }).catch(err => {
                 console.log(err)
                 this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
@@ -113,8 +124,16 @@ class ScreenLogin extends Component {
                 TouchID.authenticate(reason, options).then(success => {
                     // registered(true)
                     LoginWithFinger(check);
-                    const { navigate } = this.props.navigation;
-                    navigate('Dashboard');
+                    // const { navigate } = this.props.navigation;
+                    // navigate('Dashboard');
+                    this.props.navigation.dispatch(StackActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate({
+                                routeName: 'Drawer',
+                            })
+                        ]
+                    }))
                 })
             }
         })
@@ -124,7 +143,12 @@ class ScreenLogin extends Component {
         // alert(PixelRatio.getFontScale() + '-' + PixelRatio.get() + '-' + PixelRatio.getPixelSizeForLayoutSize() + '-' + PixelRatio.roundToNearestPixel())
         return (
             <View style={{ flex: 1 }} >
-                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('7%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Login.Title")}</Text>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Login.Title")}</Text>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorAddress}</Text>
                 <View style={[style.styleTextInput, { marginTop: GLOBALS.hp('25%') }]}>
                     <TextInput
@@ -141,14 +165,12 @@ class ScreenLogin extends Component {
                         style={style.TextInput}
                         underlineColorAndroid="transparent"
                     />
-                    <Image source={require('../../images/icon/Private-key.png')} style={{ flex: 1 }} resizeMode="contain" />
-
                 </View>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextErrorPwd}</Text>
                 <Text style={{ color: GLOBALS.Color.danger }}>{this.state.TextError}</Text>
 
                 <View style={style.FormRouter}>
-                    <TouchableOpacity style={styleButton(GLOBALS.Color.secondary, this.state.typeButton).button} onPress={() => this.LoginNTY()} disabled={this.state.typeButton}>
+                    <TouchableOpacity style={styleButton(this.state.typeButton).button} onPress={() => this.LoginNTY()} disabled={this.state.typeButton}>
                         <Gradient
                             colors={this.state.typeButton ? ['#cccccc', '#cccccc'] : ['#328FFC', '#08AEEA']}
                             start={{ x: 1, y: 0.7 }}
@@ -182,7 +204,7 @@ export default class login extends Component {
     render() {
         return (
             <ScrollView style={{ backgroundColor: '#fff' }}>
-                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={Platform.OS == 'ios' ? hp('15%') : hp('3%')} enabled>
+                <KeyboardAvoidingView style={style.container} behavior="position" keyboardVerticalOffset={Platform.OS == 'ios' ? hp('10%') : hp('1%')} enabled>
                     <ScreenLogin {...this.props} />
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -190,7 +212,7 @@ export default class login extends Component {
     }
 }
 /* style button */
-var styleButton = (color, type) => StyleSheet.create({
+var styleButton = (type) => StyleSheet.create({
     button: {
         justifyContent: 'center',
         borderRadius: 5,
@@ -199,9 +221,9 @@ var styleButton = (color, type) => StyleSheet.create({
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.24,
-        shadowRadius: type ? 2.27 : 0.22,
-        elevation: 7,
+        shadowOpacity: !type ? 0.24 : 0,
+        shadowRadius: !type ? 2.27 : 0,
+        elevation: !type ? 5 : 0,
     }
 })
 
@@ -212,7 +234,7 @@ const style = StyleSheet.create({
     },
     TextInput: {
         flex: 8,
-        fontSize: GLOBALS.fontsize(2),
+        fontSize: GLOBALS.fontsize(2.3),
         paddingLeft: GLOBALS.wp('5%')
     },
     TextButton: {
@@ -229,7 +251,7 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         backgroundColor: '#E9E9E9',
-        paddingVertical: Platform.OS === 'ios' ? hp('1.5%') : 'auto',
+        paddingVertical: Platform.OS === 'ios' ? hp('2%') : 'auto',
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {

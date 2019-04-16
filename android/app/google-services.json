@@ -1,39 +1,39 @@
 {
   "project_info": {
-    "project_number": "80769899133",
-    "firebase_url": "https://nexty-wallet-cca06.firebaseio.com",
-    "project_id": "nexty-wallet-cca06",
-    "storage_bucket": "nexty-wallet-cca06.appspot.com"
+    "project_number": "707270822758",
+    "firebase_url": "https://ez-key.firebaseio.com",
+    "project_id": "ez-key",
+    "storage_bucket": "ez-key.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:80769899133:android:46a3393468c12125",
+        "mobilesdk_app_id": "1:707270822758:android:aeb2a481f817b1e4",
         "android_client_info": {
-          "package_name": "io.nexty.wallet"
+          "package_name": "io.nexty.ezkey"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "80769899133-c8rpu3tsfh3p24up46vs3nocbb835d9k.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCGUYJdzCuUof0EAU4B-H1RiJdQduBYnrw"
+          "current_key": "AIzaSyCtGPYhXtq3bXFol39MybPoCiIzsPpXMFc"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707270822758-i6or1jcg0gdf5j72glst40g33025rgls.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "707270822758-701oq555coi41lkn6gmg8calobcf08j1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.nexty.ezkey"
+              }
+            }
+          ]
         }
       }
     }

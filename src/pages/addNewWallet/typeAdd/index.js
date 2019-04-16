@@ -7,30 +7,9 @@ import { connect } from 'react-redux'
 import { fetchAllWallet } from '../../../../redux/actions/slideWalletAction'
 import Gradient from 'react-native-linear-gradient';
 import { Avatar } from 'react-native-elements'
+import Language from '../../../i18n/i18n'
 
-const arrayType = [
-    {
-        title: 'Create',
-        description: 'Create a new wallet.',
-        type: 1,
-        highlight: true,
-        icon: require('../../../images/AddWallet/typeadd/create.png')
-    },
-    {
-        title: 'Change network',
-        description: 'Select exist wallet but change network.',
-        type: 2,
-        highlight: false,
-        icon: require('../../../images/AddWallet/typeadd/exchange.png')
-    },
-    {
-        title: 'Import',
-        description: 'Import wallet form restore code, private key...',
-        type: 3,
-        highlight: false,
-        icon: require('../../../images/AddWallet/typeadd/import.png')
-    },
-]
+
 class TypeAddWallet extends Component {
     toScreen(type) {
         const { navigate } = this.props.navigation
@@ -62,6 +41,29 @@ class TypeAddWallet extends Component {
 
 
     render() {
+        let arrayType = [
+            {
+                title: Language.t('Add_new.BtnCreate.Title'),
+                description: Language.t('Add_new.BtnCreate.content'),
+                type: 1,
+                highlight: true,
+                icon: require('../../../images/AddWallet/typeadd/create.png')
+            },
+            {
+                title: Language.t('Add_new.BtnChangeNetwork.Title'),
+                description: Language.t('Add_new.BtnChangeNetwork.content'),
+                type: 2,
+                highlight: false,
+                icon: require('../../../images/AddWallet/typeadd/exchange.png')
+            },
+            {
+                title: Language.t('Add_new.BtnImport.Title'),
+                description: Language.t('Add_new.BtnImport.content'),
+                type: 3,
+                highlight: false,
+                icon: require('../../../images/AddWallet/typeadd/import.png')
+            },
+        ]
         return (
             <Gradient
                 colors={['#F0F3F5', '#E8E8E8']}
@@ -73,7 +75,7 @@ class TypeAddWallet extends Component {
                     colorIconLeft="#328FFC"
                     colorTitle="#328FFC"
                     nameIconLeft="arrow-left"
-                    title="Add new wallet"
+                    title={Language.t('Add_new.Title')}
                     style={{ marginTop: 23 }}
                     pressIconLeft={() => this.props.navigation.goBack()}
                 />

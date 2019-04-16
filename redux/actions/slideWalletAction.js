@@ -5,9 +5,11 @@ import {
     UpdateBalanceWallet,
     GetTokenOfNetwork,
     DB_UpdateBalanceTk,
+    DB_UpdateInforTk
 } from '../../realm/walletSchema'
 import { getExchangeRate, getExchangeRateETH, getExchangeRateTRX } from '../../src/services/rate.service';
-import { updateBalance, SV_UpdateBalanceTk } from '../../src/services/wallet.service'
+import { updateBalance, SV_UpdateBalanceTk, S } from '../../src/services/wallet.service';
+import CONSTANTS from '../../src/helper//constants'
 /**
  * action snap wallet on dashboard.
  * @param {string} network network wallet when snap
@@ -159,12 +161,25 @@ const ActionUpdateBalanceTK = (bal) => {
  * @param {string} network network
  */
 export const getBalanceToken = (id, addressTK, addressWL, network) => dispatch => {
-    return SV_UpdateBalanceTk(addressTK, network, addressWL).then(bal => {
-        return DB_UpdateBalanceTk(id, parseFloat(bal))
-            .then(ss => {
-                return dispatch(ActionUpdateBalanceTK(bal))
+    if (network == 'ethereum') {
+        return fetch(CONSTANTS.EXPLORER_API_ETH + '/getTokenInfo/' + addressTK + '?apiKey=freekey')
+            .then(data => data.json())
+            .then(data => {
+                return SV_UpdateBalanceTk(addressTK, network, addressWL).then(bal => {
+                    return DB_UpdateInforTk(id, parseFloat(bal), (data['price']['rate']).toString(), (data['price']['diff']).toString())
+                        .then(ss => {
+                            return dispatch(ActionUpdateBalanceTK(bal))
+                        })
+                })
             })
-    })
+    } else {
+        return SV_UpdateBalanceTk(addressTK, network, addressWL).then(bal => {
+            return DB_UpdateBalanceTk(id, parseFloat(bal))
+                .then(ss => {
+                    return dispatch(ActionUpdateBalanceTK(bal))
+                })
+        })
+    }
 }
 
 /**

@@ -250,7 +250,7 @@ class FormInput extends Component {
                 <View style={formInput(this.state.err).input}>
                     <TextInput
                         onChangeText={(val) => this.Validate(val)}
-                        style={{ color: '#535353' }}
+                        style={{ color: '#535353', paddingVertical: 0 }}
                         placeholder={Language.t("NameWallet.Title1")}
                         placeholderTextColor="#979797"
                         underlineColorAndroid="transparent"
@@ -297,7 +297,7 @@ const formInput = (type) => StyleSheet.create({
     input: {
         borderWidth: 1,
         borderColor: type ? 'red' : '#328FFC',
-        padding: 15,
+        padding: GLOBAL.hp('2%'),
         borderRadius: 5,
         marginTop: GLOBAL.hp('10%')
     }

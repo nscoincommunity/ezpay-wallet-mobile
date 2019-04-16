@@ -157,7 +157,7 @@ class SelectNetwork extends Component {
                     colorIconLeft="#328FFC"
                     colorTitle="#328FFC"
                     nameIconLeft="arrow-left"
-                    title="Select Network"
+                    title={Language.t('SelectNetwork.Title')}
                     style={{ marginTop: 23 }}
                     pressIconLeft={() => { this.props.navigation.goBack(); }}
                 />

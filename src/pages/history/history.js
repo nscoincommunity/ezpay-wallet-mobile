@@ -27,11 +27,9 @@ export class Transaction {
     datetime: string;
     data: HistoryModel;
 }
-
 export let transactions: Transaction[];
-export const length = 15;
 export default class History extends Component {
-
+    page = 0;
     constructor(props) {
         super(props)
 
@@ -40,15 +38,20 @@ export default class History extends Component {
             index: 0,
             isLoading: true,
             isRefreshing: false,
-            loadbottom: false
+            loadbottom: false,
+            stop: false,
         };
     };
 
     getData() {
-        const { address, network } = this.props.navigation.getParam('payload')
-        this.setState({ isRefreshing: true, transactions: [], isLoading: true })
-        getDataHis(0, 15, address, network).then(async data => {
-            transactions = await this.getFullTransaction();
+        const { address, network } = this.props.navigation.getParam('payload');
+        this.setState({ isRefreshing: true, transactions: [], isLoading: true });
+        getDataHis(1, address, network).then(async data => {
+            try {
+                transactions = await this.getFullTransaction(data, address);
+            } catch (error) {
+                console.log(error)
+            }
             await this.setState({
                 transactions: transactions,
                 index: transactions.length,
@@ -67,17 +70,17 @@ export default class History extends Component {
         this.getData();
     }
 
-    getFullTransaction(): Transaction[] {
+    getFullTransaction(listTransaction, address): Transaction[] {
         let transactions = [];
-        for (let entry of historyData) {
+        for (let entry of listTransaction) {
             let type = 'arrow-up';
-            if (entry.to.toLowerCase() == Address.toLowerCase()) {
+            if (entry.to.toLowerCase() == address.toLowerCase()) {
                 type = 'arrow-down'
             }
             let transaction = new Transaction();
             transaction.tx = entry.tx;
             transaction.type = type;
-            transaction.quantity = entry.value.toFixed(2) + " NTY";
+            transaction.quantity = entry.value;
             transaction.datetime = entry.time.format("YYYY-MM-DD HH:mm:ss");
             transaction.data = entry;
             transactions.push(transaction)
@@ -86,33 +89,37 @@ export default class History extends Component {
     }
 
     onEndReached() {
+        // if (this.state.stop) {
         this.setState({ loadbottom: true })
         const { address, network } = this.props.navigation.getParam('payload')
         setTimeout(() => {
             try {
-                getDataHis(this.state.index, length, address, network)
-                    .then(async data => {
-                        await this.getFullTransaction().forEach(element => {
-                            transactions.push(element)
-                        });
-                        await this.setState({ index: transactions.length, loadbottom: false })
-                        console.log(this.state.index)
-                    }).catch((err) => {
-                        console.log('err', err)
-                    })
+                if (network == 'nexty') {
+                    this.page++
+                    getDataHis(this.page, address, network)
+                        .then(async data => {
+                            // if (data.length == 0) {
+                            //     this.setState({ stop: false })
+                            // }
+                            await this.getFullTransaction(data, address).forEach(element => {
+                                transactions.push(element)
+                            });
+                            await this.setState({ index: transactions.length, loadbottom: false })
+                            console.log(this.page)
+                        }).catch((err) => {
+                            console.log('err', err)
+                        })
+                }
             } catch (error) {
                 console.log(error)
             }
-            if (this.state.index % length == 0) {
-                this.setState({ loadbottom: false })
-            }
         }, 1000);
-
-
+        // }
     }
 
 
     render() {
+        const { address, network } = this.props.navigation.getParam('payload');
         return (
             <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
                 <StatusBar
@@ -157,7 +164,7 @@ export default class History extends Component {
                                             renderItem={({ item }) => {
                                                 return (
                                                     <TouchableOpacity
-                                                        onPress={() => this.props.navigation.navigate("DetailsHis", { data: item })}
+                                                        onPress={() => this.props.navigation.navigate("DetailsHis", { data: item, network: network, address: address })}
                                                         style={styles.row}>
                                                         <Icon
                                                             active

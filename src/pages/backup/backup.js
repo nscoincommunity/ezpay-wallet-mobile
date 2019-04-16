@@ -40,24 +40,6 @@ class backup extends Component {
         this.refs.defaultToastBottom.ShowToastFunction(message);
 
     }
-
-    // static navigationOptions = () => ({
-    //     title: Language.t('Backup.Title'),
-    //     headerStyle: {
-    //         backgroundColor: '#fafafa',
-    //         borderBottomWidth: 0,
-    //         elevation: 0
-    //     },
-    //     headerTitleStyle: {
-    //         color: '#0C449A',
-    //         width: Platform.OS == "ios" ? GLOBALS.wp('70%') : 'auto'
-    //     },
-    //     headerBackTitleStyle: {
-    //         color: '#0C449A'
-    //     },
-    //     headerTintColor: '#0C449A',
-    // });
-
     constructor(props) {
         super(props)
 
@@ -88,7 +70,7 @@ class backup extends Component {
                 this.setState({ backupcode: bc, getsuccess: true, dialogVisible: false, loading: false },
                     () => {
                         UpdateTypeBackupWallet(this.props.navigation.getParam('payload').wallet).then(ss => console.log(ss))
-                        var NameFile = 'nexty--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + this.props.navigation.getParam('payload').wallet.address + '.txt'
+                        var NameFile = 'backup--' + moment().format('YYYY-MM-DD') + '-' + datetime.getTime() + '--' + this.props.navigation.getParam('payload').wallet.address + '.txt'
                         var path = (Platform.OS === 'ios' ? RNFS.TemporaryDirectoryPath + '/' + NameFile : RNFS.ExternalDirectoryPath + '/' + NameFile)
                         RNFS.writeFile(path, bc)
                             .then(async success => {
@@ -109,7 +91,7 @@ class backup extends Component {
                                     }, 350)
                                 }
                                 if (Platform.OS == 'android') {
-                                    var newPath = RNFS.ExternalStorageDirectoryPath + '/NextyWallet'
+                                    var newPath = RNFS.ExternalStorageDirectoryPath + '/EzKeyBackup'
                                     if (await RNFS.exists(newPath)) {
                                         RNFS.writeFile(newPath + '/' + NameFile, bc).then(cp => {
                                             ToastAndroid.show(Language.t('Backup.ToastSaveFile'), ToastAndroid.SHORT)

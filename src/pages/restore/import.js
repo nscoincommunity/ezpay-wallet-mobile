@@ -118,13 +118,14 @@ class FormBackupcode extends Component {
     }
     restoreByBackupCode() {
         this.props.showLoading(true);
-        restoreByBackup(this.state.backupCode)
+        const { network, type } = this.props.navigation.getParam('payload')
+        restoreByBackup(this.state.backupCode, network)
             .then(data => {
                 this.props.showLoading(false);
                 this.props.navigation.navigate('NameWallet', {
                     payload: {
-                        type: this.props.navigation.getParam('payload').type,
-                        network: this.props.navigation.getParam('payload').network,
+                        type: type,
+                        network: network,
                         data: data
                     }
                 })
@@ -156,7 +157,7 @@ class FormBackupcode extends Component {
                     '\n- ' + res.fileSize
                 );
 
-                if ((res.fileName).substring((res.fileName).lastIndexOf('.') + 1, (res.fileName).length) == 'txt' && (res.fileName).indexOf('nexty') > -1) {
+                if ((res.fileName).substring((res.fileName).lastIndexOf('.') + 1, (res.fileName).length) == 'txt') {
                     RNFS.readFile(res.uri).then(data => {
                         console.log(data)
                         this.setState({ backupCode: data, errBUcode: false, txtErrBUcode: '', typeButton: false })
@@ -251,13 +252,14 @@ class FormPrivateKey extends Component {
 
     restoreByPK() {
         this.props.showLoading(true);
-        restoreByPk(this.state.privateKey, this.state.password)
+        const { network, type } = this.props.navigation.getParam('payload');
+        restoreByPk(this.state.privateKey, this.state.password, network)
             .then(data => {
                 this.props.showLoading(false);
                 this.props.navigation.navigate('NameWallet', {
                     payload: {
-                        type: this.props.navigation.getParam('payload').type,
-                        network: this.props.navigation.getParam('payload').network,
+                        type: type,
+                        network: network,
                         data: data
                     }
                 })

@@ -21,6 +21,7 @@ export default {
 
     EXPLORER_API: 'https://explorer.nexty.io',
     EXPLORER_API_ETH: 'http://api.ethplorer.io',
+    EXPLORER_API_TRX: 'https://apilist.tronscan.org',
     WALLET_API: 'https://dev-wallet.nexty.io',
     BASE_PNTY: Math.pow(10, 22),
     BASE_NTY: Math.pow(10, 18),

@@ -11,7 +11,9 @@ import {
     Linking,
     Modal,
     TextInput,
-    ActivityIndicator
+    ActivityIndicator,
+    StatusBar,
+    Keyboard
 } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import { checkIOS, Register, } from '../../services/auth.service';
@@ -20,7 +22,9 @@ import Lang from '../../i18n/i18n'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../helper/Reponsive';
 import Gradient from 'react-native-linear-gradient'
 import FbAnalytics from '../../services/fcm.service'
-import { InsertNewToken, } from '../../../realm/walletSchema'
+import { InsertNewToken, } from '../../../realm/walletSchema';
+import { StackActions, NavigationActions } from 'react-navigation'
+
 
 class ScreenRegister extends Component {
     constructor(props) {
@@ -47,6 +51,7 @@ class ScreenRegister extends Component {
 
         Register(this.state.password, 'nexty', 'Default wallet')
             .then(() => {
+                Keyboard.dismiss()
                 const Token = {
                     id: Math.floor(Date.now() / 1000) + 1,
                     walletId: Math.floor(Date.now() / 1000),
@@ -61,8 +66,16 @@ class ScreenRegister extends Component {
                 }
                 InsertNewToken(Token).then(() => {
                     this.setState({ loading: false });
-                    const { navigate } = this.props.navigation;
-                    navigate('Dashboard');
+                    // const { navigate } = this.props.navigation;
+                    // navigate('Dashboard');
+                    this.props.navigation.dispatch(StackActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate({
+                                routeName: 'Drawer',
+                            })
+                        ]
+                    }))
                 }).catch(e => this.setState({ loading: false }))
 
             }).catch(e => this.setState({ loading: false }))
@@ -109,11 +122,15 @@ class ScreenRegister extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
                 <Text style={{ fontSize: hp('4%'), fontWeight: '400', color: '#444444', marginTop: hp('10%'), fontFamily: GLOBALS.font.Poppins }}>{Lang.t("Register.Title")}</Text>
                 <Text style={{ fontSize: hp('2.5%'), fontWeight: '400', color: '#444444', marginTop: hp('4%'), fontFamily: GLOBALS.font.Poppins }} >
                     {Lang.t("Register.policy")}
-                    <Text style={{ color: GLOBALS.Color.secondary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { Linking.openURL('https://nexty.io/privacy-policy/') }}> Term of Service</Text>
+                    <Text style={{ color: GLOBALS.Color.secondary, marginBottom: GLOBALS.HEIGHT / 20, fontFamily: GLOBALS.font.Poppins }} onPress={() => { this.props.navigation.navigate('Browser', { url: 'https://nexty.io/privacy-policy/' }) }}> Term of Service</Text>
                 </Text>
                 <View style={[style.styleTextInput, { marginTop: hp('20%') }]}>
                     <TextInput

@@ -246,7 +246,7 @@ export const CountNetworkofWallet = (pk) => new Promise((resolve, reject) => {
 export const UpdateTypeBackupWallet = (wallet) => new Promise((resolve, reject) => {
     try {
         REALM.open(databaseOption).then(realm => {
-            let ListWallet = realm.objects(LISTWALLET).filtered('address="' + wallet.address + '"');
+            let ListWallet = realm.objects(LISTWALLET).filtered('pk_en="' + wallet.pk_en + '"');
             Array.from(ListWallet).forEach((item, index) => {
                 setTimeout(() => {
                     console.log('id', item.id)
@@ -254,7 +254,7 @@ export const UpdateTypeBackupWallet = (wallet) => new Promise((resolve, reject) 
                         let walletUpdate = realm.objectForPrimaryKey(LISTWALLET, item.id);
                         walletUpdate.typeBackup = true;
                         if (index == ListWallet.length - 1) {
-                            resolve(Array.from(realm.objects(LISTWALLET).filtered('address="' + wallet.address + '"')));
+                            resolve(Array.from(realm.objects(LISTWALLET).filtered('pk_en="' + wallet.pk_en + '"')));
                         }
                     })
                 }, 500)
@@ -423,6 +423,27 @@ export const DB_UpdateBalanceTk = (id_token, balance) => new Promise((resolve, r
             realm.write(() => {
                 var token = realm.objectForPrimaryKey(TOKEN, id_token);
                 token.balance = balance;
+                resolve('update ss')
+            })
+        }).catch(e => reject(e))
+    } catch (error) {
+        reject(error)
+    }
+})
+
+/**
+ * Update balance token
+ * @param {number} id_token id of token
+ * @param {number} balance balance token affter update
+ */
+export const DB_UpdateInforTk = (id_token, balance, exchagerate, change) => new Promise((resolve, reject) => {
+    try {
+        REALM.open(databaseOption).then(realm => {
+            realm.write(() => {
+                var token = realm.objectForPrimaryKey(TOKEN, id_token);
+                token.balance = balance;
+                token.exchagerate = exchagerate;
+                token.change = change;
                 resolve('update ss')
             })
         }).catch(e => reject(e))

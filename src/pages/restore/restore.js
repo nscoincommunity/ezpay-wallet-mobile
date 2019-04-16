@@ -29,6 +29,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../hel
 import Gradient from 'react-native-linear-gradient';
 import Header from '../../components/header';
 import { InsertNewToken, } from '../../../realm/walletSchema';
+import { StackActions, NavigationActions } from 'react-navigation'
+
 
 class SwitchTypeRestore extends Component {
     constructor() {
@@ -162,7 +164,9 @@ class FormBackupcode extends Component {
     }
     restoreByBackupCode() {
         this.props.showLoading(true);
-        restoreByBackup(this.state.backupCode, this.state.password)
+        const { network } = this.props.navigation.getParam('payload');
+
+        restoreByBackup(this.state.backupCode, network)
             .then(data => {
                 this.props.showLoading(false);
                 restore(
@@ -170,7 +174,7 @@ class FormBackupcode extends Component {
                     data.privateKey,
                     this.state.password,
                     'Default wallet',
-                    this.props.navigation.getParam('payload').network
+                    network
                 ).then(() => {
                     const Token = {
                         id: Math.floor(Date.now() / 1000) + 1,
@@ -186,8 +190,17 @@ class FormBackupcode extends Component {
                     }
                     InsertNewToken(Token).then(() => {
                         this.setState({ loading: false });
-                        const { navigate } = this.props.navigation;
-                        navigate('Dashboard');
+                        // const { navigate } = this.props.navigation;
+                        // navigate('Dashboard');
+                        this.props.navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [
+                                NavigationActions.navigate({
+                                    routeName: 'Drawer',
+                                })
+                            ]
+                        }))
+
                     }).catch(e => this.setState({ loading: false }))
                 })
             }).catch(err => {
@@ -217,7 +230,7 @@ class FormBackupcode extends Component {
                     '\n- ' + res.fileSize
                 );
 
-                if ((res.fileName).substring((res.fileName).lastIndexOf('.') + 1, (res.fileName).length) == 'txt' && (res.fileName).indexOf('nexty') > -1) {
+                if ((res.fileName).substring((res.fileName).lastIndexOf('.') + 1, (res.fileName).length) == 'txt') {
                     RNFS.readFile(res.uri).then(data => {
                         console.log(data)
                         this.setState({ backupCode: data })
@@ -387,7 +400,8 @@ class FormPrivateKey extends Component {
 
     restoreByPK() {
         this.props.showLoading(true);
-        restoreByPk(this.state.privateKey, this.state.password)
+        const { network } = this.props.navigation.getParam('payload');
+        restoreByPk(this.state.privateKey, this.state.password, network)
             .then(data => {
                 this.props.showLoading(false);
                 restore(
@@ -395,7 +409,7 @@ class FormPrivateKey extends Component {
                     data.privateKey,
                     this.state.password,
                     'Default wallet',
-                    this.props.navigation.getParam('payload').network
+                    network
                 ).then(() => {
                     const Token = {
                         id: Math.floor(Date.now() / 1000) + 1,
@@ -411,8 +425,16 @@ class FormPrivateKey extends Component {
                     }
                     InsertNewToken(Token).then(() => {
                         this.setState({ loading: false });
-                        const { navigate } = this.props.navigation;
-                        navigate('Dashboard');
+                        // const { navigate } = this.props.navigation;
+                        // navigate('Dashboard');
+                        this.props.navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [
+                                NavigationActions.navigate({
+                                    routeName: 'Drawer',
+                                })
+                            ]
+                        }))
                     }).catch(e => this.setState({ loading: false }))
                 })
             }).catch(err => {

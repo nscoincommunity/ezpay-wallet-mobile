@@ -48,7 +48,7 @@
         "YourBalance": "잔액",
         "CheckBackup": "지갑이 아직 백업되지 않았습니다.",
         "ButtonBackup": "백업",
-        "total_value": "Total value",
+        "total_value": "총 가치",
         "segment": {
             "send": "보내다",
             "receve": "받다"
@@ -282,49 +282,53 @@
     },
     "LOGIN_TITLE": "로그인",
     "Add_new": {
-        "Title": "Add new wallet",
+        "Title": "새 지갑 추가",
         "BtnCreate": {
-            "Title": "Create",
-            "content": "Create a new wallet"
+            "Title": "만들기",
+            "content": "새 지갑 만들기"
         },
         "BtnChangeNetwork": {
-            "Title": "Change network",
-            "content": "Select exist wallet but change network"
+            "Title": "네트워크 변경",
+            "content": "존재하는지갑 선택한데  네트워크 변경"
         },
         "BtnImport": {
-            "Title": "Import",
-            "content": "Import wallet form restore code, private key..."
+            "Title": "가져오기",
+            "content": "개인 키, 복원 코드 등 에서 지갑 가져 오기."
         }
     },
     "SelectNetwork": {
-        "Title": "Select network"
+        "Title": "네트워크 선택하기"
     },
     "NameWallet": {
-        "Title1": "Name wallet",
-        "Title2": "Select wallet",
-        "titleButton": "Submit",
+        "Title1": "지갑 이름",
+        "Title2": "지갑 선택",
+        "titleButton": "제출하기",
         "AlertConfirm": {
-            "title": "Confirm",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+            "title": "확인",
+            "content": "로컬 패스 코드 입력하십시오.",
+            "placeholderInput": "로컬 패스 코드 지갑",
+            "cancel": "취소",
             "ok": "Ok",
-            "walletNameExist": "Name wallet has already existed",
-            "walletNameError": "Name wallet needs at least 1 characters"
+            "walletNameExist": "이미 사용중인 이름지갑입니다.",
+            "walletNameError": "지갑이름이 최소한 한글자 이상 필요합니다."
         }
     },
     "ManageWallet": {
-        "Title": "Manage wallet",
-        "AletConfirm": {
-            "title": "Confirm remove wallet",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+        "Title": "관리 지갑",
+        "AlertConfirm": {
+            "title": "지갑삭제 확인",
+            "content": "프로세스할 로컬 패스 코드 입력하십시오",
+            "placeholderInput": "지갑 로컬 패스 코드",
+            "cancel": "취소",
             "ok": "Ok"
         },
         "AlertSuccess": {
-            "title": "Success",
-            "content": "Remove wallet success"
+            "title": "성공",
+            "content": "지갑 삭제 성공"
+        },
+        "AlertError": {
+            "title": "오류",
+            "content": "최소 1 개의 지갑이 필요합니다."
         }
     }
 }

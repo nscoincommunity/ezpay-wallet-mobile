@@ -1,4 +1,4 @@
-import { POSTAPI } from '../../helper/utils'
+import { POSTAPI, } from '../../helper/utils'
 import CONSTANTS from '../../helper/constants';
 import * as moment from "moment";
 import { Moment } from "moment";
@@ -15,61 +15,71 @@ export class HistoryModel {
 
 export var historyData: Array<HistoryModel> = []
 
-export function getDataHis(start: number = 0, length: number = 15, address, network) {
-    console.log('index = ' + start)
+export function getDataHis(start: number = 1, address, network) {
     let body = {
         addr: address,
         start: start,
-        length: length
     }
-    switch (network) {
-        case 'ethereum':
-            return POSTAPI(CONSTANTS.EXPLORER_API_ETH + '/getAddressTransactions/' + address + '?apiKey=freekey')
-                .then(response => response.json())
-                .then(response => {
-                    historyData = []
-                    for (let entry of response) {
-                        let historyEntry = new HistoryModel();
-                        historyEntry.tx = entry['hash'];
-                        historyEntry.blockNumber = 5;
-                        historyEntry.from = entry['from'];
-                        historyEntry.to = entry['to'];
-                        let value = entry['value'];
-                        historyEntry.time = moment.unix(entry['timestamp'])
-                        historyData.push(historyEntry)
-                    }
-                    return historyData;
-                })
-        case 'nexty':
-            return POSTAPI(CONSTANTS.EXPLORER_API + '/his', body)
-                .then(response => response.json())
-                .then(response => {
-                    historyData = []
-                    for (let entry of response) {
-                        let historyEntry = new HistoryModel();
-                        historyEntry.tx = entry[0];
-                        historyEntry.blockNumber = entry[1];
-                        historyEntry.from = entry[2];
-                        historyEntry.to = entry[3];
-
-                        let value = +entry[4];
-                        if (!isNaN(value)) {
-                            historyEntry.value = value;
-                        } else {
-                            historyEntry.value = 0;
+    return new Promise((resolve, reject) => {
+        switch (network) {
+            case 'ethereum':
+                POSTAPI(CONSTANTS.EXPLORER_API_ETH + '/getAddressTransactions/' + address + '?apiKey=freekey', '')
+                    .then(response => response.json())
+                    .then(response => {
+                        console.log('history', response)
+                        historyData = []
+                        for (let entry of response) {
+                            let historyEntry = new HistoryModel();
+                            historyEntry.tx = entry['hash'];
+                            historyEntry.blockNumber = 5;
+                            historyEntry.from = entry['from'];
+                            historyEntry.to = entry['to'];
+                            historyEntry.value = entry['value'];
+                            historyEntry.time = moment.unix(entry['timestamp'])
+                            historyData.push(historyEntry)
                         }
-                        historyEntry.time = moment.unix(entry[6]);
+                        resolve(historyData)
+                    })
+                break;
+            case 'nexty':
+                fetch(CONSTANTS.EXPLORER_API + '/api?module=account&action=txlist&address=' + address + '&page=' + start + '&offset=10')
+                    .then(response => response.json())
+                    .then(response => {
+                        console.log(response.result)
+                        historyData = [];
+                        for (let entry of response.result) {
+                            let historyEntry = new HistoryModel();
+                            historyEntry.tx = entry['hash'];
+                            historyEntry.blockNumber = entry['blockNumber'];
+                            historyEntry.from = entry['from'];
+                            historyEntry.to = entry['to'];
+                            historyEntry.value = parseFloat(entry['value'] / CONSTANTS.BASE_NTY);
+                            historyEntry.time = moment.unix(entry['timeStamp'])
+                            historyData.push(historyEntry)
+                        }
+                        resolve(historyData)
+                    })
+                break;
+            default:
+                fetch(CONSTANTS.EXPLORER_API_TRX + '/api/transaction?sort=-timestamp&count=true&limit=20&start=0&address=' + address)
+                    .then(response => response.json())
+                    .then(response => {
+                        historyData = [];
+                        for (let entry of response.data) {
+                            let historyEntry = new HistoryModel();
+                            historyEntry.tx = entry['hash'];
+                            historyEntry.blockNumber = entry['block'];
+                            historyEntry.from = entry['ownerAddress'];
+                            historyEntry.to = entry['toAddress'];
+                            historyEntry.value = entry['contractData']['amount'];
+                            historyEntry.time = moment.unix(entry['timestamp'])
+                            historyData.push(historyEntry)
+                        }
+                        resolve(historyData)
+                    })
+                break;
+        }
+    })
 
-                        historyData.push(historyEntry);
-                    }
-
-                    return historyData;
-                })
-                .catch(error => {
-                    console.log('error fetch: ', error)
-                })
-        default:
-            break;
-    }
 
 }

@@ -48,7 +48,7 @@
         "YourBalance": "余额",
         "CheckBackup": "钱包尚未备份",
         "ButtonBackup": "备份",
-        "total_value": "Total value",
+        "total_value": "总价值",
         "segment": {
             "send": "提交",
             "receve": "接收"
@@ -282,49 +282,53 @@
     },
     "LOGIN_TITLE": "登录",
     "Add_new": {
-        "Title": "Add new wallet",
+        "Title": "添加新钱包",
         "BtnCreate": {
-            "Title": "Create",
-            "content": "Create a new wallet"
+            "Title": "创建",
+            "content": "创建一个新钱包"
         },
         "BtnChangeNetwork": {
-            "Title": "Change network",
-            "content": "Select exist wallet but change network"
+            "Title": "改变网络",
+            "content": "选择存在钱包但更改网络"
         },
         "BtnImport": {
-            "Title": "Import",
-            "content": "Import wallet form restore code, private key..."
+            "Title": "进口",
+            "content": "从还原代码导入钱包，私钥......"
         }
     },
     "SelectNetwork": {
-        "Title": "Select network"
+        "Title": "选择网络"
     },
     "NameWallet": {
-        "Title1": "Name wallet",
-        "Title2": "Select wallet",
-        "titleButton": "Submit",
+        "Title1": "名字钱包",
+        "Title2": "选择钱包",
+        "titleButton": "提交",
         "AlertConfirm": {
-            "title": "Confirm",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+            "title": "确认",
+            "content": "输入您的本地密码",
+            "placeholderInput": "电子钱包本地密码",
+            "cancel": "取消",
             "ok": "Ok",
-            "walletNameExist": "Name wallet has already existed",
-            "walletNameError": "Name wallet needs at least 1 characters"
+            "walletNameExist": "名称钱包已经存在",
+            "walletNameError": "名称钱包至少需要1个字符"
         }
     },
     "ManageWallet": {
-        "Title": "Manage wallet",
-        "AletConfirm": {
-            "title": "Confirm remove wallet",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+        "Title": "管理钱包",
+        "AlertConfirm": {
+            "title": "确认删除钱包",
+            "content": "输入您的本地密码",
+            "placeholderInput": "电子钱包本地密码",
+            "cancel": "取消",
             "ok": "Ok"
         },
         "AlertSuccess": {
-            "title": "Success",
-            "content": "Remove wallet success"
+            "title": "成功",
+            "content": "删除钱包成功"
+        },
+        "AlertError": {
+            "title": "错误",
+            "content": "你需要至少1个钱包"
         }
     }
 }

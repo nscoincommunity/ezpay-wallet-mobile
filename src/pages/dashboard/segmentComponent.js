@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import GLOBAL from '../../helper/variables';
 import { fromBottom } from '../../components/effectPushScreen'
+import Language from '../../i18n/i18n';
 
 export class segmentComponent extends Component {
 
@@ -34,13 +35,13 @@ export class segmentComponent extends Component {
                     style={styles.btnLeft}
                     onPress={() => this.goSend()}
                 >
-                    <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins, fontWeight: 'bold' }}>Send</Text>
+                    <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins, fontWeight: 'bold' }}>{Language.t('Dashboard.segment.send')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.btnRight}
                     onPress={() => this.goReciver()}
                 >
-                    <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins, fontWeight: 'bold' }}>Recive</Text>
+                    <Text style={{ textAlign: 'center', color: '#fff', fontFamily: GLOBAL.font.Poppins, fontWeight: 'bold' }}>{Language.t('Dashboard.segment.receve')}</Text>
                 </TouchableOpacity>
             </View>
         )

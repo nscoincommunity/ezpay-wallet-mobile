@@ -9,7 +9,6 @@ import Lang, { DeviceLanguage, selectLang } from './i18n/i18n';
 import { getData } from './services/data.service';
 import { Check_registered } from './services/auth.service';
 import SplashScreen from 'react-native-splash-screen';
-import { initAuth } from './services/auth.service'
 import { CHECK_REGISTER } from '../redux/actions/initWallet';
 import { ONSNAPWALLET } from '../redux/actions/slideWalletAction';
 import { connect } from "react-redux";
@@ -18,7 +17,6 @@ import { DeleteAllWallet, deleteDB, DeleteWallet } from '../realm/walletSchema';
 import Sidebar from "./sidebar";
 import GLOBALS from './helper/variables';
 import login from './pages/login/login';
-// import unlogin from './pages/unlogin/unlogin';
 import register from './pages/register/register';
 import importWL from './pages/restore/import';
 import restore from './pages/restore/restore';
@@ -27,21 +25,17 @@ import DetailHis from './pages/detail/detail';
 import QRscan from "./components/qrscan";
 import Language from "./pages/languages/language";
 import ChangePIN from './pages/changePIN/changePIN';
-import TempPage from './Drawer';
 import ListToken from './pages/list-token/token';
-// import SelectNetwork from './pages/network/network'
 /* screen drawer*/
 import Setting from './pages/setting/setting';
 import history from './pages/history/history';
 import About from './pages/about/about';
 import Addtoken from './pages/add-token/add-token';
 import redeem from './pages/redeem/redeem';
-// import TabNavigator from './tabfooter';
 import Prk from './pages/private-key/private-key';
-import request from './pages/request/request';
 import Send from './pages/send/send';
 import dashboard from './pages/dashboard/dashboard';
-
+import Browser from './pages/browser'
 
 // Screen add new wallet
 import TypeAddWallet from './pages/addNewWallet/typeAdd';
@@ -49,37 +43,15 @@ import NameWallet from './pages/addNewWallet/nameWallet';
 import SelectNetwork from './pages/addNewWallet/selectNetwork';
 import InforWallet from './pages/inforWallet';
 import { ChangeLanguage } from '../redux/actions/slideWalletAction';
-import DeleteWL from './pages/deleteWL';
+import manageWL from './pages/manageWL';
 import { fromBottom, fadeIn, zoomIn, zoomOut } from './components/effectPushScreen'
 
 
-// Lang.locale = 'vi'
-/* customize header */
-function setHeader(title) {
-    return {
-        headerStyle: {
-            backgroundColor: GLOBALS.Color.primary,
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerBackTitleStyle: {
-            color: 'white',
-        },
-        headerTintColor: 'white',
-        title: title
-    }
-}
-
 const Drawer = createDrawerNavigator(
     {
-        // TabNavigator: { screen: TabNavigator },
         Dashboard: { screen: dashboard },
-        // Privatekey: { screen: Prk },
-        // Addtoken: { screen: Addtoken },
         Setting: { screen: Setting },
-        // History: { screen: history },
-        DeleteWL: { screen: DeleteWL },
+        ManageWL: { screen: manageWL },
         About: { screen: About },
         Redeem: { screen: redeem },
     }, {
@@ -154,7 +126,7 @@ class Router extends Component {
             {
                 initialRouteName: 'Drawer',
                 headerMode: "none",
-                transitionConfig: () => zoomIn(500)
+                transitionConfig: () => fromBottom(500)
             }
         )
 
@@ -162,7 +134,6 @@ class Router extends Component {
             {
                 Drawer: { screen: DasboardInfor },
                 login: { screen: login },
-                TempPage: { screen: TempPage },
                 ListToken: { screen: ListToken },
                 register: { screen: register },
                 importWL: { screen: importWL },
@@ -182,11 +153,11 @@ class Router extends Component {
                 SendScreen: { screen: Send },
                 Privatekey: { screen: Prk },
                 History: { screen: history },
+                Browser: { screen: Browser }
             },
             {
                 initialRouteName: this.props.register ? 'login' : 'register',
                 headerMode: "none",
-                // transitionConfig: () => fromBottom(1000)
             },
         )
 

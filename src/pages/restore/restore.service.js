@@ -2,12 +2,14 @@ import CryptoJS from 'crypto-js';
 import { resolve } from 'url';
 import { POSTAPI } from '../../helper/utils';
 import CONSTANTS from '../../helper/constants';
-import { restore } from '../../services/auth.service'
-import { getAddressFromPK } from '../../services/wallet.service'
-import { CheckExistAddressWallet } from '../../../realm/walletSchema'
+import { restore } from '../../services/auth.service';
+import { getAddressFromPK, CheckIsETH } from '../../services/wallet.service';
+import { CheckExistAddressWallet } from '../../../realm/walletSchema';
 import Lang from '../../i18n/i18n';
+import { ConvertFromAddressTron, CheckIsTRON, ConvertToAddressTron } from '../../services/tron.service'
 
-export function restoreByBackup(code: string) {
+
+export function restoreByBackup(code: string, network: string) {
     let data = {
         md5Hash: CryptoJS.MD5(code).toString(CryptoJS.enc.Hex)
     }
@@ -18,19 +20,73 @@ export function restoreByBackup(code: string) {
                 var JSONres = JSON.parse(res);
                 let addr = JSONres['walletAddress'];
                 if (addr) {
-                    CheckExistAddressWallet(addr).then(async type => {
-                        if (type) {
-                            console.log('c')
-                            reject('Exist address, please use Change network if you want use other network for this address')
+                    console.log(network, CheckIsTRON(addr), CheckIsETH(addr))
+
+                    if (network == 'tron') {
+                        if (!CheckIsTRON(addr)) {
+                            let addressTRON = await ConvertToAddressTron(addr);
+                            await CheckExistAddressWallet(addressTRON).then(async type => {
+                                if (type) {
+                                    console.log('c')
+                                    reject('Exist address, please use Change network if you want use other network for this address')
+                                } else {
+                                    let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                    let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                    resolve({
+                                        addressWL: addressTRON,
+                                        privateKey: privateKey
+                                    })
+                                }
+                            }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
                         } else {
-                            let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
-                            let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
-                            resolve({
-                                addressWL: addr,
-                                privateKey: privateKey
-                            })
+                            CheckExistAddressWallet(addr).then(async type => {
+                                if (type) {
+                                    console.log('c')
+                                    reject('Exist address, please use Change network if you want use other network for this address')
+                                } else {
+                                    let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                    let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                    resolve({
+                                        addressWL: addr,
+                                        privateKey: privateKey
+                                    })
+                                }
+                            }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
                         }
-                    }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                    } else {
+                        if (!CheckIsTRON(addr)) {
+                            CheckExistAddressWallet(addr).then(async type => {
+                                if (type) {
+                                    console.log('c')
+                                    reject('Exist address, please use Change network if you want use other network for this address')
+                                } else {
+                                    let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                    let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                    resolve({
+                                        addressWL: addr,
+                                        privateKey: privateKey
+                                    })
+                                }
+                            }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                        } else {
+                            let temp = await ConvertFromAddressTron(addr);
+                            let addressETH = '0x' + temp.slice(2, temp.length);
+                            await CheckExistAddressWallet(addressETH).then(async type => {
+                                if (type) {
+                                    console.log('c')
+                                    reject('Exist address, please use Change network if you want use other network for this address')
+                                } else {
+                                    let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                    let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                    resolve({
+                                        addressWL: addressETH,
+                                        privateKey: privateKey
+                                    })
+                                }
+                            }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                        }
+                    }
+
                 } else {
                     console.log('a')
                     reject(Lang.t("Restore.InvalidRestoreCode"))
@@ -41,23 +97,75 @@ export function restoreByBackup(code: string) {
             })
     })
 }
-export function restoreByPk(privateKey: string, password: string) {
+export function restoreByPk(privateKey: string, password: string, network: string) {
     return new Promise((resolve, reject) => {
         getAddressFromPK(privateKey).then(async (res) => {
-            console.log('address: ', res);
             let addr = res.toString();
             if (addr) {
-                CheckExistAddressWallet(addr).then(async type => {
-                    if (type) {
-                        reject('Exist address, please use Change network if you want use other network for this address')
+                if (network == 'tron') {
+                    if (!CheckIsTRON(addr)) {
+                        let addressTRON = await ConvertToAddressTron(addr);
+                        await CheckExistAddressWallet(addressTRON).then(async type => {
+                            if (type) {
+                                console.log('c')
+                                reject('Exist address, please use Change network if you want use other network for this address')
+                            } else {
+                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                resolve({
+                                    addressWL: addressTRON,
+                                    privateKey: privateKey
+                                })
+                            }
+                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
                     } else {
-                        resolve({
-                            addressWL: addr,
-                            privateKey: privateKey
-                        })
+                        CheckExistAddressWallet(addr).then(async type => {
+                            if (type) {
+                                console.log('c')
+                                reject('Exist address, please use Change network if you want use other network for this address')
+                            } else {
+                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                resolve({
+                                    addressWL: addr,
+                                    privateKey: privateKey
+                                })
+                            }
+                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
                     }
-                })
-                // await restore(addr, privateKey, password).then(() => resolve(0));
+                } else {
+                    if (!CheckIsTRON(addr)) {
+                        CheckExistAddressWallet(addr).then(async type => {
+                            if (type) {
+                                console.log('c')
+                                reject('Exist address, please use Change network if you want use other network for this address')
+                            } else {
+                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                resolve({
+                                    addressWL: addr,
+                                    privateKey: privateKey
+                                })
+                            }
+                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                    } else {
+                        let temp = await ConvertFromAddressTron(addr);
+                        let addressETH = '0x' + temp.slice(2, temp.length);
+                        await CheckExistAddressWallet(addressETH).then(async type => {
+                            if (type) {
+                                console.log('c')
+                                reject('Exist address, please use Change network if you want use other network for this address')
+                            } else {
+                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
+                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
+                                resolve({
+                                    addressWL: addressETH,
+                                    privateKey: privateKey
+                                })
+                            }
+                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                    }
+                }
             } else {
                 reject(Lang.t("Restore.AlertInvalidPK"))
             }

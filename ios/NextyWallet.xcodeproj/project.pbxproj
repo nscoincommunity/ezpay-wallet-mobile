@@ -47,7 +47,7 @@
 		2E34CB62224221BB0081EF88 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E34CB58224221A50081EF88 /* libRNSVG.a */; };
 		2E487CC621BE1C1C00FE31BF /* RNCloseApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E487CC521BE1C1C00FE31BF /* RNCloseApp.m */; };
 		2E55BEA621AF9E3000647B6F /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E55BEA421AF9E0D00647B6F /* libTouchID.a */; };
-		2E8A439321A538F500ABA5AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */; };
+		2E76F234225B2718006EB748 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E76F233225B2718006EB748 /* GoogleService-Info.plist */; };
 		2EF631712191668200F16474 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2EF631702191668200F16474 /* Images.xcassets */; };
 		3247920F6A9546548A1D0D1E /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F14846E1DD648E39817E0B7 /* libRNI18n.a */; };
 		35D3A977CD1F4BFC88E6F7C3 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C0C1DFAD0AD471FB33E8DBE /* libSplashScreen.a */; };
@@ -592,7 +592,7 @@
 		2E487CC521BE1C1C00FE31BF /* RNCloseApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCloseApp.m; sourceTree = "<group>"; };
 		2E4957D1214F93CE00157036 /* NextyWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NextyWallet.entitlements; path = NextyWallet/NextyWallet.entitlements; sourceTree = "<group>"; };
 		2E55BE6721AF9E0D00647B6F /* TouchID.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TouchID.xcodeproj; path = "../node_modules/react-native-touch-id/TouchID.xcodeproj"; sourceTree = "<group>"; };
-		2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2E76F233225B2718006EB748 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "NextyWallet/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2EC11B5A88A14277A9C9F661 /* RNDocumentPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDocumentPicker.xcodeproj; path = "../node_modules/react-native-document-picker/ios/RNDocumentPicker.xcodeproj"; sourceTree = "<group>"; };
 		2EF631702191668200F16474 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NextyWallet/Images.xcassets; sourceTree = "<group>"; };
 		343F3C8C0C8E402A990C843A /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
@@ -830,7 +830,7 @@
 		13B07FAE1A68108700A75B9A /* NextyWallet */ = {
 			isa = PBXGroup;
 			children = (
-				2E8A435821A538F500ABA5AC /* GoogleService-Info.plist */,
+				2E76F233225B2718006EB748 /* GoogleService-Info.plist */,
 				2E4957D1214F93CE00157036 /* NextyWallet.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -1941,7 +1941,7 @@
 				BAA8BA1815D54958B774271A /* Octicons.ttf in Resources */,
 				8A89719FAFDC4B5680F20E44 /* Roboto_medium.ttf in Resources */,
 				239BF466307844E3B190212B /* Roboto.ttf in Resources */,
-				2E8A439321A538F500ABA5AC /* GoogleService-Info.plist in Resources */,
+				2E76F234225B2718006EB748 /* GoogleService-Info.plist in Resources */,
 				4E30BB7ECCF64C5DA0C7161D /* rubicon-icon-font.ttf in Resources */,
 				1F46178CBADC453983D2D6BB /* SimpleLineIcons.ttf in Resources */,
 				6F2282BB039044BD8FA21128 /* Zocial.ttf in Resources */,
@@ -2265,7 +2265,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nexty.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nexty.ezkey;
 				PRODUCT_NAME = NextyWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "NextyWallet-Bridging-Header.h";
@@ -2315,7 +2315,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nexty.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nexty.ezkey;
 				PRODUCT_NAME = NextyWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "NextyWallet-Bridging-Header.h";

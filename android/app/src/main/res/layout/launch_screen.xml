@@ -8,10 +8,15 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="405dp"
         android:layout_centerInParent="true"
-        android:layout_margin="@android:dimen/app_icon_size"
+        android:layout_marginBottom="@android:dimen/app_icon_size"
+        android:layout_marginEnd="@android:dimen/app_icon_size"
+        android:layout_marginLeft="@android:dimen/app_icon_size"
+        android:layout_marginRight="@android:dimen/app_icon_size"
+        android:layout_marginStart="@android:dimen/app_icon_size"
+        android:layout_marginTop="@android:dimen/app_icon_size"
         android:padding="@android:dimen/app_icon_size"
         android:src="@drawable/src_images_logo" />
 </RelativeLayout>

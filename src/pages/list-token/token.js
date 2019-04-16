@@ -17,6 +17,8 @@ import IconMtr from 'react-native-vector-icons/MaterialIcons'
 import { GetTokenOfNetwork, DeleteToken } from '../../../realm/walletSchema'
 import Header from '../../components/header';
 import Gradient from 'react-native-linear-gradient';
+import Icon from "react-native-vector-icons/FontAwesome";
+
 
 export default class ListToken extends Component {
     mounted: boolean = true;
@@ -39,9 +41,11 @@ export default class ListToken extends Component {
     }
 
     LoadData = (network) => {
-        GetTokenOfNetwork(network).then(list => {
-            this.setState({ ArrayToken: list })
-        })
+        GetTokenOfNetwork(network)
+            .then(list => {
+                console.log('list', list)
+                this.setState({ ArrayToken: list })
+            })
     }
 
     deleteNote = (rowData) => {
@@ -121,9 +125,12 @@ export default class ListToken extends Component {
                             keyExtractor={(item, index) => index.toString()}
                         />
                         :
-                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <ActivityIndicator size='large' color={GLOBALS.Color.primary} style={{ flex: 1 }} />
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Icon name="exclamation-circle" color="#d1d1d1" size={GLOBALS.hp('20%')} />
                         </View>
+                    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    //     <ActivityIndicator size='large' color={GLOBALS.Color.primary} style={{ flex: 1 }} />
+                    // </View>
                 }
 
             </Gradient>

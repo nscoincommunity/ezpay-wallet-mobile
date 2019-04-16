@@ -1,43 +1,35 @@
 import React, { Component } from 'react'
-import { View, Image, StyleSheet, Platform } from 'react-native';
+import { View, Image, StyleSheet, Platform, StatusBar, Text } from 'react-native';
 import GLOBALS from '../../helper/variables';
 import Language from '../../i18n/i18n'
-// import Icon from "react-native-vector-icons/FontAwesome";
-import IconFeather from "react-native-vector-icons/Feather"
-
-import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Text,
-    Button,
-    Left,
-    Right,
-    Body,
-} from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Header from '../../components/header';
+import Gradient from 'react-native-linear-gradient';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 
 
 export default class About extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: "#fafafa" }}>
-                <Header style={{ backgroundColor: '#fafafa', borderBottomWidth: 0 }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.openDrawer()}
-                        >
-                            <IconFeather name="align-left" color={GLOBALS.Color.primary} size={25} />
-                        </Button>
-                    </Left>
-                    <Body style={Platform.OS == 'ios' ? { flex: 3 } : {}}>
-                        <Title style={{ color: GLOBALS.Color.primary }}>{Language.t('About.Title')}</Title>
-                    </Body>
-                    <Right />
-                </Header>
+            <Gradient
+                colors={['#F0F3F5', '#E8E8E8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ flex: 1 }}>
+                <StatusBar
+                    backgroundColor={'transparent'}
+                    translucent
+                    barStyle="dark-content"
+                />
+                <Header
+                    backgroundColor="transparent"
+                    colorIconLeft="#328FFC"
+                    colorTitle="#328FFC"
+                    nameIconLeft="align-left"
+                    title={Language.t('About.Title')}
+                    style={{ paddingTop: getStatusBarHeight() }}
+                    pressIconLeft={() => { this.props.navigation.openDrawer() }}
+                />
 
                 <View style={style.container}>
                     <View style={style.MainForm}>
@@ -45,14 +37,13 @@ export default class About extends Component {
                         <Text style={{ textAlign: 'center', marginTop: GLOBALS.HEIGHT / 40, fontFamily: GLOBALS.font.Poppins }}>{Language.t("About.Content")}</Text>
                     </View>
                 </View>
-            </Container>
+            </Gradient>
         )
     }
 }
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        // alignItems: 'center',
         padding: GLOBALS.hp('2%'),
     },
     MainForm: {

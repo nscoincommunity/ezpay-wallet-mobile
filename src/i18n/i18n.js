@@ -19,9 +19,9 @@ I18n.translations = {
     en: require('./en.json'),
     vi: require('./vi.json'),
     ko: require('./ko.json'),
-    zh: require('./zh.json'),
-    pt: require('./pt.json'),
-    es: require('./es.json')
+    zh: require('./zh.json'), // trung quoc
+    pt: require('./pt.json'), // bo dao nha
+    es: require('./es.json') // tay ban nha
 };
 
 // I18n.locale = 'en';

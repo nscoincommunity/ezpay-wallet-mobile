@@ -51,7 +51,7 @@
         "total_value": "Total value",
         "segment": {
             "send": "Send",
-            "receve": "Receve"
+            "receve": "Receive"
         }
     },
     "Send": {
@@ -293,7 +293,7 @@
         },
         "BtnImport": {
             "Title": "Import",
-            "content": "Import wallet form restore code, private key..."
+            "content": "Import wallet from restore code, private key..."
         }
     },
     "SelectNetwork": {
@@ -315,7 +315,7 @@
     },
     "ManageWallet": {
         "Title": "Manage wallet",
-        "AletConfirm": {
+        "AlertConfirm": {
             "title": "Confirm remove wallet",
             "content": "Enter your local passcode to process",
             "placeholderInput": "Wallet local passcode",
@@ -325,6 +325,10 @@
         "AlertSuccess": {
             "title": "Success",
             "content": "Remove wallet success"
+        },
+        "AlertError": {
+            "title": "Error",
+            "content": "You need minimum 1 wallet"
         }
     }
 }

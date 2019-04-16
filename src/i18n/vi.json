@@ -48,7 +48,7 @@
         "YourBalance": "Số dư",
         "CheckBackup": "Ví của bạn chưa được sao lưu",
         "ButtonBackup": "Sao lưu",
-        "total_value": "Total value",
+        "total_value": "Số dư",
         "segment": {
             "send": "Gửi",
             "receve": "Nhận"
@@ -282,49 +282,53 @@
     },
     "LOGIN_TITLE": "Đăng nhập",
     "Add_new": {
-        "Title": "Add new wallet",
+        "Title": "Thêm ví mới",
         "BtnCreate": {
-            "Title": "Create",
-            "content": "Create a new wallet"
+            "Title": "Tạo mới",
+            "content": "Tạo ví mới"
         },
         "BtnChangeNetwork": {
-            "Title": "Change network",
-            "content": "Select exist wallet but change network"
+            "Title": "Thay đổi network",
+            "content": "Thêm ví đã tồn tại trên một network khác"
         },
         "BtnImport": {
-            "Title": "Import",
-            "content": "Import wallet form restore code, private key..."
+            "Title": "Từ mã khôi phục",
+            "content": "Thêm ví mới từ mã backup, private key"
         }
     },
     "SelectNetwork": {
-        "Title": "Select network"
+        "Title": "Chọn network"
     },
     "NameWallet": {
-        "Title1": "Name wallet",
-        "Title2": "Select wallet",
-        "titleButton": "Submit",
+        "Title1": "Tên ví",
+        "Title2": "Chọn ví",
+        "titleButton": "Đồng ý",
         "AlertConfirm": {
-            "title": "Confirm",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+            "title": "Xác nhận",
+            "content": "Nhập mật khẩu để xác nhận",
+            "placeholderInput": "Mật khẩu",
+            "cancel": "Hủy",
             "ok": "Ok",
-            "walletNameExist": "Name wallet has already existed",
-            "walletNameError": "Name wallet needs at least 1 characters"
+            "walletNameExist": "Tên ví đã tồn tại",
+            "walletNameError": "Tên ví tối thiểu 1 kí tự"
         }
     },
     "ManageWallet": {
-        "Title": "Manage wallet",
-        "AletConfirm": {
-            "title": "Confirm remove wallet",
-            "content": "Enter your local passcode to process",
-            "placeholderInput": "Wallet local passcode",
-            "cancel": "Cancel",
+        "Title": "Quản lí ví",
+        "AlertConfirm": {
+            "title": "Xác nhận xóa ví",
+            "content": "Nhập mật khẩu để tiếp tục",
+            "placeholderInput": "Mật khẩu",
+            "cancel": "Hủy",
             "ok": "Ok"
         },
         "AlertSuccess": {
-            "title": "Success",
-            "content": "Remove wallet success"
+            "title": "Thành công",
+            "content": "Bạn đã xóa ví thành công"
+        },
+        "AlertError": {
+            "title": "Lỗi",
+            "content": "Cần ít nhất 1 ví trên ứng dụng"
         }
     }
 }

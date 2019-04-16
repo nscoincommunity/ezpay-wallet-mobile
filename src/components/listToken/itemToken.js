@@ -8,14 +8,26 @@ import GLOBAL from '../../helper/variables';
 export class ItemToken extends Component {
 
     render() {
-        const { item } = this.props
+        const { item } = this.props;
+        var url_icon;
+        if (item.name == 'NTF') {
+            url_icon = require('../../images/iconToken/nexty/ntf.png')
+        }
+        var color_change = '#7ED321'
+        if (parseFloat(item.change) < 0) {
+            color_change = 'red'
+        }
+
         return (
             <View style={styles.Item_coin}>
                 <View style={styles.avatar_coin}>
                     <Avatar
                         size="medium"
-                        rounded
+                        source={url_icon}
+                        rounded={true}
+                        imageProps={{ resizeMode: 'contain' }}
                         // title={item.name}
+                        // titleStyle={{ color: '#979797', fontFamily: GLOBAL.font.Poppins, fontSize: GLOBAL.fontsize(3) }}
                         overlayContainerStyle={{
                             backgroundColor: 'transparent',
                             borderWidth: 1,
@@ -48,7 +60,7 @@ export class ItemToken extends Component {
                     }}>{this.props.balance == NaN ? this.props.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : item.balance}</Text>
                     <Text style={{
                         flex: 6,
-                        color: '#7ED321',
+                        color: color_change,
                         textAlign: 'center',
                         fontFamily: GLOBAL.font.Poppins
                     }}>{item.change}%</Text>

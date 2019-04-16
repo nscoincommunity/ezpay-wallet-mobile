@@ -45,14 +45,14 @@ export default class sidebar extends Component {
     render() {
         const datas = [
             {
-                name: 'Nexty wallet',
+                name: Language.t('Dashboard.Title'),
                 route: 'Dashboard',
                 icon: require('./images/iconMenu/home.png')
             },
             {
-                name: 'Manage wallet',
-                route: 'DeleteWL',
-                icon: require('./images/iconMenu/home.png')
+                name: Language.t('ManageWallet.Title'),
+                route: 'ManageWL',
+                icon: require('./images/iconMenu/manage.png')
             },
             {
                 name: Language.t('Drawer.Redeem'),
@@ -115,6 +115,7 @@ export default class sidebar extends Component {
                     }}
                     keyExtractor={(item) => item.name}
                 />
+                <Text style={{ fontFamily: GLOBALS.font.Poppins, paddingHorizontal: GLOBALS.wp('2%') }}>Version: 0.0.1</Text>
             </Gradient>
         )
     }
