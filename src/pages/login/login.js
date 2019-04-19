@@ -54,16 +54,16 @@ class ScreenLogin extends Component {
 
 
     componentDidMount() {
-        // Login2('123456')
-        //     .then(status => {
-        //         this.setState({ loading: false })
-        //         console.log(status)
-        //         const { navigate } = this.props.navigation;
-        //         navigate('Dashboard');
-        //     }).catch(err => {
-        //         console.log(err)
-        //         this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
-        //     })
+        Login2('123456')
+            .then(status => {
+                this.setState({ loading: false })
+                console.log(status)
+                const { navigate } = this.props.navigation;
+                navigate('Dashboard');
+            }).catch(err => {
+                console.log(err)
+                this.setState({ TextError: Lang.t('Login.InvalidCredentials'), loading: false })
+            })
         this.LoginwithFingerprint()
     }
 

@@ -110,44 +110,39 @@ export function restoreByPk(privateKey: string, password: string, network: strin
                                 console.log('c')
                                 reject('Exist address, please use Change network if you want use other network for this address')
                             } else {
-                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
-                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
                                 resolve({
                                     addressWL: addressTRON,
                                     privateKey: privateKey
                                 })
                             }
-                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                        }).catch(e => reject(Lang.t("Restore.AlertInvalidPK")))
                     } else {
                         CheckExistAddressWallet(addr).then(async type => {
                             if (type) {
                                 console.log('c')
                                 reject('Exist address, please use Change network if you want use other network for this address')
                             } else {
-                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
-                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
                                 resolve({
                                     addressWL: addr,
                                     privateKey: privateKey
                                 })
                             }
-                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                        }).catch(e => reject(Lang.t("Restore.AlertInvalidPK")))
                     }
                 } else {
                     if (!CheckIsTRON(addr)) {
+                        addr = addr.toLowerCase();
                         CheckExistAddressWallet(addr).then(async type => {
                             if (type) {
                                 console.log('c')
                                 reject('Exist address, please use Change network if you want use other network for this address')
                             } else {
-                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
-                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
                                 resolve({
                                     addressWL: addr,
                                     privateKey: privateKey
                                 })
                             }
-                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                        }).catch(e => reject(Lang.t("Restore.AlertInvalidPK")))
                     } else {
                         let temp = await ConvertFromAddressTron(addr);
                         let addressETH = '0x' + temp.slice(2, temp.length);
@@ -156,14 +151,12 @@ export function restoreByPk(privateKey: string, password: string, network: strin
                                 console.log('c')
                                 reject('Exist address, please use Change network if you want use other network for this address')
                             } else {
-                                let privateKeyEncrypted = JSONres['privateKeyEncrypted'];
-                                let privateKey = await CryptoJS.AES.decrypt(privateKeyEncrypted, code).toString(CryptoJS.enc.Utf8);
                                 resolve({
                                     addressWL: addressETH,
                                     privateKey: privateKey
                                 })
                             }
-                        }).catch(e => reject(Lang.t("Restore.InvalidRestoreCode")))
+                        }).catch(e => reject(Lang.t("Restore.AlertInvalidPK")))
                     }
                 }
             } else {

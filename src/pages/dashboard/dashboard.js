@@ -120,6 +120,20 @@ class Dashboard extends Component {
                             :
                             null
                     }
+                    {/* {
+                        this.props.snapToWallet.network == 'ethereum' &&
+                        <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
+                            <TouchableOpacity style={{
+                                flex: 1,
+                                backgroundColor: GLOBALS.Color.secondary,
+                                justifyContent: 'center',
+                                paddingHorizontal: GLOBALS.wp('5%'),
+                                borderRadius: 5
+                            }}>
+                                <Text style={{ color: '#fff' }}>Dapps</Text>
+                            </TouchableOpacity>
+                        </View>
+                    } */}
                     <View style={{ flex: 1, justifyContent: 'center' }}>
                         {
                             exchange != '' &&

@@ -13,17 +13,6 @@ import {
 import GLOBALS from '../../helper/variables';
 import Dialog from "react-native-dialog";
 import { getPrivateKey } from '../../services/auth.service'
-// import {
-//     Container,
-//     Header,
-//     Title,
-//     Content,
-//     Text,
-//     Button,
-//     Left,
-//     Right,
-//     Body,
-// } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Language from '../../i18n/i18n'
 import CustomToast from '../../components/toast';
@@ -195,7 +184,7 @@ export default class privateKey extends Component {
                                 </View>
                                 <TouchableOpacity style={style.button} onPress={this.showDialog.bind(this)}>
                                     <Gradient
-                                        colors={['#0C449A', '#082B5F']}
+                                        colors={['#08AEEA', '#328FFC']}
                                         start={{ x: 1, y: 0.7 }}
                                         end={{ x: 0, y: 3 }}
                                         style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5 }}

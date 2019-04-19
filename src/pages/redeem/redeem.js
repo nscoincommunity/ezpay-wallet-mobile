@@ -150,10 +150,10 @@ export default class Redeem extends Component {
                                     style={styles.button}
                                     onPress={() => this.props.navigation.navigate('TabNavigator')}>
                                     <Gradient
-                                        colors={['#0C449A', '#082B5F']}
+                                        colors={['#08AEEA', '#328FFC']}
                                         start={{ x: 1, y: 0.7 }}
                                         end={{ x: 0, y: 3 }}
-                                        style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5, }}
+                                        style={{ paddingVertical: GLOBALS.hp('1.5%'), borderRadius: 5, }}
                                     >
                                         <Text style={styles.TextButton}>{Language.t('Redeem.Congratulation.TitleButton')}</Text>
                                     </Gradient>
@@ -182,10 +182,10 @@ export default class Redeem extends Component {
                                     style={styles.button}
                                     onPress={this.navigateToOFO.bind(this)}>
                                     <Gradient
-                                        colors={['#0C449A', '#082B5F']}
+                                        colors={['#08AEEA', '#328FFC']}
                                         start={{ x: 1, y: 0.7 }}
                                         end={{ x: 0, y: 3 }}
-                                        style={{ paddingVertical: GLOBALS.hp('2%'), borderRadius: 5, }}
+                                        style={{ paddingVertical: GLOBALS.hp('1.5%'), borderRadius: 5, }}
                                     >
                                         <Text style={styles.TextButton}>{Language.t('Redeem.Error.TitleButton')}</Text>
                                     </Gradient>
@@ -243,7 +243,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     button: {
-        shadowOffset: { width: 3, height: 3, },
+        shadowOffset: {
+            width: 3,
+            height: 3,
+        },
         shadowColor: 'black',
         shadowOpacity: 0.2,
         marginVertical: GLOBALS.hp('3%'),

@@ -26,6 +26,7 @@ import QRscan from "./components/qrscan";
 import Language from "./pages/languages/language";
 import ChangePIN from './pages/changePIN/changePIN';
 import ListToken from './pages/list-token/token';
+// import Dapps from './pages/Dapps'
 /* screen drawer*/
 import Setting from './pages/setting/setting';
 import history from './pages/history/history';
@@ -122,6 +123,7 @@ class Router extends Component {
             {
                 Drawer: { screen: Drawer },
                 InforWallet: { screen: InforWallet },
+                SendScreen: { screen: Send },
             },
             {
                 initialRouteName: 'Drawer',
@@ -148,9 +150,7 @@ class Router extends Component {
                 AddNewWallet: { screen: TypeAddWallet },
                 NameWallet: { screen: NameWallet },
                 SelectNetwork: { screen: SelectNetwork },
-                // InforWallet: { screen: InforWallet },
                 Addtoken: { screen: Addtoken },
-                SendScreen: { screen: Send },
                 Privatekey: { screen: Prk },
                 History: { screen: history },
                 Browser: { screen: Browser }

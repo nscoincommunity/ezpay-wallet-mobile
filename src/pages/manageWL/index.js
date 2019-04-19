@@ -12,7 +12,7 @@ import Language from '../../i18n/i18n';
 import { bindActionCreators } from 'redux';
 import { fetchAllWallet } from '../../../redux/actions/slideWalletAction'
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import REALM from 'realm'
 
 interface item {
     bg_net: any,
@@ -39,7 +39,8 @@ class PageDeleteWL extends Component {
 
     loadData() {
         SelectAllWallet().then(data => {
-            this.setState({ listWallet: data })
+            var tempData = JSON.parse(JSON.stringify(data))
+            this.setState({ listWallet: tempData })
             if (data.length == 1) {
                 this.setState({ visibleBtnRM: true })
             }

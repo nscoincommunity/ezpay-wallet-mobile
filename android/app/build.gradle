@@ -100,8 +100,8 @@ android {
         applicationId "io.nexty.ezkey"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 000010
-        versionName "0.0.1"
+        versionCode 000020
+        versionName "0.0.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

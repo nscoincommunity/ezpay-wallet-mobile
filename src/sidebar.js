@@ -115,7 +115,7 @@ export default class sidebar extends Component {
                     }}
                     keyExtractor={(item) => item.name}
                 />
-                <Text style={{ fontFamily: GLOBALS.font.Poppins, paddingHorizontal: GLOBALS.wp('2%') }}>Version: 0.0.1</Text>
+                <Text style={{ fontFamily: GLOBALS.font.Poppins, paddingHorizontal: GLOBALS.wp('2%') }}>Version: 0.0.2</Text>
             </Gradient>
         )
     }

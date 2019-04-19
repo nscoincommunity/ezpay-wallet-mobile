@@ -108,17 +108,17 @@ export default class InforWallet extends Component {
                                 style={{ padding: GLOBAL.wp('6%') }}
                                 resizeMode="contain"
                             >
-                                {
-                                    Platform.OS == 'android' ?
-                                        <QRCodeAndroid
-                                            value={item.address}
-                                            logo={logo_net}
-                                            logoSize={GLOBAL.wp('20%')}
-                                            logoBackgroundColor='transparent'
-                                            backgroundColor='transparent'
-                                            size={GLOBAL.wp('60%')}
-                                        />
-                                        :
+                                {/* {
+                                    Platform.OS == 'android' ? */}
+                                <QRCodeAndroid
+                                    value={item.address}
+                                    logo={logo_net}
+                                    logoSize={GLOBAL.wp('20%')}
+                                    logoBackgroundColor='transparent'
+                                    backgroundColor='transparent'
+                                    size={GLOBAL.wp('60%')}
+                                />
+                                {/* :
                                         <QRCode
                                             content={item.address}
                                             backgroundColor='transparent'
@@ -126,7 +126,7 @@ export default class InforWallet extends Component {
                                             logoSize={GLOBAL.wp('20%')}
                                             size={GLOBAL.wp('60%')}
                                         />
-                                }
+                                } */}
                             </ImageBackground>
                         </TouchableOpacity>
                         <Text
