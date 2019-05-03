@@ -3,6 +3,8 @@ package com.nextywallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
+import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
 import io.realm.react.RealmReactPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
@@ -18,7 +20,6 @@ import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.peel.react.rnos.RNOSModule;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import com.rnfs.RNFSPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import org.reactnative.camera.RNCameraPackage;
 import com.facebook.react.ReactNativeHost;
@@ -43,6 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
+            new WebViewBridgePackage(),
+            new RNFSPackage(),
             new RealmReactPackage(),
               new FingerprintAuthPackage(),
               new RNFirebasePackage(),
@@ -56,7 +59,6 @@ public class MainApplication extends Application implements ReactApplication {
               new TcpSocketsModule(),
               new RandomBytesPackage(),
               new RNOSModule(),
-              new RNFSPackage(),
               new ReactNativeDocumentPicker(),
               new RNCameraPackage(),
               new RNFirebaseAnalyticsPackage(),

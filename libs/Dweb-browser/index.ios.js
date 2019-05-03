@@ -185,13 +185,13 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
     let wssUrl = getInfuraWSSURL(chainID, infuraAPIKey);
 
     function executeCallback (id, error, value) {
-      goldenProvider.executeCallback(id, error, value)
+      EzkeyProvider.executeCallback(id, error, value)
     }
 
-    let goldenProvider = null
+    let EzkeyProvider = null
 
     function init() {
-      goldenProvider = new Golden({
+      EzkeyProvider = new Ezkey({
         noConflict: true,
         address: addressHex,
         networkVersion: chainID,
@@ -202,28 +202,28 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
         signTransaction: function (tx, cb){
           console.log('signing a transaction', tx)
           const { id = 8888 } = tx
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           window.webkit.messageHandlers.reactNative.postMessage({"name": "signTransaction", "object": tx, id: id})
         },
         signMessage: function (msgParams, cb) {
           const { data } = msgParams
           const { id = 8888 } = msgParams
           console.log("signing a message", msgParams)
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           window.webkit.messageHandlers.reactNative.postMessage({"name": "signMessage", "object": { data }, id: id})
         },
         signPersonalMessage: function (msgParams, cb) {
           const { data } = msgParams
           const { id = 8888 } = msgParams
           console.log("signing a personal message", msgParams)
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           window.webkit.messageHandlers.reactNative.postMessage({"name": "signPersonalMessage", "object": { data }, id: id})
         },
         signTypedMessage: function (msgParams, cb) {
           const { data } = msgParams
           const { id = 8888 } = msgParams
           console.log("signing a typed message", msgParams)
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           window.webkit.messageHandlers.reactNative.postMessage({"name": "signTypedMessage", "object": { data }, id: id})
         }
       },
@@ -235,12 +235,12 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
     
     init();
     
-    web3 = new Web3(goldenProvider)
+    web3 = new Web3(EzkeyProvider)
 
     web3.eth.defaultAccount = addressHex
   
     web3.setProvider = function () {
-      console.debug('Golden Wallet - overrode web3.setProvider')
+      console.debug('Ezkey Wallet - overrode web3.setProvider')
     }
 
     web3.version.getNetwork = function(cb) {

@@ -15,6 +15,13 @@ import { getData, setData } from './data.service';
 import Language from '../i18n/i18n';
 import ABI from '../../ABI';
 import { UpdateBalanceTRON, ConvertFromAddressTron, ConvertToAddressTron, UpdateBalanceTokenTRON } from './tron.service'
+import { utils } from 'ethers';
+import { ec as Ec } from 'elliptic'
+
+// Create and initialize EC context
+// (better do it once and reuse it)
+const secp256k1 = new Ec('secp256k1')
+
 
 const WEB3 = new Web3();
 export var balance: number = 0
@@ -351,6 +358,60 @@ export async function SendToken(network: string, tokenAddress: string, address_r
     })
 
 }
+
+/**
+ * Sign message tx return signerTx Dapps
+ * @param {Tx} tx tx want sign
+ * @param {string} passcode wallet local passcode
+ * @param {string} pk_en private encrypt
+ */
+export const signMessageDapps = async (message, passcode: string, pk_en: string) => {
+    if (!await validatePassword(passcode)) throw (Language.t('Send.AlerError.Content'));
+    return new Promise(async (resolve, reject) => {
+        try {
+            // WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider('ethereum')))
+            // try {
+            //     const account = WEB3.eth.accounts.privateKeyToAccount('0x' + await getPrivateKey(passcode, pk_en));
+            //     var sh3Message = WEB3.utils.keccak256(message)
+            //     console.log('message sha3', message, sh3Message)
+            //     WEB3.eth.sign(sh3Message, account.address, (error, result) => {
+            //         console.log(error, result);
+
+            //     })
+            // } catch (error) {
+            //     console.log(error)
+            // }
+            console.log(await getPrivateKey(passcode, pk_en), message)
+            var privateKey = await getPrivateKey(passcode, pk_en);
+            const Signature = signDigest(hashMessage(message), privateKey.toLowerCase())
+            console.log('aaa', Signature)
+            resolve((utils.hexZeroPad(Signature.r, 32) + utils.hexZeroPad(Signature.s, 32).substring(2) + (Signature.recoveryParam ? '1c' : '1b')))
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+export const hashMessage = (message) => {
+    const payload = utils.concat([
+        utils.toUtf8Bytes('\x19Ethereum Signed Message:\n32'),
+        utils.toUtf8Bytes(String(message.length)),
+        ((typeof (message) === 'string') ? utils.toUtf8Bytes(message) : message)
+    ])
+    return utils.keccak256(payload)
+}
+
+export const signDigest = (digest, privateKey) => {
+    if (!privateKey) throw new Error('Private key not found')
+    const keyPair = secp256k1.keyFromPrivate(privateKey)
+    const signature = keyPair.sign(utils.arrayify(digest), { canonical: true })
+    return {
+        recoveryParam: signature.recoveryParam,
+        r: `0x${signature.r.toString(16)}`,
+        s: `0x${signature.s.toString(16)}`
+    }
+}
+
 export async function signTransaction(txData: Tx, privateKey: string) {
     let { rawTx } = sign(txData, privateKey);
     return rawTx

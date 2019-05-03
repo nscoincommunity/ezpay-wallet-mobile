@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import {
-    View,
     StyleSheet,
+    // WebView,
     Dimensions
 } from 'react-native'
 import PropTypes from 'prop-types'
 import WebView from 'react-native-webview-bridge-updated/webview-bridge'
 
 const { width, height } = Dimensions.get('window')
-export default class GoldenDWebBrowser extends Component {
+export default class WebBrowser extends Component {
     static propTypes = {
         style: PropTypes.any,
         uri: PropTypes.string.isRequired,
@@ -22,8 +22,7 @@ export default class GoldenDWebBrowser extends Component {
         jsContent: PropTypes.string.isRequired,
         onLoadEnd: PropTypes.func,
         onLoadStart: PropTypes.func,
-        onProgress: PropTypes.func,
-        onNavigationStateChange: PropTypes.func
+        onProgress: PropTypes.func
     }
 
     static defaultProps = {
@@ -36,6 +35,11 @@ export default class GoldenDWebBrowser extends Component {
         onLoadEnd: () => { },
         onLoadStart: () => { },
         onProgress: () => { }
+    }
+
+
+    componentDidMount() {
+
     }
 
     _onBridgeMessage(resTX) {
@@ -104,29 +108,28 @@ export default class GoldenDWebBrowser extends Component {
             infuraAPIKey,
             jsContent,
             onLoadEnd,
-            onLoadStart,
-            onNavigationStateChange
+            onLoadStart
         } = this.props
 
         return (
-            <View style={{ flex: 1, width: width }}>
-                <WebView
-                    ref={(ref) => { this.webview = ref }}
-                    onBridgeMessage={this._onBridgeMessage.bind(this)}
-                    javaScriptEnabled={true}
-                    injectedOnStartLoadingJavaScript={getJavascript(addressHex, network, infuraAPIKey, jsContent)}
-                    source={uri}
-                    onLoadEnd={onLoadEnd}
-                    onLoadStart={onLoadStart}
-                    onRequestClose={() => { }}
-                    onNavigationStateChange={onNavigationStateChange}
-                />
-            </View>
+            <WebView
+                ref={(ref) => { this.webview = ref }}
+                onBridgeMessage={this._onBridgeMessage.bind(this)}
+                // mixedContentMode="compatibility"
+                javaScriptEnabled={true}
+                // injectedJavaScript={getJavascript(addressHex, network, infuraAPIKey, jsContent, uri)}
+                // onLoadStart={() => this.webview.injectJavaScript(getJavascript(addressHex, network, infuraAPIKey, jsContent))}
+                injectedOnStartLoadingJavaScript={getJavascript(addressHex, network, infuraAPIKey, jsContent)}
+                source={uri}
+                onLoadEnd={onLoadEnd}
+                onLoadStart={onLoadStart}
+            />
         )
     }
 }
 
 const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
+    // return `window.test = () => alert('AAA')`
     return `
     ${jsContent}
     function getChainID(name) {
@@ -136,10 +139,8 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
         case 'rinkeby': return 4;
         case 'kovan': return 42;
       }
-
       throw new Error('Unsupport network')
     }
-
     function getInfuraRPCURL(chainID, apiKey) {
       switch(chainID) {
         case 1: return 'https://mainnet.infura.io/' + apiKey;
@@ -147,10 +148,8 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
         case 4: return 'https://rinkeby.infura.io/' + apiKey;
         case 42: return 'https://kovan.infura.io/' + apiKey;
       }
-
       throw new Error('Unsupport network')
     }
-
     function getInfuraWSSURL(chainID, apiKey) {
       switch(chainID) {
         case 1: return 'wss://mainnet.infura.io/ws/' + apiKey;
@@ -158,26 +157,21 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
         case 4: return 'wss://rinkeby.infura.io/ws/' + apiKey;
         case 42: return 'wss://kovan.infura.io/ws/' + apiKey;
       }
-
       throw new Error('Unsupport network')
     }
-
     let infuraAPIKey = '${infuraAPIKey}';
     let addressHex = '${addressHex}';
     let network = '${network}';
     let chainID = getChainID(network);
     let rpcUrl = getInfuraRPCURL(chainID, infuraAPIKey);
     let wssUrl = getInfuraWSSURL(chainID, infuraAPIKey);
-
     function executeCallback (id, error, value) {
       console.log(JSON.stringify(value))
-      goldenProvider.executeCallback(id, error, value)
+      EzkeyProvider.executeCallback(id, error, value)
     }
-
-    let goldenProvider = null
-
+    let EzkeyProvider = null
     function init() {
-      goldenProvider = new Golden({
+      EzkeyProvider = new Ezkey({
         noConflict: true,
         address: addressHex,
         networkVersion: chainID,
@@ -188,7 +182,7 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
         signTransaction: function (tx, cb){
           console.log('signing a transaction', tx)
           const { id = 8888 } = tx
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           const resTx = {name: 'signTransaction', id, tx} 
           WebViewBridge.send(JSON.stringify(resTx))
         },
@@ -196,7 +190,7 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
           const { data } = msgParams
           const { id = 8888 } = msgParams
           console.log("signing a message", msgParams)
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           console.log("signMessage")
           const resTx = {name: "signMessage", id, tx} 
           WebViewBridge.send(JSON.stringify(resTx))
@@ -205,7 +199,7 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
           const { data } = msgParams
           const { id = 8888 } = msgParams
           console.log("signing a personal message", msgParams)
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           console.log("signPersonalMessage")
           const resTx = {name: "signPersonalMessage", id, data} 
           WebViewBridge.send(JSON.stringify(resTx))
@@ -214,7 +208,7 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
           const { data } = msgParams
           const { id = 8888 } = msgParams
           console.log("signing a typed message", msgParams)
-          goldenProvider.addCallback(id, cb)
+          EzkeyProvider.addCallback(id, cb)
           console.log("signTypedMessage")
           const resTx = {name: "signTypedMessage", id, tx} 
           WebViewBridge.send(JSON.stringify(resTx))
@@ -227,14 +221,11 @@ const getJavascript = function (addressHex, network, infuraAPIKey, jsContent) {
     }
     
     init();
-    window.web3 = new Web3(goldenProvider)
-
+    window.web3 = new Web3(EzkeyProvider)
     web3.eth.defaultAccount = addressHex
-
     web3.setProvider = function () {
-      console.debug('Golden Wallet - overrode web3.setProvider')
+      console.debug('Ezkey Wallet - overrode web3.setProvider')
     }
-
     web3.version.getNetwork = function(cb) {
       cb(null, chainID)
     }

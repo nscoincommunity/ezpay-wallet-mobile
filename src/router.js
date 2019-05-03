@@ -26,7 +26,10 @@ import QRscan from "./components/qrscan";
 import Language from "./pages/languages/language";
 import ChangePIN from './pages/changePIN/changePIN';
 import ListToken from './pages/list-token/token';
-// import Dapps from './pages/Dapps'
+// import BrowserDapps from './pages/browserDapps';
+// import ListDapps from './pages/listDapps'
+import Dapps from './pages/Dapps/router'
+
 /* screen drawer*/
 import Setting from './pages/setting/setting';
 import history from './pages/history/history';
@@ -45,7 +48,7 @@ import SelectNetwork from './pages/addNewWallet/selectNetwork';
 import InforWallet from './pages/inforWallet';
 import { ChangeLanguage } from '../redux/actions/slideWalletAction';
 import manageWL from './pages/manageWL';
-import { fromBottom, fadeIn, zoomIn, zoomOut } from './components/effectPushScreen'
+import { fromBottom, fadeIn, zoomIn, zoomOut, flipX, flipY, fromTop } from './components/effectPushScreen'
 
 
 const Drawer = createDrawerNavigator(
@@ -153,7 +156,10 @@ class Router extends Component {
                 Addtoken: { screen: Addtoken },
                 Privatekey: { screen: Prk },
                 History: { screen: history },
-                Browser: { screen: Browser }
+                Browser: { screen: Browser },
+                // ListDapps: { screen: ListDapps },
+                // BrowserDapps: { screen: BrowserDapps }
+                Dapps: { screen: Dapps }
             },
             {
                 initialRouteName: this.props.register ? 'login' : 'register',

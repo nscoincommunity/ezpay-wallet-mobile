@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-webview-bridge-updated')
     implementation project(':realm')
     implementation project(':react-native-touch-id')
     implementation project(':react-native-firebase')
@@ -160,10 +161,10 @@ dependencies {
     // implementation 'com.facebook.fresco:animated-gif:1.9.0'
     implementation 'com.facebook.fresco:animated-gif:1.3.0'
     // Firebase dependencies
-    implementation "com.google.android.gms:play-services-base:16.0.1"
-    implementation "com.google.firebase:firebase-core:16.0.4"
-    implementation "com.google.firebase:firebase-analytics"
-    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation "com.google.android.gms:play-services-base:16.1.0"
+    implementation "com.google.firebase:firebase-core:16.0.8"
+    implementation "com.google.firebase:firebase-analytics:16.4.0"
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
 }
 
@@ -174,3 +175,10 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 apply plugin: 'com.google.gms.google-services'
+// THE FOLLOWING CODE IS NEEDED TO GET FIREBASE ANDROID SDK WORKING
+configurations.all {
+    resolutionStrategy {
+        force 'com.android.support:support-v4:27.1.0'
+    }
+}
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
