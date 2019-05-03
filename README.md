@@ -1,6 +1,5 @@
 # Ez Keystore - Mutil wallet & ERC20 Tokens
- 
- Project for create wallet application in android and ios
+ [<img src="https://raw.githubusercontent.com/nextyio/RN_EzKeyStore/master/screenshot/view.png">]('https://github.com/nextyio/RN_EzKeyStore')
  
  ## Features
  - [x] Create/import Ethereum, Nexty, TRON wallet
