@@ -16,7 +16,19 @@ export default class ListDapps extends Component {
     setTimeout(() => {
       this.ready = true
     }, 650)
+
+    // this.props.navigation.navigate('SignTransaction', {
+    //   payload:
+    //     {
+    //       to: '0xEAe4190088527d44242684331afb3238C12224c8',
+    //       value: 200,
+    //       url: 'ss'
+    //     }
+    // })
   }
+
+
+
   _goToBrowser = (item) => {
     const { address, network, pk_en } = this.props.navigation.getParam('payload');
     this.props.navigation.navigate('BrowserDapps', {
@@ -83,6 +95,12 @@ const styles = StyleSheet.create({
 })
 
 const dumpData = [
+  {
+    title: 'Elotto',
+    subTitle: "Game of Nexty",
+    url: 'http://45.76.156.99',
+    img: 'http://45.76.156.99/assets/images/logo.svg'
+  },
   {
     title: 'Kyber Network',
     subTitle: 'An instant decentralized cryptocurrency exchange service.',

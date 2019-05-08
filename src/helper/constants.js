@@ -14,7 +14,7 @@ export default {
     WEB3_API: 'http://13.228.68.50:8545',
 
     /* Main net ethereum */
-    WEB3_ETH: 'https://mainnet.infura.io/v3/b174a1cc2f7441eb94ed9ea18c384730',
+    WEB3_ETH: 'https://rinkeby.infura.io/v3/b174a1cc2f7441eb94ed9ea18c384730',
 
     /* Main net TRON */
     WEB3_TRX: 'https://api.trongrid.io/',

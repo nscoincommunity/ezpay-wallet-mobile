@@ -1,10 +1,43 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Platform, TouchableOpacity, ImageBackground } from 'react-native'
+import { Text, View, StyleSheet, Platform, TouchableOpacity, ImageBackground, ViewProps } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Header } from 'react-native-elements';
-import GLOBAL from '../../helper/variables'
+import GLOBAL from '../../helper/variables';
+import PropTypes from 'prop-types'
 
-export default class HeaderComponent extends Component {
+export interface HeaderProps extends ViewProps {
+    size?: number,
+    backgroundColor?: string,
+    colorIconLeft?: string,
+    colorIconRight?: string,
+    colorTitle?: string,
+    nameIconLeft?: string,
+    nameIconRight?: string,
+    title?: string,
+    style?: any,
+    pressIconLeft?: Function,
+    pressIconRight?: Function,
+}
+
+export default class HeaderComponent extends Component<HeaderProps> {
+    static PropTypes = {
+        size: PropTypes.number,
+        backgroundColor: PropTypes.string,
+        colorIconLeft: PropTypes.string,
+        colorIconRight: PropTypes.string,
+        nameIconLeft: PropTypes.string,
+        nameIconRight: PropTypes.string,
+        title: PropTypes.string,
+        style: PropTypes.any,
+        pressIconLeft: PropTypes.func,
+        pressIconRight: PropTypes.func,
+        colorTitle: PropTypes.string
+    }
+
+    static defaultProps = {
+        pressIconLeft: (data) => { },
+        pressIconRight: (data) => { }
+    }
 
     render() {
         const { size,

@@ -17,8 +17,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DAppBrowser from '../../../../libs/Dweb-browser'
 import RNFS from 'react-native-fs';
 import Gradient from 'react-native-linear-gradient';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper'
-import GLOBALS from '../../../helper/variables'
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import GLOBALS from '../../../helper/variables';
+import { convertHexToString } from '../Dapp.service'
 
 const { width, height } = Dimensions.get('window')
 type Props = {};
@@ -132,6 +133,18 @@ export default class App extends Component<Props> {
             callBack: this.executeCallback
         })
     }
+    onSignTransaction = async ({ id, object }) => {
+        const { pk_en } = this.props.navigation.getParam('payload');
+        const ViewObject = await convertHexToString(object)
+        this.props.navigation.navigate('SignTransaction', {
+            id,
+            object,
+            url: this.state.urlView,
+            pk_en,
+            callBack: this.executeCallback,
+            ViewObject
+        })
+    }
 
     render() {
         const progress = this.webProgress.interpolate({
@@ -209,7 +222,7 @@ export default class App extends Component<Props> {
                         ref="WEBVIEW_REF"
                         uri={this.state.url}
                         addressHex={address}
-                        network="mainnet"
+                        network="rinkeby"
                         infuraAPIKey="b174a1cc2f7441eb94ed9ea18c384730"
                         jsContent={jsContent}
                         style={{ width: width }}
@@ -217,6 +230,7 @@ export default class App extends Component<Props> {
                         onProgress={this.onProgress}
                         onLoadEnd={this.onLoadEnd}
                         onSignPersonalMessage={this.onSignPersonalMessage}
+                        onSignTransaction={this.onSignTransaction}
                     />
                 }
                 <View

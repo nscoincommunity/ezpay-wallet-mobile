@@ -10,6 +10,7 @@ import {
 import PropTypes from 'prop-types'
 import LayoutUtils from './LayoutUtils'
 import GLOBAL from '../../helper/variables';
+import Gradient from 'react-native-linear-gradient'
 
 const isIPX = LayoutUtils.getIsIPX()
 const extraBottom = LayoutUtils.getExtraBottom()
@@ -107,7 +108,7 @@ export default class BottomButton extends Component {
                 bottom: this.state.bottom,
                 marginTop: 10,
                 borderRadius: this.state.borderRadius,
-                backgroundColor: '#121734',
+                // backgroundColor: 'red',
                 left: this.state.marginVertical,
                 right: this.state.marginVertical
             }}
@@ -115,11 +116,22 @@ export default class BottomButton extends Component {
                 <TouchableOpacity
                     disabled={disable}
                     onPress={this.onPress}
-                    style={styles.saveButton}
                 >
-                    <Text style={{ fontSize: 16, color: disable ? GLOBAL.Color.primary : GLOBAL.Color.secondary, fontFamily: GLOBAL.font.Poppins }}>
-                        {text}
-                    </Text>
+                    <Gradient
+                        colors={['#328FFC', '#08AEEA']}
+                        style={styles.saveButton}
+                        start={{ x: 0.7, y: 0 }}
+                        end={{ x: 0, y: 0 }}
+                    >
+                        <Text style={{
+                            fontSize: 16,
+                            color: disable ? GLOBAL.Color.primary : '#fff',
+                            fontFamily: GLOBAL.font.Poppins,
+                            fontWeight: '400'
+                        }}>
+                            {text}
+                        </Text>
+                    </Gradient>
                 </TouchableOpacity>
             </Animated.View>
         )
@@ -129,7 +141,8 @@ export default class BottomButton extends Component {
 const styles = StyleSheet.create({
     saveButton: {
         paddingVertical: 13,
+        borderRadius: 5,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     }
 })
