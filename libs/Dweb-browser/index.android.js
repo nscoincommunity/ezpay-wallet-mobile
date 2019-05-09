@@ -123,6 +123,7 @@ export default class WebBrowser extends Component {
                 source={uri}
                 onLoadEnd={onLoadEnd}
                 onLoadStart={onLoadStart}
+                onProgress
             />
         )
     }
