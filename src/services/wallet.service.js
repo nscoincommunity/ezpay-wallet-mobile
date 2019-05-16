@@ -213,14 +213,6 @@ export const signTransactionDapp = async (from, to, value, data, privateKey) => 
                 try {
                     rawTx = '0x' + await signTransaction(txData, privateKey)
                     resolve(rawTx)
-                    // WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
-                    //     if (error) {
-                    //         console.log(error)
-                    //         reject(error.message);
-                    //     } else {
-                    //         console.log(hash)
-                    //     }
-                    // })
                 } catch (error) {
                     console.log(error)
                     reject(error)
@@ -423,7 +415,11 @@ function getGasPrice(): string {
 
 export const HexToString = (hex) => {
     const value = WEB3.utils.hexToNumberString(hex);
-    return value;
+    if (value) {
+        return value;
+    } else {
+        return 0
+    }
 }
 
 export async function getAddressFromPK(privateKey) {

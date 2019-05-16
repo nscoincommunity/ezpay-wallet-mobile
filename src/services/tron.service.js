@@ -4,11 +4,18 @@ import { validatePassword, getPrivateKey } from './auth.service'
 import CONSTANTS from '../helper/constants'
 import { forkJoin, of, interval, throwError, fromEvent, Observable, merge } from 'rxjs';
 
-const TESTNET = "https://api.shasta.trongrid.io/";
-const MAINNET = 'https://api.trongrid.io';
-const TRONWEB = new TronWeb({
-    fullHost: MAINNET,
-});
+const TESTNET = {
+    fullNode: 'https://api.shasta.trongrid.io/',
+    solidityNode: 'https://api.shasta.trongrid.io/',
+    eventServer: 'https://api.shasta.trongrid.io/',
+}
+const MAINNET = {
+    fullHost: 'https://api.trongrid.io',
+    eventServer: 'https://api.someotherevent.io',
+}
+
+
+const TRONWEB = new TronWeb(TESTNET);
 import ABI from '../../ABI';
 /**
  * convert address wallet from type ETH, NTY to type of TRON

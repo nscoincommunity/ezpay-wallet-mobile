@@ -54,11 +54,11 @@ export default class sidebar extends Component {
                 route: 'ManageWL',
                 icon: require('./images/iconMenu/manage.png')
             },
-            {
-                name: Language.t('Drawer.Redeem'),
-                route: 'Redeem',
-                icon: require('./images/iconMenu/redeem.png')
-            },
+            // {
+            //     name: Language.t('Drawer.Redeem'),
+            //     route: 'Redeem',
+            //     icon: require('./images/iconMenu/redeem.png')
+            // },
             {
                 name: Language.t('Drawer.Settings'),
                 route: 'Setting',
