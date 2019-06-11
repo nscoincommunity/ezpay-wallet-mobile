@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -100,6 +99,7 @@
 		FADCCF7AD84D481F8CC5A015 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 574C909134F948869361AD89 /* Entypo.ttf */; };
 		FE7ACDFAC8D449DEB72A47FB /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81F0FF025D9541AEB950586B /* SimpleLineIcons.ttf */; };
 		FF08145C57934332BCEC81BB /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7D2D83B7B0F4FA9BA1946CF /* EvilIcons.ttf */; };
+		95FFDA2B97E44C7ABBF413C7 /* libRNDeviceBrightness.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 892F8743395A47388DD4C1FE /* libRNDeviceBrightness.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -686,6 +686,8 @@
 		E7D2D83B7B0F4FA9BA1946CF /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		FC08E90BC1CE626D5194B3F3 /* Pods-NextyWallet-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NextyWallet-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NextyWallet-tvOSTests/Pods-NextyWallet-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		FCCF9E1657BC4D0D824DE527 /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
+		06507439289C4E418BD6FDF7 /* RNDeviceBrightness.xcodeproj */ = {isa = PBXFileReference; name = "RNDeviceBrightness.xcodeproj"; path = "../node_modules/react-native-device-brightness/RNDeviceBrightness.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		892F8743395A47388DD4C1FE /* libRNDeviceBrightness.a */ = {isa = PBXFileReference; name = "libRNDeviceBrightness.a"; path = "libRNDeviceBrightness.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -736,6 +738,7 @@
 				00D5BD3CBC1A43E1A79A43FB /* libc++.tbd in Frameworks */,
 				F0752C92F4E5406EA2F85571 /* libz.tbd in Frameworks */,
 				9F4F8AEF54184ABD80DF4BE2 /* libReact-Native-Webview-Bridge.a in Frameworks */,
+				95FFDA2B97E44C7ABBF413C7 /* libRNDeviceBrightness.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1161,6 +1164,7 @@
 				100EB96E78524344BCC2725F /* RNFirebase.xcodeproj */,
 				90212A37EBB24E159EA520C3 /* RealmReact.xcodeproj */,
 				D929BA3152464B1FA8D37C2E /* React-Native-Webview-Bridge.xcodeproj */,
+				06507439289C4E418BD6FDF7 /* RNDeviceBrightness.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -2236,12 +2240,14 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = NextyWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -2281,12 +2287,14 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = NextyWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -2332,6 +2340,7 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = NextyWallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2383,6 +2392,7 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = NextyWallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2435,11 +2445,13 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -2489,11 +2501,13 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -2542,11 +2556,13 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -2595,11 +2611,13 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-webview-bridge-updated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-device-brightness/RNDeviceBrightness",
 				);
 				INFOPLIST_FILE = "NextyWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (

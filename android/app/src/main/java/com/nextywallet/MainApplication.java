@@ -3,6 +3,7 @@ package com.nextywallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.capslock.RNDeviceBrightness.RNDeviceBrightness;
 import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
+            new RNDeviceBrightness(),
             new WebViewBridgePackage(),
             new RNFSPackage(),
             new RealmReactPackage(),

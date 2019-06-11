@@ -1,19 +1,21 @@
 import React, { Component } from "react";
 import ROUTER from "./src/router";
+import RouterContainer from './app/route'
 import './global';
 // import { exChange } from './src/tabfooter'
 import { DeviceLanguage, selectLang } from './src/i18n/i18n';
 import { getData, setData } from './src/services/data.service';
 import { getExchangeRate } from './src/services/rate.service';
 import firebase from 'react-native-firebase';
-import { Alert, Platform } from 'react-native'
+import { Alert, Platform, StatusBar } from 'react-native'
 import { POSTAPI } from './src/helper/utils';
 import devToolsEnhancer from 'remote-redux-devtools';
 // redux
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import THUNK from 'redux-thunk';
-import REDUCER from './redux/reducers/rootReducer';
+// import REDUCER from './redux/reducers/rootReducer';
+import REDUCER from './app/redux/reducers'
 
 const store = createStore(REDUCER, compose(
   applyMiddleware(THUNK),
@@ -117,7 +119,12 @@ export default class Setup extends Component {
   render() {
     return (
       <Provider store={store}>
-        <ROUTER />
+        <StatusBar
+          backgroundColor={'transparent'}
+          translucent
+          barStyle="dark-content"
+        />
+        <RouterContainer />
       </Provider>
     );
   }
