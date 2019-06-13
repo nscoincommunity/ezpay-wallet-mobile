@@ -108,7 +108,7 @@ export default [
         name: 'NTF',
         symbol: 'NTF',
         network: 'nexty',
-        address: '0xf426016c5335399bd8f8798abf7c55264e0c1dba',
+        address: '0x2c783ad80ff980ec75468477e3dd9f86123ecbda',
         decimals: 18,
         id_market: 0
     },

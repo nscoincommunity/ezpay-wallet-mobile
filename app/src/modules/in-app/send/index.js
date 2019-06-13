@@ -28,9 +28,9 @@ import { FlashMessageTransition } from '../../../../lib/flash-message';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import { KeyboardAwareScrollView } from '../../../components/Keyboard-Aware-Scroll'
-import { CheckIsAddress, Check_fee_with_balance, Send_Token } from '../../../../services/index.account'
+import { CheckIsAddress, Check_fee_with_balance, Send_Token, Update_balance } from '../../../../services/index.account'
 import RBSheet from '../../../../lib/bottom-sheet'
-
+import { get_balance_wallet } from '../../../../db'
 
 const TransactionFee = [
     {
@@ -60,8 +60,8 @@ const ListAddress = [
         address: '0x2f45675e47415afbaa8bbf26276b88e40df18c95'
     },
     {
-        name: 'dau',
-        address: '0x5316c4ad1BB635978558188585D2Ed42DAf9faAA'
+        name: 'address ntf',
+        address: '0x7c0c79776e463f1a7da96a0aff325743dd3d7082'
     }
 ]
 
@@ -140,23 +140,28 @@ let heightKeyboard = 0;
 let locationInput = 0
 class FormSendIOS extends Component {
 
-    state = {
-        disableButton: false,
-        selectFee: 'Average',
-        paddingScroll: 0,
-        checkbox: true,
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            ...this.init_state,
+            price_usd: this.props.data.price,
+            paddingScroll: 0,
+            selectFee: 'Average',
+            gasPrice: 0
+        }
+    }
+
+    init_state = {
         txt_Address: '',
-        amount: '',
-        price_usd: this.props.data.price,
-        desc: '',
-        err_txt_address: false,
-        gasPrice: 10,
-        disable_btn_send: true,
+        err_Txt_Address: false,
+        txt_Amount: '',
+        err_Txt_Amount: false,
+        txt_Desc: '',
+        disable_btn_send: true
     }
 
     componentWillMount() {
-        console.log(this.props.data)
-
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
             heightKeyboard = e.endCoordinates.height;
             if (locationInput + 50 > height - heightKeyboard) {
@@ -177,8 +182,7 @@ class FormSendIOS extends Component {
 
     onSelect = data => {
         if (data['result'] == 'cancelScan') return;
-        // 
-        this.setState({ txt_Address: data['result'] })
+        this.change_txt_address(data['result'])
     }
 
     navigateToScan() {
@@ -195,50 +199,97 @@ class FormSendIOS extends Component {
                     'Insufficient balance.',
                     [{ text: 'Ok', style: 'cancel' }]
                 )
-                this.setState({ disable_btn_send: true })
             } else {
-                this.setState({ gasPrice: gasPrice, disable_btn_send: false })
+                this.setState({ gasPrice: gasPrice })
             }
         }).catch(e => console.log(e))
         // Send_Token(item.address, '0x7c0c79776e463f1a7da96a0aff325743dd3d7082', 0.1, addressTK, '', network, decimals, gasPrice)
     }
-    change_txt_address = (value) => {
+
+    change_txt_address = async (value) => {
         const { network } = this.props.data;
-        CheckIsAddress(value, network).then(status => {
+        CheckIsAddress(value, network).then(async status => {
             if (status) {
-                this.setState({ txt_Address: value, err_txt_address: false })
+                await this.setState({ txt_Address: value, err_Txt_Address: false })
             } else {
-                this.setState({ txt_Address: '', err_txt_address: true })
+                await this.setState({ txt_Address: value, err_Txt_Address: true })
             }
         })
+        await this.enable_Button_Send()
+    }
+
+    enable_Button_Send = () => {
+        if (
+            this.state.err_Txt_Address == true ||
+            this.state.err_Txt_Amount == true ||
+            this.state.txt_Address.length < 1 ||
+            parseFloat(this.state.txt_Amount) <= 0 ||
+            this.state.txt_Amount.length < 1
+        ) {
+            // console.log('if', this.state.err_Txt_Address,
+            //     this.state.err_Txt_Amount,
+            //     this.state.txt_Address,
+            //     this.state.txt_Amount)
+            this.setState({ disable_btn_send: true })
+        } else {
+            // console.log('else', this.state.err_Txt_Address,
+            //     this.state.err_Txt_Amount,
+            //     this.state.txt_Address,
+            //     this.state.txt_Amount)
+            this.setState({ disable_btn_send: false })
+        }
     }
 
     setMaxBalance = () => {
-
+        const data = this.props.data
+        get_balance_wallet(data.item.id).then(balance => {
+            this.change_txt_amount(balance)
+        })
     }
 
 
     SendToken = () => {
         const { item, addressTK, network, decimals } = this.props.data
-        Send_Token(item.address, this.state.txt_Address, this.state.amount, addressTK, item.private_key, network, decimals, this.state.gasPrice).then(ss => {
-            console.log(ss)
-        }).catch(e => console.log(e))
+        Send_Token(item.address, this.state.txt_Address, this.state.txt_Amount, addressTK, item.private_key, network, decimals, this.state.gasPrice)
+            .then(ss => {
+                console.log(ss)
+            }).catch(e => console.log(e))
     }
 
     change_txt_desc = (value) => {
-        this.setState({ desc: value })
+        this.setState({ txt_Desc: value })
     }
 
-    change_txt_amount = (value) => {
-        const { price } = this.props.data;
+    change_txt_amount = async (value) => {
+        const data = this.props.data;
         if (value > 0) {
-            this.setState({ price_usd: parseFloat(value) * parseFloat(price), amount: parseFloat(value) })
+            get_balance_wallet(data.item.id).then(async balance => {
+                if (parseFloat(value) <= parseFloat(balance)) {
+                    await this.setState({
+                        price_usd: parseFloat(value) * parseFloat(data.price),
+                        txt_Amount: value,
+                        err_Txt_Amount: false
+                    }, () => {
+                        this.enable_Button_Send()
+                    })
+                } else {
+                    await this.setState({
+                        price_usd: parseFloat(value) * parseFloat(data.price),
+                        txt_Amount: value,
+                        err_Txt_Amount: true
+                    }, () => {
+                        this.enable_Button_Send()
+                    })
+                }
+            }).catch(console.log)
         } else {
-            this.setState({ price_usd: price, amount: 0 })
-        }
-
-        if (value > 0 && this.state.txt_Address !== '') {
-            this.setState({ disable_btn_send: false })
+            await this.setState({
+                price_usd: data.price,
+                txt_Amount: value,
+                err_Txt_Amount: false
+            }, () => {
+                this.enable_Button_Send()
+            })
         }
     }
 
@@ -289,7 +340,7 @@ class FormSendIOS extends Component {
                         flex: 4.5,
                         flexDirection: 'row',
                         borderBottomWidth: 1,
-                        borderBottomColor: this.state.err_txt_address ? Color.Scarlet : Color.SILVER
+                        borderBottomColor: this.state.err_Txt_Address ? Color.Scarlet : Color.SILVER
                     }}>
                         <View style={{ flex: this.state.txt_Address.length > 0 ? 9 : 8 }}>
                             <Sae
@@ -309,9 +360,11 @@ class FormSendIOS extends Component {
                                 onTouchStart={e => this.onTouch_Input(e)}
                                 onSubmitEditing={() => { this.amount.focus() }}
                                 returnKeyType="next"
+                                numberOfLines={1}
                             />
+
                         </View>
-                        <View style={{ flex: this.state.txt_Address.length > 0 ? 1 : 2, justifyContent: 'center', alignItems: 'center', }}>
+                        <View style={{ flex: this.state.txt_Address.length > 0 ? 1 : 2, justifyContent: 'center', alignItems: 'center', paddingTop: hp('2%') }}>
                             {
                                 this.state.txt_Address.length > 0 ?
                                     <TouchableOpacity
@@ -329,10 +382,6 @@ class FormSendIOS extends Component {
                         </View>
 
                     </View>
-                    {/* {
-                        this.state.err_txt_address.length > 0 &&
-                        <Text style={{ color: Color.Scarlet }}>{this.state.err_txt_address}</Text>
-                    } */}
 
                     <View style={{ flex: 2.5, flexDirection: 'row', paddingVertical: hp('1%') }}>
                         <TouchableOpacity
@@ -384,7 +433,11 @@ class FormSendIOS extends Component {
                 <View style={styles.FormAmount}>
                     {/************* Start input Amount *************/}
                     <View style={{ flex: 4, justifyContent: 'center' }}>
-                        <View style={{ borderBottomWidth: 1, flexDirection: 'row' }}>
+                        <View style={{
+                            borderBottomWidth: 1,
+                            flexDirection: 'row',
+                            borderBottomColor: this.state.err_Txt_Amount ? Color.Scarlet : Color.SILVER
+                        }}>
                             <Sae
                                 ref={(r) => { this.amount = r; }}
                                 label={data.symbol}
@@ -397,15 +450,18 @@ class FormSendIOS extends Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 onChangeText={(value) => { this.change_txt_amount(value) }}
+                                value={this.state.txt_Amount.toString()}
                                 style={{ flex: 9 }}
                                 keyboardType="numeric"
                                 showBorderBottom={false}
                                 onResponderEnd={e => this.onTouch_Input(e)}
                             />
-                            <TouchableOpacity style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                            }}>
+                            <TouchableOpacity
+                                onPress={this.setMaxBalance}
+                                style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                }}>
                                 <Text style={{ color: Color.Tomato }}>Max</Text>
                             </TouchableOpacity>
                         </View>
@@ -479,10 +535,6 @@ class FormSendIOS extends Component {
                 <View style={{ flex: 2, justifyContent: 'center', paddingHorizontal: wp('20%') }}>
                     <TouchableOpacity
                         onPress={() => this.SendToken()}
-                        style={{
-                            backgroundColor: 'orange',
-                            borderRadius: 5
-                        }}
                         disabled={this.state.disable_btn_send}
                     >
                         <Gradient
@@ -519,18 +571,38 @@ class FormSendIOS extends Component {
                             // alignItems: "center",
                             borderTopLeftRadius: 5,
                             borderTopRightRadius: 5,
+                            backgroundColor: Color.Tomato
                         }
                     }}
                 >
-                    <View style={{ flexDirection: 'row', padding: 5 }}>
-                        <View style={{ flex: 1 }}>
-                            <Icon name="close-circle" size={30} color={Color.Danger} />
-                        </View>
-                        <View style={{ flex: 9, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontWeight: 'bold' }}>Address book</Text>
-                        </View>
+
+                    <View
+                        style={{
+                            padding: 5,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <View style={{
+                            height: hp('0.7%'),
+                            width: wp('10%'),
+                            backgroundColor: '#fff',
+                            borderRadius: 5
+                        }} />
                     </View>
-                    <View style={{ paddingHorizontal: 5 }}>
+
+                    <View style={{
+                        paddingHorizontal: 5,
+                        backgroundColor: '#fff',
+                        borderTopLeftRadius: 5,
+                        borderTopRightRadius: 5,
+                        flex: 1
+                    }}>
+                        <View style={{ padding: 5 }}>
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontWeight: 'bold' }}>Address book</Text>
+                            </View>
+                        </View>
                         <FlatList
                             data={ListAddress}
                             extraData={(item, index) => index.toString()}

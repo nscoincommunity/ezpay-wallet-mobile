@@ -2,7 +2,7 @@ import REALM, { ObjectSchema } from 'realm';
 const ACCOUNT_NAME = 'ACCOUNT_EZ';
 const WALLET_NAME = 'TOKEN_EZ';
 const TOKEN_NAME = 'WALLET_EZ';
-
+const FAVORITE_NAME = 'FAVORITE_EZ'
 
 
 const ACCOUNT: ObjectSchema = {
@@ -49,6 +49,16 @@ const WALLET: ObjectSchema = {
     }
 }
 
+const FAVORITE: ObjectSchema = {
+    name: FAVORITE_NAME,
+    primaryKey: 'id',
+    properties: {
+        id: 'int',
+        name: 'string',
+        address: 'string'
+    }
+}
+
 export const EASY = {
     ACCOUNT,
     ACCOUNT_NAME,
@@ -56,4 +66,6 @@ export const EASY = {
     WALLET_NAME,
     TOKEN,
     TOKEN_NAME,
+    FAVORITE,
+    FAVORITE_NAME
 }

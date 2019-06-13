@@ -125,6 +125,7 @@ export default class Setup extends Component {
           barStyle="dark-content"
         />
         <RouterContainer />
+        {/* <ROUTER /> */}
       </Provider>
     );
   }

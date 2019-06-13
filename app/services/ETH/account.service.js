@@ -1,6 +1,5 @@
 import Web3 from 'web3';
 import ABI from '../../../ABI';
-import BN from 'bn.js'
 import { forkJoin } from 'rxjs';
 import moment from 'moment';
 import { sign } from '@warren-bank/ethereumjs-tx-sign';
@@ -54,56 +53,6 @@ export const Get_Infor_Token = (Token_Address, network) => new Promise(async (re
         reject(error)
     }
 })
-// /**
-//  * Function update balance of address
-//  * @param {string} address address wallet need update balance
-//  * @param {string} network network need update balance
-//  * @param {number} decimals decimals 
-//  */
-// export const Update_balance = (address, network, decimals) => {
-//     return new Promise((resolve, reject) => {
-//         WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)));
-//         WEB3.eth.getBalance(address).then(bal => {
-//             if (bal > 0) {
-//                 if (parseFloat(bal / CONSTANT.Get_decimals(decimals)) % 1 == 0) {
-//                     resolve(parseFloat(bal / CONSTANT.Get_decimals(decimals)))
-//                 } else {
-//                     resolve(parseFloat(bal / CONSTANT.Get_decimals(decimals)).toFixed(2))
-//                 }
-//             } else {
-//                 resolve(0)
-//             }
-//         }).catch(e => {
-//             console.log(e);
-//             reject(0)
-//         })
-//     })
-// }
-
-// /**
-//  * Function update balance of address on token
-//  * @param {string} addessTk address token
-//  * @param {string} network network need update balance
-//  * @param {number} decimals decimals
-//  * @param {string} addressWL address wallet need update
-//  */
-// export const Update_balance_token = (addessTk, network, decimals, addressWL) => {
-//     return new Promise(async (resolve, reject) => {
-//         WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)));
-//         var CONTRACT = await new WEB3.eth.Contract(ABI, addessTk);
-//         await CONTRACT.methods.balanceOf(addressWL).call().then(bal => {
-//             if (bal > 0) {
-//                 if (parseFloat(bal / CONSTANT.Get_decimals(decimals)) % 1 == 0) {
-//                     resolve(parseFloat(bal / CONSTANT.Get_decimals(decimals)).toLocaleString())
-//                 } else {
-//                     resolve(parseFloat(bal / CONSTANT.Get_decimals(decimals)).toFixed(2).toLocaleString())
-//                 }
-//             } else {
-//                 resolve(0)
-//             }
-//         })
-//     })
-// }
 
 /**
  * Return provider of web3
@@ -132,11 +81,17 @@ export const get_address_from_pk_eth = (privatekey: string) => {
         }
     })
 }
-
-export const Update_balance_ETH = (addessTk, addressWL, network, decimals) => new Promise(async (resolve, reject) => {
+/**
+ * Function update balance token
+ * @param {string} addressTk address of token
+ * @param {string} addressWL address of wallet on token
+ * @param {string} network network of token
+ * @param {string} decimals decimals of token
+ */
+export const Update_balance_ETH = (addressTk, addressWL, network, decimals) => new Promise(async (resolve, reject) => {
     try {
         WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
-        if (addessTk == '') {
+        if (addressTk == '') {
             WEB3.eth.getBalance(addressWL).then(bal => {
                 if (bal > 0) {
                     if (parseFloat(bal / CONSTANT.Get_decimals(decimals)) % 1 == 0) {
@@ -149,9 +104,8 @@ export const Update_balance_ETH = (addessTk, addressWL, network, decimals) => ne
                 }
             }).catch(e => reject(e))
         } else {
-            var CONTRACT = await new WEB3.eth.Contract(ABI, addessTk);
-            console.log('contract', CONTRACT)
-            await CONTRACT.methods.balanceOf(addressWL).call().then(bal => {
+            var contract = await new WEB3.eth.Contract(ABI, addressTk);
+            await contract.methods.balanceOf(addressWL).call().then(bal => {
                 if (bal > 0) {
                     if (parseFloat(bal / CONSTANT.Get_decimals(decimals)) % 1 == 0) {
                         resolve(parseFloat(bal / CONSTANT.Get_decimals(decimals)))
@@ -177,32 +131,60 @@ export const CheckIsETH = (address) => {
  * @param {Tx} tx rawTx 
  * @param {string} privatekey private key to sign transaction
  * @param {string} network network of token
- * @param {string} addessTk address of token
+ * @param {string} addressTk address of token
  * @param {number} decimals decimals of token
  */
-export const send_ETH = (tx: Tx, privatekey: string, network: string, addessTk?: string, decimals: number) => new Promise(async (resolve, reject) => {
+export const send_ETH = (tx: Tx, privatekey: string, network: string, addressTk?: string, decimals: number) => new Promise(async (resolve, reject) => {
     try {
         WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider(network)))
-
         tx.value = await tx.value * CONSTANT.Get_decimals(decimals);
         tx.value = await '0x' + bigInt(tx.value).toString(16);
 
-        console.log('value', tx)
-        tx.gasPrice = await WEB3.utils.toWei(tx.gasPrice.toString(), 'Gwei')
+        tx.gasPrice = await WEB3.utils.toWei(tx.gasPrice.toString(), 'Gwei');
 
         tx.nonce = await WEB3.eth.getTransactionCount(tx.from);
-        tx.gas = await WEB3.eth.estimateGas(tx)
 
-        const rawTx = '0x' + await sign(tx, privatekey).rawTx;
-        WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
-            if (error) {
-                reject(error)
-            } else {
-                console.log(hash)
-                resolve(hash)
+        console.log('nonce', await WEB3.eth.getTransactionCount(tx.from))
+        if (addressTk == '') {
+            console.log('value', tx)
+            tx.gas = await WEB3.eth.estimateGas(tx)
+
+            const rawTx = '0x' + await sign(tx, privatekey).rawTx;
+            WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    console.log(hash)
+                    resolve(hash)
+                }
+            })
+        } else {
+            var contract = new WEB3.eth.Contract(ABI, addressTk, { from: tx.from });
+            var dataTx: Tx = {
+                from: tx.from,
+                to: addressTk,
+                value: '0x0',
+                data: contract.methods.transfer(tx.to, tx.value).encodeABI(),
+                gasPrice: 0,
+                nonce: tx.nonce,
+                chainId: 66666
             }
-        })
+            dataTx.gas = await WEB3.eth.estimateGas(dataTx);
+            console.log('dataTx', dataTx)
+            const rawTx = '0x' + await sign(dataTx, privatekey).rawTx;
+            WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
+                if (error) {
+                    console.log('err 1', error)
+                    reject(error)
+                } else {
+                    console.log(hash)
+                    resolve(hash)
+                }
+            })
+        }
+
     } catch (error) {
+        console.log('err 2', error)
         reject(error)
     }
 })

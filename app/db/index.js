@@ -4,7 +4,7 @@ import { SECURE } from "./secureMode/schema";
 
 const DB_EASY = {
   path: "EASY.realm",
-  schema: [EASY.ACCOUNT, EASY.TOKEN, EASY.WALLET],
+  schema: [EASY.ACCOUNT, EASY.TOKEN, EASY.WALLET, EASY.FAVORITE],
   schemaVersion: 0
 };
 
@@ -324,6 +324,16 @@ export const update_total_balance = (id, total_balance) => new Promise((resolve,
   }
 })
 
+export const get_balance_wallet = (id) => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      let account = realm.objects(EASY.ACCOUNT_NAME).filtered('id="' + id + '"');
+      resolve(account[0].balance)
+    })
+  } catch (error) {
+
+  }
+})
 
 
 

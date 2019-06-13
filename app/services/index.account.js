@@ -55,7 +55,13 @@ export const Import_account = (privateKey, network) => {
         }
     })
 }
-
+/**
+ * 
+ * @param {string} addressTK 
+ * @param {string} addressWL 
+ * @param {string} network 
+ * @param {number} decimals 
+ */
 export const Update_balance = (addressTK, addressWL, network, decimals) => new Promise((resolve, reject) => {
     if (network == 'tron') {
         Update_balance_TRX(addressTK, addressWL, decimals).then(bal => {
@@ -95,7 +101,6 @@ export const Send_Token = (from, to, value, addressTK, privateKey, network, deci
 
 export const Check_fee_with_balance = (fee, address, addressTK, network, decimals) => new Promise((resolve, reject) => {
     Update_balance_ETH(addressTK, address, network, decimals).then(bal => {
-        console.log(bal, fee)
         if (bal > fee) {
             resolve(true)
         } else {

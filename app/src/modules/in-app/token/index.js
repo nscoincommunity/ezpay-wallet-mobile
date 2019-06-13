@@ -8,8 +8,6 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Item from './item'
 import RBSheet from '../../../../lib/bottom-sheet'
 import { get_Token } from '../../../../db';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Create_account_of_token } from './actions'
 import { Update_balance } from '../../../../services/index.account'
 import realm, { update_Balance_db, update_total_balance } from '../../../../db'
@@ -65,7 +63,6 @@ export default class Token extends Component {
                         this.state.Token.network,
                         this.state.Token.decimals)
                         .then(bal => {
-                            console.log('balance', bal)
                             total_balance += parseFloat(bal);
                             update_Balance_db(item.id, parseFloat(bal)).then(() => {
                                 update_total_balance(this.state.Token.id, total_balance);
@@ -171,10 +168,3 @@ export default class Token extends Component {
         )
     }
 }
-
-const mapDispatchToProps = dispatch => {
-    return bindActionCreators({}, dispatch)
-}
-
-
-// export default connect(null, mapDispatchToProps)(Token)

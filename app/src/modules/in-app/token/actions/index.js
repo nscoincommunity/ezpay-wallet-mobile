@@ -1,6 +1,6 @@
 import { insert_account_token, length_account_tokem, Remove_account_token } from "../../../../../db";
-import { Create_account } from '../../../../../services/index.account';
-import { Func_import_account } from '../../add-wallet/import/import.service'
+import { Create_account, Update_balance } from '../../../../../services/index.account';
+import { Func_import_account } from '../../add-wallet/import/import.service';
 
 export const Create_account_of_token = (id_token, network) => new Promise((resolve, reject) => {
     Create_account(network).then(async account => {
@@ -39,3 +39,10 @@ export const Remove_account_of_token = (id_account) => new Promise((resolve, rej
         reject(false)
     })
 })
+
+export const Update_balance_token = (addressTK, network, addressWL, decimals) => dispatch => {
+    return Update_balance(addressTK, addressWL, network, decimals).then(balance => {
+        console.log(balance);
+        return dispatch({ type: 'BalanceTK', payload: balance })
+    })
+}

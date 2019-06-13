@@ -13,7 +13,6 @@ import { GetListToken, Func_Update_price } from '../../../../redux/rootActions/e
 import { GETAPI } from '../../../../helpers/API'
 import URI from '../../../../helpers/constant/uri';
 
-
 class Dashboard extends Component {
 
     mounting = true;
@@ -55,6 +54,8 @@ class Dashboard extends Component {
     }
 
 
+
+
     componentWillUnmount() {
         this.mounting = true;
         console.log(this.mounting)
@@ -90,7 +91,11 @@ class Dashboard extends Component {
                 }}
                     componentRight={() => {
                         return (
-                            <Image source={ImageApp.notification} />
+                            <TouchableOpacity
+                                onPress={this.rightIconClick}
+                            >
+                                <Image source={ImageApp.notification} />
+                            </TouchableOpacity>
                         )
                     }}
                     Title="EZ Keystore"
