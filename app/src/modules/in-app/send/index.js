@@ -14,7 +14,7 @@ import {
     Platform,
     Dimensions,
     Clipboard,
-    Alert
+    Alert,
 } from 'react-native'
 import Header from '../../../components/header';
 import ImageApp from '../../../../helpers/constant/image';
@@ -30,7 +30,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper'
 import { KeyboardAwareScrollView } from '../../../components/Keyboard-Aware-Scroll'
 import { CheckIsAddress, Check_fee_with_balance, Send_Token, Update_balance } from '../../../../services/index.account'
 import RBSheet from '../../../../lib/bottom-sheet'
-import { get_balance_wallet } from '../../../../db'
+import { get_balance_wallet, insert_favorite, get_all_favorite, name_favorite2 } from '../../../../db'
 
 const TransactionFee = [
     {
@@ -148,7 +148,9 @@ class FormSendIOS extends Component {
             price_usd: this.props.data.price,
             paddingScroll: 0,
             selectFee: 'Average',
-            gasPrice: 0
+            gasPrice: 0,
+            checkbox: true,
+            list_Favorite: []
         }
     }
 
@@ -173,6 +175,10 @@ class FormSendIOS extends Component {
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
             this.setState({ paddingScroll: 0 })
         });
+
+        get_all_favorite().then(data => {
+            this.setState({ list_Favorite: data })
+        })
     }
 
     componentWillUnmount() {
@@ -203,7 +209,6 @@ class FormSendIOS extends Component {
                 this.setState({ gasPrice: gasPrice })
             }
         }).catch(e => console.log(e))
-        // Send_Token(item.address, '0x7c0c79776e463f1a7da96a0aff325743dd3d7082', 0.1, addressTK, '', network, decimals, gasPrice)
     }
 
     change_txt_address = async (value) => {
@@ -250,9 +255,37 @@ class FormSendIOS extends Component {
 
     SendToken = () => {
         const { item, addressTK, network, decimals } = this.props.data
-        Send_Token(item.address, this.state.txt_Address, this.state.txt_Amount, addressTK, item.private_key, network, decimals, this.state.gasPrice)
-            .then(ss => {
-                console.log(ss)
+        Send_Token(
+            item.address,
+            this.state.txt_Address,
+            this.state.txt_Amount,
+            addressTK,
+            item.private_key,
+            network,
+            decimals,
+            this.state.gasPrice
+        )
+            .then(async TransactionHash => {
+                console.log(TransactionHash)
+                if (this.state.checkbox) {
+                    var favorite_object = {
+                        id: Math.floor(Date.now() / 1000),
+                        name: `Favorite ${await name_favorite2() + 1}`,
+                        address: this.state.txt_Address
+                    }
+                    await insert_favorite(favorite_object).then(ss2 => {
+                        console.log(ss2)
+                    }).catch(err => console.log(err))
+                }
+                await Alert.alert(
+                    'Send success',
+                    TransactionHash,
+                    [
+                        { text: 'Ok', style: 'cancel' },
+                        { text: 'Copy', onPress: () => { Clipboard.setString(TransactionHash) }, style: 'cancel' }
+                    ]
+                )
+                await this.setState(this.init_state);
             }).catch(e => console.log(e))
     }
 
@@ -364,7 +397,7 @@ class FormSendIOS extends Component {
                             />
 
                         </View>
-                        <View style={{ flex: this.state.txt_Address.length > 0 ? 1 : 2, justifyContent: 'center', alignItems: 'center', paddingTop: hp('2%') }}>
+                        <View style={{ flex: this.state.txt_Address.length > 0 ? 1 : 2, justifyContent: 'center', alignItems: 'center', paddingTop: hp('3%') }}>
                             {
                                 this.state.txt_Address.length > 0 ?
                                     <TouchableOpacity
@@ -398,7 +431,7 @@ class FormSendIOS extends Component {
                             }}
                         >
                             <View>
-                                <Text style={{ color: Color.Dark_gray, fontSize: font_size(1.8) }}>Address books</Text>
+                                <Text style={{ color: Color.Dark_gray, fontSize: font_size(1.8) }}>Favorite</Text>
                             </View>
                             <View>
                                 <Icon name="account-box-outline" size={font_size(2.5)} />
@@ -426,7 +459,7 @@ class FormSendIOS extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flex: 3, flexDirection: 'row', alignItems: 'center' }}>
-                        <Text>Add contact to address book</Text>
+                        <Text>Add contact to <Text style={{ fontWeight: 'bold' }}>favorite</Text></Text>
                         <CheckBox checked={this.state.checkbox} color={Color.Malachite} onPress={() => this.setState({ checkbox: !this.state.checkbox })} />
                     </View>
                 </View>
@@ -578,17 +611,23 @@ class FormSendIOS extends Component {
 
                     <View
                         style={{
-                            padding: 5,
+                            padding: hp('1'),
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}
                     >
-                        <View style={{
-                            height: hp('0.7%'),
-                            width: wp('10%'),
-                            backgroundColor: '#fff',
-                            borderRadius: 5
-                        }} />
+                        <TouchableHighlight
+                            onPress={() => this.RBSheet.close()}
+                            underlayColor="transparent"
+                        >
+                            <View style={{
+                                height: hp('0.7%'),
+                                width: wp('10%'),
+                                backgroundColor: '#fff',
+                                borderRadius: 5
+                            }} />
+                        </TouchableHighlight>
+
                     </View>
 
                     <View style={{
@@ -600,28 +639,36 @@ class FormSendIOS extends Component {
                     }}>
                         <View style={{ padding: 5 }}>
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={{ fontWeight: 'bold' }}>Address book</Text>
+                                <Text style={{ fontWeight: 'bold' }}>List favorite</Text>
                             </View>
                         </View>
-                        <FlatList
-                            data={ListAddress}
-                            extraData={(item, index) => index.toString()}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <TouchableOpacity
-                                        style={{
-                                            paddingVertical: 10,
-                                            borderBottomWidth: 1,
-                                            borderBottomColor: Color.Light_gray
-                                        }}
-                                        onPress={() => this.chooseAddress(item.address)}
-                                    >
-                                        <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-                                        <Text numberOfLines={1} ellipsizeMode="middle" style={{ color: Color.Dark_gray }}>{item.address}</Text>
-                                    </TouchableOpacity>
-                                )
-                            }}
-                        />
+                        {
+                            this.state.list_Favorite.length > 0 ?
+                                <FlatList
+                                    data={this.state.list_Favorite}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item, index }) => {
+                                        return (
+                                            <TouchableOpacity
+                                                style={{
+                                                    paddingVertical: 10,
+                                                    borderBottomWidth: 1,
+                                                    borderBottomColor: Color.Light_gray
+                                                }}
+                                                onPress={() => this.chooseAddress(item.address)}
+                                            >
+                                                <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                                                <Text numberOfLines={1} ellipsizeMode="middle" style={{ color: Color.Dark_gray }}>{item.address}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }}
+                                />
+                                :
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                    <Icon name="select" size={font_size(25)} />
+                                </View>
+                        }
+
                     </View>
                 </RBSheet>
             </KeyboardAvoidingView>

@@ -285,7 +285,6 @@ export const Remove_account_token = (id_account) => new Promise((resolve, reject
   }
 })
 
-
 export const length_account_tokem = (id_token) => {
   return REALM.open(DB_EASY).then(realm => {
     var token = realm.objects(EASY.TOKEN_NAME).filtered('id="' + id_token + '"');
@@ -293,8 +292,6 @@ export const length_account_tokem = (id_token) => {
     return account.length + 1
   })
 }
-
-
 
 export const update_Balance_db = (id, balance) => new Promise((resolve, reject) => {
   try {
@@ -334,6 +331,124 @@ export const get_balance_wallet = (id) => new Promise((resolve, reject) => {
 
   }
 })
+
+
+/**                                                                                      **\
+ * *************************|------------------------------------|************************ *
+ * *************************|   Start Action in Schema Favorite  |************************ *
+ * *************************|------------------------------------|************************ *
+\**                                                                                      **/
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Insert favorite
+ * @param {object} favorite_object object favorite: id,name,address
+ */
+export const insert_favorite = (favorite_object) => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      check_exist_address_favorite(favorite_object.name, favorite_object.address)
+        .then(exist => {
+          if (exist) {
+            reject('Address or name has exist')
+          } else {
+            realm.write(() => {
+              realm.create(EASY.FAVORITE_NAME, favorite_object);
+              resolve(favorite_object)
+            })
+          }
+        }).catch(e => reject(e))
+    }).catch(err => reject(err))
+  } catch (error) {
+    reject(error)
+  }
+})
+
+/**
+ * check exist adddress or name in favorite
+ * @param {string} name name of favorite
+ * @param {string} address address of favorite
+ */
+export const check_exist_address_favorite = (name, address) => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      var exist = realm.objects(EASY.FAVORITE_NAME).filtered('name="' + name + '" OR address="' + address + '"');
+      console.log(Array.from(exist));
+      if (exist.length > 0) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    })
+  } catch (error) {
+    reject(error)
+  }
+})
+
+/**
+ * Update favorite
+ * @param {object} favorite_object object favorite: id,name,address
+ */
+export const update_object_favotire = (favorite_object) => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      var favorite = realm.objectForPrimaryKey(EASY.FAVORITE_NAME, favorite_object.id);
+      realm.write(() => {
+        favorite.name = favorite_object.name;
+        favorite.address = favorite_object.address;
+        resolve()
+      })
+    }).catch(err => reject(err))
+  } catch (error) {
+    reject(error)
+  }
+})
+
+
+export const delete_favorite = (id) => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      var favorite = realm.objectForPrimaryKey(EASY.FAVORITE_NAME, id);
+      realm.write(() => {
+        realm.delete(favorite)
+        resolve()
+      })
+    }).catch(e => reject(e))
+  } catch (error) {
+    reject(error)
+  }
+})
+
+export const get_all_favorite = () => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      var favorite = realm.objects(EASY.FAVORITE_NAME)
+      resolve(Array.from(favorite))
+    }).catch(e => reject(e))
+  } catch (error) {
+    reject(error)
+  }
+})
+
+export const name_favorite = () => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      var favorite = realm.objects(EASY.FAVORITE_NAME).filtered('name CONTAINS "Favorite"')
+      console.log(Array.from(favorite));
+      resolve(Array.from(favorite).length)
+    }).catch(e => reject(e))
+  } catch (error) {
+    reject(error)
+  }
+})
+export const name_favorite2 = () => {
+  return REALM.open(DB_EASY).then(realm => {
+    var favorite = realm.objects(EASY.FAVORITE_NAME).filtered('name CONTAINS "Favorite"')
+    console.log(Array.from(favorite));
+    return (Array.from(favorite).length)
+  })
+}
 
 
 
