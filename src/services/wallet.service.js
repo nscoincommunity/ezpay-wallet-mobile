@@ -3,8 +3,8 @@ import '../../shim.js';
 import crypto from 'crypto'
 import '../../global';
 import moment from 'moment';
-const Web3 = require('web3');
-// import Web3 from 'web3'
+// const Web3 = require('web3');
+import Web3 from 'web3'
 import { forkJoin, of, interval, throwError, fromEvent, Observable, merge } from 'rxjs';
 import GLOBALS from "../helper/constants";
 import { Address, initAuth, validatePassword, getPrivateKey } from '../services/auth.service';
@@ -364,6 +364,7 @@ export async function SendToken(network: string, tokenAddress: string, address_r
                     console.log("gas first: " + gas)
                     console.log('estimateGas')
                     txData.gas = gas;
+                    console.log('txData', JSON.stringify(txData))
                     let rawTx;
                     try {
                         rawTx = '0x' + await signTransaction(txData, await getPrivateKey(password, pk))

@@ -23,7 +23,6 @@ export default class AccordionView extends Component {
     RefrestData = () => {
         this.ListData = [];
         const { data } = this.props;
-        console.log('data', data)
         this.symbol = data.symbol;
         this.decimals = data.decimals
         this.address = data.address;
