@@ -105,6 +105,13 @@ export default class AccordionView extends Component {
 
                 <TouchableOpacity
                     style={styles.buttonContent}
+                    onPress={() => this.props.navigation.navigate('History', {
+                        payload: {
+                            address: section.address,
+                            network: this.network,
+                            decimals: this.decimals
+                        }
+                    })}
                 >
                     <View style={{ justifyContent: 'center' }}>
                         <Text style={styles.textButton} >History</Text>

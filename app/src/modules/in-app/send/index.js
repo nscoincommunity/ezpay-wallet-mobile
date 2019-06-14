@@ -50,20 +50,6 @@ const TransactionFee = [
     }
 ]
 
-const ListAddress = [
-    {
-        name: 'address eth',
-        address: '0xdB4C107cFc61415FB5616BbfFAA8902bd52955E9'
-    },
-    {
-        name: 'address nty',
-        address: '0x2f45675e47415afbaa8bbf26276b88e40df18c95'
-    },
-    {
-        name: 'address ntf',
-        address: '0x7c0c79776e463f1a7da96a0aff325743dd3d7082'
-    }
-]
 
 export default class SendScreen extends Component {
 
@@ -148,10 +134,11 @@ class FormSendIOS extends Component {
             price_usd: this.props.data.price,
             paddingScroll: 0,
             selectFee: 'Average',
-            gasPrice: 0,
+            gasPrice: this.props.data.network == 'ethereum' ? 10 : 0,
             checkbox: true,
             list_Favorite: []
         }
+        console.log(this.props.data)
     }
 
     init_state = {
@@ -186,9 +173,23 @@ class FormSendIOS extends Component {
         this.keyboardDidHideListener.remove();
     }
 
-    onSelect = data => {
+    onSelect = async data => {
         if (data['result'] == 'cancelScan') return;
-        this.change_txt_address(data['result'])
+        var data_qr = await data['result'];
+        try {
+            data_qr = await JSON.parse(data_qr);
+            await this.change_txt_address(data_qr.to);
+            await this.change_txt_amount(data_qr.value);
+            if (data_qr.description != '') {
+                await Alert.alert(
+                    'Message',
+                    data_qr.description,
+                    [{ text: 'Ok', style: 'cancel' }]
+                )
+            }
+        } catch (error) {
+            this.change_txt_address(data_qr)
+        }
     }
 
     navigateToScan() {
@@ -286,7 +287,13 @@ class FormSendIOS extends Component {
                     ]
                 )
                 await this.setState(this.init_state);
-            }).catch(e => console.log(e))
+            }).catch(e => {
+                Alert.alert(
+                    'Error',
+                    e,
+                    [{ text: 'Ok', style: 'cancel' }]
+                )
+            })
     }
 
     change_txt_desc = (value) => {
@@ -524,6 +531,7 @@ class FormSendIOS extends Component {
                                 style={{ flex: 9 }}
                                 showBorderBottom={false}
                                 onResponderEnd={e => this.onTouch_Input(e)}
+                                value={this.state.txt_Desc}
                             />
                         </View>
                     </View>
@@ -534,33 +542,38 @@ class FormSendIOS extends Component {
 
                         <View style={{ flexDirection: 'row', paddingVertical: hp('1%') }}>
                             {
-                                data.network == 'ethereum' ?
-
-                                    TransactionFee.map((item, index) => {
-                                        return (
-                                            <TouchableOpacity
-                                                key={index.toString()}
-                                                style={[styleButton(this.state.selectFee === item.title).button]}
-                                                onPress={() => this.SelectFee(item.title, item.fee, item.gasPrice)}
-                                            >
-                                                <Text style={[styleButton(this.state.selectFee === item.title).text]}>{item.title}</Text>
-                                                <Text style={[styleButton(this.state.selectFee === item.title).text]}>{item.fee} ETH</Text>
-                                            </TouchableOpacity>
-                                        )
-                                    })
-                                    :
-                                    TransactionFee.map((item, index) => {
-                                        return (
-                                            <TouchableOpacity
-                                                key={index.toString()}
-                                                style={[styleButton(this.state.selectFee === item.title).button]}
-                                                onPress={() => this.SelectFee(item.title, 0, 0)}
-                                            >
-                                                <Text style={[styleButton(this.state.selectFee === item.title).text]}>{item.title}</Text>
-                                                <Text style={[styleButton(this.state.selectFee === item.title).text]}>0 </Text>
-                                            </TouchableOpacity>
-                                        )
-                                    })
+                                TransactionFee.map((item, index) => {
+                                    let symbolFee;
+                                    let itemFee;
+                                    let itemGasPrice;
+                                    switch (data.network) {
+                                        case 'ethereum':
+                                            symbolFee = 'ETH';
+                                            itemFee = item.fee;
+                                            itemGasPrice = item.gasPrice;
+                                            break;
+                                        case 'nexty':
+                                            symbolFee = 'NTY';
+                                            item.fee = 0;
+                                            item.gasPrice = 0
+                                            break;
+                                        default:
+                                            symbolFee = 'TRX';
+                                            itemFee = 0;
+                                            itemGasPrice = 0;
+                                            break;
+                                    }
+                                    return (
+                                        <TouchableOpacity
+                                            key={index.toString()}
+                                            style={[styleButton(this.state.selectFee === item.title).button]}
+                                            onPress={() => this.SelectFee(item.title, itemFee, itemGasPrice)}
+                                        >
+                                            <Text style={[styleButton(this.state.selectFee === item.title).text]}>{item.title}</Text>
+                                            <Text style={[styleButton(this.state.selectFee === item.title).text]}>{itemFee + ' ' + symbolFee}</Text>
+                                        </TouchableOpacity>
+                                    )
+                                })
                             }
                         </View>
                     </View>
