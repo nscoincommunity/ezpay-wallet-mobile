@@ -108,12 +108,15 @@ export default class Receive extends Component {
 
                     <TouchableOpacity
                         style={{ justifyContent: 'center', alignItems: 'center' }}
-                        onPress={() => showMessage({
-                            message: 'Copy success',
-                            type: 'success',
-                            animated: true,
-                            icon: "success",
-                        })}
+                        onPress={() => {
+                            showMessage({
+                                message: 'Copy success',
+                                type: 'success',
+                                animated: true,
+                                icon: "success",
+                            });
+                            Clipboard.setString(this.state.valueQR)
+                        }}
                     >
 
                         <ImageBackground
