@@ -28,7 +28,10 @@ import DappBrowser from '../src/modules/in-app/Dapps';
 import SignMessage from '../src/modules/in-app/Dapps/screen/signMessage';
 import ConfirmTransaction from '../src/modules/in-app/Dapps/screen/confirmTransaction';
 // Stack Setting
-import About from '../src/modules/in-app/about';
+import Menu from '../src/modules/menu';
+import Favorite from '../src/modules/menu/favorite';
+import AddFavorite from '../src/modules/menu/favorite/add-favorite'
+
 
 const stackHome = createStackNavigator(
     {
@@ -67,9 +70,12 @@ const stackDapp = createStackNavigator(
 
 const stackSetting = createStackNavigator(
     {
-        About: { screen: About }
+        Menu: { screen: Menu },
+        Favorite: { screen: Favorite },
+        AddFavorite:{screen:AddFavorite},
+        QRscan: { screen: QRscan },
     }, {
-        initialRouteName: 'About',
+        initialRouteName: 'Menu',
         headerMode: 'none'
     }
 )

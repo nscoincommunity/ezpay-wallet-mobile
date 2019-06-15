@@ -431,18 +431,7 @@ export const get_all_favorite = () => new Promise((resolve, reject) => {
   }
 })
 
-export const name_favorite = () => new Promise((resolve, reject) => {
-  try {
-    REALM.open(DB_EASY).then(realm => {
-      var favorite = realm.objects(EASY.FAVORITE_NAME).filtered('name CONTAINS "Favorite"')
-      console.log(Array.from(favorite));
-      resolve(Array.from(favorite).length)
-    }).catch(e => reject(e))
-  } catch (error) {
-    reject(error)
-  }
-})
-export const name_favorite2 = () => {
+export const name_favorite = () => {
   return REALM.open(DB_EASY).then(realm => {
     var favorite = realm.objects(EASY.FAVORITE_NAME).filtered('name CONTAINS "Favorite"')
     console.log(Array.from(favorite));

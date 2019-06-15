@@ -24,13 +24,12 @@ import ButtonBottom from '../../../components/buttonBottom';
 import { Sae } from '../../../components/text-input-effect'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CheckBox } from 'native-base'
-import { FlashMessageTransition } from '../../../../lib/flash-message';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import { KeyboardAwareScrollView } from '../../../components/Keyboard-Aware-Scroll'
 import { CheckIsAddress, Check_fee_with_balance, Send_Token, Update_balance } from '../../../../services/index.account'
 import RBSheet from '../../../../lib/bottom-sheet'
-import { get_balance_wallet, insert_favorite, get_all_favorite, name_favorite2 } from '../../../../db'
+import { get_balance_wallet, insert_favorite, get_all_favorite, name_favorite } from '../../../../db'
 
 const TransactionFee = [
     {
@@ -271,7 +270,7 @@ class FormSendIOS extends Component {
                 if (this.state.checkbox) {
                     var favorite_object = {
                         id: Math.floor(Date.now() / 1000),
-                        name: `Favorite ${await name_favorite2() + 1}`,
+                        name: `Favorite ${await name_favorite() + 1}`,
                         address: this.state.txt_Address
                     }
                     await insert_favorite(favorite_object).then(ss2 => {
