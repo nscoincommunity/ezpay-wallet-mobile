@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableHighlight, ScrollView, Switch } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Header from '../../components/header';
@@ -9,11 +9,64 @@ import Gradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../helpers/constant/responsive';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
+import { bindActionCreators } from 'redux';
+import { Func_Settings } from '../../../redux/rootActions/easyMode'
+import TouchID from 'react-native-touch-id'
+import Settings from '../../../settings/initApp'
+import { setStorage } from '../../../helpers/storages'
 
 
 export class Menu extends Component {
 
+
+    changeTouchID = (value) => {
+        console.log(value)
+        let optionalConfig = {
+            unifiedErrors: false,
+            passcodeFallback: true
+        }
+        TouchID.isSupported(optionalConfig).then(isSupporter => {
+            console.log('supported', isSupporter)
+            if (isSupporter) {
+                let options = {
+                    title: "Ez Pay", // Android
+                    sensorDescription: 'Touch sensor', // Android
+                    sensorErrorDescription: 'Failed', // Android
+                    cancelText: 'Cancel', // Android
+                    fallbackLabel: "", // iOS (if empty, then label is hidden)
+                }
+                TouchID.authenticate('Scan ' + isSupporter + ' to process').then((auth, error) => {
+                    if (error) {
+                        console.log('errrrr', error)
+                        Alert.alert(
+                            'Error',
+                            error,
+                            [{ text: 'Ok', style: 'default' }]
+                        )
+                    } else {
+                        console.log('Touch id', auth)
+                        Settings.ez_turn_on_fingerprint = value;
+                        setStorage('setting', JSON.stringify(Settings)).then(() => {
+                            this.props.Func_Settings(Settings);
+                        })
+
+                    }
+                }).catch(err => {
+                    console.log('err', err)
+                })
+            } else {
+                Alert.alert(
+                    'Error',
+                    'Your device not support ' + isSupporter,
+                    [{ text: 'Ok', style: 'default' }]
+                )
+            }
+        })
+    }
+
     render() {
+        let SETTINGS = this.props.settings
+
         return (
             <Gradient
                 colors={Color.Gradient_backgound_page}
@@ -31,7 +84,7 @@ export class Menu extends Component {
                         {/********* Card favorite **********/}
                         <Text style={styles.textHeader}>Favorite</Text>
                         <View style={styles.containerMenu}>
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                                 onPress={() => this.props.navigation.navigate('Favorite')}
                             >
@@ -46,13 +99,13 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
 
                         {/*********  Card Secure  ********/}
                         <Text style={styles.textHeader}>Secure</Text>
                         <View style={styles.containerMenu}>
-                            <TouchableHighlight
+                            <View
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -63,13 +116,14 @@ export class Menu extends Component {
                                         <Text>Use Touch ID</Text>
                                     </View>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Switch value={true} />
+                                        <Switch value={SETTINGS.ez_turn_on_fingerprint} onValueChange={(value) => this.changeTouchID(value)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </View>
 
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
+                                onPress={() => this.props.navigation.navigate('Passcode_settings')}
                             >
                                 <View style={{ flexDirection: 'row' }}>
                                     <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -82,7 +136,7 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
 
 
@@ -90,7 +144,7 @@ export class Menu extends Component {
 
                         <Text style={styles.textHeader}>Community</Text>
                         <View style={styles.containerMenu}>
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -104,9 +158,9 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
 
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -120,9 +174,9 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
 
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -136,7 +190,7 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
 
                         {/********* Card About us **********/}
@@ -144,7 +198,7 @@ export class Menu extends Component {
 
                         <Text style={styles.textHeader}>About us</Text>
                         <View style={styles.containerMenu}>
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -158,9 +212,9 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
 
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -174,9 +228,9 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
 
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -190,14 +244,14 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
 
 
                         {/********* Card Advanced settings **********/}
                         <Text style={styles.textHeader}>Advanced</Text>
                         <View style={styles.containerMenu}>
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
                             >
                                 <View style={{ flexDirection: 'row' }}>
@@ -211,7 +265,7 @@ export class Menu extends Component {
                                         <Icon name="chevron-right" size={font_size(3)} />
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
 
 
@@ -244,12 +298,14 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+    return {
+        settings: state.Settings
+    }
+}
 
-})
-
-const mapDispatchToProps = {
-
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ Func_Settings }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu)

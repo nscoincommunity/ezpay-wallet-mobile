@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, Text, Platform, Animated, BackHandler, StatusBar } from 'react-native';
 import Camera from 'react-native-camera'
-// import Icon from "react-native-vector-icons/FontAwesome";
-// import Language from '../i18n/i18n';
-// import GLOBALS from '../helper/variables';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import Color from '../../../helpers/constant/color';
 import CONSTANT from '../../../helpers/constant';
 import Gradient from 'react-native-linear-gradient';

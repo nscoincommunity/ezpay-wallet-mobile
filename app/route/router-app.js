@@ -31,7 +31,7 @@ import ConfirmTransaction from '../src/modules/in-app/Dapps/screen/confirmTransa
 import Menu from '../src/modules/menu';
 import Favorite from '../src/modules/menu/favorite';
 import AddFavorite from '../src/modules/menu/favorite/add-favorite'
-
+import Passcode_settings from '../src/modules/menu/passcode'
 
 const stackHome = createStackNavigator(
     {
@@ -72,8 +72,9 @@ const stackSetting = createStackNavigator(
     {
         Menu: { screen: Menu },
         Favorite: { screen: Favorite },
-        AddFavorite:{screen:AddFavorite},
+        AddFavorite: { screen: AddFavorite },
         QRscan: { screen: QRscan },
+        Passcode_settings: { screen: Passcode_settings }
     }, {
         initialRouteName: 'Menu',
         headerMode: 'none'

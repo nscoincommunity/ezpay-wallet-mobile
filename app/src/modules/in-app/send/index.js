@@ -30,6 +30,9 @@ import { KeyboardAwareScrollView } from '../../../components/Keyboard-Aware-Scro
 import { CheckIsAddress, Check_fee_with_balance, Send_Token, Update_balance } from '../../../../services/index.account'
 import RBSheet from '../../../../lib/bottom-sheet'
 import { get_balance_wallet, insert_favorite, get_all_favorite, name_favorite } from '../../../../db'
+import TouchID from 'react-native-touch-id'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 
 const TransactionFee = [
     {
@@ -50,7 +53,7 @@ const TransactionFee = [
 ]
 
 
-export default class SendScreen extends Component {
+class SendScreen extends Component {
 
 
     render() {
@@ -74,7 +77,7 @@ export default class SendScreen extends Component {
                         contentContainerStyle={{ flex: 1, paddingHorizontal: wp('3%') }}
                         keyboardShouldPersistTaps="handled"
                     >
-                        <FormSendIOS data={data} {...this.props} />
+                        <FormSend data={data} {...this.props} />
                     </ScrollView>
                 </View>
             </Gradient>
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
 const { height, width } = Dimensions.get('window')
 let heightKeyboard = 0;
 let locationInput = 0
-class FormSendIOS extends Component {
+class FormSend extends Component {
 
     constructor(props) {
         super(props)
@@ -135,7 +138,7 @@ class FormSendIOS extends Component {
             selectFee: 'Average',
             gasPrice: this.props.data.network == 'ethereum' ? 10 : 0,
             checkbox: true,
-            list_Favorite: []
+            list_Favorite: [],
         }
         console.log(this.props.data)
     }
@@ -252,6 +255,49 @@ class FormSendIOS extends Component {
         })
     }
 
+    Func_button_send = () => {
+        if (this.props.SETTINGS.ez_turn_on_fingerprint) {
+            let optionalConfig = {
+                unifiedErrors: false,
+                passcodeFallback: true
+            }
+            TouchID.isSupported(optionalConfig).then(isSupporter => {
+                console.log('supported', isSupporter)
+                if (isSupporter) {
+                    let options = {
+                        title: "Ez Pay", // Android
+                        sensorDescription: 'Touch sensor', // Android
+                        sensorErrorDescription: 'Failed', // Android
+                        cancelText: 'Cancel', // Android
+                        fallbackLabel: "", // iOS (if empty, then label is hidden)
+                    }
+                    TouchID.authenticate('Scan ' + isSupporter + ' to process').then((auth, error) => {
+                        if (error) {
+                            console.log('errrrr', error)
+                            Alert.alert(
+                                'Error',
+                                error,
+                                [{ text: 'Ok', style: 'default' }]
+                            )
+                        } else {
+                            console.log('Touch id', auth)
+                            this.SendToken()
+                        }
+                    }).catch(err => {
+                        console.log('err', err)
+                    })
+                } else {
+                    Alert.alert(
+                        'Error',
+                        'Your device not support ' + isSupporter,
+                        [{ text: 'Ok', style: 'default' }]
+                    )
+                }
+            })
+        } else {
+            this.SendToken()
+        }
+    }
 
     SendToken = () => {
         const { item, addressTK, network, decimals } = this.props.data
@@ -553,8 +599,8 @@ class FormSendIOS extends Component {
                                             break;
                                         case 'nexty':
                                             symbolFee = 'NTY';
-                                            item.fee = 0;
-                                            item.gasPrice = 0
+                                            itemFee = 0;
+                                            itemGasPrice = 0
                                             break;
                                         default:
                                             symbolFee = 'TRX';
@@ -579,7 +625,7 @@ class FormSendIOS extends Component {
                 </View>
                 <View style={{ flex: 2, justifyContent: 'center', paddingHorizontal: wp('20%') }}>
                     <TouchableOpacity
-                        onPress={() => this.SendToken()}
+                        onPress={() => this.Func_button_send()}
                         disabled={this.state.disable_btn_send}
                     >
                         <Gradient
@@ -608,7 +654,7 @@ class FormSendIOS extends Component {
                         this.RBSheet = ref;
                     }}
                     closeOnDragDown={true}
-                    height={500}
+                    height={hp('70')}
                     duration={250}
                     customStyles={{
                         container: {
@@ -618,8 +664,7 @@ class FormSendIOS extends Component {
                             borderTopRightRadius: 5,
                             backgroundColor: Color.Tomato
                         }
-                    }}
-                >
+                    }}>
 
                     <View
                         style={{
@@ -688,188 +733,11 @@ class FormSendIOS extends Component {
     }
 }
 
-class FormSendAndroid extends Component {
-    state = {
-        disableButton: false,
-        selectFee: 'Average',
-        localtionInput: 0,
-        checkbox: true,
-    }
-    SelectFee = (fee) => {
-        this.setState({ selectFee: fee })
-    }
-    ChangeText = (value) => {
 
-    }
-    render() {
-        return (
-            <KeyboardAvoidingView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
-                <View style={{
-                    height: hp('25%'),
-                    backgroundColor: '#fff',
-                    borderRadius: 8,
-                    marginBottom: hp('2%'),
-                    padding: hp('1%'),
-                    flexDirection: 'column'
-                }}>
-                    <View style={{ flex: 4, }}>
-                        <Sae
-                            ref={(r) => { this.address = r; }}
-                            label={'Enter Address'}
-                            iconClass={Icon}
-                            iconName={'pencil'}
-                            iconColor={Color.Whisper}
-                            labelStyle={{ color: Color.Whisper }}
-                            inputStyle={{ color: Color.Tomato }}
-                            // active border height
-                            // TextInput props
-                            autoCapitalize={'none'}
-                            autoCorrect={false}
-                            onChangeText={(value) => { this.ChangeText(value) }}
-                        // onResponderEnd={e => this.ResponderInput(e)}
-                        // style={{ backgroundColor: 'red' }}
-                        />
-                    </View>
-
-                    <View style={{ flex: 3, flexDirection: 'row', paddingVertical: hp('1%') }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: Color.Whisper,
-                            flex: 4.5,
-                            paddingVertical: hp('1%'),
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 20
-                        }}>
-                            <Text style={{ color: Color.Dark_gray }}>Paste</Text>
-                        </TouchableOpacity >
-                        <TouchableOpacity style={{
-                            backgroundColor: Color.Whisper,
-                            flex: 4.5,
-                            paddingVertical: 7,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 20,
-                            marginHorizontal: 15
-                        }}>
-                            <Text style={{ color: Color.Dark_gray }}>Address book</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                        >
-                            <Icon name="qrcode" size={25} color={Color.Dark_gray} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ flex: 3, flexDirection: 'row', alignItems: 'center' }}>
-                        <Text>Add contact to address book</Text>
-                        <CheckBox checked={this.state.checkbox} color={Color.Malachite} onPress={() => this.setState({ checkbox: !this.state.checkbox })} />
-                    </View>
-                </View>
-                <View style={{
-                    height: hp('43%'),
-                    backgroundColor: '#fff',
-                    borderRadius: 8,
-                    marginBottom: hp('2%'),
-                    padding: hp('1%'),
-                    flexDirection: 'column'
-                }}>
-                    {/************* Start input Amount *************/}
-                    <View style={{ flex: 3, }}>
-                        <View style={{ borderBottomWidth: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Sae
-                                ref={(r) => { this.amount = r; }}
-                                label={'Amount'}
-                                iconClass={Icon}
-                                iconName={'pencil'}
-                                iconColor={Color.Whisper}
-                                // labelHeight={20}
-                                labelStyle={{ color: Color.Whisper }}
-                                inputStyle={{ color: Color.Tomato, borderBottomWidth: 0, fontSize: 25, }}
-                                autoCapitalize={'none'}
-                                autoCorrect={false}
-                                onChangeText={(value) => { this.ChangeText(value) }}
-                                style={{ flex: 9 }}
-                                keyboardType="numeric"
-                                showBorderBottom={false}
-                            // onResponderEnd={e => this.ResponderInput(e)}
-
-                            />
-                            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                                <Text>ETH</Text>
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ flex: 9, fontSize: font_size(1.5) }}>~2323875.000</Text>
-                            <Text style={{ flex: 1, fontSize: font_size(1.5) }}>USD</Text>
-                        </View>
-                    </View>
-
-                    {/************* End input Amount *************/}
-
-
-                    {/************* Start input Description *************/}
-                    <View style={{ flex: 3, }}>
-                        <View style={{ borderBottomWidth: 1, flexDirection: 'row' }}>
-                            <Sae
-                                ref={(r) => { this.note = r; }}
-                                label={'Description'}
-                                iconClass={Icon}
-                                iconName={'pencil'}
-                                iconColor={Color.Whisper}
-                                labelStyle={{ color: Color.Whisper }}
-                                inputStyle={{ color: Color.Tomato, borderBottomWidth: 0, }}
-                                autoCapitalize={'none'}
-                                autoCorrect={false}
-                                onChangeText={(value) => { this.ChangeText(value) }}
-                                style={{ flex: 9 }}
-                                showBorderBottom={false}
-                            // onResponderEnd={e => this.ResponderInput(e)}
-                            />
-                        </View>
-                    </View>
-                    {/************* Start input Description *************/}
-
-                    <View style={{ flex: 3, }}>
-                        <Text style={{ textAlign: 'center', }}>Transaction Fee</Text>
-
-                        <View style={{ flexDirection: 'row', paddingVertical: hp('1%') }}>
-                            {
-                                TransactionFee.map((item, index) => {
-                                    return (
-                                        <TouchableOpacity
-                                            key={index.toString()}
-                                            style={[styleButton(this.state.selectFee === item.title).button]}
-                                            onPress={() => this.SelectFee(item.title)}
-                                        >
-                                            <Text style={[styleButton(this.state.selectFee === item.title).text]}>{item.title}</Text>
-                                            <Text style={[styleButton(this.state.selectFee === item.title).text]}>{item.fee} ETH</Text>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </View>
-                    </View>
-                </View>
-                <View style={{ height: hp('13%'), justifyContent: 'center', alignItems: 'center' }}>
-                    <TouchableOpacity
-                        style={{
-                            backgroundColor: 'orange',
-                            borderRadius: 5
-                        }}
-                    >
-                        <Gradient
-                            colors={Color.Gradient_button_tomato}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            style={{ paddingHorizontal: wp('25%'), paddingVertical: hp('2%'), borderRadius: 7 }}
-                        >
-                            <Text style={{ color: '#fff' }}>Next</Text>
-                        </Gradient>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
-        )
+mapStateToProps = state => {
+    return {
+        SETTINGS: state.Settings
     }
 }
+
+export default connect(mapStateToProps, null)(SendScreen)

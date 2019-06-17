@@ -7,7 +7,7 @@ import Setting from '../../../../settings/initApp';
 import ListToken from '../../../../helpers/constant/listToken';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { GetListToken } from '../../../../redux/rootActions/easyMode'
+import { GetListToken, Func_Settings } from '../../../../redux/rootActions/easyMode'
 
 class Splash extends Component {
     constructor(props) {
@@ -19,9 +19,15 @@ class Splash extends Component {
         try {
             getStorage('setting').then(set => {
                 if (set) {
-                    console.log(set)
+                    var set = JSON.parse(set)
+                    Setting.push_list_token = set.push_list_token;
+                    Setting.mode_secure = set.mode_secure;
+                    Setting.first_open = set.first_open;
+                    Setting.ez_turn_on_passcode = set.ez_turn_on_passcode;
+                    Setting.ez_turn_on_fingerprint = set.ez_turn_on_fingerprint;
+                    this.props.Func_Settings(set)
                 } else {
-                    console.log(set)
+                    console.log('bb', set)
                 }
             })
         } catch (error) {
@@ -75,6 +81,7 @@ class Splash extends Component {
                                     setStorage('list_token', JSON.stringify(ListToken)).then(() => {
                                         Setting.push_list_token = true;
                                         setStorage('setting', JSON.stringify(Setting)).then(() => {
+                                            this.props.Func_Settings(Setting)
                                             this.props.GetListToken()
                                             this.props.navigation.navigate('InApp')
                                         })
@@ -99,7 +106,7 @@ class Splash extends Component {
     }
 }
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ GetListToken }, dispatch)
+    return bindActionCreators({ GetListToken, Func_Settings }, dispatch)
 }
 
 export default connect(null, mapDispatchToProps)(Splash);

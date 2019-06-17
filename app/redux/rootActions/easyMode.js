@@ -77,3 +77,10 @@ export const Func_Update_price = (id, price, percent_change) => dispatch => {
         }).catch(console.log)
     })
 }
+
+export const Func_Settings = (settings) => dispatch => {
+    return dispatch({
+        type: 'SETTING',
+        payload: settings
+    })
+}

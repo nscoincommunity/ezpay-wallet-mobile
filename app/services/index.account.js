@@ -12,6 +12,7 @@ import {
     CheckIsTRON,
     send_TRON
 } from './TRX/account.service';
+import CryptoJS from 'crypto-js';
 
 
 export interface Tx {
@@ -109,3 +110,13 @@ export const Check_fee_with_balance = (fee, address, addressTK, network, decimal
     }).catch(e => reject(e))
 
 })
+
+export const Encrypt_password = (password) => new Promise((resolve, reject) => {
+    try {
+        var password_encrypt = CryptoJS.MD5(password).toString(CryptoJS.enc.Hex)
+        resolve(password_encrypt)
+    } catch (error) {
+        reject(error)
+    }
+})
+

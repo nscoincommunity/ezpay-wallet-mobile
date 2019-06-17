@@ -1,4 +1,5 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
+import Init_Setting from '../../settings/initApp'
 
 let initState = {
     ListToken: []
@@ -14,6 +15,17 @@ export const Get_All_Token = (state = initState, action) => {
     }
 }
 
+const Settings = (state = Init_Setting, action) => {
+    switch (action.type) {
+        case 'SETTING':
+            return action.payload
+
+        default:
+            return state
+    }
+}
+
 export default combineReducers({
-    Get_All_Token
+    Get_All_Token,
+    Settings
 })

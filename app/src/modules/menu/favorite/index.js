@@ -6,7 +6,6 @@ import Color from '../../../../helpers/constant/color';
 import Gradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive'
-import RBSheet from '../../../../lib/bottom-sheet'
 import { insert_favorite, get_all_favorite, name_favorite, update_object_favotire, delete_favorite } from '../../../../db'
 import ActionSheet from '../../../components/action-sheet'
 import Dialog from "react-native-dialog";
