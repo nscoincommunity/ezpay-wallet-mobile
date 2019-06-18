@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Keyboard } from 'react-native';
 //Stack other module
 import QRscan from '../src/components/QR-scan'
-
+import FormPassword from '../src/components/form-input-password'
 // Stack Home
 import Dashboard from '../src/modules/in-app/dashboard';
 import Token from '../src/modules/in-app/token';
@@ -49,7 +49,8 @@ const stackHome = createStackNavigator(
         ToAddress: { screen: ToAddress },
         History: { screen: History },
         Detail_history: { screen: Detail_history },
-        Browser: { screen: Browser }
+        Browser: { screen: Browser },
+        FormPassword: { screen: FormPassword }
     },
     {
         initialRouteName: 'Dashboard',
@@ -61,7 +62,8 @@ const stackDapp = createStackNavigator(
     {
         DappBrowser: { screen: DappBrowser },
         SignMessage: { screen: SignMessage },
-        ConfirmTransaction: { screen: ConfirmTransaction }
+        ConfirmTransaction: { screen: ConfirmTransaction },
+        FormPassword: { screen: FormPassword }
     }, {
         initialRouteName: 'DappBrowser',
         headerMode: 'none'
@@ -74,7 +76,8 @@ const stackSetting = createStackNavigator(
         Favorite: { screen: Favorite },
         AddFavorite: { screen: AddFavorite },
         QRscan: { screen: QRscan },
-        Passcode_settings: { screen: Passcode_settings }
+        Passcode_settings: { screen: Passcode_settings },
+        FormPassword: { screen: FormPassword }
     }, {
         initialRouteName: 'Menu',
         headerMode: 'none'

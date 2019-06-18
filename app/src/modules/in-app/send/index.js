@@ -139,6 +139,7 @@ class FormSend extends Component {
             gasPrice: this.props.data.network == 'ethereum' ? 10 : 0,
             checkbox: true,
             list_Favorite: [],
+            gasFee: 0.00021
         }
         console.log(this.props.data)
     }
@@ -209,7 +210,7 @@ class FormSend extends Component {
                     [{ text: 'Ok', style: 'cancel' }]
                 )
             } else {
-                this.setState({ gasPrice: gasPrice })
+                this.setState({ gasPrice: gasPrice, gasFee: fee })
             }
         }).catch(e => console.log(e))
     }
@@ -234,16 +235,8 @@ class FormSend extends Component {
             parseFloat(this.state.txt_Amount) <= 0 ||
             this.state.txt_Amount.length < 1
         ) {
-            // console.log('if', this.state.err_Txt_Address,
-            //     this.state.err_Txt_Amount,
-            //     this.state.txt_Address,
-            //     this.state.txt_Amount)
             this.setState({ disable_btn_send: true })
         } else {
-            // console.log('else', this.state.err_Txt_Address,
-            //     this.state.err_Txt_Amount,
-            //     this.state.txt_Address,
-            //     this.state.txt_Amount)
             this.setState({ disable_btn_send: false })
         }
     }
@@ -256,42 +249,11 @@ class FormSend extends Component {
     }
 
     Func_button_send = () => {
-        if (this.props.SETTINGS.ez_turn_on_fingerprint) {
-            let optionalConfig = {
-                unifiedErrors: false,
-                passcodeFallback: true
-            }
-            TouchID.isSupported(optionalConfig).then(isSupporter => {
-                console.log('supported', isSupporter)
-                if (isSupporter) {
-                    let options = {
-                        title: "Ez Pay", // Android
-                        sensorDescription: 'Touch sensor', // Android
-                        sensorErrorDescription: 'Failed', // Android
-                        cancelText: 'Cancel', // Android
-                        fallbackLabel: "", // iOS (if empty, then label is hidden)
-                    }
-                    TouchID.authenticate('Scan ' + isSupporter + ' to process').then((auth, error) => {
-                        if (error) {
-                            console.log('errrrr', error)
-                            Alert.alert(
-                                'Error',
-                                error,
-                                [{ text: 'Ok', style: 'default' }]
-                            )
-                        } else {
-                            console.log('Touch id', auth)
-                            this.SendToken()
-                        }
-                    }).catch(err => {
-                        console.log('err', err)
-                    })
-                } else {
-                    Alert.alert(
-                        'Error',
-                        'Your device not support ' + isSupporter,
-                        [{ text: 'Ok', style: 'default' }]
-                    )
+        if (this.props.SETTINGS.ez_turn_on_fingerprint || this.props.SETTINGS.ez_turn_on_passcode) {
+            this.props.navigation.navigate('FormPassword', {
+                payload: {
+                    canBack: true,
+                    isAuth: this.SendToken
                 }
             })
         } else {
@@ -349,7 +311,7 @@ class FormSend extends Component {
         const data = this.props.data;
         if (value > 0) {
             get_balance_wallet(data.item.id).then(async balance => {
-                if (parseFloat(value) <= parseFloat(balance)) {
+                if (parseFloat(value) + this.state.gasFee <= parseFloat(balance)) {
                     await this.setState({
                         price_usd: parseFloat(value) * parseFloat(data.price),
                         txt_Amount: value,

@@ -20,6 +20,14 @@ export class Menu extends Component {
 
 
     changeTouchID = (value) => {
+        if (!Settings.ez_turn_on_passcode) {
+            Alert.alert(
+                'Error',
+                'Please enable password before enable touch id',
+                [{ text: 'Ok', style: 'default' }]
+            )
+            return;
+        }
         console.log(value)
         let optionalConfig = {
             unifiedErrors: false,

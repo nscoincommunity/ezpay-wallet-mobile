@@ -40,6 +40,10 @@ class Splash extends Component {
         this.InitWallet()
     }
 
+    isAuth = () => {
+        this.props.navigation.navigate('InApp')
+    }
+
     InitWallet = () => {
         Check_Exist_Wallet()
             .then(status => {
@@ -92,7 +96,18 @@ class Splash extends Component {
                         }).catch(e => console.log)
                 } else {
                     this.props.GetListToken()
-                    this.props.navigation.navigate('InApp')
+                    // this.props.navigation.navigate('InApp')
+                    if (this.props.SETTINGS.ez_turn_on_passcode == true || this.props.SETTINGS.ez_turn_on_fingerprint == true) {
+                        this.props.navigation.navigate('FormPassword', {
+                            payload: {
+                                canBack: false,
+                                isAuth: this.isAuth
+                            }
+                        })
+                    } else {
+                        this.props.navigation.navigate('InApp')
+                    }
+
                 }
             }).catch(console.log)
     }
@@ -105,8 +120,12 @@ class Splash extends Component {
         );
     }
 }
+const mapStateToProps = state => {
+    return { SETTINGS: state.Settings }
+}
+
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({ GetListToken, Func_Settings }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(Splash);
+export default connect(mapStateToProps, mapDispatchToProps)(Splash);

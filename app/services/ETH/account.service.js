@@ -148,16 +148,22 @@ export const send_ETH = (tx: Tx, privatekey: string, network: string, addressTk?
         if (addressTk == '') {
             console.log('value', tx)
             tx.gas = await WEB3.eth.estimateGas(tx)
+            try {
+                const rawTx = '0x' + await sign(tx, privatekey).rawTx;
+                console.log('rawTx', rawTx)
+                WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
+                    if (error) {
+                        console.log('sss', error)
+                        reject(error.toString())
+                    } else {
+                        console.log('hash', hash)
+                        resolve(hash)
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
 
-            const rawTx = '0x' + await sign(tx, privatekey).rawTx;
-            WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
-                if (error) {
-                    reject(error)
-                } else {
-                    console.log(hash)
-                    resolve(hash)
-                }
-            })
         } else {
             var contract = new WEB3.eth.Contract(ABI, addressTk, { from: tx.from });
             var dataTx: Tx = {

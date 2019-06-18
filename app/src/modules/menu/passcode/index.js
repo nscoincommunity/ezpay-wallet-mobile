@@ -37,12 +37,24 @@ class Passcode_settings extends Component {
                 }
             }).catch(err => console.log(err))
         } else {
-            Settings.ez_turn_on_passcode = false;
-            setStorage('setting', JSON.stringify(Settings)).then(() => {
-                this.props.Func_Settings(Settings);
+            this.props.navigation.navigate('FormPassword', {
+                payload: {
+                    canBack: true,
+                    isAuth: this.isAuth
+                }
             })
+
         }
     }
+
+    isAuth = () => {
+        Settings.ez_turn_on_passcode = false;
+        Settings.ez_turn_on_fingerprint = false;
+        setStorage('setting', JSON.stringify(Settings)).then(() => {
+            this.props.Func_Settings(Settings);
+        })
+    }
+
     Func_button_change = () => {
         this.setState({ type_open_RBsheet: false }, () => {
             this.RBSheet.open()
@@ -229,7 +241,7 @@ class Formpassword extends Component {
                                     inputPadding={16}
                                     onChangeText={(value) => { this.change_txt_password_old(value) }}
                                     value={this.state.txt_password_old}
-                                    onSubmitEditing={() => { this.address.focus() }}
+                                    onSubmitEditing={() => { this.password.focus() }}
                                     returnKeyType="next"
                                     numberOfLines={1}
                                     secureTextEntry={true}
@@ -239,7 +251,7 @@ class Formpassword extends Component {
 
                         <View style={stylePassword.formInput}>
                             <Fumi
-                                ref={(r) => { this.name = r; }}
+                                ref={(r) => { this.password = r; }}
                                 label={this.props.type ? 'Password' : 'Password new'}
                                 iconClass={FontAwesomeIcon}
                                 iconName={'lock'}
@@ -249,7 +261,7 @@ class Formpassword extends Component {
                                 inputPadding={16}
                                 onChangeText={(value) => { this.change_txt_password(value) }}
                                 value={this.state.txt_password}
-                                onSubmitEditing={() => { this.address.focus() }}
+                                onSubmitEditing={() => { this.confirmpwd.focus() }}
                                 returnKeyType="next"
                                 numberOfLines={1}
                                 secureTextEntry={true}
@@ -262,7 +274,7 @@ class Formpassword extends Component {
 
                         <View style={stylePassword.formInput}>
                             <Fumi
-                                ref={(r) => { this.name = r; }}
+                                ref={(r) => { this.confirmpwd = r; }}
                                 label={this.props.type ? 'Confirm password' : 'Confirm password new'}
                                 iconClass={FontAwesomeIcon}
                                 iconName={'lock'}
@@ -272,8 +284,8 @@ class Formpassword extends Component {
                                 inputPadding={16}
                                 onChangeText={(value) => { this.change_txt_confirm_password(value) }}
                                 value={this.state.txt_confirm_password}
-                                onSubmitEditing={() => { this.address.focus() }}
-                                returnKeyType="next"
+                                onSubmitEditing={() => this.props.type ? this.Func_button_create_password() : this.Func_button_update_password()}
+                                returnKeyType="done"
                                 numberOfLines={1}
                                 secureTextEntry={true}
                             />
