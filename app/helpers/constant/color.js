@@ -29,5 +29,6 @@ export default {
     Gradient_clear_sky: ['#005C97', '#363795'],
     Gradient_lizard: ['#304352', '#d7d2cc'],
     Gradient_turquoise_flow: ['#136a8a', '#267871'],
+    Gradient_dark: ['#3F434A', '#535353']
 
 }

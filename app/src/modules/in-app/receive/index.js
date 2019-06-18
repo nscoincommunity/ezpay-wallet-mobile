@@ -50,7 +50,6 @@ export default class Receive extends Component {
         this.JsonQr.decimal = decimals;
         this.JsonQr.token = address;
         this.JsonQr.symbol = symbol;
-        this.JsonQr.token = address;
 
         this.setState({ valueQR: item.address });
         this.setState({ brightnessCurrent: Platform.OS == 'ios' ? await DeviceBrightness.getBrightnessLevel() : await DeviceBrightness.getSystemBrightnessLevel() })
@@ -126,10 +125,6 @@ export default class Receive extends Component {
                         >
                             <QRCode
                                 value={this.state.valueQR}
-                                // logo={{ uri: URI.MARKET_CAP_ICON + id_market + '.png' }}
-                                // logoMargin={5}
-                                // logoSize={50}
-                                // logoBorderRadius={25}
                                 logoBackgroundColor='#fff'
                                 backgroundColor='transparent'
                                 size={200}
