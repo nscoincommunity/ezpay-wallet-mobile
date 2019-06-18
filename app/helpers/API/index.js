@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
-export const POSTAPI = (uri: string, body) => {
-    return fetch(uri, {
+export function POSTAPI(address: string, body) {
+    return fetch(address, {
         method: 'POST',
         headers: {
             Accept: 'application/json',

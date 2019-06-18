@@ -15,14 +15,12 @@ import InforAccount from '../src/modules/in-app/token/info-account';
 import ListToken from '../src/modules/in-app/add-token';
 import InforToken from '../src/modules/in-app/add-token/infor-token';
 import Addnew from '../src/modules/in-app/add-wallet/new';
-import TypeImport from '../src/modules/in-app/add-wallet/import/selectImport';
-import ImportAccount from '../src/modules/in-app/add-wallet/import';
-import ReceiveAccount from '../src/modules/in-app/receive';
-import SendScreen from '../src/modules/in-app/send';
-import ToAddress from '../src/modules/in-app/send/toAddress';
-import History from '../src/modules/in-app/history';
-import Detail_history from '../src/modules/in-app/history/detail-history';
-import Browser from '../src/modules/browser'
+import TypeImport from '../src/modules/in-app/add-wallet/import/selectImport'
+import ImportAccount from '../src/modules/in-app/add-wallet/import'
+import ReceiveAccount from '../src/modules/in-app/receive'
+import SendScreen from '../src/modules/in-app/send'
+import ToAddress from '../src/modules/in-app/send/toAddress'
+
 // Stack Dapp
 import DappBrowser from '../src/modules/in-app/Dapps';
 import SignMessage from '../src/modules/in-app/Dapps/screen/signMessage';
@@ -43,10 +41,7 @@ const stackHome = createStackNavigator(
         QRscan: { screen: QRscan },
         ReceiveAccount: { screen: ReceiveAccount },
         SendScreen: { screen: SendScreen },
-        ToAddress: { screen: ToAddress },
-        History: { screen: History },
-        Detail_history: { screen: Detail_history },
-        Browser: { screen: Browser }
+        ToAddress: { screen: ToAddress }
     },
     {
         initialRouteName: 'Dashboard',
