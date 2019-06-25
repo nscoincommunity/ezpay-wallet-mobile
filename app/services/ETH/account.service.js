@@ -6,6 +6,7 @@ import { sign } from '@warren-bank/ethereumjs-tx-sign';
 import bigInt from 'big-integer';
 import CONSTANT from '../../helpers/constant'
 import { Tx } from '../index.account'
+import InputDataDecoder from 'ethereum-input-data-decoder'
 
 const WEB3 = new Web3()
 // const WEB3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/'))
@@ -195,3 +196,42 @@ export const send_ETH = (tx: Tx, privatekey: string, network: string, addressTk?
     }
 })
 
+export const HexToString = (hex) => {
+    const value = WEB3.utils.hexToNumberString(hex);
+    if (value) {
+        return value;
+    } else {
+        return 0
+    }
+}
+
+export const signTransactionDapp = (tx: Tx, privateKey: string, decimals) => new Promise(async (resolve, reject) => {
+    try {
+        console.log('first tx', tx)
+        WEB3.setProvider(new WEB3.providers.HttpProvider(getProvider('ethereum')))
+        // if (tx.gasPrice == '') {
+        // tx.gasPrice = await WEB3.eth.getGasPrice()
+        // } else {
+        tx.gasPrice = await WEB3.utils.toWei(tx.gasPrice.toString(), 'Gwei');
+        console.log('gasprice', tx.gasPrice)
+        // }
+        tx.nonce = await WEB3.eth.getTransactionCount(tx.from);
+        console.log('none', tx.nonce)
+        tx.gas = await WEB3.eth.estimateGas(tx)
+        console.log('tx', tx)
+        const rawTx = '0x' + await sign(tx, privateKey).rawTx;
+        resolve(rawTx)
+    } catch (error) {
+        console.log(error)
+        reject(error)
+    }
+})
+export const DecodeInput = (input) => new Promise(async (resolve, reject) => {
+    try {
+        const decoder = new InputDataDecoder(ABI);
+        var result = decoder.decodeData(input)
+        resolve(result)
+    } catch (error) {
+        reject(error)
+    }
+})

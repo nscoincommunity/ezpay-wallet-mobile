@@ -18,6 +18,7 @@ export const Get_All_Token = (state = initState, action) => {
 const Settings = (state = Init_Setting, action) => {
     switch (action.type) {
         case 'SETTING':
+            console.log('reducer', action.payload)
             return action.payload
 
         default:

@@ -24,9 +24,10 @@ import History from '../src/modules/in-app/history';
 import Detail_history from '../src/modules/in-app/history/detail-history';
 import Browser from '../src/modules/browser'
 // Stack Dapp
-import DappBrowser from '../src/modules/in-app/Dapps';
-import SignMessage from '../src/modules/in-app/Dapps/screen/signMessage';
-import ConfirmTransaction from '../src/modules/in-app/Dapps/screen/confirmTransaction';
+import ListDapp from '../src/modules/Dapps/screen';
+import DappBrowser from '../src/modules/Dapps/browser'
+import SignMessage from '../src/modules/Dapps/screen/signMessage';
+import signTransaction from '../src/modules/Dapps/screen/signTransaction';
 // Stack Setting
 import Menu from '../src/modules/menu';
 import Favorite from '../src/modules/menu/favorite';
@@ -60,12 +61,13 @@ const stackHome = createStackNavigator(
 
 const stackDapp = createStackNavigator(
     {
+        ListDapp: { screen: ListDapp },
         DappBrowser: { screen: DappBrowser },
         SignMessage: { screen: SignMessage },
-        ConfirmTransaction: { screen: ConfirmTransaction },
+        SignTransaction: { screen: signTransaction },
         FormPassword: { screen: FormPassword }
     }, {
-        initialRouteName: 'DappBrowser',
+        initialRouteName: 'ListDapp',
         headerMode: 'none'
     }
 )

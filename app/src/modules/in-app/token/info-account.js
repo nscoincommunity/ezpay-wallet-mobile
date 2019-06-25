@@ -10,22 +10,79 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSi
 import RBSheet from '../../../../lib/bottom-sheet'
 import QRCode from 'react-native-qrcode-svg';
 import FlashMessage, { showMessage } from '../../../../lib/flash-message'
+import { connect } from 'react-redux';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper'
+import { Func_Remove_Token } from '../../../../redux/rootActions/easyMode';
+import { bindActionCreators } from 'redux'
+import { StackActions, NavigationActions } from 'react-navigation';
 
-
-export default class InforAccount extends Component {
+class InforAccount extends Component {
 
     state = {
         copied: false
     }
 
-    Remove_wallet = () => {
+    Remove_wallet = async () => {
+        console.log('saas', this.props.navigation.getParam('payload'))
+        if (this.props.navigation.getParam('payload').lengthAccount > 1) {
+            if (this.props.SETTINGS.ez_turn_on_passcode) {
+                this.props.navigation.navigate('FormPassword', {
+                    payload: {
+                        canBack: true,
+                        isAuth: this.isAuthRM
+                    }
+                })
+            } else {
+                const { section, funcReload } = this.props.navigation.getParam('payload');
+                Remove_account_of_token(section.id).then(ss => {
+                    funcReload();
+                    this.props.navigation.goBack();
+                })
+            }
+        } else {
+            if (this.props.SETTINGS.ez_turn_on_passcode) {
+                this.props.navigation.navigate('FormPassword', {
+                    payload: {
+                        canBack: true,
+                        isAuth: this.isAuthTK
+                    }
+                })
+            } else {
+                const { symbol, name } = this.props.navigation.getParam('payload');
+                await this.props.Func_Remove_Token(name, symbol);
+                await this.props.navigation.dispatch(StackActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({
+                            routeName: 'Dashboard',
+                        }),
+                    ],
+                }))
+            }
+        }
+
+    }
+    isAuthTK = async () => {
+        const { symbol, name } = this.props.navigation.getParam('payload');
+        await this.props.Func_Remove_Token(name, symbol);
+        await this.props.navigation.dispatch(StackActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({
+                    routeName: 'Dashboard',
+                }),
+            ],
+        }))
+    }
+
+    isAuthRM = () => {
         const { section, funcReload } = this.props.navigation.getParam('payload');
-        console.log(this.props.navigation.state.params)
         Remove_account_of_token(section.id).then(ss => {
             funcReload();
             this.props.navigation.goBack();
         })
     }
+
 
     Export_private = () => {
         Alert.alert(
@@ -40,8 +97,25 @@ It is important for restoring your account so you should never lose it but also 
         )
     }
 
+
+
     open_sheet = () => {
         this.setState({ copied: false })
+        if (this.props.SETTINGS.ez_turn_on_passcode) {
+            this.props.navigation.navigate('FormPassword', {
+                payload: {
+                    canBack: true,
+                    isAuth: this.isAuthPK
+                }
+            })
+        } else {
+            setTimeout(() => {
+                this.RBSheet.open();
+            }, 350);
+        }
+    }
+
+    isAuthPK = () => {
         setTimeout(() => {
             this.RBSheet.open();
         }, 350);
@@ -153,7 +227,7 @@ It is important for restoring your account so you should never lose it but also 
                         this.RBSheet = ref;
                     }}
                     closeOnDragDown={true}
-                    height={hp('80')}
+                    height={hp('90') - getStatusBarHeight()}
                     duration={250}
                     customStyles={{
                         container: {
@@ -274,3 +348,15 @@ const styles = StyleSheet.create({
         elevation: 7,
     }
 })
+
+const mapStateToProps = state => {
+    return {
+        SETTINGS: state.Settings
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ Func_Remove_Token }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InforAccount)

@@ -14,22 +14,23 @@ import { Fumi } from '../../../components/text-input-effect'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Func_Settings } from '../../../../redux/rootActions/easyMode'
 import Settings from '../../../../settings/initApp'
-import { Encrypt_password } from '../../../../services/index.account'
+import { Encrypt_password, Encrypt } from '../../../../services/index.account'
 
 class Passcode_settings extends Component {
     state = {
-        type_open_RBsheet: true
+        type_open_RBsheet: true,
+        value_switch: this.props.SETTINGS.ez_turn_on_passcode
     }
 
     changeSwitch = (value) => {
         if (value) {
-            getStorage('password').then(password => {
+            getStorage('password').then(async password => {
                 console.log(password)
                 if (password) {
-                    Settings.ez_turn_on_passcode = false;
-                    setStorage('setting', JSON.stringify(Settings)).then(() => {
-                        this.props.Func_Settings(Settings);
-                    })
+                    Settings.ez_turn_on_passcode = await true;
+                    await setStorage('setting', JSON.stringify(Settings))
+                    this.props.Func_Settings(Settings);
+                    this.setState({ value_switch: true })
                 } else {
                     this.setState({ type_open_RBsheet: true }, () => {
                         this.RBSheet.open()
@@ -47,12 +48,16 @@ class Passcode_settings extends Component {
         }
     }
 
-    isAuth = () => {
-        Settings.ez_turn_on_passcode = false;
-        Settings.ez_turn_on_fingerprint = false;
-        setStorage('setting', JSON.stringify(Settings)).then(() => {
-            this.props.Func_Settings(Settings);
-        })
+    isAuth = async () => {
+        Settings.ez_turn_on_passcode = await false;
+        Settings.ez_turn_on_fingerprint = await false;
+        this.setState({ value_switch: false })
+        await setStorage('setting', JSON.stringify(Settings))
+        await this.props.Func_Settings(Settings);
+    }
+
+    componentWillReceiveProps() {
+        console.log('aaa')
     }
 
     Func_button_change = () => {
@@ -66,7 +71,7 @@ class Passcode_settings extends Component {
     }
 
     render() {
-
+        // console.log('state on render', this.props.SETTINGS.ez_turn_on_passcode)
         return (
             <Gradient
                 colors={Color.Gradient_backgound_page}
@@ -87,12 +92,12 @@ class Passcode_settings extends Component {
                             <Text>Enable password</Text>
                         </View>
                         <View style={styles.button_switch}>
-                            <Switch value={this.props.SETTINGS.ez_turn_on_passcode} onValueChange={(value) => this.changeSwitch(value)} />
+                            <Switch value={this.state.value_switch} onValueChange={(value) => this.changeSwitch(value)} />
                         </View>
                     </View>
 
                     {
-                        this.props.SETTINGS.ez_turn_on_passcode &&
+                        this.state.value_switch &&
                         <View style={styles.formChangePasscode}>
                             <TouchableOpacity
                                 onPress={() => this.Func_button_change()}
@@ -126,7 +131,7 @@ class Passcode_settings extends Component {
                     <Formpassword
                         type={this.state.type_open_RBsheet}
                         closeRBS={this.closeRBS}
-                        Func_change_setting={this.props.Func_Settings}
+                        {...this.props}
                     />
                 </RBSheet>
             </Gradient>
@@ -136,6 +141,10 @@ class Passcode_settings extends Component {
 
 
 class Formpassword extends Component {
+    constructor(props) {
+        super(props)
+
+    }
     state = {
         txt_password: '',
         err_password: false,
@@ -187,7 +196,7 @@ class Formpassword extends Component {
         setStorage('setting', JSON.stringify(Settings)).then(() => {
             Encrypt_password(this.state.txt_password).then(pwd_en => {
                 setStorage('password', pwd_en);
-                this.props.Func_change_setting(Settings);
+                this.props.Func_Settings(Settings);
                 this.props.closeRBS()
             }).catch(e => console.log(e))
         })
@@ -195,10 +204,15 @@ class Formpassword extends Component {
 
     Func_button_update_password = () => {
         Encrypt_password(this.state.txt_password_old).then(pwd_old => {
-            getStorage('password').then(pwd => {
+            getStorage('password').then(async pwd => {
                 if (pwd == pwd_old) {
-                    setStorage('password', pwd_old);
-                    this.props.closeRBS()
+                    setStorage('password', await Encrypt(this.state.txt_password)).then(ss => {
+                        Alert.alert(
+                            'Success',
+                            'Change password success',
+                            [{ text: 'Ok', style: 'default', onPress: () => this.props.closeRBS() }]
+                        )
+                    })
                 } else {
                     Alert.alert(
                         'Error',
@@ -361,7 +375,8 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+    // console.log('state func mapStateToProps', state.Settings.ez_turn_on_passcode)
     return {
         SETTINGS: state.Settings
     }

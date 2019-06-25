@@ -1,14 +1,14 @@
-# Ez Keystore - Mutil wallet & ERC20 Tokens
- [<img src="https://raw.githubusercontent.com/nextyio/RN_EzKeyStore/master/screenshot/view.png">]('https://github.com/nextyio/RN_EzKeyStore')
+# Ez Pay - Mutil wallet & ERC20 Tokens
+ [<img src="https://raw.githubusercontent.com/nextyio/RN_EzKeyStore/master/screenshot/view.png">]('https://github.com/ezpayio/ezpay-wallet-mobile')
  
  ## Features
- - [x] Create/import Ethereum, Nexty, TRON wallet
+ - [x] Create/import Ethereum, Nexty, TRON wallet & ERC20 Token
  - [x] Check balance, transactions
  - [x] send/Receive ETH, NTY, TRON & ERC20 Token
  - [x] ĐAPP web browser and list collectible items.
  
 
-## Build Ez Keystore
+## Build Ez Pay
 
 In package.json delete row
 ```
@@ -45,8 +45,9 @@ Run from your terminal to install the library.
   * react-native run-android # for android
   ```
   ## Contributing
-   * Facebook:
+  * Facebook:
   * Google:
   * LinkedIn:
+  * Telegram:
   ## License
   

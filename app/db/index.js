@@ -140,7 +140,19 @@ export const InsertNewAccout = Account => new Promise((resolve, reject) => {
     reject(error);
   }
 });
-export const GetAllAccount = () => { };
+
+
+export const GetAllAddressOfToken = (name) => new Promise((resolve, reject) => {
+  try {
+    REALM.open(DB_EASY).then(realm => {
+      let Token = realm.objects(EASY.TOKEN_NAME).filtered('name="' + name + '"');
+      resolve(Array.from(Token)[0].account)
+    })
+  } catch (error) {
+    reject(error)
+  }
+})
+
 
 /**
  * Get all token of wallet

@@ -17,7 +17,9 @@ import { setStorage } from '../../../helpers/storages'
 
 
 export class Menu extends Component {
-
+    state = {
+        enable_touchID: Settings.ez_turn_on_fingerprint
+    }
 
     changeTouchID = (value) => {
         if (!Settings.ez_turn_on_passcode) {
@@ -28,6 +30,7 @@ export class Menu extends Component {
             )
             return;
         }
+        this.setState({ enable_touchID: value })
         console.log(value)
         let optionalConfig = {
             unifiedErrors: false,
@@ -51,16 +54,19 @@ export class Menu extends Component {
                             error,
                             [{ text: 'Ok', style: 'default' }]
                         )
+                        this.setState({ enable_touchID: Settings.ez_turn_on_fingerprint })
                     } else {
                         console.log('Touch id', auth)
                         Settings.ez_turn_on_fingerprint = value;
                         setStorage('setting', JSON.stringify(Settings)).then(() => {
                             this.props.Func_Settings(Settings);
+                            this.setState({ enable_touchID: Settings.ez_turn_on_fingerprint })
                         })
 
                     }
                 }).catch(err => {
                     console.log('err', err)
+                    this.setState({ enable_touchID: Settings.ez_turn_on_fingerprint })
                 })
             } else {
                 Alert.alert(
@@ -68,6 +74,7 @@ export class Menu extends Component {
                     'Your device not support ' + isSupporter,
                     [{ text: 'Ok', style: 'default' }]
                 )
+                this.setState({ enable_touchID: Settings.ez_turn_on_fingerprint })
             }
         })
     }
@@ -124,7 +131,7 @@ export class Menu extends Component {
                                         <Text>Use Touch ID</Text>
                                     </View>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Switch value={SETTINGS.ez_turn_on_fingerprint} onValueChange={(value) => this.changeTouchID(value)} />
+                                        <Switch value={this.state.enable_touchID} onValueChange={(value) => this.changeTouchID(value)} />
                                     </View>
                                 </View>
                             </View>

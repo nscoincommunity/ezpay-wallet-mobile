@@ -79,6 +79,7 @@ export const Func_Update_price = (id, price, percent_change) => dispatch => {
 }
 
 export const Func_Settings = (settings) => dispatch => {
+    console.log(settings)
     return dispatch({
         type: 'SETTING',
         payload: settings

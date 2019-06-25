@@ -100,12 +100,30 @@ class ListToken extends Component {
     show_sheet_bottom = async (item) => {
         this.setState({ Item_tranfer: item })
         if (item.type == true) {
-            await this.props.Func_Remove_Token(item.name, item.symbol);
-            await this.clear_input_search()
+            if (this.props.SETTINGS.ez_turn_on_passcode) {
+                this.name = item.name;
+                this.symbol = item.symbol
+                this.props.navigation.navigate('FormPassword', {
+                    payload: {
+                        canBack: true,
+                        isAuth: this.isAuth
+                    }
+                })
+            } else {
+                await this.props.Func_Remove_Token(item.name, item.symbol);
+                await this.clear_input_search()
+            }
+
         } else {
             await this.RBSheet.open()
         }
     }
+    isAuth = async () => {
+        await this.props.Func_Remove_Token(this.name, this.symbol);
+        await this.clear_input_search()
+
+    }
+
     create_new_account = async () => {
         await this.props.Func_Add_Account(this.state.Item_tranfer);
         await this.RBSheet.close()
@@ -356,4 +374,10 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({ Func_Add_Account, Func_Remove_Token }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(ListToken)
+const mapStateToProps = state => {
+    return {
+        SETTINGS: state.Settings
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListToken)

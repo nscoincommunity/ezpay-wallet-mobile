@@ -12,10 +12,6 @@ import { GetListToken, Func_Settings } from '../../../../redux/rootActions/easyM
 class Splash extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        };
-    }
-    componentWillMount() {
         try {
             getStorage('setting').then(set => {
                 if (set) {
@@ -96,8 +92,8 @@ class Splash extends Component {
                         }).catch(e => console.log)
                 } else {
                     this.props.GetListToken()
-                    // this.props.navigation.navigate('InApp')
-                    if (this.props.SETTINGS.ez_turn_on_passcode == true || this.props.SETTINGS.ez_turn_on_fingerprint == true) {
+                    console.log(this.props.SETTINGS.ez_turn_on_passcode == true)
+                    if (this.props.SETTINGS.ez_turn_on_passcode == true) {
                         this.props.navigation.navigate('FormPassword', {
                             payload: {
                                 canBack: false,

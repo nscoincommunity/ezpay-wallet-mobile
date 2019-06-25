@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, RefreshControl } from 'react-native';
 import { Add_Token, Get_All_Token_Of_Wallet } from '../../../../db';
 import Header from '../../../components/header';
 import SwitchButton from '../../../components/switch-button';
@@ -16,6 +16,9 @@ import URI from '../../../../helpers/constant/uri';
 class Dashboard extends Component {
 
     mounting = true;
+    state = {
+        isRefreshing: false,
+    }
     componentDidMount() {
         const { navigation } = this.props;
         console.log('navigation', navigation)
@@ -53,7 +56,32 @@ class Dashboard extends Component {
         }, 20000)
     }
 
+    refreshData = () => {
+        if (this.props.ListToken.length > 0) {
+            this.props.ListToken.forEach((item, index) => {
+                if (item.id_market !== 0) {
+                    GETAPI(URI.MARKET_CAP_TICKER + item.id_market)
+                        .then(res => res.json())
+                        .then(res => {
+                            var price = res['data']['quotes']['USD']['price'];
+                            var percent_change = res['data']['quotes']['USD']['percent_change_1h'];
+                            if (price > 1) {
+                                price = parseFloat(price.toFixed(2))
+                            } else {
+                                price = parseFloat(price.toFixed(6))
+                            }
+                            this.props.Func_Update_price(item.id, price, parseFloat(percent_change))
+                        })
+                } else {
+                    this.props.Func_Update_price(item.id, 0, 0)
+                }
 
+                if (index == this.props.ListToken.length - 1) {
+                    this.update_price_tk()
+                }
+            });
+        }
+    }
 
 
     componentWillUnmount() {
@@ -116,6 +144,13 @@ class Dashboard extends Component {
                             )
                         }}
                         keyExtractor={(item, index) => index.toString()}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.isRefreshing}
+                                onRefresh={() => this.refreshData()}
+                            />
+                        }
+
                     />
                 }
 

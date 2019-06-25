@@ -120,3 +120,8 @@ export const Encrypt_password = (password) => new Promise((resolve, reject) => {
     }
 })
 
+export const Encrypt = (text) => {
+    var text_en = CryptoJS.MD5(text).toString(CryptoJS.enc.Hex)
+    return text_en
+}
+

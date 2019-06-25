@@ -24,8 +24,8 @@ export default class AccordionView extends Component {
         this.ListData = [];
         const { data } = this.props;
         this.symbol = data.symbol;
-        this.decimals = data.decimals
-        this.address = data.address;
+        this.name = data.name;
+        this.decimals = data.decimals;
         this.id_market = data.id_market;
         this.network = data.network;
         this.price = data.price
@@ -60,7 +60,9 @@ export default class AccordionView extends Component {
                             section,
                             symbol: this.symbol,
                             addressTK: this.address,
-                            funcReload: this.RefrestData
+                            funcReload: this.RefrestData,
+                            lengthAccount: this.state.ListAccount.length,
+                            name: this.name
                         }
                     })}
                     style={{

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Animated, Easing } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Animated, Easing, Alert } from 'react-native';
 import Header from '../../components/header';
-import ImageApp from '../../../helpers/constant/image';
 import Color from '../../../helpers/constant/color';
 import Gradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -87,13 +86,18 @@ class FormPassword extends Component {
         const { isAuth } = this.props.navigation.getParam('payload')
         Encrypt_password(this.state.txt_password).then(pwd => {
             getStorage('password').then(pwd_storage => {
-                console.log('sdsd', pwd, pwd_storage)
+                // console.log('sdsd', pwd, pwd_storage)
                 if (pwd == pwd_storage) {
                     this.props.navigation.goBack();
                     isAuth();
+                } else {
+                    Alert.alert(
+                        'Error',
+                        'Invalid password',
+                        [{ text: 'Ok', style: 'default' }]
+                    )
                 }
             })
-
         })
     }
 
@@ -175,6 +179,7 @@ class FormPassword extends Component {
                                 <Icon name={this.state.god_eye ? 'eye' : 'eye-off'} size={25} />
                             </TouchableOpacity>
                         </View>
+
                         <View style={styles.formChangePasscode}>
                             <TouchableOpacity
                                 onPress={() => this.checkPassword()}
