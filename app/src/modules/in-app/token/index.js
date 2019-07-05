@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Text, View, Platform, TouchableHighlight, TouchableOpacity, ScrollView, Image } from 'react-native';
+import {
+    Text,
+    View,
+    Platform,
+    TouchableHighlight,
+    TouchableOpacity,
+    ScrollView,
+    Image,
+    RefreshControl
+} from 'react-native';
 import Gradient from 'react-native-linear-gradient';
 import Header from '../../../components/header';
 import Color from '../../../../helpers/constant/color';
@@ -17,10 +26,12 @@ import realm, { update_Balance_db, update_total_balance } from '../../../../db'
 export default class Token extends Component {
     mounted = true
     state = {
-        Token: {}
+        Token: {},
+        isRefreshing: false,
     }
     componentWillMount() {
-        this.loadData()
+        this.loadData();
+        this.props.navigation.getParam('payload').changeMount()
     }
 
     loadData = () => {
@@ -51,6 +62,28 @@ export default class Token extends Component {
     componentWillUnmount() {
         this.mounted = false;
         clearTimeout(this.timeoutUpdate)
+    }
+
+    refreshData = () => {
+        if (this.state.Token && this.state.Token.account.length > 0) {
+            let total_balance = 0;
+            this.state.Token.account.forEach((item, index) => {
+                Update_balance(this.state.Token.address,
+                    item.address,
+                    this.state.Token.network,
+                    this.state.Token.decimals)
+                    .then(bal => {
+                        total_balance += parseFloat(bal);
+                        update_Balance_db(item.id, parseFloat(bal)).then(() => {
+                            update_total_balance(this.state.Token.id, total_balance);
+                            this.loadData()
+                        })
+                    }).catch(e => console.log(e))
+                if (index == this.state.Token.account.length - 1) {
+                    this.updateBalance()
+                }
+            });
+        }
     }
 
     updateBalance = () => {
@@ -101,12 +134,22 @@ export default class Token extends Component {
             >
                 <Header
                     IconLeft="arrow-back"
-                    onPressLeft={() => this.props.navigation.goBack()}
+                    onPressLeft={() => {
+                        this.props.navigation.goBack();
+                        this.props.navigation.getParam('payload').changeMount()
+                    }}
                     Title={address === '' ? network : name}
                     styleTitle={{ color: Color.Tomato }}
                 />
                 <View style={{ flex: 1, padding: 10 }}>
-                    <ScrollView>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.isRefreshing}
+                                onRefresh={() => this.refreshData()}
+                            />
+                        }
+                    >
                         {
                             this.state.Token.account !== undefined && this.state.Token.account.length > 0 &&
                             <Item data={this.state.Token} {...this.props} />

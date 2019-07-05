@@ -18,7 +18,7 @@ import Gradient from 'react-native-linear-gradient';
 import Header from '../../../../components/header';
 import CONSTANT from '../../../../../helpers/constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Func_import_account } from './import.service';
+import { Func_import_account, isValidMnemonic } from './import.service';
 import ButtonBottom from '../../../../components/buttonBottom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -26,7 +26,10 @@ import { Func_Add_Account } from '../actions'
 import { StackActions, NavigationActions } from 'react-navigation';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
-import { Import_account_of_token } from '../../token/actions'
+import { Import_account_of_token } from '../../token/actions';
+import SETTINGS from '../../../../../settings/initApp';
+import { getStorage } from '../../../../../helpers/storages';
+import { EncryptWithPassword } from "../../../../../services/index.account";
 
 
 class Import extends Component {
@@ -48,12 +51,19 @@ class Import extends Component {
                 var OK = regex.test(val);
                 if (!OK) {
                     this.setState({ disableButton: true, error: 'Invalid private key' })
-                    return;
+                    break;
                 }
                 this.import_by_privatekey(val, type, token)
                 break;
             case 'mnemoric':
-                this.import_by_mnemonic(val, type, token)
+                var isValid = await isValidMnemonic(val);
+                if (isValid) {
+                    this.import_by_mnemonic(val, type, token);
+                    break
+                } else {
+                    this.setState({ disableButton: true, error: 'Invalid Phrase' })
+                    break
+                }
             default:
                 break;
         }
@@ -63,28 +73,56 @@ class Import extends Component {
         Func_import_account(val, type, token.network).then(address => {
             this.setState({ disableButton: false, error: '' });
             var ID = Math.floor(Date.now() / 1000);
-            this.ObjToken = {
-                id: ID,
-                name: token.name,
-                symbol: token.symbol,
-                network: token.network,
-                address: token.address,
-                price: 0,
-                percent_change: 0,
-                icon: '',
-                decimals: token.decimals,
-                total_balance: 0,
-                id_market: token.id_market,
-                account: [{
+            if (SETTINGS.mode_secure) {
+                getStorage('password').then(async pwd => {
+                    this.ObjToken = {
+                        id: ID,
+                        name: token.name,
+                        symbol: token.symbol,
+                        network: token.network,
+                        address: token.address,
+                        price: 0,
+                        percent_change: 0,
+                        icon: '',
+                        decimals: token.decimals,
+                        total_balance: 0,
+                        id_market: token.id_market,
+                        account: [{
+                            id: ID,
+                            name: 'Account 1',
+                            token_type: token.network,
+                            address: address,
+                            private_key: await EncryptWithPassword(val, pwd),
+                            balance: 0,
+                            time: new Date()
+                        }]
+                    }
+                })
+            } else {
+                this.ObjToken = {
                     id: ID,
-                    name: 'Account 1',
-                    token_type: token.network,
-                    address: address,
-                    private_key: val,
-                    balance: 0,
-                    time: new Date()
-                }]
+                    name: token.name,
+                    symbol: token.symbol,
+                    network: token.network,
+                    address: token.address,
+                    price: 0,
+                    percent_change: 0,
+                    icon: '',
+                    decimals: token.decimals,
+                    total_balance: 0,
+                    id_market: token.id_market,
+                    account: [{
+                        id: ID,
+                        name: 'Account 1',
+                        token_type: token.network,
+                        address: address,
+                        private_key: val,
+                        balance: 0,
+                        time: new Date()
+                    }]
+                }
             }
+
         }).catch(e => {
             console.log('error', e)
             this.setState({ disableButton: true, error: e })
@@ -95,30 +133,58 @@ class Import extends Component {
         Func_import_account(val, type, token.network).then(account => {
             this.setState({ disableButton: false, error: '' });
             var ID = Math.floor(Date.now() / 1000);
-            this.ObjToken = {
-                id: ID,
-                name: token.name,
-                symbol: token.symbol,
-                network: token.network,
-                address: token.address,
-                price: 0,
-                percent_change: 0,
-                icon: '',
-                decimals: token.decimals,
-                total_balance: 0,
-                id_market: token.id_market,
-                account: [{
+
+            if (SETTINGS.mode_secure) {
+                getStorage('password').then(async pwd => {
+                    this.ObjToken = {
+                        id: ID,
+                        name: token.name,
+                        symbol: token.symbol,
+                        network: token.network,
+                        address: token.address,
+                        price: 0,
+                        percent_change: 0,
+                        icon: '',
+                        decimals: token.decimals,
+                        total_balance: 0,
+                        id_market: token.id_market,
+                        account: [{
+                            id: ID,
+                            name: 'Account 1',
+                            token_type: token.network,
+                            address: account.address,
+                            private_key: await EncryptWithPassword(account.privateKey, pwd),
+                            balance: 0,
+                            time: new Date()
+                        }]
+                    }
+                })
+            } else {
+                this.ObjToken = {
                     id: ID,
-                    name: 'Account 1',
-                    token_type: token.network,
-                    address: account.address,
-                    private_key: account.privateKey,
-                    balance: 0,
-                    time: new Date()
-                }]
+                    name: token.name,
+                    symbol: token.symbol,
+                    network: token.network,
+                    address: token.address,
+                    price: 0,
+                    percent_change: 0,
+                    icon: '',
+                    decimals: token.decimals,
+                    total_balance: 0,
+                    id_market: token.id_market,
+                    account: [{
+                        id: ID,
+                        name: 'Account 1',
+                        token_type: token.network,
+                        address: account.address,
+                        private_key: account.privateKey,
+                        balance: 0,
+                        time: new Date()
+                    }]
+                }
             }
         }).catch(e => {
-            this.setState({ disableButton: true, error: e })
+            console.log(e)
         })
     }
 
@@ -223,6 +289,7 @@ class Import extends Component {
                                 multiline={true}
                                 onChangeText={(val) => this.ChangeText(val)}
                                 value={this.state.textInput}
+                                underlineColorAndroid="transparent"
                             />
                             {
                                 this.state.textInput.length > 0 ?

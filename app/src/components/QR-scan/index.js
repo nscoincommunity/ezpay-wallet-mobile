@@ -57,7 +57,6 @@ export default class CameraScreen extends React.Component<any, any> {
     }
     i = 0;
     onBarCodeRead = (scanResult) => {
-        console.log('aaa')
         if (this.i == 0) {
             if (scanResult.data != null) {
                 this.setState({ ResultScan: scanResult.data })

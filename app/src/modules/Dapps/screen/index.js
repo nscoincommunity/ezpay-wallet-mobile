@@ -88,8 +88,8 @@ export default class ListDapp extends Component {
 
     componentWillMount() {
         GetAllAddressOfToken('Ethereum').then(listAddress => {
-            console.log(Array.from(listAddress))
-            this.setState({ listAddress })
+            console.log(Array.from(listAddress.account))
+            this.setState({ listAddress: Array.from(listAddress.account) })
         })
     }
 

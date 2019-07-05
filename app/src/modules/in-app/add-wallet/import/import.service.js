@@ -1,6 +1,7 @@
 import { RefreshListToken } from "../../../../../redux/rootActions/easyMode";
 import { Get_All_Token_Of_Wallet } from "../../../../../db";
 import { Import_account } from "../../../../../services/index.account";
+import 'ethers/dist/shims.js';
 import { ethers } from "ethers";
 
 export const Func_import_account = (value, type, network) => new Promise((resolve, reject) => {
@@ -29,3 +30,15 @@ export const Func_import_account = (value, type, network) => new Promise((resolv
       return;
   }
 });
+
+export const isValidMnemonic = (wordlist) => {
+  try {
+    console.log(wordlist)
+    var check = ethers.utils.HDNode.isValidMnemonic(wordlist);
+    console.log('check', check)
+    return check;
+  } catch (error) {
+    return false
+  }
+
+}

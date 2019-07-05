@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { Func_Add_Account, Func_Remove_Token } from '../../../../redux/rootActions/easyMode';
 import { StackActions, NavigationActions } from 'react-navigation';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive';
 
 
 let TokenArray = [];
@@ -38,7 +39,8 @@ class ListToken extends Component {
         Item_tranfer: {}
     }
     componentWillMount() {
-        this.getListToken()
+        this.getListToken();
+        this.props.navigation.getParam('payload').changeMount()
     }
 
     getListToken = () => {
@@ -126,15 +128,17 @@ class ListToken extends Component {
 
     create_new_account = async () => {
         await this.props.Func_Add_Account(this.state.Item_tranfer);
-        await this.RBSheet.close()
-        await this.props.navigation.dispatch(StackActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({
-                    routeName: 'Dashboard',
-                }),
-            ],
-        }))
+        await this.RBSheet.close();
+        setTimeout(() => {
+            this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [
+                    NavigationActions.navigate({
+                        routeName: 'Dashboard',
+                    }),
+                ],
+            }))
+        }, 350);
     }
     import_account = async () => {
         await this.RBSheet.close();
@@ -197,7 +201,7 @@ class ListToken extends Component {
                             <TouchableOpacity
                                 onPress={() => this.show_sheet_bottom(item)}
                             >
-                                <Icon name={item.type == true ? 'close-circle' : 'plus-circle'} color={item.type == true ? Color.Scarlet : Color.Malachite} size={30} />
+                                <Icon name={item.type == true ? 'close-circle' : 'plus-circle'} color={item.type == true ? Color.Scarlet : Color.Malachite} size={font_size(5)} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -216,7 +220,10 @@ class ListToken extends Component {
             >
                 <Header
                     IconLeft="arrow-back"
-                    onPressLeft={() => this.props.navigation.goBack()}
+                    onPressLeft={() => {
+                        this.props.navigation.goBack();
+                        this.props.navigation.getParam('payload').changeMount();
+                    }}
                     Title='Add token'
                     styleTitle={{ color: Color.Tomato }}
                 />

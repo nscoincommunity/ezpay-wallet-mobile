@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Color from "../../../../helpers/constant/color";
 import ImageApp from "../../../../helpers/constant/image";
 import URI from "../../../../helpers/constant/uri";
+import TextTicker from '../../../../lib/react-native-text-ticker'
 
 class TokenItem extends Component {
   static propTypes = {
@@ -47,7 +48,7 @@ class TokenItem extends Component {
           ic_token = ImageApp.ic_nty_token;
           break;
         } else {
-          ic_token = "ERC20";
+          ic_token = "NRC20";
           break;
         }
       case "tron":
@@ -68,7 +69,11 @@ class TokenItem extends Component {
     if (network == "addToken") {
       return (
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("ListToken")}
+          onPress={() => this.props.navigation.navigate("ListToken", {
+            payload: {
+              changeMount: this.props.changeMount
+            }
+          })}
         >
           <Text
             style={{
@@ -91,7 +96,8 @@ class TokenItem extends Component {
                 name,
                 network,
                 id,
-                address
+                address,
+                changeMount: this.props.changeMount
               }
             })
           }
@@ -143,17 +149,38 @@ class TokenItem extends Component {
               </Text>
             </View>
             <View style={{ flex: 4, justifyContent: "center" }}>
-              <Text
-                style={{
-                  textAlign: "right",
-                  fontWeight: "bold",
-                  fontSize: 25,
-                  color: Color.Dark_gray,
-                  marginBottom: 1
-                }}
-              >
-                {total_balance}
-              </Text>
+              {
+                total_balance.toString().length > 8 ?
+                  <TextTicker
+                    style={{
+                      textAlign: "right",
+                      fontWeight: "bold",
+                      fontSize: 25,
+                      color: Color.Dark_gray,
+                      marginBottom: 1
+                    }}
+                    duration={3000}
+                    loop
+                    bounce
+                    repeatSpacer={50}
+                    marqueeDelay={30}
+                  >
+                    {total_balance}
+                  </TextTicker>
+                  :
+                  <Text
+                    style={{
+                      textAlign: "right",
+                      fontWeight: "bold",
+                      fontSize: 25,
+                      color: Color.Dark_gray,
+                      marginBottom: 1
+                    }}
+                  >
+                    {total_balance}
+                  </Text>
+              }
+
               <Text
                 style={{
                   textAlign: "right",

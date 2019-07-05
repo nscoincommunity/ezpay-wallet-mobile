@@ -22,6 +22,9 @@ class FormPassword extends Component {
             eyeAnim: new Animated.Value(0)
         };
     }
+    static navigationOptions = {
+        gesturesEnabled: false,
+    }
 
     componentDidMount() {
         this.use_fingerprint()
@@ -89,7 +92,7 @@ class FormPassword extends Component {
                 // console.log('sdsd', pwd, pwd_storage)
                 if (pwd == pwd_storage) {
                     this.props.navigation.goBack();
-                    isAuth();
+                    isAuth(pwd_storage);
                 } else {
                     Alert.alert(
                         'Error',

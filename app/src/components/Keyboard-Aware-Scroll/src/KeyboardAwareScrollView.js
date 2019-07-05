@@ -29,6 +29,7 @@ export default class KeyboardAwareScrollView extends KeyboardAwareBase {
                     this._updateKeyboardAwareViewContentSize();
                 }}
                 scrollEventThrottle={200}
+                keyboardShouldPersistTaps="always"
             // style={this.props.style}
             />
         );

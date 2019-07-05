@@ -4,4 +4,5 @@ export default {
     mode_secure: false,
     ez_turn_on_passcode: false,
     ez_turn_on_fingerprint: false,
+    testnet: false
 }

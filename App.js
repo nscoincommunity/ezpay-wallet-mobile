@@ -16,6 +16,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import THUNK from 'redux-thunk';
 // import REDUCER from './redux/reducers/rootReducer';
 import REDUCER from './app/redux/reducers'
+import SplashScreen from 'react-native-splash-screen';
 
 const store = createStore(REDUCER, compose(
   applyMiddleware(THUNK),
@@ -30,7 +31,7 @@ export default class Setup extends Component {
   }
 
   async componentDidMount() {
-
+    SplashScreen.hide()
     this.checkPermission();
     this.createNotificationListeners();
   }

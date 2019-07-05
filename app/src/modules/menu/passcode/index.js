@@ -89,10 +89,14 @@ class Passcode_settings extends Component {
 
                     <View style={styles.form_switch}>
                         <View style={styles.title_form}>
-                            <Text>Enable password</Text>
+                            <Text style={{ color: Settings.mode_secure ? Color.Dark_gray : '#000' }} >Enable password</Text>
                         </View>
                         <View style={styles.button_switch}>
-                            <Switch value={this.state.value_switch} onValueChange={(value) => this.changeSwitch(value)} />
+                            <Switch
+                                value={this.state.value_switch}
+                                onValueChange={(value) => this.changeSwitch(value)}
+                                disabled={Settings.mode_secure ? true : false}
+                            />
                         </View>
                     </View>
 

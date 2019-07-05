@@ -23,6 +23,7 @@ import HeaderBrowser from './header';
 import FooterBrowser from './footer';
 import DAppBrowser from '../../../../lib/Dweb-browser'
 import { convertHexToString } from '../dapp.service'
+import Settings from '../../../../settings/initApp'
 
 let jsContent = ''
 type Props = {};
@@ -190,7 +191,7 @@ export default class BrowserDapps extends Component {
                                 ref={r => this.WEBVIEW = r}
                                 uri={this.state.url}
                                 addressHex={address}
-                                network="rinkeby"
+                                network={Settings.testnet ? "rinkeby" : "mainnet"}
                                 infuraAPIKey="b174a1cc2f7441eb94ed9ea18c384730"
                                 jsContent={jsContent}
                                 style={{ width: wp('100') }}

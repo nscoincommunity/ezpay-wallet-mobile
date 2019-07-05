@@ -15,11 +15,13 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import { Func_Remove_Token } from '../../../../redux/rootActions/easyMode';
 import { bindActionCreators } from 'redux'
 import { StackActions, NavigationActions } from 'react-navigation';
+import { DecryptWithPassword, Encrypt } from '../../../../services/index.account'
 
 class InforAccount extends Component {
 
     state = {
-        copied: false
+        copied: false,
+        privateKey: ''
     }
 
     Remove_wallet = async () => {
@@ -109,13 +111,17 @@ It is important for restoring your account so you should never lose it but also 
                 }
             })
         } else {
-            setTimeout(() => {
-                this.RBSheet.open();
-            }, 350);
+            this.isAuthPK()
         }
     }
 
-    isAuthPK = () => {
+    isAuthPK = async (pwd) => {
+        const { section } = this.props.navigation.getParam('payload');
+        if (this.props.SETTINGS.mode_secure) {
+            this.setState({ privateKey: await DecryptWithPassword(section.private_key, pwd) })
+        } else {
+            this.setState({ privateKey: section.private_key })
+        }
         setTimeout(() => {
             this.RBSheet.open();
         }, 350);
@@ -129,7 +135,7 @@ It is important for restoring your account so you should never lose it but also 
 
     render() {
         const { section, symbol, addressTK } = this.props.navigation.getParam('payload');
-        console.log('section', section)
+        console.log('section', this.props.navigation.getParam('payload'))
         return (
             <Gradient
                 colors={Color.Gradient_backgound_page}
@@ -270,20 +276,24 @@ It is important for restoring your account so you should never lose it but also 
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: font_size(4), color: '#000' }}>Your private key</Text>
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            <QRCode
-                                value={section.private_key}
-                                logoBackgroundColor='#fff'
-                                backgroundColor='transparent'
-                                size={wp('70')}
-                            />
+                            {
+                                this.state.privateKey != '' &&
+                                <QRCode
+                                    value={this.state.privateKey}
+                                    logoBackgroundColor='#fff'
+                                    backgroundColor='transparent'
+                                    size={wp('70')}
+                                />
+                            }
+
                             <Text
                                 style={{ textAlign: 'center', marginVertical: hp('2') }}
-                            >{section.private_key}</Text>
+                            >{this.state.privateKey}</Text>
                         </View>
                         <View style={{ alignItems: 'center' }}>
                             <TouchableOpacity
                                 style={styles.styleButtonCopy}
-                                onPress={() => this.func_Copy(section.private_key)}
+                                onPress={() => this.func_Copy(this.state.privateKey)}
                             >
                                 <Text style={{ marginRight: 5 }}>
                                     {!this.state.copied ? 'Copy' : 'Copied'}

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native'
 import InitApp from './Init-app';
 import InApp from './router-app';
+import InitSecure from './router-create-secure';
 export default class RootRouter extends Component {
 
     render() {
@@ -10,6 +11,7 @@ export default class RootRouter extends Component {
             {
                 InitApp,
                 InApp,
+                InitSecure
             },
             {
                 initialRouteName: 'InitApp',

@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Color from '../../../../helpers/constant/color';
 import ImageApp from '../../../../helpers/constant/image';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive'
+import TextTicker from '../../../../lib/react-native-text-ticker'
+
 
 interface data {
     id: number,
@@ -29,6 +31,7 @@ export default class AccordionView extends Component {
         this.id_market = data.id_market;
         this.network = data.network;
         this.price = data.price
+        this.address = data.address
 
         data.account.forEach(element => {
             this.ListData.push(element)
@@ -53,7 +56,21 @@ export default class AccordionView extends Component {
         return (
             <View style={[styleHeader(!active).header]}>
                 <Text style={styles.headerName}>{section.name}</Text>
-                <Text style={styles.headerBalance}>{section.balance}</Text>
+                {
+                    section.balance.toString().length > 8 ?
+                        <TextTicker
+                            style={styles.headerBalance}
+                            duration={5000}
+                            loop
+                            bounce
+                            repeatSpacer={50}
+                            marqueeDelay={0}
+                        >
+                            {section.balance}
+                        </TextTicker>
+                        :
+                        <Text style={styles.headerBalance}>{section.balance}</Text>
+                }
                 <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('InforAccount', {
                         payload: {
@@ -132,6 +149,7 @@ export default class AccordionView extends Component {
                     style={styles.buttonContent}
                     onPress={() => this.props.navigation.navigate('SendScreen', {
                         payload: {
+                            type: '',
                             item: section,
                             symbol: this.symbol,
                             decimals: this.decimals,

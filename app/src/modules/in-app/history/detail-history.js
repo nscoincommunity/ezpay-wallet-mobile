@@ -24,6 +24,7 @@ import Color from '../../../../helpers/constant/color';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive'
 import FlashMessage, { showMessage } from '../../../../lib/flash-message'
 import URI from '../../../../helpers/constant/uri';
+import Settings from '../../../../settings/initApp'
 
 
 export default class DetailHis extends Component {
@@ -40,7 +41,7 @@ export default class DetailHis extends Component {
 
     _goExplorer(tx, network) {
         const { navigate } = this.props.navigation;
-        navigate('Browser', { url: URI.EXPLORER_WEB(network, 'rinkeby') + tx });
+        navigate('Browser', { url: URI.EXPLORER_WEB(network, Settings.testnet) + tx });
     }
 
     render() {

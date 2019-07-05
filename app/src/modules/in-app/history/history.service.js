@@ -1,7 +1,7 @@
 import URI from '../../../../helpers/constant/uri';
 import { POSTAPI, GETAPI } from '../../../../helpers/API'
 import * as moment from "moment";
-
+import Settings from '../../../../settings/initApp'
 
 export class HistoryModel {
     tx: String;
@@ -20,7 +20,7 @@ export const getDataHistory = (start: number = 1, address, network, decimals) =>
         start
     }
     if (network == 'tron') {
-        let uri = URI.EXPLORER_API(network, 'rinkeby') + '/api/transaction?sort=-timestamp&count=true&limit=20&start=0&address=' + address
+        let uri = URI.EXPLORER_API(network, Settings.testnet) + '/api/transaction?sort=-timestamp&count=true&limit=20&start=0&address=' + address
         GETAPI(uri)
             .then(res => res.json())
             .then(response => {
@@ -39,7 +39,7 @@ export const getDataHistory = (start: number = 1, address, network, decimals) =>
                 resolve(historyData)
             })
     } else {
-        let uri = URI.EXPLORER_API(network, 'rinkeby') + '/api?module=account&action=txlist&address=' + address + '&page=' + start + '&offset=10&sort=desc'
+        let uri = URI.EXPLORER_API(network, Settings.testnet) + '/api?module=account&action=txlist&address=' + address + '&page=' + start + '&offset=10&sort=desc'
         GETAPI(uri)
             .then(res => res.json())
             .then(response => {

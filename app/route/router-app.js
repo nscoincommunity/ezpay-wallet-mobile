@@ -31,8 +31,9 @@ import signTransaction from '../src/modules/Dapps/screen/signTransaction';
 // Stack Setting
 import Menu from '../src/modules/menu';
 import Favorite from '../src/modules/menu/favorite';
-import AddFavorite from '../src/modules/menu/favorite/add-favorite'
-import Passcode_settings from '../src/modules/menu/passcode'
+import AddFavorite from '../src/modules/menu/favorite/add-favorite';
+import Passcode_settings from '../src/modules/menu/passcode';
+import MenuAdvanced from '../src/modules/menu/advanced'
 
 const stackHome = createStackNavigator(
     {
@@ -79,22 +80,23 @@ const stackSetting = createStackNavigator(
         AddFavorite: { screen: AddFavorite },
         QRscan: { screen: QRscan },
         Passcode_settings: { screen: Passcode_settings },
-        FormPassword: { screen: FormPassword }
+        FormPassword: { screen: FormPassword },
+        Advanced: { screen: MenuAdvanced }
     }, {
         initialRouteName: 'Menu',
         headerMode: 'none'
     }
 )
 
-stackHome.navigationOptions = ({ navigation }) => {
-    let tabBarVisible = true;
-    if (navigation.state.index > 0) {
-        tabBarVisible = false;
-    }
-    return {
-        tabBarVisible,
-    };
-};
+// stackHome.navigationOptions = ({ navigation }) => {
+//     let tabBarVisible = true;
+//     if (navigation.state.index > 0) {
+//         tabBarVisible = false;
+//     }
+//     return {
+//         tabBarVisible,
+//     };
+// };
 
 export default createMaterialBottomTabNavigator(
     {

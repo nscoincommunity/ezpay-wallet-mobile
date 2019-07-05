@@ -165,7 +165,28 @@ export default class Favorite extends Component {
                             </View>
                             :
                             <View>
-
+                                <View>
+                                    <TouchableOpacity
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            padding: hp('2')
+                                        }}
+                                        onPress={() => this.props.navigation.navigate('AddFavorite', {
+                                            payload: {
+                                                reloadData: this.getData
+                                            }
+                                        })}
+                                    >
+                                        <View style={{ justifyContent: 'center', marginHorizontal: wp('2') }}>
+                                            <Icon name="plus-circle-outline" size={font_size(3)} color={Color.Tomato} />
+                                        </View>
+                                        <View style={{ justifyContent: 'center', marginHorizontal: wp('2') }}>
+                                            <Text style={{ color: Color.Tomato }}>Add new favorite</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                     }
                 </View>

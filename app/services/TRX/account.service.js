@@ -121,3 +121,18 @@ export const send_TRON = (tx: Tx, privatekey: string, addressTK: string, decimal
     }
 })
 
+/**
+ * convert address wallet from type ETH, NTY to type of TRON
+ * @param {string} address address want convert
+ */
+export const ConvertToAddressTron = (address: string) => {
+    return TRONWEB.address.fromHex(address);
+}
+
+/**
+ * Convert address wallet from type TRON to type of ETH, NTY
+ * @param {string} address address want convert
+ */
+export const ConvertFromAddressTron = (address: string) => {
+    return TRONWEB.address.toHex(address)
+}

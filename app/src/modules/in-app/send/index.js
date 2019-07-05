@@ -21,18 +21,20 @@ import ImageApp from '../../../../helpers/constant/image';
 import Color from '../../../../helpers/constant/color';
 import Gradient from 'react-native-linear-gradient';
 import ButtonBottom from '../../../components/buttonBottom';
-import { Sae } from '../../../components/text-input-effect'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { CheckBox } from 'native-base'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive'
-import { isIphoneX } from 'react-native-iphone-x-helper'
-import { KeyboardAwareScrollView } from '../../../components/Keyboard-Aware-Scroll'
-import { CheckIsAddress, Check_fee_with_balance, Send_Token, Update_balance } from '../../../../services/index.account'
-import RBSheet from '../../../../lib/bottom-sheet'
-import { get_balance_wallet, insert_favorite, get_all_favorite, name_favorite } from '../../../../db'
-import TouchID from 'react-native-touch-id'
+import { Sae } from '../../../components/text-input-effect';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { CheckBox } from 'native-base';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive';
+import { isIphoneX } from 'react-native-iphone-x-helper';
+import { KeyboardAwareScrollView } from '../../../components/Keyboard-Aware-Scroll';
+import { CheckIsAddress, Check_fee_with_balance, Send_Token, Update_balance, DecryptWithPassword } from '../../../../services/index.account';
+import { convertWeiToEther } from '../../../../services/ETH/account.service'
+import RBSheet from '../../../../lib/bottom-sheet';
+import { get_balance_wallet, insert_favorite, get_all_favorite, name_favorite } from '../../../../db';
+import TouchID from 'react-native-touch-id';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
+
 
 const TransactionFee = [
     {
@@ -55,7 +57,9 @@ const TransactionFee = [
 
 class SendScreen extends Component {
 
-
+    componentDidMount() {
+        console.log('payload', this.props.navigation.getParam('payload'))
+    }
     render() {
         const data = this.props.navigation.getParam('payload');
         return (
@@ -139,7 +143,9 @@ class FormSend extends Component {
             gasPrice: this.props.data.network == 'ethereum' ? 10 : 0,
             checkbox: true,
             list_Favorite: [],
-            gasFee: 0.00021
+            gasFee: 0.00021,
+            gas: 0,
+            disable_all: false
         }
         console.log(this.props.data)
     }
@@ -153,7 +159,7 @@ class FormSend extends Component {
         disable_btn_send: true
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
             heightKeyboard = e.endCoordinates.height;
             if (locationInput + 50 > height - heightKeyboard) {
@@ -169,6 +175,16 @@ class FormSend extends Component {
         get_all_favorite().then(data => {
             this.setState({ list_Favorite: data })
         })
+
+        const data = this.props.data;
+        if (data.type && data.type == 'qrscan') {
+            var value = await convertWeiToEther(data.value, data.decimals);
+            console.log('aaa', value)
+            this.change_txt_address(data.toAddress);
+            this.change_txt_amount(value);
+            this.change_txt_desc(data.description);
+            this.setState({ gas: data.gas, disable_all: true })
+        }
     }
 
     componentWillUnmount() {
@@ -261,17 +277,24 @@ class FormSend extends Component {
         }
     }
 
-    SendToken = () => {
-        const { item, addressTK, network, decimals } = this.props.data
+    SendToken = async (pwd?= "") => {
+        const { item, addressTK, network, decimals } = this.props.data;
+        var privateKey
+        if (this.props.SETTINGS.mode_secure) {
+            privateKey = await DecryptWithPassword(item.private_key, pwd)
+        } else {
+            privateKey = item.private_key
+        }
         Send_Token(
             item.address,
             this.state.txt_Address,
             this.state.txt_Amount,
             addressTK,
-            item.private_key,
+            privateKey,
             network,
             decimals,
-            this.state.gasPrice
+            this.state.gasPrice,
+            parseFloat(this.state.gas)
         )
             .then(async TransactionHash => {
                 console.log(TransactionHash)
@@ -397,7 +420,7 @@ class FormSend extends Component {
                                 iconName={'pencil'}
                                 iconColor={Color.Whisper}
                                 labelStyle={{ color: Color.Whisper }}
-                                inputStyle={{ color: Color.Tomato, paddingBottom: 0, }}
+                                inputStyle={{ color: this.state.disable_all ? Color.Dark_gray : Color.Tomato, paddingBottom: 0, }}
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 onChangeText={(value) => { this.change_txt_address(value) }}
@@ -408,6 +431,7 @@ class FormSend extends Component {
                                 onSubmitEditing={() => { this.amount.focus() }}
                                 returnKeyType="next"
                                 numberOfLines={1}
+                                editable={!this.state.disable_all}
                             />
 
                         </View>
@@ -416,6 +440,7 @@ class FormSend extends Component {
                                 this.state.txt_Address.length > 0 ?
                                     <TouchableOpacity
                                         onPress={() => this.clear_txt_address()}
+                                        disabled={this.state.disable_all}
                                     >
                                         <Icon name="close-circle-outline" size={font_size(3)} color={Color.Scarlet} />
                                     </TouchableOpacity>
@@ -443,6 +468,7 @@ class FormSend extends Component {
                                 marginHorizontal: wp('2%'),
                                 flexDirection: 'row',
                             }}
+                            disabled={this.state.disable_all}
                         >
                             <View>
                                 <Text style={{ color: Color.Dark_gray, fontSize: font_size(1.8) }}>Favorite</Text>
@@ -463,6 +489,7 @@ class FormSend extends Component {
                                 marginHorizontal: wp('2%'),
                                 flexDirection: 'row'
                             }}
+                            disabled={this.state.disable_all}
                         >
                             <View>
                                 <Text style={{ color: Color.Dark_gray, fontSize: font_size(1.8) }}>Scan QR</Text>
@@ -493,7 +520,7 @@ class FormSend extends Component {
                                 iconColor={Color.Whisper}
                                 // labelHeight={20}
                                 labelStyle={{ color: Color.Whisper }}
-                                inputStyle={{ color: Color.Tomato, borderBottomWidth: 0, fontSize: font_size(3.5), paddingBottom: 0, }}
+                                inputStyle={{ color: this.state.disable_all ? Color.Dark_gray : Color.Tomato, borderBottomWidth: 0, fontSize: font_size(3.5), paddingBottom: 0, }}
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 onChangeText={(value) => { this.change_txt_amount(value) }}
@@ -502,9 +529,11 @@ class FormSend extends Component {
                                 keyboardType="numeric"
                                 showBorderBottom={false}
                                 onResponderEnd={e => this.onTouch_Input(e)}
+                                editable={!this.state.disable_all}
                             />
                             <TouchableOpacity
                                 onPress={this.setMaxBalance}
+                                disabled={this.state.disable_all}
                                 style={{
                                     flex: 1,
                                     justifyContent: 'center',
@@ -531,7 +560,7 @@ class FormSend extends Component {
                                 iconName={'pencil'}
                                 iconColor={Color.Whisper}
                                 labelStyle={{ color: Color.Whisper }}
-                                inputStyle={{ color: Color.Tomato, paddingBottom: 0, }}
+                                inputStyle={{ color: this.state.disable_all ? Color.Dark_gray : Color.Tomato, paddingBottom: 0, }}
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 onChangeText={(value) => { this.change_txt_desc(value) }}
@@ -539,6 +568,7 @@ class FormSend extends Component {
                                 showBorderBottom={false}
                                 onResponderEnd={e => this.onTouch_Input(e)}
                                 value={this.state.txt_Desc}
+                                editable={!this.state.disable_all}
                             />
                         </View>
                     </View>
@@ -575,6 +605,7 @@ class FormSend extends Component {
                                             key={index.toString()}
                                             style={[styleButton(this.state.selectFee === item.title).button]}
                                             onPress={() => this.SelectFee(item.title, itemFee, itemGasPrice)}
+                                            disabled={this.state.disable_all}
                                         >
                                             <Text style={[styleButton(this.state.selectFee === item.title).text]}>{item.title}</Text>
                                             <Text style={[styleButton(this.state.selectFee === item.title).text]}>{itemFee + ' ' + symbolFee}</Text>

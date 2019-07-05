@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image, RefreshControl } from 'react-native';
-import { Add_Token, Get_All_Token_Of_Wallet } from '../../../../db';
+import { View, Text, TouchableOpacity, FlatList, Image, RefreshControl, Alert, TouchableHighlight } from 'react-native';
+import { Add_Token, Get_All_Token_Of_Wallet, GetAllAddressOfToken, GetAllAddressOfTokenAddress, get_All_Account, update_Balance_db, update_total_balance } from '../../../../db';
 import Header from '../../../components/header';
 import SwitchButton from '../../../components/switch-button';
 import TokenItem from './tokenItem';
@@ -12,18 +12,46 @@ import { bindActionCreators } from 'redux';
 import { GetListToken, Func_Update_price } from '../../../../redux/rootActions/easyMode';
 import { GETAPI } from '../../../../helpers/API'
 import URI from '../../../../helpers/constant/uri';
+import Settings from '../../../../settings/initApp'
+import { getStorage, setStorage } from '../../../../helpers/storages';
+import { NavigationActions, StackActions, } from 'react-navigation'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp, responsiveFontSize as font_size } from '../../../../helpers/constant/responsive';
+import RBSheet from '../../../../lib/bottom-sheet';
+import { Update_balance } from '../../../../services/index.account'
+
 
 class Dashboard extends Component {
 
     mounting = true;
     state = {
         isRefreshing: false,
+        mode: Settings.mode_secure,
+        listAddress: []
     }
     componentDidMount() {
-        const { navigation } = this.props;
-        console.log('navigation', navigation)
         if (this.mounting) {
-            this.update_price_tk()
+            this.update_price_tk();
+            this.load_price_data();
+        }
+    }
+
+    load_price_data = () => {
+        if (this.mounting) {
+            Get_All_Token_Of_Wallet().then(data => {
+                data.forEach((listToken, index) => {
+                    let total_balance = 0;
+                    listToken.account.forEach((listAccount, index) => {
+                        Update_balance(listToken.address, listAccount.address, listToken.network, listToken.decimals).then(bal => {
+                            total_balance += parseFloat(bal);
+                            console.log(bal, total_balance)
+                            update_Balance_db(listAccount.id, parseFloat(bal)).then(() => {
+                                update_total_balance(listToken.id, total_balance);
+                            })
+                        })
+                    })
+                })
+            })
         }
     }
 
@@ -52,8 +80,14 @@ class Dashboard extends Component {
                         this.update_price_tk()
                     }
                 });
+                this.load_price_data()
             }
-        }, 20000)
+        }, 10000)
+    }
+
+    changeMount = () => {
+        this.mounting = !this.mounting;
+        console.log('mount', this.mounting)
     }
 
     refreshData = () => {
@@ -83,10 +117,147 @@ class Dashboard extends Component {
         }
     }
 
+    changeSwitch = (value) => {
+        this.setState({ mode: value })
+        if (value) {
+            Alert.alert(
+                'Warning',
+                'The added addresses in EZ mode will not be taken to SECURE mode and the wallet will automatically enable security features to better protect the wallet. Are you sure you will switch to this mode?',
+                [
+                    { text: 'Cancel', style: 'cancel', onPress: () => this.setState({ mode: Settings.mode_secure }) },
+                    { text: 'Ok', style: 'destructive', onPress: () => this.switchToSecure(value) }
+                ]
+            )
+        } else {
+            Alert.alert(
+                'Warning',
+                'The added addresses in SECURE mode will not be taken to EZ mode. Are you sure you will switch to this mode?',
+                [
+                    { text: 'Cancel', style: 'cancel', onPress: () => this.setState({ mode: Settings.mode_secure }) },
+                    { text: 'Ok', style: 'destructive', onPress: () => this.switchToEZ(value) }
+                ]
+            )
+        }
+
+    }
+
+    rightIconClick = () => {
+        this.props.navigation.navigate('QRscan', { onSelect: this.onSelect })
+    }
+
+    onSelect = (value) => {
+        console.log(value)
+        if (value.result == 'cancelScan') {
+            return;
+        }
+        try {
+            this.object_value = JSON.parse(value.result);
+            console.log(this.object_value.chain.toLocaleLowerCase())
+            if (this.object_value.token != '') {
+                GetAllAddressOfTokenAddress(this.object_value.token).then(listAccount => {
+                    if (listAccount) {
+                        console.log('list account', listAccount)
+                        try {
+                            this.param_object = {
+                                addressTk: listAccount['address'],
+                                decimals: listAccount['decimals'],
+                                network: listAccount['network'],
+                                name: listAccount['name'],
+                                price: listAccount['price'],
+                                symbol: listAccount['symbol']
+                            }
+                            this.setState({ listAddress: Array.from(listAccount.account) }, () => {
+                                this.RBSheet.open()
+                            })
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    } else {
+                        Alert.alert(
+                            'Error',
+                            'Please add account in token ' + (this.object_value.symbol).toLocaleUpperCase(),
+                            [{ text: 'Ok', style: 'default' }]
+                        )
+                    }
+                })
+            } else {
+                GetAllAddressOfToken(this.object_value.chain.toLocaleLowerCase())
+                    .then(listAccount => {
+                        if (listAccount) {
+                            console.log('list account', listAccount)
+                            try {
+                                this.param_object = {
+                                    addressTk: listAccount['address'],
+                                    decimals: listAccount['decimals'],
+                                    network: listAccount['network'],
+                                    name: listAccount['name'],
+                                    price: listAccount['price'],
+                                    symbol: listAccount['symbol']
+                                }
+                                this.setState({ listAddress: Array.from(listAccount.account) }, () => {
+                                    this.RBSheet.open()
+                                })
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        } else {
+                            Alert.alert(
+                                'Error',
+                                'Please add account in token ' + this.object_value.chain,
+                                [{ text: 'Ok', style: 'default' }]
+                            )
+                        }
+                    }).catch(e => console.log)
+            }
+
+        } catch (error) {
+            console.log(error)
+            Alert.alert(
+                'error',
+                error,
+                [{ text: 'Ok', style: 'default' }]
+            )
+        }
+    }
+
+    chooseAddress = (item) => {
+        this.RBSheet.close();
+        setTimeout(() => {
+            this.props.navigation.navigate('SendScreen', {
+                payload: {
+                    type: 'qrscan',
+                    addressTK: this.param_object.addressTk,
+                    decimals: this.param_object.decimals,
+                    network: this.param_object.network,
+                    price: this.param_object.price,
+                    symbol: this.param_object.symbol,
+                    item,
+                    toAddress: this.object_value.to,
+                    value: this.object_value.value,
+                    gas: this.object_value.gas,
+                    description: this.object_value.description
+                }
+            })
+        }, 350)
+    }
+
+    switchToSecure = (value) => {
+        Settings.mode_secure = value;
+        Settings.testnet = false;
+        setStorage('setting', JSON.stringify(Settings))
+        this.props.navigation.navigate('InitApp')
+    }
+
+    switchToEZ = (value) => {
+        Settings.mode_secure = value;
+        setStorage('setting', JSON.stringify(Settings))
+        this.props.navigation.navigate('InitApp')
+    }
+
 
     componentWillUnmount() {
-        this.mounting = true;
-        console.log(this.mounting)
+        this.mounting = false;
+        console.log('unmount', this.mounting)
     }
 
     render() {
@@ -103,31 +274,48 @@ class Dashboard extends Component {
                 end={{ x: 1, y: 1 }}
                 style={{ flex: 1 }}
             >
-                <Header componentLeft={() => {
-                    return (
-                        <SwitchButton
-                            // mode ez
-                            inactiveButtonColor="#F2F4F4"
-                            inactiveBackgroundColor={Color.Gradient_button_tomato}
-                            // mode secure
-                            activeButtonColor="#FFF"
-                            activeBackgroundColor={['#FBFCFC', '#E9EBEC']}
-                            switchHeight={25}
-                            switchWidth={55}
-                        />
-                    )
-                }}
+                <Header
+                    componentLeft={() => {
+                        return (
+                            <SwitchButton
+                                // mode ez
+                                inactiveButtonColor="#F2F4F4"
+                                inactiveBackgroundColor={Color.Gradient_button_tomato}
+                                // mode secure
+                                activeButtonColor="#FFF"
+                                activeBackgroundColor={['#FBFCFC', '#E9EBEC']}
+                                inactiveButtonPressedColor={Color.Tomato}
+                                switchHeight={35}
+                                switchWidth={70}
+                                buttonRadius={17}
+                                onChangeState={this.changeSwitch}
+                                active={this.state.mode}
+                            />
+                        )
+                    }}
                     componentRight={() => {
                         return (
                             <TouchableOpacity
                                 onPress={this.rightIconClick}
                             >
-                                <Image source={ImageApp.notification} />
+                                <Icon name="qrcode-scan" size={font_size(3)} />
+                                {/* <Image source={ImageApp.notification} /> */}
                             </TouchableOpacity>
                         )
                     }}
-                    Title="EZ Keystore"
-                    styleTitle={{ color: Color.Tomato }}
+                    componentTitle={() => {
+                        return (
+                            this.props.TESTNET ?
+                                <View>
+                                    <Text style={[{ fontWeight: 'bold', fontSize: 15, color: Color.Tomato }]}>EZ Keystore</Text>
+                                    <Text style={{ fontSize: 10, color: Color.Tomato, textAlign: 'center' }}>(testnet)</Text>
+                                </View>
+                                :
+                                <Text style={[{ fontWeight: 'bold', fontSize: 15, color: Color.Tomato }]}>EZ Keystore</Text>
+                        )
+                    }}
+                // Title={`EZ Keystore \n ${this.props.TESTNET ? '(testnet)' : ''}`}
+                // styleTitle={{ color: Color.Tomato }}
                 />
 
                 {
@@ -140,6 +328,7 @@ class Dashboard extends Component {
                                 <TokenItem
                                     InforToken={item}
                                     {...this.props}
+                                    changeMount={this.changeMount}
                                 />
                             )
                         }}
@@ -153,15 +342,99 @@ class Dashboard extends Component {
 
                     />
                 }
+                {/******************************************************************/}
+                {/* ***************** SHEET LIST WALLET BOTTOM ******************* */}
+                <RBSheet
+                    ref={ref => {
+                        this.RBSheet = ref;
+                    }}
+                    closeOnDragDown={true}
+                    height={hp('70')}
+                    duration={250}
+                    customStyles={{
+                        container: {
+                            // justifyContent: "center",
+                            // alignItems: "center",
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5,
+                            backgroundColor: Color.Tomato
+                        }
+                    }}>
 
+                    <View
+                        style={{
+                            padding: hp('1'),
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <TouchableHighlight
+                            onPress={() => this.RBSheet.close()}
+                            underlayColor="transparent"
+                        >
+                            <View style={{
+                                height: hp('0.7%'),
+                                width: wp('10%'),
+                                backgroundColor: '#fff',
+                                borderRadius: 5
+                            }} />
+                        </TouchableHighlight>
+
+                    </View>
+
+                    <View style={{
+                        paddingHorizontal: 5,
+                        backgroundColor: '#fff',
+                        borderTopLeftRadius: 5,
+                        borderTopRightRadius: 5,
+                        flex: 1
+                    }}>
+                        <View style={{ padding: 5 }}>
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontWeight: 'bold' }}>Select a address</Text>
+                            </View>
+                        </View>
+                        {
+                            this.state.listAddress.length > 0 ?
+                                <FlatList
+                                    data={this.state.listAddress}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item, index }) => {
+                                        return (
+                                            <TouchableOpacity
+                                                style={{
+                                                    paddingVertical: 10,
+                                                    borderBottomWidth: 1,
+                                                    borderBottomColor: Color.Light_gray
+                                                }}
+                                                onPress={() => this.chooseAddress(item)}
+                                            >
+                                                <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                                                <Text numberOfLines={1} ellipsizeMode="middle" style={{ color: Color.Dark_gray, paddingLeft: wp('2') }}>{item.address}</Text>
+                                                <Text style={{ color: Color.Dark_gray, paddingLeft: wp('2') }}>{item.balance + ' ' + this.param_object.symbol}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }}
+                                />
+                                :
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text>Please add account</Text>
+                                </View>
+                        }
+
+                    </View>
+                </RBSheet>
             </Gradient>
         );
     }
 }
 
 const mapStateToProps = state => {
+    // console.log(state.Settings.mode_secure)
     return {
-        ListToken: state.Get_All_Token.ListToken
+        ListToken: state.Get_All_Token.ListToken,
+        MODE: state.Settings.mode_secure,
+        TESTNET: Settings.testnet
     }
 }
 

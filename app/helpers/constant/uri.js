@@ -10,37 +10,41 @@ export default {
     EXPLORER_API: (network, type) => {
         switch (network) {
             case 'ethereum':
-                return `https://blockscout.com/eth/${type}`
-            case 'nexty':
-                if (type == 'testnet') {
-                    return ''
+                if (type) {
+                    return `https://blockscout.com/eth/rinkeby`
                 } else {
-                    return 'https://explorer.nexty.io'
+                    return `https://blockscout.com/eth/mainnet`
+                }
+            case 'nexty':
+                if (type) {
+                    return 'http://explorer.testnet.nexty.io';
+                } else {
+                    return 'https://explorer.nexty.io';
                 }
             default:
-                if (type == 'testnet') {
-                    return ''
-                } else {
+                if (type) {
                     return 'https://apilist.tronscan.org'
+                } else {
+                    return ''
                 }
         }
     },
     EXPLORER_WEB: (network, type) => {
         switch (network) {
             case 'ethereum':
-                if (type == 'rinkeby') {
+                if (type) {
                     return 'https://rinkeby.etherscan.io/tx/'
                 } else {
                     return 'https://etherscan.io/tx/'
                 }
             case 'nexty':
-                if (type == 'rinkeby') {
-                    return 'https://explorer.nexty.io/tx/'
+                if (type) {
+                    return 'http://explorer.testnet.nexty.io/tx/'
                 } else {
                     return 'https://explorer.nexty.io/tx/'
                 }
             default:
-                if (type == 'rinkeby') {
+                if (type) {
                     return 'https://tronscan.org/#/transaction/'
                 } else {
                     return 'https://tronscan.org/#/transaction/'

@@ -125,13 +125,17 @@ export class Menu extends Component {
                             >
                                 <View style={{ flexDirection: 'row' }}>
                                     <View style={{ flex: 1, justifyContent: 'center' }}>
-                                        <Icon name="fingerprint" size={font_size(3)} />
+                                        <Icon name="fingerprint" size={font_size(3)} color={Settings.mode_secure ? Color.Dark_gray : '#000'} />
                                     </View>
                                     <View style={{ flex: 8, justifyContent: 'center' }}>
-                                        <Text>Use Touch ID</Text>
+                                        <Text style={{ color: Settings.mode_secure ? Color.Dark_gray : '#000' }}>Use Touch ID</Text>
                                     </View>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Switch value={this.state.enable_touchID} onValueChange={(value) => this.changeTouchID(value)} />
+                                        <Switch
+                                            value={this.state.enable_touchID}
+                                            onValueChange={(value) => this.changeTouchID(value)}
+                                            disabled={Settings.mode_secure ? true : false}
+                                        />
                                     </View>
                                 </View>
                             </View>
@@ -268,6 +272,7 @@ export class Menu extends Component {
                         <View style={styles.containerMenu}>
                             <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
+                                onPress={() => this.props.navigation.navigate('Advanced')}
                             >
                                 <View style={{ flexDirection: 'row' }}>
                                     <View style={{ flex: 1, justifyContent: 'center' }}>

@@ -2,8 +2,7 @@ import REALM, { ObjectSchema } from 'realm';
 const ACCOUNT_NAME = 'ACCOUNT_EZ';
 const WALLET_NAME = 'TOKEN_EZ';
 const TOKEN_NAME = 'WALLET_EZ';
-const FAVORITE_NAME = 'FAVORITE_EZ'
-
+const FAVORITE_NAME = 'FAVORITE_EZ';
 
 const ACCOUNT: ObjectSchema = {
     name: ACCOUNT_NAME,
@@ -67,5 +66,5 @@ export const EASY = {
     TOKEN,
     TOKEN_NAME,
     FAVORITE,
-    FAVORITE_NAME
+    FAVORITE_NAME,
 }

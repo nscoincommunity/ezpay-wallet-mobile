@@ -4,9 +4,10 @@ import { forkJoin } from 'rxjs';
 import moment from 'moment';
 import { sign } from '@warren-bank/ethereumjs-tx-sign';
 import bigInt from 'big-integer';
-import CONSTANT from '../../helpers/constant'
-import { Tx } from '../index.account'
-import InputDataDecoder from 'ethereum-input-data-decoder'
+import CONSTANT from '../../helpers/constant';
+import { Tx } from '../index.account';
+import InputDataDecoder from 'ethereum-input-data-decoder';
+import Settings from '../../settings/initApp'
 
 const WEB3 = new Web3()
 // const WEB3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/'))
@@ -23,6 +24,11 @@ export const CreateETH = (network) => {
             reject(error)
         }
     })
+}
+
+export const convertWeiToEther = (Wei, decimals) => {
+    var ether = WEB3.utils.fromWei(Wei, 'ether');
+    return ether
 }
 
 /**
@@ -60,12 +66,13 @@ export const Get_Infor_Token = (Token_Address, network) => new Promise(async (re
  * @param {string} network network
  */
 const getProvider = (network: String) => {
-    switch (network) {
-        case 'nexty':
-            return CONSTANT.ProviderNTY()
-        default:
-            return CONSTANT.ProviderETH('rinkeby')
-    }
+    return CONSTANT.Provider(network, Settings.testnet)
+    // switch (network) {
+    //     case 'nexty':
+    //         return CONSTANT.ProviderNTY('testnet')
+    //     default:
+    //         return CONSTANT.ProviderETH('rinkeby')
+    // }
 }
 
 export const get_address_from_pk_eth = (privatekey: string) => {
@@ -145,10 +152,12 @@ export const send_ETH = (tx: Tx, privatekey: string, network: string, addressTk?
 
         tx.nonce = await WEB3.eth.getTransactionCount(tx.from);
 
-        console.log('nonce', await WEB3.eth.getTransactionCount(tx.from))
+        console.log('tx', tx)
         if (addressTk == '') {
             console.log('value', tx)
-            tx.gas = await WEB3.eth.estimateGas(tx)
+            if (tx.gas <= 0) {
+                tx.gas = await WEB3.eth.estimateGas(tx);
+            }
             try {
                 const rawTx = '0x' + await sign(tx, privatekey).rawTx;
                 console.log('rawTx', rawTx)
@@ -174,9 +183,12 @@ export const send_ETH = (tx: Tx, privatekey: string, network: string, addressTk?
                 data: contract.methods.transfer(tx.to, tx.value).encodeABI(),
                 gasPrice: 0,
                 nonce: tx.nonce,
-                chainId: 66666
+                chainId: Settings.testnet ? 111111 : 666666,
+                gas: tx.gas
             }
-            dataTx.gas = await WEB3.eth.estimateGas(dataTx);
+            if (tx.gas <= 0) {
+                dataTx.gas = await WEB3.eth.estimateGas(tx);
+            }
             console.log('dataTx', dataTx)
             const rawTx = '0x' + await sign(dataTx, privatekey).rawTx;
             WEB3.eth.sendSignedTransaction(rawTx, (error, hash) => {
@@ -204,7 +216,12 @@ export const HexToString = (hex) => {
         return 0
     }
 }
-
+/**
+ * sign transaction in dapp
+ * @param {object} tx object tx 
+ * @param {string} privateKey private to sign transaction
+ * @param {number} decimals decimal token
+ */
 export const signTransactionDapp = (tx: Tx, privateKey: string, decimals) => new Promise(async (resolve, reject) => {
     try {
         console.log('first tx', tx)

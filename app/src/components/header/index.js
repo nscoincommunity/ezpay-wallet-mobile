@@ -14,7 +14,10 @@ export interface HeaderProps {
     onPressLeft?: Function, // use when props componentLeft null
     onPressRight?: Function, // use when props componentRight null
     IconLeft?: string, // use when props componentLeft null
-    IconRight?: string // use when props componentRight null
+    IconRight?: string, // use when props componentRight null,
+    colorIconLeft?: string,
+    colorIconRight?: string,
+    componentTitle?: Function
 }
 const statusBarHeight = getStatusBarHeight();
 
@@ -23,16 +26,22 @@ export default class HeaderApp extends Component<HeaderProps> {
         componentLeft: PropsTypes.func,
         componentRight: PropsTypes.func,
         Title: PropsTypes.string,
+        componentTitle: PropsTypes.func,
         styleTitle: PropsTypes.any,
         onPressLeft: PropsTypes.func,
         onPressRight: PropsTypes.func,
         IconLeft: PropsTypes.string,
-        IconRight: PropsTypes.string
+        IconRight: PropsTypes.string,
+        colorIconLeft: PropsTypes.string,
+        colorIconRight: PropsTypes.string
     }
 
     static defaultProps = {
         componentLeft: () => null,
-        componentRight: () => null
+        componentRight: () => null,
+        componentTitle: () => null,
+        colorIconLeft: Color.Tomato,
+        colorIconRight: Color.Tomato
     }
 
     // componentDidMount() {
@@ -47,7 +56,8 @@ export default class HeaderApp extends Component<HeaderProps> {
             onPressLeft,
             onPressRight,
             IconLeft,
-            IconRight
+            IconRight,
+            componentTitle
         } = this.props;
         if (componentLeft() === null) {
             return (
@@ -59,10 +69,10 @@ export default class HeaderApp extends Component<HeaderProps> {
                                 onPress={() => onPressLeft()}
                             >
                                 <View style={{ flexDirection: 'row', paddingLeft: 3 }}>
-                                    <Icon name={Platform.OS == 'ios' ? `ios-${IconLeft}` : `md-${IconLeft}`} size={30} color={Color.Tomato} />
+                                    <Icon name={Platform.OS == 'ios' ? `ios-${IconLeft}` : `md-${IconLeft}`} size={30} color={this.props.colorIconLeft} />
                                     {Platform.OS == 'ios' &&
                                         <View style={{ justifyContent: 'center', marginBottom: 2, marginLeft: 3 }}>
-                                            <Text style={{ color: Color.Tomato }}>Back</Text>
+                                            <Text style={{ color: this.props.colorIconRight }}>Back</Text>
                                         </View>
                                     }
                                 </View>
@@ -79,7 +89,7 @@ export default class HeaderApp extends Component<HeaderProps> {
                                 onPress={() => onPressRight()}
                             >
                                 <View style={{ justifyContent: 'center', paddingRight: 3 }}>
-                                    <Icon name={Platform.OS == 'ios' ? `ios-${IconRight}` : `md-${IconRight}`} color={Color.Tomato} size={30} />
+                                    <Icon name={Platform.OS == 'ios' ? `ios-${IconRight}` : `md-${IconRight}`} color={this.props.colorIconRight} size={30} />
                                 </View>
                             </TouchableOpacity>
                         }
@@ -93,7 +103,8 @@ export default class HeaderApp extends Component<HeaderProps> {
                         {componentLeft()}
                     </View>
                     <View style={{ flex: 6, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={[{ fontWeight: 'bold', fontSize: 15, }, styleTitle]}>{Title}</Text>
+                        {/* <Text style={[{ fontWeight: 'bold', fontSize: 15, }, styleTitle]}>{Title}</Text> */}
+                        {componentTitle()}
                     </View>
                     <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
                         {componentRight()}

@@ -7,6 +7,7 @@ import {
     RefreshControl,
     TouchableOpacity,
     Platform,
+    ActivityIndicator
 } from 'react-native';
 import Header from '../../../components/header';
 import ImageApp from '../../../../helpers/constant/image';
@@ -146,6 +147,7 @@ export default class History extends Component {
                                     elevation: 2,
                                     borderRadius: 10,
                                 }}>
+                                    <ActivityIndicator size="large" style={{ flex: 1 }} color={Color.Tomato} />
                                 </View>
                             </View>
                             :
